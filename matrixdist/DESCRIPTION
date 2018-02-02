@@ -1,9 +1,11 @@
 Package: matrixdist
 Type: Package
-Title: What the package does (short line)
+Title: Functions for the Matrix Distributions
 Version: 1.0
 Date: 2018-02-02
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Geoffrey Z Thompson
+Maintainer: Geoffrey Z Thompson <gzthompson@gmail.com>
+Description: Generating matrix distributions, computing densities for matrix distributions, 
+    and fitting parameters of matrix distributions. Currently only for normal distributions, 
+    but may expand to t-distributions and some others.
+License: CC0
