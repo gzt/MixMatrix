@@ -85,10 +85,19 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R
   else return(exp(logresult))
 }
 
-mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-9,max.iter=100){
+mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-9,max.iter=100,U,V){
   # intend to implement toeplitz restriction later
-  # if data is array, presumes indexed over third column
+  # if data is array, presumes indexed over first column (same as output)
   # if list, presumes is a list of the matrices
+  # will start by working with assumption that data is an array
+  dims = dim(data)
+  if(missing(U)) U = diag(dims[2])
+  if(missing(V)) V = diag(dims[3])
+  mu = apply(data,c(2,3),mean)
+  swept.data = sweep(data,c(2,3),mu)
+  iter = 0
   
+  
+  return(list(mean = mu))
 }
 
