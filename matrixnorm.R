@@ -87,7 +87,7 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R
 
 mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-9,max.iter=100,U,V){
   # intend to implement toeplitz restriction later
-  # if data is array, presumes indexed over first column (same as output)
+  # if data is array, presumes indexed over first column (same as output of rmatrixnorm)
   # if list, presumes is a list of the matrices
   # will start by working with assumption that data is an array
   dims = dim(data)
@@ -96,8 +96,22 @@ mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-
   mu = apply(data,c(2,3),mean)
   swept.data = sweep(data,c(2,3),mu)
   iter = 0
+  error.term = 1e40
+  
+  while(iter < max.iter && error.term > tol){
+    inter.V = apply(swept.data, 1, function(x) (t(x) %*% solve(U) %*% x))
+    new.V = matrix(apply( inter.V, 1, sum)      ,nrow=dims[3]) / (dims[1]*dims[2])
+    
+    inter.U =  apply(swept.data, 1, function(x) ((x) %*% solve(V) %*% t(x)) )
+    new.U = matrix(apply(inter.U ,1,sum),nrow=dims[2]) / (dims[1]*dims[3])
+    new.U = new.U/(new.U[1,1])
+    error.term = max(sum((new.V - V)^2), sum((new.U - U)^2))
+    V = new.V
+    U = new.U
+    iter = iter + 1
+  }
   
   
-  return(list(mean = mu))
+  return(list(mean = mu, U=U, V = V, iter=iter, tol=error.term))
 }
 
