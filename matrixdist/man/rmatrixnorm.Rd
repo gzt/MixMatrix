@@ -10,23 +10,37 @@ rmatrixnorm(n, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}
 
-\item{mean}{$p \times q$ matrix of means}
+\item{mean}{$p X q$ matrix of means}
 
-\item{L}{$p \times p$ matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{$p X p$ matrix specifying relations among the rows. By default, an identity matrix.}
 
-\item{R}{$q \times q$ matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{$q X q$ matrix specifying relations among the columns. By default, an identity matrix.}
 
-\item{U}{$LL^T$ - $p \times p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
+\item{U}{$LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
 
-\item{V}{$R^TR$ - $q \times q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
+\item{V}{$R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
 
 \item{list}{Defaults to \code{FALSE}. If this is \code{TRUE}, then the output will be a list of matrices.}
 
 \item{array}{If $n = 1$ and this is not specified and \code{list} is \code{FALSE}, the function will return a matrix containing the one observation. If $n > 1$, should be the opposite of \code{list}. If \code{list} is \code{TRUE}, this will be ignored.}
 }
 \value{
-This returns either a list of $n$ $p \times q$ matrices or a $n \times p \times q$ array.
+This returns either a list of $n$ $p X q$ matrices or a $n X p X q$ array.
 }
 \description{
 rmatrixnorm
+}
+\examples{
+set.seed(20180202)
+rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+set.seed(20180202)
+A = rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
+A[[1]]
+set.seed(20180202)
+B = rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+B[1 , , ]
+
 }

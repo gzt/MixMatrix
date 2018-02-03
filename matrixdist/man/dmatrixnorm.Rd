@@ -8,17 +8,17 @@ dmatrixnorm(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
   R = diag(dim(x)[2]), U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
-\item{x}{$p \times q$ input matrix}
+\item{x}{$p X q$ input matrix}
 
-\item{mean}{$p \times q$ matrix of means. By default, a matrix of $0$s with size taken from \code{x}}
+\item{mean}{$p X q$ matrix of means. By default, a matrix of $0$s with size taken from \code{x}}
 
-\item{L}{$p \times p$ matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{$p X p$ matrix specifying relations among the rows. By default, an identity matrix.}
 
-\item{R}{$q \times q$ matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{$q X q$ matrix specifying relations among the columns. By default, an identity matrix.}
 
-\item{U}{$LL^T$ - $p \times p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
+\item{U}{$LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
 
-\item{V}{$R^TR$ - $q \times q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
+\item{V}{$R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
 
 \item{log}{Whether to return the density on the log scale.}
 }
@@ -27,4 +27,13 @@ Returns the density at the provided observation.
 }
 \description{
 dmatrixnorm
+}
+\examples{
+set.seed(20180202)
+A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+L=matrix(c(2,1,0,.1),nrow=2))
+#dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
+
+
 }
