@@ -34,7 +34,7 @@ rmatrixnorm.one <- function(mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]), U = 
   mat = matrix(stats::rnorm(n),nrow=dims[1])
   cholU = chol(U)
   cholV = chol(V)
-  result = mean + cholU %*% mat %*% t(cholV)
+  result = mean + t(cholU) %*% mat %*% (cholV)
   dimnames(result) = dimnames(mean)
   return(result)
 }
@@ -177,38 +177,61 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 #' mle.matrixnorm
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in dimensions 2 and 3, indexed by dimension 1.
-#' @param row.restrict At present, no options available for this. In the future, intend to have options for, eg, AR(1) structure.
-#' @param col.restrict  At present, no options available for this. In the future, intend to have options for, eg, AR(1) structure.
-#' @param tol Convergence criterion. Measured against square deviation between iterations of the two variance-covariance matrices.
+#' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
+#'    within each row. If both this and \code{col.mean} are \code{TRUE}, there will be
+#'    a common mean for the entire matrix.
+#' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
+#'    within each row. If both this and \code{row.mean} are \code{TRUE}, there will be
+#'    a common mean for the entire matrix.
+#' @param row.variance At present, no options available for this.
+#'    Variance structure for the rows. In the future, intend to have options
+#'    for, eg, AR(1) structure.
+#' @param col.variance  At present, no options available for this.
+#'    Variance structure for the columns. In the future, intend to have options
+#'    for, eg, AR(1) structure.
+#' @param tol Convergence criterion. Measured against square deviation
+#'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
-#' @param U (optional) Can provide a starting point for the U matrix. By default, an identity matrix.
-#' @param V (optional) Can provide a starting point for the V matrix. By default, an identity matrix.
+#' @param U (optional) Can provide a starting point for the U matrix.
+#'    By default, an identity matrix.
+#' @param V (optional) Can provide a starting point for the V matrix.
+#'    By default, an identity matrix.
 #'
-#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix, the number of iterations, and error at the time of stopping.
+#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix,
+#'    the number of iterations, and error at the time of stopping.
 #' @export
 #'
 #' @examples
-#'set.seed(20180202)
-#'A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#' set.seed(20180202)
+#' A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 #' results=mle.matrixnorm(A)
 #' print(results)
 #'
 #'
-mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-9,max.iter=100,U,V){
+mle.matrixnorm = function(data,row.mean = FALSE,col.mean=FALSE,row.variance="none",col.variance="none",tol = 1e-9,max.iter=100,U,V){
   if(class(data) == "list") data = aperm(array(unlist(data), dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data))),perm=c(3,1,2))
 
-  # intend to implement toeplitz restriction later
+  # intend to implement AR(1) (etc) variance restriction later
   # if data is array, presumes indexed over first column (same as output of rmatrixnorm)
   # if list, presumes is a list of the matrices
   # will start by working with assumption that data is an array
   dims = dim(data)
 
-  if(max(dims[2]/dims[3],dims[3]/dims[2])<(dims[1]-1)) warning("Need more observations to estimate parameters.")
+  if(max(dims[2]/dims[3],dims[3]/dims[2])>(dims[1]-1)) warning("Need more observations to estimate parameters.")
   # don't have initial starting point for U and V, start with diag.
   if(missing(U)) U = diag(dims[2])
   if(missing(V)) V = diag(dims[3])
   mu = apply(data,c(2,3),mean)
+  if(row.mean){
+    # should make it so that the mean is constant within a row
+    mu = matrix(apply(mu,1,mean),nrow=dims[2],ncol=dims[3])
+  }
+  if(col.mean){
+    # should make it so that the mean is constant within a column
+    mu = matrix(apply(mu,2,mean),nrow=dims[2],ncol=dims[3],byrow=T)
+  }
+  #if both are true, this should make it so the mean is constant all over
   swept.data = sweep(data,c(2,3),mu)
   iter = 0
   error.term = 1e40
@@ -220,7 +243,9 @@ mle.matrixnorm = function(data,row.restrict="none",col.restrict="none",tol = 1e-
 
     inter.U =  apply(swept.data, 1, function(x) ((x) %*% solve(V) %*% t(x)) )
     new.U = matrix(apply(inter.U ,1,sum),nrow=dims[2]) / (dims[1]*dims[3])
-    new.U = new.U/(new.U[1,1]) # only identifiable up to a constant, so have to fix something at 1
+    new.U = new.U/(new.U[1,1])
+    # only identifiable up to a constant, so have to fix something at 1
+    # should perhaps change - makes doing other restrictions on variance harder.
     # compute differences with prior iterations:
     error.term = sum((new.V - V)^2) + sum((new.U - U)^2)
     V = new.V

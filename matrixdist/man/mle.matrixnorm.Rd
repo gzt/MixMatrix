@@ -4,26 +4,43 @@
 \alias{mle.matrixnorm}
 \title{mle.matrixnorm}
 \usage{
-mle.matrixnorm(data, row.restrict = "none", col.restrict = "none",
-  tol = 1e-09, max.iter = 100, U, V)
+mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
+  row.variance = "none", col.variance = "none", tol = 1e-09,
+  max.iter = 100, U, V)
 }
 \arguments{
 \item{data}{Either a list of matrices or a 3-D array with matrices in dimensions 2 and 3, indexed by dimension 1.}
 
-\item{row.restrict}{At present, no options available for this. In the future, intend to have options for, eg, AR(1) structure.}
+\item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
+within each row. If both this and \code{col.mean} are \code{TRUE}, there will be
+a common mean for the entire matrix.}
 
-\item{col.restrict}{At present, no options available for this. In the future, intend to have options for, eg, AR(1) structure.}
+\item{col.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
+within each row. If both this and \code{row.mean} are \code{TRUE}, there will be
+a common mean for the entire matrix.}
 
-\item{tol}{Convergence criterion. Measured against square deviation between iterations of the two variance-covariance matrices.}
+\item{row.variance}{At present, no options available for this.
+Variance structure for the rows. In the future, intend to have options
+for, eg, AR(1) structure.}
+
+\item{col.variance}{At present, no options available for this.
+Variance structure for the columns. In the future, intend to have options
+for, eg, AR(1) structure.}
+
+\item{tol}{Convergence criterion. Measured against square deviation
+between iterations of the two variance-covariance matrices.}
 
 \item{max.iter}{Maximum possible iterations of the algorithm.}
 
-\item{U}{(optional) Can provide a starting point for the U matrix. By default, an identity matrix.}
+\item{U}{(optional) Can provide a starting point for the U matrix.
+By default, an identity matrix.}
 
-\item{V}{(optional) Can provide a starting point for the V matrix. By default, an identity matrix.}
+\item{V}{(optional) Can provide a starting point for the V matrix.
+By default, an identity matrix.}
 }
 \value{
-Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix, the number of iterations, and error at the time of stopping.
+Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix,
+   the number of iterations, and error at the time of stopping.
 }
 \description{
 mle.matrixnorm
