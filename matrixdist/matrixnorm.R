@@ -1,6 +1,4 @@
 #' rmatrixnorm.one
-#' rmatrixnorm.one
-#'
 #' @param mean $p \times q$ matrix of means
 #' @param L $p \times p$ matrix specifying relations among the rows. By default, an identity matrix.
 #' @param R $q \times q$ matrix specifying relations among the columns. By default, an identity matrix.
@@ -98,7 +96,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
   else return(exp(logresult))
 }
 
-#' dmatrixnorm
+#' dmatrixnorm.test
 #'
 #' @param x $p \times q$ input matrix
 #' @param mean $p \times q$ matrix of means. By default, a matrix of $0$s with size taken from \code{x}
