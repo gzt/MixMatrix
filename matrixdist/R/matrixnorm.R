@@ -1,3 +1,20 @@
+#' matrixdist: a package for some random matrix distributions.
+#'
+#' The matrixdist package current provides for generating
+#' matrix normal random variables, computing matrix normal densities,
+#' and fitting the MLEs for parameters of matrix normal distributions.
+#' In the future, this may expand to matrix t distributions or some
+#' other matrix random variables, at least generation and distribution
+#' if not parameter estimation.
+#'
+#' @docType package
+#' @name matrixdist
+NULL
+
+
+
+
+
 #' rmatrixnorm.one
 #' @param mean $p X q$ matrix of means
 #' @param L $p X p$ matrix specifying relations among the rows. By default, an identity matrix.
