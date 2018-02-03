@@ -107,8 +107,8 @@ rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]),
 #' set.seed(20180202)
 #' A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #' L=matrix(c(2,1,0,.1),nrow=2))
-#' #dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#' #L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
+#' dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
 #'
 dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag(dim(x)[2]),
@@ -151,8 +151,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
 #' dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
-dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag(dim(x)[2]),
-                        U = L %*% t(L), V = t(R) %*% R,log = FALSE){
+dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
+                    R=diag(dim(x)[2]),U = L %*% t(L), V = t(R) %*% R,log = FALSE){
   #results should equal other option - works by unrolling into MVN
   dims = dim(x)
   if(!(dims[1] == dim(U)[2] && dim(U)[1]==dim(U)[2] && dims[2]==dim(V)[1] && dim(V)[1]==dim(V)[2])) {
