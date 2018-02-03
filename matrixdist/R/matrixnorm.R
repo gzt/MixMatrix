@@ -242,23 +242,23 @@ mle.matrixnorm <- function(data,row.mean = FALSE,col.mean=FALSE,row.variance="no
     #make intermediate matrix, then collapse to final version
     if(col.variance == "AR(1)"){
       var = V[1,1]
-    nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,U=U,V=theta[1]*toepmatrix(dims[3],theta[2]))))
+    nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,U=U,V=theta[1]*toepgenerate(dims[3],theta[2]))))
       fit0 = stats::optim(c(var,rho.col),nLL,method="L-BFGS-B",
                    hessian = FALSE,lower=c(0,0),upper=c(Inf,.999) )
       var = fit0$par[1]
       rho.col = fit0$par[2]
-      new.V = var * toepmatrix(dims[3],rho.col)
+      new.V = var * toepgenerate(dims[3],rho.col)
     } else {
     inter.V = apply(swept.data, 1, function(x) (t(x) %*% solve(U) %*% x))
     new.V = matrix(apply( inter.V, 1, sum),nrow=dims[3]) / (dims[1]*dims[2])
     }
 
     if(row.variance == "AR(1)"){
-      nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,V=new.V,U=toepmatrix(dims[2],theta))))
+      nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,V=new.V,U=toepgenerate(dims[2],theta))))
       fit0 = stats::optim(rho.row,nLL,method="L-BFGS-B",
                    hessian = FALSE,lower=0,upper=.999 )
       rho.row = fit0$par
-      new.U = toepmatrix(dims[2],rho.row)
+      new.U = toepgenerate(dims[2],rho.row)
       } else {
     inter.U =  apply(swept.data, 1, function(x) ((x) %*% solve(V) %*% t(x)) )
     new.U = matrix(apply(inter.U ,1,sum),nrow=dims[2]) / (dims[1]*dims[3])
@@ -277,20 +277,22 @@ mle.matrixnorm <- function(data,row.mean = FALSE,col.mean=FALSE,row.variance="no
   return(list(mean = mu, U=U, V = V, iter=iter, tol=error.term))
 }
 
-#' toepmatrix
+#' toepgenerate
 #'
 #' @param n number of columns/rows
 #' @param rho correlation parameter
 #'
-#' @return Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on the other diagonals, where $k$ is distance from the main diagonal. Used internally but it is useful for generating your own random matrices.
+#' @return Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on
+#'    the other diagonals, where $k$ is distance from the main diagonal.
+#'    Used internally but it is useful for generating your own random matrices.
 #' @keywords internal
 #' @export
 #'
 #' @examples
 #' rho = .9
 #' n = 6
-#' toepmatrix(n,rho)
-toepmatrix <- function(n,rho){
+#' toepgenerate(n,rho)
+toepgenerate <- function(n,rho){
   if(n <=1) stop("n must be greater than 1.")
   if(rho >= 1) stop("rho must be a correlation less than 1.")
   if(rho <= -1) stop("rho must be a correlation greater than -1.")
