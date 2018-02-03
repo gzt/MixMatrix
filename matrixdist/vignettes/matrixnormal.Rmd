@@ -1,0 +1,23 @@
+---
+title: "Matrix Normal Distributions"
+author: "Geoffrey Thompson"
+date: "February 3, 2018"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Matrix Normal Distributions}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(matrixdist)
+```
+
+## Matrix Distributions
+
+Suppose there is a two-dimensional grid of observations: each observation is randomly distributed somehow, perhaps each spot on the grid has its own mean, there's a covariance relation across the rows that doesn't vary across the columns and a covariance relation across the columns that doesn't vary across the rows. We may be interested in drawing from such random variables, calculating densities, or fitting parameters to such distributions based on observations of those distributions. Here I have some functions for doing so in the case of matrix normal distributions.
+
+## Matrix Normal Distributions
+
