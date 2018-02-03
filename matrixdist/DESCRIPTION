@@ -4,9 +4,10 @@ Title: Functions For Matrix Distributions
 Version: 0.0.0.9000
 Date: 2018-02-02
 Authors@R: person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
-          role = c("aut", "cre")
+          role = c("aut", "cre"))
 Description: Generating matrix distributions, computing densities for matrix distributions, 
     and fitting parameters of matrix distributions. Currently only for normal distributions, 
     but may expand to t-distributions and some others.
 Depends: R (>= 2.0.0)
 License: GPL-3
+RoxygenNote: 6.0.1
