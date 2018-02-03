@@ -10,22 +10,22 @@ rmatrixnorm(n, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}
 
-\item{mean}{$p X q$ matrix of means}
+\item{mean}{\eqn{p X q}  matrix of means}
 
-\item{L}{$p X p$ matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.}
 
-\item{R}{$q X q$ matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.}
 
-\item{U}{$LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
+\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{$R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
+\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance matrix for columns, computed from \eqn{R}  if not specified.}
 
-\item{list}{Defaults to \code{FALSE}. If this is \code{TRUE}, then the output will be a list of matrices.}
+\item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the output will be a list of matrices.}
 
-\item{array}{If $n = 1$ and this is not specified and \code{list} is \code{FALSE}, the function will return a matrix containing the one observation. If $n > 1$, should be the opposite of \code{list}. If \code{list} is \code{TRUE}, this will be ignored.}
+\item{array}{If \eqn{n = 1}  and this is not specified and \code{list}  is \code{FALSE} , the function will return a matrix containing the one observation. If \eqn{n > 1} , should be the opposite of \code{list} . If \code{list}  is \code{TRUE} , this will be ignored.}
 }
 \value{
-This returns either a list of $n$ $p X q$ matrices or a $n X p X q$ array.
+This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
 }
 \description{
 rmatrixnorm

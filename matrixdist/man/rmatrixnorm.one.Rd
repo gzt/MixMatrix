@@ -8,15 +8,15 @@ rmatrixnorm.one(mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
   U = L \%*\% t(L), V = t(R) \%*\% R)
 }
 \arguments{
-\item{mean}{$p X q$ matrix of means}
+\item{mean}{\eqn{p X q}  matrix of means}
 
-\item{L}{$p X p$ matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.}
 
-\item{R}{$q X q$ matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.}
 
-\item{U}{$LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.}
+\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{$R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.}
+\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance matrix for columns, computed from \eqn{R}  if not specified.}
 }
 \value{
 Returns a matrix of one observation. This function is for internal use only.

@@ -23,7 +23,7 @@ mle.matrixnorm(data, row.restrict = "none", col.restrict = "none",
 \item{V}{(optional) Can provide a starting point for the V matrix. By default, an identity matrix.}
 }
 \value{
-Returns a list with a mean matrix, a $U$ matrix, a $V$ matrix, the number of iterations, and error at the time of stopping.
+Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix, the number of iterations, and error at the time of stopping.
 }
 \description{
 mle.matrixnorm

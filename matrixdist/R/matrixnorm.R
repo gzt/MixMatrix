@@ -16,11 +16,11 @@ NULL
 
 
 #' rmatrixnorm.one
-#' @param mean $p X q$ matrix of means
-#' @param L $p X p$ matrix specifying relations among the rows. By default, an identity matrix.
-#' @param R $q X q$ matrix specifying relations among the columns. By default, an identity matrix.
-#' @param U $LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.
-#' @param V $R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.
+#' @param mean \eqn{p X q}  matrix of means
+#' @param L \eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.
+#' @param R \eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.
+#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.
+#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance matrix for columns, computed from \eqn{R}  if not specified.
 #'
 #' @return Returns a matrix of one observation. This function is for internal use only.
 #' @keywords internal
@@ -44,14 +44,14 @@ rmatrixnorm.one <- function(mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]), U = 
 #' rmatrixnorm
 #'
 #' @param n number of observations to generate - must be a positive integer.
-#' @param mean $p X q$ matrix of means
-#' @param L $p X p$ matrix specifying relations among the rows. By default, an identity matrix.
-#' @param R $q X q$ matrix specifying relations among the columns. By default, an identity matrix.
-#' @param U $LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.
-#' @param V $R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.
-#' @param list Defaults to \code{FALSE}. If this is \code{TRUE}, then the output will be a list of matrices.
-#' @param array If $n = 1$ and this is not specified and \code{list} is \code{FALSE}, the function will return a matrix containing the one observation. If $n > 1$, should be the opposite of \code{list}. If \code{list} is \code{TRUE}, this will be ignored.
-#' @return This returns either a list of $n$ $p X q$ matrices or a $n X p X q$ array.
+#' @param mean \eqn{p X q}  matrix of means
+#' @param L \eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.
+#' @param R \eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.
+#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.
+#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance matrix for columns, computed from \eqn{R}  if not specified.
+#' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the output will be a list of matrices.
+#' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is \code{FALSE} , the function will return a matrix containing the one observation. If \eqn{n > 1} , should be the opposite of \code{list} . If \code{list}  is \code{TRUE} , this will be ignored.
+#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
 #' @export
 #'
 #' @examples
@@ -92,12 +92,12 @@ rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]),
 
 #' dmatrixnorm
 #'
-#' @param x $p X q$ input matrix
-#' @param mean $p X q$ matrix of means. By default, a matrix of $0$s with size taken from \code{x}
-#' @param L $p X p$ matrix specifying relations among the rows. By default, an identity matrix.
-#' @param R $q X q$ matrix specifying relations among the columns. By default, an identity matrix.
-#' @param U $LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.
-#' @param V $R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.
+#' @param x \eqn{p X q} input matrix
+#' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}
+#' @param L \eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.
+#' @param R \eqn{q X q} matrix specifying relations among the columns. By default, an identity matrix.
+#' @param U \eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.
+#' @param V \eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix for columns, computed from \eqn{R} if not specified.
 #' @param log Whether to return the density on the log scale.
 #'
 #' @return Returns the density at the provided observation.
@@ -134,12 +134,12 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
 
 #' dmatrixnorm.test
 #'
-#' @param x $p X q$ input matrix
-#' @param mean $p X q$ matrix of means. By default, a matrix of $0$s with size taken from \code{x}
-#' @param L $p X p$ matrix specifying relations among the rows. By default, an identity matrix.
-#' @param R $q X q$ matrix specifying relations among the columns. By default, an identity matrix.
-#' @param U $LL^T$ - $p X p$ positive definite variance-covariance matrix for rows, computed from $L$ if not specified.
-#' @param V $R^TR$ - $q X q$ positive definite variance-covariance matrix for columns, computed from $R$ if not specified.
+#' @param x \eqn{p X q} input matrix
+#' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}
+#' @param L \eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.
+#' @param R \eqn{q X q} matrix specifying relations among the columns. By default, an identity matrix.
+#' @param U \eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.
+#' @param V \eqn{R^T R} - \eqn{q X q} positive definite variance-covariance matrix for columns, computed from \eqn{R} if not specified.
 #' @param log Whether to return the density on the log scale.
 #'
 #' @return Returns the density at the provided observation. This is an alternative method of computing which works by flattening out into a vector instead of a matrix.
@@ -184,7 +184,7 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 #' @param U (optional) Can provide a starting point for the U matrix. By default, an identity matrix.
 #' @param V (optional) Can provide a starting point for the V matrix. By default, an identity matrix.
 #'
-#' @return Returns a list with a mean matrix, a $U$ matrix, a $V$ matrix, the number of iterations, and error at the time of stopping.
+#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix, the number of iterations, and error at the time of stopping.
 #' @export
 #'
 #' @examples
