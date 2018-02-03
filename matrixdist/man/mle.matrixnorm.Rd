@@ -19,13 +19,11 @@ a common mean for the entire matrix.}
 within each row. If both this and \code{row.mean} are \code{TRUE}, there will be
 a common mean for the entire matrix.}
 
-\item{row.variance}{At present, no options available for this.
-Variance structure for the rows. In the future, intend to have options
-for, eg, AR(1) structure.}
+\item{row.variance}{Imposes a variance structure on the rows. Either
+"none" or "AR(1)". Only positive correlations are allowed for AR(1).}
 
-\item{col.variance}{At present, no options available for this.
-Variance structure for the columns. In the future, intend to have options
-for, eg, AR(1) structure.}
+\item{col.variance}{Imposes a variance structure on the columns.
+Either "none" or "AR(1)". Only positive correlations are allowed for AR(1).}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}

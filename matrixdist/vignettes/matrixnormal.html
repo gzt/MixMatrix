@@ -149,10 +149,10 @@ A =<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dt"
 </div>
 <div id="parameter-estimation-for-matrix-variate-normal-distributions" class="section level2">
 <h2>Parameter estimation for matrix variate normal distributions</h2>
-<p>Maximum likelihood estimation is possible for the matrix variate normal distribution (see <span class="citation">Dutilleul (1999)</span> or <span class="citation">Glanz and Carvalho (2013)</span> for details). The pair of variance matrices are only identifiable up to a constant, so this sets the first element of <span class="math inline">\(\mathbf{U}\)</span> to <span class="math inline">\(1\)</span>.</p>
-<p>There are two restrictions possible for the mean matrices: <code>row.mean</code> will force a common mean within a row and <code>col.mean</code> will force a common mean within a column. In the future, restrictions on <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> will be made available (say, AR(1) covariance structures) with <code>row.variance</code> and <code>col.variance</code> commands.</p>
+<p>Maximum likelihood estimation is possible for the matrix variate normal distribution (see <span class="citation">Dutilleul (1999)</span> or <span class="citation">Glanz and Carvalho (2013)</span> for details). The pair of variance matrices are only identifiable up to a constant, so this function sets the first element of <span class="math inline">\(\mathbf{U}\)</span> to <span class="math inline">\(1\)</span>.</p>
+<p>There are two restrictions possible for the mean matrices: <code>row.mean</code> will force a common mean within a row and <code>col.mean</code> will force a common mean within a column. Restrictions on <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are possible with <code>row.variance</code> and <code>col.variance</code> commands. Currently the only option is to impose an AR(1) structure by providing the <code>AR(1)</code> option. This works by using <code>optim</code> to find the appropriate <span class="math inline">\(\rho\)</span> - it is not fast but if this is the true structure it will be better than an unstructured variance matrix. The <span class="math inline">\(\rho\)</span> parameter shouuld be <span class="math inline">\(&gt;0\)</span> but is not forced to be non-negative.</p>
 <p>In order to fit parameters for an <span class="math inline">\(n \times p\)</span> matrix, at least <span class="math inline">\(\max (n/p,p/n) + 1\)</span> observations are needed.</p>
-<p>The function expects data in the format produced by the <code>rmatrixnorm</code> function. The results are only the parameter estimates and do not include measures of uncertainty.</p>
+<p>The function expects data in a format produced by the <code>rmatrixnorm</code> function. The results are only the parameter estimates and do not include measures of uncertainty.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">20180202</span>)
 A =<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dt">n=</span><span class="dv">100</span>,<span class="dt">mean=</span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">100</span>,<span class="dv">0</span>,<span class="op">-</span><span class="dv">100</span>,<span class="dv">0</span>,<span class="dv">25</span>,<span class="op">-</span><span class="dv">1000</span>),<span class="dt">nrow=</span><span class="dv">2</span>),
    <span class="dt">L=</span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">0</span>,.<span class="dv">1</span>),<span class="dt">nrow=</span><span class="dv">2</span>),<span class="dt">list=</span><span class="ot">TRUE</span>)
@@ -203,7 +203,1828 @@ $iter
 
 $tol
 [1] 3411.292</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this failure is expected with misspecification! </span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this failure is expected with misspecification! </span>
+
+B =<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dv">50</span>,<span class="dt">mean=</span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>,<span class="dt">nrow=</span><span class="dv">5</span>),<span class="dt">U=</span><span class="dv">3</span><span class="op">*</span><span class="kw">toeplitz</span>(.<span class="dv">6</span><span class="op">^</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)))
+<span class="kw">mle.matrixnorm</span>(B,<span class="dt">row.variance=</span><span class="st">&quot;AR(1)&quot;</span>)</code></pre></div>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.999 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.
+
+Warning in toepmatrix(dims[2], theta): Rho = 0.998 high correlation may
+cause numerical problems.</code></pre>
+<pre><code>$mean
+          [,1]     [,2]     [,3]
+[1,] 0.9879945 5.976905 10.88718
+[2,] 1.8732469 6.852212 12.18793
+[3,] 2.9224880 7.939933 13.30729
+[4,] 4.2194033 9.036333 14.06759
+[5,] 5.2340302 9.857787 14.63149
+
+$U
+          [,1]      [,2]      [,3]      [,4]      [,5]
+[1,] 1.0000000 0.5843139 0.3414228 0.1994981 0.1165695
+[2,] 0.5843139 1.0000000 0.5843139 0.3414228 0.1994981
+[3,] 0.3414228 0.5843139 1.0000000 0.5843139 0.3414228
+[4,] 0.1994981 0.3414228 0.5843139 1.0000000 0.5843139
+[5,] 0.1165695 0.1994981 0.3414228 0.5843139 1.0000000
+
+$V
+             [,1]         [,2]       [,3]
+[1,] 1.8560017484 0.0005009877 0.01055515
+[2,] 0.0005009877 1.5764046590 0.06611688
+[3,] 0.0105551486 0.0661168803 1.81785108
+
+$iter
+[1] 11
+
+$tol
+[1] 1.9879e-10</code></pre>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2>References</h2>

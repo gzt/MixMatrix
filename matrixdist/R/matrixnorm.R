@@ -144,11 +144,13 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
 #'
 #' @return Returns the density at the provided observation. This is an alternative method of computing which works by flattening out into a vector instead of a matrix.
 #' @keywords internal
+#' @export
+#'
 #' @examples
 #' set.seed(20180202)
 #' A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2))
-#' dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#' dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
 dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
@@ -183,12 +185,10 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 #' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
 #'    within each row. If both this and \code{row.mean} are \code{TRUE}, there will be
 #'    a common mean for the entire matrix.
-#' @param row.variance At present, no options available for this.
-#'    Variance structure for the rows. In the future, intend to have options
-#'    for, eg, AR(1) structure.
-#' @param col.variance  At present, no options available for this.
-#'    Variance structure for the columns. In the future, intend to have options
-#'    for, eg, AR(1) structure.
+#' @param row.variance Imposes a variance structure on the rows. Either
+#'     "none" or "AR(1)". Only positive correlations are allowed for AR(1).
+#' @param col.variance  Imposes a variance structure on the columns.
+#'     Either "none" or "AR(1)". Only positive correlations are allowed for AR(1).
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
@@ -209,7 +209,7 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 #' print(results)
 #'
 #'
-mle.matrixnorm = function(data,row.mean = FALSE,col.mean=FALSE,row.variance="none",col.variance="none",tol = 1e-9,max.iter=100,U,V){
+mle.matrixnorm <- function(data,row.mean = FALSE,col.mean=FALSE,row.variance="none",col.variance="none",tol = 1e-9,max.iter=100,U,V){
   if(class(data) == "list") data = aperm(array(unlist(data), dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data))),perm=c(3,1,2))
 
   # intend to implement AR(1) (etc) variance restriction later
@@ -235,15 +235,35 @@ mle.matrixnorm = function(data,row.mean = FALSE,col.mean=FALSE,row.variance="non
   swept.data = sweep(data,c(2,3),mu)
   iter = 0
   error.term = 1e40
+  if(col.variance == "AR(1)") rho.col = .5
+  if(row.variance == "AR(1)") rho.row = .5
 
   while(iter < max.iter && error.term > tol){
     #make intermediate matrix, then collapse to final version
+    if(col.variance == "AR(1)"){
+      var = V[1,1]
+    nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,U=U,V=theta[1]*toepmatrix(dims[3],theta[2]))))
+      fit0 = stats::optim(c(var,rho.col),nLL,method="L-BFGS-B",
+                   hessian = FALSE,lower=c(0,0),upper=c(Inf,.999) )
+      var = fit0$par[1]
+      rho.col = fit0$par[2]
+      new.V = var * toepmatrix(dims[3],rho.col)
+    } else {
     inter.V = apply(swept.data, 1, function(x) (t(x) %*% solve(U) %*% x))
     new.V = matrix(apply( inter.V, 1, sum),nrow=dims[3]) / (dims[1]*dims[2])
+    }
 
+    if(row.variance == "AR(1)"){
+      nLL  <- function(theta) -sum(apply(swept.data,1,function(x) dmatrixnorm(x,log=TRUE,V=new.V,U=toepmatrix(dims[2],theta))))
+      fit0 = stats::optim(rho.row,nLL,method="L-BFGS-B",
+                   hessian = FALSE,lower=0,upper=.999 )
+      rho.row = fit0$par
+      new.U = toepmatrix(dims[2],rho.row)
+      } else {
     inter.U =  apply(swept.data, 1, function(x) ((x) %*% solve(V) %*% t(x)) )
     new.U = matrix(apply(inter.U ,1,sum),nrow=dims[2]) / (dims[1]*dims[3])
     new.U = new.U/(new.U[1,1])
+    }
     # only identifiable up to a constant, so have to fix something at 1
     # should perhaps change - makes doing other restrictions on variance harder.
     # compute differences with prior iterations:
@@ -257,3 +277,25 @@ mle.matrixnorm = function(data,row.mean = FALSE,col.mean=FALSE,row.variance="non
   return(list(mean = mu, U=U, V = V, iter=iter, tol=error.term))
 }
 
+#' toepmatrix
+#'
+#' @param n number of columns/rows
+#' @param rho correlation parameter
+#'
+#' @return Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on the other diagonals, where $k$ is distance from the main diagonal. Used internally but it is useful for generating your own random matrices.
+#' @keywords internal
+#' @export
+#'
+#' @examples
+#' rho = .9
+#' n = 6
+#' toepmatrix(n,rho)
+toepmatrix <- function(n,rho){
+  if(n <=1) stop("n must be greater than 1.")
+  if(rho >= 1) stop("rho must be a correlation less than 1.")
+  if(rho <= -1) stop("rho must be a correlation greater than -1.")
+  if(rho < 0) warning("Rho = ",rho," and should be greater than 0.")
+  if(rho > .99) warning("Rho = ",rho," high correlation may cause numerical problems.")
+  X = stats::toeplitz(c(1,rho^(1:(n-1))))
+  return(X)
+}

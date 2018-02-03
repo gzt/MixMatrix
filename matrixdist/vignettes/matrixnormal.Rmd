@@ -77,13 +77,13 @@ dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 ## Parameter estimation for matrix variate normal distributions
 
-Maximum likelihood estimation is possible for the matrix variate normal distribution (see @dutilleul1999mle or @2013arXiv1309.6609G for details). The pair of variance matrices are only identifiable up to a constant, so this sets the first element of $\mathbf{U}$ to $1$.
+Maximum likelihood estimation is possible for the matrix variate normal distribution (see @dutilleul1999mle or @2013arXiv1309.6609G for details). The pair of variance matrices are only identifiable up to a constant, so this function sets the first element of $\mathbf{U}$ to $1$.
 
-There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. In the future, restrictions on $\mathbf{U}$ and $\mathbf{V}$ will be made available (say, AR(1) covariance structures) with `row.variance` and `col.variance` commands.
+There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands. Currently the only option is to impose an AR(1) structure by providing the `AR(1)` option. This works by using `optim` to find the appropriate $\rho$ - it is not fast but if this is the true structure it will be better than an unstructured variance matrix. The $\rho$ parameter shouuld be $>0$ but is not forced to be non-negative.
 
 In order to fit parameters for an $n \times p$ matrix, at least $\max (n/p,p/n) + 1$ observations are needed.
 
-The function expects data in the format produced by the `rmatrixnorm` function.
+The function expects data in a format produced by the `rmatrixnorm` function.
 The results are only the parameter estimates and do not include measures of uncertainty.
 
 ```{r mle}
@@ -95,6 +95,9 @@ print(results)
 results.fixrows = mle.matrixnorm(A, row.mean=TRUE)
 print(results.fixrows)
 # this failure is expected with misspecification! 
+
+B = rmatrixnorm(50,mean=matrix(1:15,nrow=5),U=3*toeplitz(.6^(1:5)))
+mle.matrixnorm(B,row.variance="AR(1)")
 
 ```
 

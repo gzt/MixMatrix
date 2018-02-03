@@ -1,8 +1,8 @@
 Package: matrixdist
 Type: Package
 Title: Functions For Matrix Distributions
-Version: 0.0.0.9001
-Date: 2018-02-02
+Version: 0.0.0.91
+Date: 2018-02-03
 Authors@R: person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"))
 Description: Generating matrix distributions, computing densities for matrix distributions, 
