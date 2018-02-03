@@ -1,11 +1,12 @@
 Package: matrixdist
 Type: Package
-Title: Functions for the Matrix Distributions
-Version: 1.0
+Title: Functions For Matrix Distributions
+Version: 0.0.0.9000
 Date: 2018-02-02
-Author: Geoffrey Z Thompson
-Maintainer: Geoffrey Z Thompson <gzthompson@gmail.com>
+Authors@R: person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
+          role = c("aut", "cre")
 Description: Generating matrix distributions, computing densities for matrix distributions, 
     and fitting parameters of matrix distributions. Currently only for normal distributions, 
     but may expand to t-distributions and some others.
-License: CC0
+Depends: R (>= 2.0.0)
+License: GPL-3
