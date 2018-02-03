@@ -86,7 +86,7 @@ In order to fit parameters for an $n \times p$ matrix, at least $\max (n/p,p/n) 
 The function expects data in a format produced by the `rmatrixnorm` function.
 The results are only the parameter estimates and do not include measures of uncertainty.
 
-```{r mle}
+```{r mle,warning=FALSE}
 set.seed(20180202)
 A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
@@ -98,6 +98,7 @@ print(results.fixrows)
 
 B = rmatrixnorm(50,mean=matrix(1:15,nrow=5),U=3*toeplitz(.6^(1:5)))
 mle.matrixnorm(B,row.variance="AR(1)")
+mle.matrixnorm(B)
 
 ```
 
