@@ -30,9 +30,4 @@ Returns a matrix of one observation. This function is for internal use only.
 \description{
 rmatrixt.one
 }
-\seealso{
-Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt.one}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixt}}
-}
 \keyword{internal}

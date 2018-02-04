@@ -55,6 +55,5 @@ summary(rmatrixt(n=100,df=10,matrix(0)))
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt.one}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixt.one}}
+  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt}}
 }

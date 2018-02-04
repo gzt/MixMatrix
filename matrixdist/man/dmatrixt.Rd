@@ -41,6 +41,5 @@ dmatrixt(x,df=1)
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{rmatrixinvt.one}}, \code{\link{rmatrixinvt}},
-  \code{\link{rmatrixt.one}}, \code{\link{rmatrixt}}
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixt}}
 }

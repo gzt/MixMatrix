@@ -33,6 +33,5 @@ Generate random draws from the inverted matrix variate t-distribution
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt.one}},
-  \code{\link{rmatrixt.one}}, \code{\link{rmatrixt}}
+  \code{\link{dmatrixt}}, \code{\link{rmatrixt}}
 }

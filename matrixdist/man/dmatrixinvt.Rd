@@ -34,6 +34,5 @@ Compute densities for the inverted matrix variate t-distribution.
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixt}},
-  \code{\link{rmatrixinvt.one}}, \code{\link{rmatrixinvt}},
-  \code{\link{rmatrixt.one}}, \code{\link{rmatrixt}}
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixt}}
 }
