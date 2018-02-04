@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrixnorm.R
 \name{rmatrixnorm}
 \alias{rmatrixnorm}
-\title{rmatrixnorm}
+\title{rmatrixnorm: matrix variate normal}
 \usage{
 rmatrixnorm(n, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L
   \%*\% t(L), V = t(R) \%*\% R, list = FALSE, array = NULL)
@@ -28,7 +28,7 @@ rmatrixnorm(n, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
 }
 \description{
-rmatrixnorm
+generate random draws from a matrix variate normal distribution
 }
 \examples{
 set.seed(20180202)
@@ -43,4 +43,8 @@ B = rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 B[1 , , ]
 
+}
+\seealso{
+Other matrixnorm: \code{\link{dmatrixnorm.test}},
+  \code{\link{dmatrixnorm}}, \code{\link{rmatrixnorm.one}}
 }

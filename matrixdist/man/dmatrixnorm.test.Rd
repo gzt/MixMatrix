@@ -35,4 +35,8 @@ A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 }
+\seealso{
+Other matrixnorm: \code{\link{dmatrixnorm}},
+  \code{\link{rmatrixnorm.one}}, \code{\link{rmatrixnorm}}
+}
 \keyword{internal}

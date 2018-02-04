@@ -2,22 +2,24 @@
 % Please edit documentation in R/matrixt.R
 \name{rmatrixt}
 \alias{rmatrixt}
-\title{Title}
+\title{rmatrixt}
 \usage{
-rmatrixt(n, mean, df, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
+rmatrixt(n, df, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
   U = L \%*\% t(L), V = t(R) \%*\% R, list = FALSE, array = NULL)
 }
 \arguments{
 \item{n}{number of observations to generate}
 
+\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer), \code{df = Inf} is allowed.}
+
 \item{mean}{\eqn{p X q} This is really a "shift" rather than a mean as this
 is a central T, though the expected value will be equal to this if \eqn{df > 2}}
 
-\item{df}{Degrees of freedom parameter}
+\item{L}{\eqn{p X p}  matrix specifying relations among the rows.
+By default, an identity matrix.}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.}
-
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
+By default, an identity matrix.}
 
 \item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows, computed
 from \eqn{L} if not specified. Note this is not the variance.}
@@ -33,21 +35,26 @@ computed from \eqn{R}  if not specified.  Note this is not the variance.}
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
 }
 \description{
-Title
+Random generation for the matrix variate t-distribution
 }
 \examples{
 set.seed(20180202)
-rmatrixt(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),df=10,
+rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 set.seed(20180202)
-A = rmatrixt(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),df=10,
+A = rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 A[[1]]
 set.seed(20180202)
-B = rmatrixt(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),df=10,
+B = rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 B[1 , , ]
 summary(rt(n=100,df=10))
-summary(rmatrixt(n=100,matrix(0),df=10))
+summary(rmatrixt(n=100,df=10,matrix(0)))
 
+}
+\seealso{
+Other matrixt: \code{\link{dmatrixinvt}},
+  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt.one}},
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixt.one}}
 }

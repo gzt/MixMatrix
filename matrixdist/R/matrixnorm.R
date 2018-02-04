@@ -11,11 +11,8 @@
 #' @name matrixdist
 NULL
 
-
-
-
-
 #' rmatrixnorm.one
+#' @family matrixnorm
 #' @param mean \eqn{p X q}  matrix of means
 #' @param L \eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.
 #' @param R \eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.
@@ -25,6 +22,9 @@ NULL
 #' @return Returns a matrix of one observation. This function is for internal use only.
 #' @keywords internal
 rmatrixnorm.one <- function(mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]), U = L %*% t(L), V = t(R) %*% R){
+  mean = as.matrix(mean)
+  U = as.matrix(U)
+  V = as.matrix(V)
   dims = dim(mean)
   # should probably do better error checking, checks for conformable matrix dimensions
   if(!(dims[1] == dim(U)[2] && dim(U)[1]==dim(U)[2] && dims[2]==dim(V)[1] && dim(V)[1]==dim(V)[2])) {
@@ -41,8 +41,11 @@ rmatrixnorm.one <- function(mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]), U = 
 
 
 
-#' rmatrixnorm
+#' rmatrixnorm: matrix variate normal
 #'
+#' @description  generate random draws from a matrix variate normal distribution
+#'
+#' @family matrixnorm
 #' @param n number of observations to generate - must be a positive integer.
 #' @param mean \eqn{p X q}  matrix of means
 #' @param L \eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.
@@ -67,9 +70,13 @@ rmatrixnorm.one <- function(mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]), U = 
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 #' B[1 , , ]
 #'
-rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]),
-                        U = L %*% t(L), V = t(R) %*% R,list=FALSE,array=NULL ){
+rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),
+                        R=diag(dim(mean)[2]), U = L %*% t(L),
+                        V = t(R) %*% R,list=FALSE,array=NULL ){
     if(!(n>0)) stop("n must be > 0")
+  mean = as.matrix(mean)
+  U = as.matrix(U)
+  V = as.matrix(V)
   dims = dim(mean)
   if(n ==1 && list == FALSE && is.null(array)){
     return(rmatrixnorm.one(mean,U=U,V=V))
@@ -90,15 +97,18 @@ rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]),
 }
 
 
-#' dmatrixnorm
+#' dmatrixnorm: matrix variate normal
 #'
+#' @description compute densities from a matrix variate normal distribution
+#'
+#' @family matrixnorm
 #' @param x \eqn{p X q} input matrix
 #' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}
 #' @param L \eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.
 #' @param R \eqn{q X q} matrix specifying relations among the columns. By default, an identity matrix.
 #' @param U \eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.
 #' @param V \eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix for columns, computed from \eqn{R} if not specified.
-#' @param log Whether to return the density on the log scale.
+#' @param log logical; if TRUE, probabilities p are given as log(p).
 #'
 #' @return Returns the density at the provided observation.
 #' @export
@@ -111,8 +121,13 @@ rmatrixnorm <- function(n, mean,L=diag(dim(mean)[1]),R=diag(dim(mean)[2]),
 #'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
 #'
-dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag(dim(x)[2]),
+dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]),
+                        L = diag(dim(x)[1]), R=diag(dim(x)[2]),
                         U = L %*% t(L), V = t(R) %*% R,log = FALSE){
+  x = as.matrix(x)
+  mean = as.matrix(mean)
+  U = as.matrix(U)
+  V = as.matrix(V)
   dims = dim(x)
   if(!(dims[1] == dim(U)[2] && dim(U)[1]==dim(U)[2] && dims[2]==dim(V)[1] && dim(V)[1]==dim(V)[2])) {
     stop("Non-conforming dimensions.")
@@ -134,6 +149,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
 
 #' dmatrixnorm.test
 #'
+#' @family matrixnorm
 #' @param x \eqn{p X q} input matrix
 #' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}
 #' @param L \eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.
@@ -153,9 +169,14 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]), R=diag
 #' dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
-dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
-                    R=diag(dim(x)[2]),U = L %*% t(L), V = t(R) %*% R,log = FALSE){
+dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
+                             L = diag(dim(x)[1]), R=diag(dim(x)[2]),
+                             U = L %*% t(L), V = t(R) %*% R,log = FALSE){
   #results should equal other option - works by unrolling into MVN
+  x = as.matrix(x)
+  mean = as.matrix(mean)
+  U = as.matrix(U)
+  V = as.matrix(V)
   dims = dim(x)
   if(!(dims[1] == dim(U)[2] && dim(U)[1]==dim(U)[2] && dims[2]==dim(V)[1] && dim(V)[1]==dim(V)[2])) {
     stop("Non-conforming dimensions.")
@@ -176,7 +197,9 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
   else return(exp(logresult))
 }
 
-#' mle.matrixnorm
+#' mle.matrixnorm:
+#'
+#' @description Maximum likelihood estimation for matrix normal distributions
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in dimensions 2 and 3, indexed by dimension 1.
 #' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
@@ -278,6 +301,8 @@ mle.matrixnorm <- function(data,row.mean = FALSE,col.mean=FALSE,row.variance="no
 }
 
 #' toepgenerate
+#'
+#' @description generate AR(1) correlation matrices
 #'
 #' @param n number of columns/rows
 #' @param rho correlation parameter

@@ -17,7 +17,7 @@ Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on
    Used internally but it is useful for generating your own random matrices.
 }
 \description{
-toepgenerate
+generate AR(1) correlation matrices
 }
 \examples{
 rho = .9

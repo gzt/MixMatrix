@@ -24,4 +24,8 @@ Returns a matrix of one observation. This function is for internal use only.
 \description{
 rmatrixnorm.one
 }
+\seealso{
+Other matrixnorm: \code{\link{dmatrixnorm.test}},
+  \code{\link{dmatrixnorm}}, \code{\link{rmatrixnorm}}
+}
 \keyword{internal}

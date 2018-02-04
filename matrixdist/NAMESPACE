@@ -2,7 +2,11 @@
 
 export(dmatrixnorm)
 export(dmatrixnorm.test)
+export(dmatrixt)
+export(lmvgamma)
 export(mle.matrixnorm)
+export(posmatsqrt)
+export(rmatrixinvt)
 export(rmatrixnorm)
 export(rmatrixt)
 export(toepgenerate)

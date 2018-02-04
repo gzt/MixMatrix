@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrixnorm.R
 \name{mle.matrixnorm}
 \alias{mle.matrixnorm}
-\title{mle.matrixnorm}
+\title{mle.matrixnorm:}
 \usage{
 mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
   row.variance = "none", col.variance = "none", tol = 1e-09,
@@ -41,7 +41,7 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix,
    the number of iterations, and error at the time of stopping.
 }
 \description{
-mle.matrixnorm
+Maximum likelihood estimation for matrix normal distributions
 }
 \examples{
 set.seed(20180202)

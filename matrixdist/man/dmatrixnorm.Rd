@@ -2,9 +2,9 @@
 % Please edit documentation in R/matrixnorm.R
 \name{dmatrixnorm}
 \alias{dmatrixnorm}
-\title{dmatrixnorm}
+\title{dmatrixnorm: matrix variate normal}
 \usage{
-dmatrixnorm(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
+dmatrixnorm(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
   R = diag(dim(x)[2]), U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
@@ -20,13 +20,13 @@ dmatrixnorm(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 
 \item{V}{\eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix for columns, computed from \eqn{R} if not specified.}
 
-\item{log}{Whether to return the density on the log scale.}
+\item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }
 \value{
 Returns the density at the provided observation.
 }
 \description{
-dmatrixnorm
+compute densities from a matrix variate normal distribution
 }
 \examples{
 set.seed(20180202)
@@ -36,4 +36,8 @@ dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
 
+}
+\seealso{
+Other matrixnorm: \code{\link{dmatrixnorm.test}},
+  \code{\link{rmatrixnorm.one}}, \code{\link{rmatrixnorm}}
 }
