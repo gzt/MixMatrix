@@ -4,8 +4,9 @@
 \alias{rmatrixnorm}
 \title{rmatrixnorm: matrix variate normal}
 \usage{
-rmatrixnorm(n, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L
-  \%*\% t(L), V = t(R) \%*\% R, list = FALSE, array = NULL)
+rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
+  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
+  list = FALSE, array = NULL)
 }
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}

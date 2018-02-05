@@ -4,9 +4,7 @@
 \alias{rmatrixt.one}
 \title{rmatrixt.one}
 \usage{
-rmatrixt.one(df, mean = matrix(0, nrow = 2, ncol = 2),
-  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R)
+rmatrixt.one(df, mean = matrix(0, nrow = 2, ncol = 2), solveU, cholV)
 }
 \arguments{
 \item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),

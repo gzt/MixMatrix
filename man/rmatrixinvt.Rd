@@ -5,8 +5,8 @@
 \title{rmatrixinvt}
 \usage{
 rmatrixinvt(n, df, mean = matrix(0, nrow = 2, ncol = 2),
-  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R)
+  L = diag(dim(as.matrix(mean))[1]), R = diag(dim(as.matrix(mean))[2]),
+  U = L \%*\% t(L), V = t(R) \%*\% R, list = FALSE, array = NULL)
 }
 \arguments{
 \item{n}{number of observations}
@@ -27,8 +27,19 @@ computed from \eqn{L} if not specified. Note this is not the variance.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
 computed from \eqn{R}  if not specified.  Note this is not the variance.}
+
+\item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
+output will be a list of matrices.}
+
+\item{array}{If \eqn{n = 1}  and this is not specified and \code{list}  is
+\code{FALSE} , the function will return a matrix containing the one
+observation. If \eqn{n > 1} , should be the opposite of \code{list} .
+If \code{list}  is \code{TRUE} , this will be ignored.}
 }
 \value{
+This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+   a \eqn{n X p X q}  array.
+
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices
    or a \eqn{n X p X q}  array.
 }

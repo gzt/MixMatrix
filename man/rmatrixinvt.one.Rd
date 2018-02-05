@@ -4,9 +4,7 @@
 \alias{rmatrixinvt.one}
 \title{rmatrixinvt.one}
 \usage{
-rmatrixinvt.one(df, mean = matrix(0, nrow = 2, ncol = 2),
-  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R)
+rmatrixinvt.one(df, mean = matrix(0, nrow = 2, ncol = 2), Usqrt, Vsqrt)
 }
 \arguments{
 \item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
@@ -16,16 +14,10 @@ rmatrixinvt.one(df, mean = matrix(0, nrow = 2, ncol = 2),
 mean as this is a central T, though the expected value will be equal
 to this if \eqn{df > 2}}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By
-default, an identity matrix.}
-
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
-By default, an identity matrix.}
-
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+\item{Usqrt}{\eqn{LL^T}  - \eqn{p X p}  positive definite symm sqrt matrix for rows,
 computed from \eqn{L} if not specified. Note this is not the variance.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
+\item{Vsqrt}{\eqn{R^T R}  - \eqn{q X q}  positive definite symm sqrt matrix for columns,
 computed from \eqn{R}  if not specified.  Note this is not the variance.}
 }
 \value{

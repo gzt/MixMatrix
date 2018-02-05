@@ -4,8 +4,9 @@
 \alias{dmatrixt}
 \title{dmatrixt}
 \usage{
-dmatrixt(x, df, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
-  R = diag(dim(x)[2]), U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
+dmatrixt(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
+  L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]), U = L
+  \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
 \item{x}{\eqn{p X q} input matrix}

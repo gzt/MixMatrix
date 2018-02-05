@@ -4,8 +4,9 @@
 \alias{dmatrixnorm.test}
 \title{dmatrixnorm.test}
 \usage{
-dmatrixnorm.test(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
-  R = diag(dim(x)[2]), U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
+dmatrixnorm.test(x, mean = array(0L, dim(as.matrix(x))),
+  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
+  V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
 \item{x}{\eqn{p X q} input matrix}

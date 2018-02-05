@@ -18,21 +18,15 @@
 #'    use only.
 #' @keywords internal
 #'
-rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
-                         L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
-                         U = L %*% t(L), V = t(R) %*% R) {
-    if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
-             is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2), solveU, cholV ) {
+    if(!(all(is.numeric(df), is.numeric(mean),
+             is.numeric(solveU),is.numeric(cholV)))) stop("Non-numeric input. ")
     mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    if(df == 0 || is.infinite(df)) return(rmatrixnorm.one(mean = mean, U = U, V = V))
+    solveU <- as.matrix(solveU)
+    cholV <- as.matrix(cholV)
+
     dims <- dim(mean)
-    # should probably do better error checking, checks for conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-        stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
+    # moving some of this to the main function
     n <- prod(dims)
     mat <- matrix(stats::rnorm(n), nrow = dims[1])
     # okay, here's the deal: the way this was formulated in the book
@@ -40,10 +34,10 @@ rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
     # clear that what we have to do to get what is 'usually'
     # expected on this count is multiply U by the degrees of freedom.
     # somebody please correct me on this if wrong.
-    USigma <- stats::rWishart(1, df + dims[1] - 1, solve(df * U))[, , 1]
-    cholU <- (chol(solve(USigma)))
-    cholV <- chol(V)
-    result <- mean + t(cholU) %*% mat %*% (cholV)
+    USigma <- stats::rWishart(1, df + dims[1] - 1, 1/df * solveU)[, , 1]
+    # want this one - check the math, and it's faster!
+    cholU <- (solve(chol(USigma)))
+    result <- mean + (cholU) %*% mat %*% (cholV)
     dimnames(result) <- dimnames(mean)
     return(result)
 }
@@ -103,15 +97,21 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
+    # should probably do better error checking, checks for conformable matrix dimensions
+    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+    }
+    solveU = solve(U)
+    cholV = chol(V)
     if(df == 0 || is.infinite(df)) return(rmatrixnorm(n = n, mean = mean, U = U, V = V,
                                                           list = list, array = array))
     if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixt.one(mean = mean, df = df, U = U, V = V))
+        return(rmatrixt.one(mean = mean, df = df, solveU = solveU, cholV = cholV))
         # if n = 1 and you don't specify arguments, if just returns a matrix
     }
     if (list) {
-        return(lapply(1:n, function(x) rmatrixt.one(df = df,mean = mean,
-                                                    U = U, V = V)))
+        return(lapply(1:n, function(x) rmatrixt.one(mean = mean, df = df, solveU = solveU, cholV = cholV)))
     }
     if (!(list) && !(is.null(array))) {
         if (!(array))
@@ -122,7 +122,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
     for (i in 1:n) {
         # note this indexes by the first coord - use aperm() on
         # results if you don't want that
-        result[ , , i] <- rmatrixt.one(df = df, mean = mean, U = U, V = V)
+        result[ , , i] <- rmatrixt.one(mean = mean, df = df, solveU = solveU, cholV = cholV)
     }
     return(result)
 }
@@ -279,13 +279,9 @@ posmatsqrt <- function(A) {
 #' @param mean \eqn{p X q} This is really a 'shift' rather than a
 #'    mean as this is a central T, though the expected value will be equal
 #'    to this if \eqn{df > 2}
-#' @param L \eqn{p X p}  matrix specifying relations among the rows. By
-#'    default, an identity matrix.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+#' @param Usqrt \eqn{LL^T}  - \eqn{p X p}  positive definite symm sqrt matrix for rows,
 #'    computed from \eqn{L} if not specified. Note this is not the variance.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
+#' @param Vsqrt \eqn{R^T R}  - \eqn{q X q}  positive definite symm sqrt matrix for columns,
 #'    computed from \eqn{R}  if not specified.  Note this is not the variance.
 #'
 #' @return Returns a matrix of one observation. This function is for
@@ -293,24 +289,17 @@ posmatsqrt <- function(A) {
 #' @keywords internal
 #'
 rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
-                            L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
-                            U = L %*% t(L), V = t(R) %*% R) {
-  if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
-           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+                            Usqrt, Vsqrt) {
+  if(!(all(is.numeric(df), is.numeric(mean),
+           is.numeric(Usqrt),is.numeric(Vsqrt)))) stop("Non-numeric input. ")
     mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
     dims <- dim(mean)
-    # checks for conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-        stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
+    # conformable dimension check moved to rmatrixinvt
+
     n <- prod(dims)
     mat <- matrix(stats::rnorm(n), nrow = dims[1])
     S <- stats::rWishart(1, df + dims[1] - 1, diag(dims[1]))[, , 1]
-    Usqrt <- posmatsqrt(U)
-    Vsqrt <- posmatsqrt(V)
+
     SXX <- solve(posmatsqrt(S + mat %*% t(mat)))
     result <- Usqrt %*% SXX %*% mat %*% Vsqrt + mean
     return(result)
@@ -333,6 +322,14 @@ rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
 #'    computed from \eqn{L} if not specified. Note this is not the variance.
 #' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
 #'    computed from \eqn{R}  if not specified.  Note this is not the variance.
+#' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
+#'    output will be a list of matrices.
+#' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
+#'    \code{FALSE} , the function will return a matrix containing the one
+#'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
+#'    If \code{list}  is \code{TRUE} , this will be ignored.
+#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+#'    a \eqn{n X p X q}  array.
 #'
 #' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices
 #'    or a \eqn{n X p X q}  array.
@@ -352,12 +349,19 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
+    # checks for conformable matrix dimensions
+    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+    }
+    Usqrt <- posmatsqrt(U)
+    Vsqrt <- posmatsqrt(V)
     if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixinvt.one(df = df, mean = mean, U = U, V = V))
+        return(rmatrixinvt.one(df = df, mean = mean, Usqrt = Usqrt, Vsqrt = Vsqrt))
         # if n = 1 and you don't specify arguments, if just returns a matrix
     }
     if (list) {
-        return(lapply(1:n, function(x) rmatrixinvt.one(df = df, mean = mean, U = U, V = V)))
+        return(lapply(1:n, function(x) rmatrixinvt.one(df = df, mean = mean, Usqrt = Usqrt, Vsqrt = Vsqrt)))
     }
     if (!(list) && !(is.null(array))) {
         if (!(array))
@@ -368,7 +372,7 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
     for (i in 1:n) {
         # note this indexes by the last coord - use aperm() on results if
         # you don't want that
-        result[ , , i] <- rmatrixinvt.one(df = df, mean = mean, U = U, V = V)
+        result[ , , i] <- rmatrixinvt.one(df = df, mean = mean, Usqrt = Usqrt, Vsqrt = Vsqrt)
     }
     return(result)
 

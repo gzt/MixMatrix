@@ -14,35 +14,31 @@ NULL
 #'
 #' @param mean \eqn{p X q}  matrix of means
 #' @param L \eqn{p X p}  matrix specifying relations among the rows.
-#'    By default, an identity matrix.
+#'    By default (inherited from above), an identity matrix. Should be
+#'    output of Cholesky decomposition from rmatrixnorm.
 #' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance
-#'    matrix for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance
-#'    matrix for columns, computed from \eqn{R}  if not specified.
+#'    By default (inherited from above), an identity matrix. Should be
+#'    output of Cholesky decomposition from rmatrixnorm.
 #'
 #' @return Returns a matrix of one observation. This function is for internal use only.
 #' @keywords internal
-rmatrixnorm.one <- function(mean, L = diag(dim(mean)[1]),
-                            R = diag(dim(mean)[2]), U = L %*% t(L),
-                            V = t(R) %*% R) {
+rmatrixnorm.one <- function(mean, L, R) {
+
+  # removing a lot of error checking from this function as it should be
+  # done upstream - this is an internal function!
+  # should only be passed the cholesky or other sqrt matrices!
+
   if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
-    # checks for conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-        stop("Non-conforming dimensions.", dims, dim(U),dim(V))
-    }
-    n <- prod(dims)
+    # other computation moved upstream!
+    n = prod(dims)
     mat <- matrix(stats::rnorm(n), nrow = dims[1])
-    cholU <- chol(U)
-    cholV <- chol(V)
-    result <- mean + t(cholU) %*% mat %*% (cholV)
+
+    result <- mean + t(L) %*% mat %*% (R)
     dimnames(result) <- dimnames(mean)
     return(result)
 }
@@ -96,12 +92,23 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
+
+    # non-conforming dimension check moved to rmatrixnorm
+    # checks for conformable matrix dimensions
+    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+      stop("Non-conforming dimensions.", dims, dim(U),dim(V))
+    }
+
+    cholU <- chol(U)
+    cholV <- chol(V)
+
     if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixnorm.one(mean, U = U, V = V))
+        return(rmatrixnorm.one(mean, L = cholU, R = cholV))
         # if n = 1 and you don't specify arguments, if just returns a matrix
     }
     if (list) {
-        return(lapply(1:n, function(x) rmatrixnorm.one(mean, U = U, V = V)))
+        return(lapply(1:n, function(x) rmatrixnorm.one(mean, L = cholU, R = cholV)))
     }
     if (!(list) && !(is.null(array))) {
         if (!(array))
@@ -112,7 +119,7 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
     for (i in 1:n) {
         # note this indexes by the first coord - use aperm() on results
         # if you don't want that
-        result[ , , i] <- rmatrixnorm.one(mean, U = U, V = V)
+        result[ , , i] <- rmatrixnorm.one(mean, L = cholU, R = cholV)
     }
     return(result)
 }
