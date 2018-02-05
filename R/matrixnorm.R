@@ -285,17 +285,16 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 1e-09, max.iter = 100, U, V) {
+    if (class(data) == "list") data = aperm(array(unlist(data),                                                dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data))),                                  perm = c(3, 1, 2))
     if(!all(is.numeric(data),is.numeric(tol),
             is.numeric(max.iter))) stop("Non-numeric input. ")
     if(!(missing(U))){
       if(!(is.numeric(U))) stop("Non-numeric input.")
     }
-  if(!(missing(V))){
-    if(!(is.numeric(V))) stop("Non-numeric input.")
-  }
-    if (class(data) == "list") data = aperm(array(unlist(data),
-        dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data))),
-        perm = c(3, 1, 2))
+    if(!(missing(V))){
+      if(!(is.numeric(V))) stop("Non-numeric input.")
+    }
+
 
     # if data is array, presumes indexed over first column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
