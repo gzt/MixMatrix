@@ -96,9 +96,9 @@ results.fixrows = mle.matrixnorm(A, row.mean=TRUE)
 print(results.fixrows)
 # this failure is expected with misspecification! 
 
-B = rmatrixnorm(50,mean=matrix(1:15,nrow=5),U=3*toeplitz(.6^(1:5)))
-mle.matrixnorm(B,row.variance="AR(1)")
-mle.matrixnorm(B)
+B = rmatrixnorm(n=50,mean=matrix(1:15,nrow=5),U=3*stats::toeplitz(.6^(1:5)))
+mle.matrixnorm(B,row.variance="AR(1)",U=3*stats::toeplitz(.6^(1:5)))
+mle.matrixnorm(B,U=3*stats::toeplitz(.6^(1:5)))
 
 ```
 
