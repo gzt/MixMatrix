@@ -87,8 +87,8 @@ rmatrixnorm.one <- function(mean, L = diag(dim(mean)[1]),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 #' B[ , , 1]
 #'
-rmatrixnorm <- function(n, mean, L = diag(dim(mean)[1]),
-                        R = diag(dim(mean)[2]), U = L %*% t(L),
+rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
+                        R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                         V = t(R) %*% R, list = FALSE, array = NULL) {
     if(!is.numeric(n)) stop("n is not numeric")
     if (!(n > 0)) stop("n must be > 0. n = ", n)
@@ -147,8 +147,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(mean)[1]),
 #'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
 #'
-dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
-                        R = diag(dim(x)[2]), U = L %*% t(L),
+dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]), L = diag(dim(mean)[1]),
+                        R = diag(dim(mean)[2]), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
   if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
@@ -168,7 +168,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
     n <- dim(V)[1]
     detU <- det(U)
     detV <- det(V)
-    if (!(detU > 0 || detV > 0)) stop("non-invertible matrix")
+    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
     Uinv <- solve(U)
     Vinv <- solve(V)
     XM <- x - mean
@@ -209,8 +209,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
 #' \dontrun{dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
 
-dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
-                             L = diag(dim(x)[1]), R = diag(dim(x)[2]),
+dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
+                             L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                              U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
     # results should equal other option - works by unrolling into MVN
   if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
@@ -408,3 +408,4 @@ toepgenerate <- function(n, rho) {
     X <- stats::toeplitz(c(1, rho^(1:(n - 1))))
     return(X)
 }
+

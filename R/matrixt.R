@@ -91,18 +91,19 @@ rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
 #' summary(rmatrixt(n=100,df=10,matrix(0)))
 #'
 
-rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
-                     R = diag(dim(mean)[2]), U = L %*% t(L),
+rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
+                     R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                      V = t(R) %*% R, list = FALSE, array = NULL) {
     if (!(n > 0))
         stop("n must be > 0. n =", n)
-    if (!(df >= 0))
+    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+    if( ((is.null(df)) || is.na(df) || (df < 0)))
       stop("df must be >= 0. df =", df)
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
-    if(df == 0 || is.infinite(df)) return(rmatrixnorm(n = n, mean = mean, U = U, V = V, 
+    if(df == 0 || is.infinite(df)) return(rmatrixnorm(n = n, mean = mean, U = U, V = V,
                                                           list = list, array = array))
     if (n == 1 && list == FALSE && is.null(array)) {
         return(rmatrixt.one(mean = mean, df = df, U = U, V = V))
@@ -153,15 +154,16 @@ rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
 #' dt(x,1)
 #' dmatrixt(x,df=1)
 #'
-dmatrixt <- function(x, df, mean = array(0L, dim(x)[1:2]),
-                     L = diag(dim(x)[1]), R = diag(dim(x)[2]),
+dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
+                     L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]),
                      U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
     if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
-    if (!(df >= 0))
+    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+    if( ((is.null(df)) || is.na(df) || (df < 0)))
       stop("df must be >= 0. df =", df)
-    if(df == 0 || is.infinite(df)) return(dmatrixnorm(mean = mean, U = U, V = V, log = log))
+    if( (df == 0 || is.infinite(df)) ) return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
     x <- as.matrix(x)
     mean <- as.matrix(mean)
     U <- as.matrix(U)
@@ -172,21 +174,26 @@ dmatrixt <- function(x, df, mean = array(0L, dim(x)[1:2]),
       stop("Non-conforming dimensions.", dims, dim(U), dim(V))
     }
     xm <- x - mean
-    
+
+    detU <- det(U)
+    detV <- det(V)
+
     # breaking equation into two parts: the integrating constants (gammas)
     # and the matrix algebra parts (mats) done on the log scale
     # NB: I provided the correction to this that I did for
     # rmatrixt as well (ie scale by df)
-    
+
+    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
+
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    mats <- -0.5 * dims[2] * log(det(df * U)) - 0.5 * dims[1] * log(det(V)) -
+    mats <- -0.5 * dims[2] * (log(detU)+dims[1]*log(df)) - 0.5 * dims[1] * log(detV) -
          0.5 * (df + sum(dims) - 1) * log(det(diag(dims[1]) +
          solve(df * U) %*% xm %*% solve(V) %*% t(xm)))
 
-    results <- gammas + mats
+    results <- as.numeric(gammas + mats)
     if (log) {
         return(results)
       } else {
@@ -257,6 +264,7 @@ posmatsqrt <- function(A) {
 
     e <- eigen(A)
     V <- e$vectors
+    if(!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
     B <- V %*% diag(sqrt(e$values)) %*% t(V)
     return(B)
 }
@@ -331,10 +339,13 @@ rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
 #' @export
 #'
 rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
-                        L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
-                        U = L %*% t(L), V = t(R) %*% R) {
+                        L = diag(dim(as.matrix(mean))[1]), R = diag(dim(as.matrix(mean))[2]),
+                        U = L %*% t(L), V = t(R) %*% R, list=FALSE, array = NULL) {
     if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+       if( ((is.null(df)) || is.na(df) || (df < 0)))
+      stop("df must be >= 0. df =", df)
     if (!(n > 0))
         stop("n must be > 0.", n)
     mean <- as.matrix(mean)
@@ -342,11 +353,11 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
     V <- as.matrix(V)
     dims <- dim(mean)
     if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixinvt.one(mean, df, U = U, V = V))
+        return(rmatrixinvt.one(df = df, mean = mean, U = U, V = V))
         # if n = 1 and you don't specify arguments, if just returns a matrix
     }
     if (list) {
-        return(lapply(1:n, function(x) rmatrixinvt.one(mean, df, U = U, V = V)))
+        return(lapply(1:n, function(x) rmatrixinvt.one(df = df, mean = mean, U = U, V = V)))
     }
     if (!(list) && !(is.null(array))) {
         if (!(array))
@@ -357,7 +368,7 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
     for (i in 1:n) {
         # note this indexes by the last coord - use aperm() on results if
         # you don't want that
-        result[ , , i] <- rmatrixinvt.one(mean, df, U = U, V = V)
+        result[ , , i] <- rmatrixinvt.one(df = df, mean = mean, U = U, V = V)
     }
     return(result)
 
@@ -382,12 +393,15 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 #' @param log logical; if TRUE, probabilities p are given as log(p).
 #'
 #' @return returns the density.
-dmatrixinvt <- function(x, df, mean = array(0L, dim(x)[1:2]),
-                        L = diag(dim(x)[1]), R = diag(dim(x)[2]),
+dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
+                        L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]),
                         U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
   if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
+    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+      if( ((is.null(df)) || is.na(df) || (df < 0)))
+      stop("df must be >= 0. df =", df)
     if(df <= 0 || is.infinite(df)) stop("Invalid input for df, must have 0 < df < Inf, df = ", df)
     x <- as.matrix(x)
     mean <- as.matrix(mean)
@@ -399,11 +413,17 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(x)[1:2]),
       stop("Non-conforming dimensions.", dims, dim(U), dim(V))
     }
     xm <- x - mean
+    detU <- det(U)
+    detV <- det(V)
+    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
+
     # breaking equation into two parts: the integrating constants
     # (gammas) and the matrix algebra parts (mats) done on the log scale
+    # note I did not do the DF correction as for the matrix t distribution
+
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
         0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
-    mats <- -0.5 * dims[2] * log(det(U)) - 0.5 * dims[1] * log(det(V)) -
+    mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
         0.5 * (df - 2) * log(det(diag(dims[1]) -
         solve(U) %*% xm %*% solve(V) %*% t(xm)))
     results <- gammas + mats
