@@ -26,17 +26,14 @@ dmatrixnorm.test(x, mean = array(0L, dim(x)), L = diag(dim(x)[1]),
 Returns the density at the provided observation. This is an alternative method of computing which works by flattening out into a vector instead of a matrix.
 }
 \description{
-dmatrixnorm.test
+Equivalent to dmatrixnorm except it works by unrolling to a vector.
 }
 \examples{
 set.seed(20180202)
 A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
     L=matrix(c(2,1,0,.1),nrow=2))
-dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-    L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
+\dontrun{dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+    L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
 }
-\seealso{
-Other matrixnorm: \code{\link{dmatrixnorm}},
-  \code{\link{rmatrixnorm.one}}, \code{\link{rmatrixnorm}}
-}
+\keyword{#'}
 \keyword{internal}

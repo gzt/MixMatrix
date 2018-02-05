@@ -12,7 +12,7 @@
 NULL
 
 #' rmatrixnorm.one
-#' @family matrixnorm
+#'
 #' @param mean \eqn{p X q}  matrix of means
 #' @param L \eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.
 #' @param R \eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.
@@ -148,8 +148,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]),
 }
 
 #' dmatrixnorm.test
-#'
-#' @family matrixnorm
+#' @description Equivalent to dmatrixnorm except it works by unrolling to a vector.
 #' @param x \eqn{p X q} input matrix
 #' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}
 #' @param L \eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.
@@ -160,14 +159,13 @@ dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]),
 #'
 #' @return Returns the density at the provided observation. This is an alternative method of computing which works by flattening out into a vector instead of a matrix.
 #' @keywords internal
-#' @export
-#'
+#' #'
 #' @examples
 #' set.seed(20180202)
 #' A = rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2))
-#' dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
+#' \dontrun{dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
 
 dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
                              L = diag(dim(x)[1]), R=diag(dim(x)[2]),

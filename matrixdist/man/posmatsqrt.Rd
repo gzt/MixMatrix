@@ -13,7 +13,7 @@ posmatsqrt(A)
 a symmetric square root matrix for A. ie, \eqn{B = t(B)} and \eqn{B \%*\% B = A}.
 }
 \description{
-posmatsqrt
+Computes a positive symmetric square root  matrix for a positive definite input matrix. Used in the inverted matrix variate t-distribution.
 }
 \examples{
 A = diag(5) + 1

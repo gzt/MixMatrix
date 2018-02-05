@@ -38,6 +38,5 @@ dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 }
 \seealso{
-Other matrixnorm: \code{\link{dmatrixnorm.test}},
-  \code{\link{rmatrixnorm.one}}, \code{\link{rmatrixnorm}}
+Other matrixnorm: \code{\link{rmatrixnorm}}
 }

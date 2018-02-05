@@ -180,7 +180,7 @@ lmvgamma <- function(x,p){
 mvgamma <- function(x,p) exp(lmvgamma(x,p))
 
 #' posmatsqrt
-#'
+#' @description Computes a positive symmetric square root  matrix for a positive definite input matrix. Used in the inverted matrix variate t-distribution.
 #' @param A positive definite p x p real-valued matrix.
 #'
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and \eqn{B \%*\% B = A}.

@@ -45,6 +45,5 @@ B[1 , , ]
 
 }
 \seealso{
-Other matrixnorm: \code{\link{dmatrixnorm.test}},
-  \code{\link{dmatrixnorm}}, \code{\link{rmatrixnorm.one}}
+Other matrixnorm: \code{\link{dmatrixnorm}}
 }
