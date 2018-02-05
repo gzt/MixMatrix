@@ -1,11 +1,10 @@
 #' matrixdist: a package for some random matrix distributions.
 #'
 #' The matrixdist package current provides for generating
-#' matrix normal random variables, computing matrix normal densities,
-#' and fitting the MLEs for parameters of matrix normal distributions.
-#' In the future, this may expand to matrix t distributions or some
-#' other matrix random variables, at least generation and distribution
-#' if not parameter estimation.
+#' matrix variate random variables, computing matrix variate densities,
+#' and fitting the MLEs for parameters of matrix variate normal distributions.
+#' Currently, normal, t, and inverted t distributions are supported for generation
+#' and density computation.
 #'
 #' @docType package
 #' @name matrixdist
@@ -285,7 +284,8 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 1e-09, max.iter = 100, U, V) {
-    if (class(data) == "list") data <- array(unlist(data),                                                dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data)))
+    if (class(data) == "list") data <- array(unlist(data),
+                                       dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data)))
     if(!all(is.numeric(data),is.numeric(tol),
             is.numeric(max.iter))) stop("Non-numeric input. ")
     if(!(missing(U))){
@@ -320,10 +320,12 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     swept.data <- sweep(data, c(1, 2), mu)
     iter <- 0
     error.term <- 1e+40
-    if (col.variance == "AR(1)")
-        rho.col <- 0.5
-    if (row.variance == "AR(1)")
-        rho.row <- 0.5
+    if (col.variance == "AR(1)"){
+      if(V[1,2] > 0) rho.col = V[1,2] else rho.col <- 0.3
+    }
+    if (row.variance == "AR(1)"){
+      if(V[1,2] > 0) rho.row = V[1,2] else rho.row <- 0.3
+    }
 
     while (iter < max.iter && error.term > tol) {
         # make intermediate matrix, then collapse to final version

@@ -7,9 +7,8 @@
 \title{matrixdist: a package for some random matrix distributions.}
 \description{
 The matrixdist package current provides for generating
-matrix normal random variables, computing matrix normal densities,
-and fitting the MLEs for parameters of matrix normal distributions.
-In the future, this may expand to matrix t distributions or some
-other matrix random variables, at least generation and distribution
-if not parameter estimation.
+matrix variate random variables, computing matrix variate densities,
+and fitting the MLEs for parameters of matrix variate normal distributions.
+Currently, normal, t, and inverted t distributions are supported for generation
+and density computation.
 }

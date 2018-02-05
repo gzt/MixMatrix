@@ -26,6 +26,7 @@ rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
+    if(df == 0 || is.infinite(df)) return(rmatrixnorm.one(mean = mean, U = U, V = V))
     dims <- dim(mean)
     # should probably do better error checking, checks for conformable matrix dimensions
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -95,17 +96,21 @@ rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
                      V = t(R) %*% R, list = FALSE, array = NULL) {
     if (!(n > 0))
         stop("n must be > 0. n =", n)
+    if (!(df >= 0))
+      stop("df must be >= 0. df =", df)
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
+    if(df == 0 || is.infinite(df)) return(rmatrixnorm(n = n, mean = mean, U = U, V = V, 
+                                                          list = list, array = array))
     if (n == 1 && list == FALSE && is.null(array)) {
         return(rmatrixt.one(mean = mean, df = df, U = U, V = V))
         # if n = 1 and you don't specify arguments, if just returns a matrix
     }
     if (list) {
-        return(lapply(1:n, function(x) rmatrixt.one(mean = mean,
-                                                    df = df, U = U, V = V)))
+        return(lapply(1:n, function(x) rmatrixt.one(df = df,mean = mean,
+                                                    U = U, V = V)))
     }
     if (!(list) && !(is.null(array))) {
         if (!(array))
@@ -116,7 +121,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
     for (i in 1:n) {
         # note this indexes by the first coord - use aperm() on
         # results if you don't want that
-        result[ , , i] <- rmatrixt.one(mean = mean, df = df, U = U, V = V)
+        result[ , , i] <- rmatrixt.one(df = df, mean = mean, U = U, V = V)
     }
     return(result)
 }
@@ -151,9 +156,12 @@ rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
 dmatrixt <- function(x, df, mean = array(0L, dim(x)[1:2]),
                      L = diag(dim(x)[1]), R = diag(dim(x)[2]),
                      U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
-  if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+    if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
+    if (!(df >= 0))
+      stop("df must be >= 0. df =", df)
+    if(df == 0 || is.infinite(df)) return(dmatrixnorm(mean = mean, U = U, V = V, log = log))
     x <- as.matrix(x)
     mean <- as.matrix(mean)
     U <- as.matrix(U)
@@ -164,10 +172,12 @@ dmatrixt <- function(x, df, mean = array(0L, dim(x)[1:2]),
       stop("Non-conforming dimensions.", dims, dim(U), dim(V))
     }
     xm <- x - mean
+    
     # breaking equation into two parts: the integrating constants (gammas)
     # and the matrix algebra parts (mats) done on the log scale
     # NB: I provided the correction to this that I did for
     # rmatrixt as well (ie scale by df)
+    
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
@@ -323,6 +333,8 @@ rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
 rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
                         L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                         U = L %*% t(L), V = t(R) %*% R) {
+    if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     if (!(n > 0))
         stop("n must be > 0.", n)
     mean <- as.matrix(mean)
@@ -340,12 +352,12 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
         if (!(array))
             warning("list FALSE and array FALSE, returning array")
     }
-    result <- array(data = NA, dim = c(n, dims),
-                   dimnames = list(NULL, dimnames(mean)))
+    result <- array(data = NA, dim = c(dims, n),
+                   dimnames = list(dimnames(mean),NULL))
     for (i in 1:n) {
-        # note this indexes by the first coord - use aperm() on results if
+        # note this indexes by the last coord - use aperm() on results if
         # you don't want that
-        result[i, , ] <- rmatrixinvt.one(mean, df, U = U, V = V)
+        result[ , , i] <- rmatrixinvt.one(mean, df, U = U, V = V)
     }
     return(result)
 
@@ -376,6 +388,7 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(x)[1:2]),
   if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
+    if(df <= 0 || is.infinite(df)) stop("Invalid input for df, must have 0 < df < Inf, df = ", df)
     x <- as.matrix(x)
     mean <- as.matrix(mean)
     U <- as.matrix(U)
