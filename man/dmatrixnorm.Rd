@@ -10,15 +10,20 @@ dmatrixnorm(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
 \arguments{
 \item{x}{\eqn{p X q} input matrix}
 
-\item{mean}{\eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s with size taken from \code{x}}
+\item{mean}{\eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s
+with size taken from \code{x}}
 
-\item{L}{\eqn{p X p} matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{\eqn{p X p} matrix specifying relations among the rows. By default,
+an identity matrix.}
 
-\item{R}{\eqn{q X q} matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q} matrix specifying relations among the columns. By
+default, an identity matrix.}
 
-\item{U}{\eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix for rows, computed from \eqn{L} if not specified.}
+\item{U}{\eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix
+for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix for columns, computed from \eqn{R} if not specified.}
+\item{V}{\eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix
+for columns, computed from \eqn{R} if not specified.}
 
 \item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }

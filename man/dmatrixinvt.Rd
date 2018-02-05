@@ -10,16 +10,19 @@ dmatrixinvt(x, df, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
 \arguments{
 \item{x}{\eqn{p X q} input matrix}
 
-\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer), \code{df = Inf} is allowed.}
+\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
+\code{df = Inf} is allowed.}
 
 \item{mean}{by default 0, matrix of same size as observations \code{x}}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{\eqn{p X p}  matrix specifying relations among the rows.
+By default, an identity matrix.}
 
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
+By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows, computed
-from \eqn{L} if not specified. Note this is not the variance.}
+\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+computed from \eqn{L} if not specified. Note this is not the variance.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
 computed from \eqn{R}  if not specified.  Note this is not the variance.}
@@ -30,7 +33,8 @@ computed from \eqn{R}  if not specified.  Note this is not the variance.}
 returns the density.
 }
 \description{
-Compute densities for the inverted matrix variate t-distribution.
+Compute densities for the inverted matrix variate
+   t-distribution.
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixt}},

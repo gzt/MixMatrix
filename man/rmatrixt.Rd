@@ -10,10 +10,12 @@ rmatrixt(n, df, mean, L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
 \arguments{
 \item{n}{number of observations to generate}
 
-\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer), \code{df = Inf} is allowed.}
+\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
+\code{df = Inf} is allowed.}
 
-\item{mean}{\eqn{p X q} This is really a "shift" rather than a mean as this
-is a central T, though the expected value will be equal to this if \eqn{df > 2}}
+\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean as this
+is a central T, though the expected value will be equal to this if
+\eqn{df > 2}}
 
 \item{L}{\eqn{p X p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
@@ -21,18 +23,23 @@ By default, an identity matrix.}
 \item{R}{\eqn{q X q}  matrix specifying relations among the columns.
 By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows, computed
-from \eqn{L} if not specified. Note this is not the variance.}
+\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+computed from \eqn{L} if not specified. Note this is not the variance.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
 computed from \eqn{R}  if not specified.  Note this is not the variance.}
 
-\item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the output will be a list of matrices.}
+\item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
+output will be a list of matrices.}
 
-\item{array}{If \eqn{n = 1}  and this is not specified and \code{list}  is \code{FALSE} , the function will return a matrix containing the one observation. If \eqn{n > 1} , should be the opposite of \code{list} . If \code{list}  is \code{TRUE} , this will be ignored.}
+\item{array}{If \eqn{n = 1}  and this is not specified and \code{list}  is
+\code{FALSE} , the function will return a matrix containing the one
+observation. If \eqn{n > 1} , should be the opposite of \code{list} .
+If \code{list}  is \code{TRUE} , this will be ignored.}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
+This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+   a \eqn{n X p X q}  array.
 }
 \description{
 Random generation for the matrix variate t-distribution

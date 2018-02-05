@@ -12,7 +12,8 @@ lmvgamma(x, p)
 \item{p}{positive integer, dimension of a square matrix}
 }
 \value{
-log of multivariate gamma for each entry of x. For non-log variant, see mvgamma.
+log of multivariate gamma for each entry of x. For non-log variant,
+    see mvgamma.
 }
 \description{
 A special mathematical function related to the gamma function,

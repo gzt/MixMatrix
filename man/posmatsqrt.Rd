@@ -10,10 +10,13 @@ posmatsqrt(A)
 \item{A}{positive definite p x p real-valued matrix.}
 }
 \value{
-a symmetric square root matrix for A. ie, \eqn{B = t(B)} and \eqn{B \%*\% B = A}.
+a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
+   \eqn{B \%*\% B = A}.
 }
 \description{
-Computes a positive symmetric square root  matrix for a positive definite input matrix. Used in the inverted matrix variate t-distribution.
+Computes a positive symmetric square root  matrix for a
+   positive definite input matrix. Used in the inverted matrix variate
+   t-distribution.
 }
 \examples{
 A = diag(5) + 1

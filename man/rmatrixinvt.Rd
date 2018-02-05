@@ -11,25 +11,30 @@ rmatrixinvt(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 \arguments{
 \item{n}{number of observations}
 
-\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer), \code{df = Inf} is allowed.}
+\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
+\code{df = Inf} is allowed.}
 
-\item{mean}{\eqn{p X q} This is really a "shift" rather than a mean.}
+\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean.}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default, an identity matrix.}
+\item{L}{\eqn{p X p}  matrix specifying relations among the rows.
+By default, an identity matrix.}
 
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By default, an identity matrix.}
+\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
+By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows, computed
-from \eqn{L} if not specified. Note this is not the variance.}
+\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+computed from \eqn{L} if not specified. Note this is not the variance.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
 computed from \eqn{R}  if not specified.  Note this is not the variance.}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices or a \eqn{n X p X q}  array.
+This returns either a list of \eqn{n}  \eqn{p X q}  matrices
+   or a \eqn{n X p X q}  array.
 }
 \description{
-Generate random draws from the inverted matrix variate t-distribution
+Generate random draws from the inverted matrix
+   variate t-distribution
 }
 \seealso{
 Other matrixt: \code{\link{dmatrixinvt}},

@@ -9,21 +9,23 @@ mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
   max.iter = 100, U, V)
 }
 \arguments{
-\item{data}{Either a list of matrices or a 3-D array with matrices in dimensions 2 and 3, indexed by dimension 1.}
+\item{data}{Either a list of matrices or a 3-D array with matrices in
+dimensions 2 and 3, indexed by dimension 1.}
 
-\item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
-within each row. If both this and \code{col.mean} are \code{TRUE}, there will be
-a common mean for the entire matrix.}
+\item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{col.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
 
-\item{col.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a common mean
-within each row. If both this and \code{row.mean} are \code{TRUE}, there will be
-a common mean for the entire matrix.}
+\item{col.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{row.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{row.variance}{Imposes a variance structure on the rows. Either
-"none" or "AR(1)". Only positive correlations are allowed for AR(1).}
+'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).}
 
 \item{col.variance}{Imposes a variance structure on the columns.
-Either "none" or "AR(1)". Only positive correlations are allowed for AR(1).}
+Either 'none' or 'AR(1)'. Only positive correlations are allowed for
+AR(1).}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}
@@ -37,8 +39,8 @@ By default, an identity matrix.}
 By default, an identity matrix.}
 }
 \value{
-Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V} matrix,
-   the number of iterations, and error at the time of stopping.
+Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
+   matrix, the number of iterations, and error at the time of stopping.
 }
 \description{
 Maximum likelihood estimation for matrix normal distributions
