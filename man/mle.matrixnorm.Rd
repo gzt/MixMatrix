@@ -47,7 +47,7 @@ Maximum likelihood estimation for matrix normal distributions
 }
 \examples{
 set.seed(20180202)
-A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 results=mle.matrixnorm(A)
 print(results)

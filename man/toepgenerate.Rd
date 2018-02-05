@@ -20,8 +20,8 @@ Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on
 generate AR(1) correlation matrices
 }
 \examples{
-rho = .9
-n = 6
+rho <- .9
+n <- 6
 toepgenerate(n,rho)
 }
 \keyword{internal}

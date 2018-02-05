@@ -47,7 +47,7 @@ mu + t(chol(U)) %*% y %*% chol(V)
 
 ```
 
-When $n=1$, by default this returns a matrix. For $n>1$, by default, it will return a three-dimensional array indexed by the first coordinate. 
+When $n=1$, by default this returns a matrix. For $n>1$, by default, it will return a three-dimensional array indexed by the last coordinate (array convention similar to `rWishart`). 
 
 ```{r noptions}
 set.seed(20180203)
@@ -58,7 +58,7 @@ y <- rmatrixnorm(n = 100, mean=matrix(rep(0,6),nrow=3),list = TRUE)
 y[[1]]
 set.seed(20180203)
 z <- rmatrixnorm(n = 100, mean=matrix(rep(0,6),nrow=3),array = TRUE)
-z[1, , ]
+z[ , , 1]
 class(x)
 class(y)
 class(z)

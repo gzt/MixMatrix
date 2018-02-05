@@ -34,7 +34,7 @@ If \code{list}  is \code{TRUE} , this will be ignored.}
 }
 \value{
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
-   a \eqn{n X p X q}  array.
+   a \eqn{p X q X n}  array.
 }
 \description{
 generate random draws from a matrix variate normal distribution
@@ -44,13 +44,13 @@ set.seed(20180202)
 rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 set.seed(20180202)
-A = rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+A <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 A[[1]]
 set.seed(20180202)
-B = rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+B <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-B[1 , , ]
+B[ , , 1]
 
 }
 \seealso{

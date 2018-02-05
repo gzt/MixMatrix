@@ -49,11 +49,11 @@ set.seed(20180202)
 rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 set.seed(20180202)
-A = rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+A <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 A[[1]]
 set.seed(20180202)
-B = rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+B <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 B[1 , , ]
 summary(rt(n=100,df=10))
