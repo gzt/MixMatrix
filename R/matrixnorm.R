@@ -28,6 +28,8 @@ NULL
 rmatrixnorm.one <- function(mean, L = diag(dim(mean)[1]),
                             R = diag(dim(mean)[2]), U = L %*% t(L),
                             V = t(R) %*% R) {
+  if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     mean = as.matrix(mean)
     U = as.matrix(U)
     V = as.matrix(V)
@@ -89,6 +91,7 @@ rmatrixnorm.one <- function(mean, L = diag(dim(mean)[1]),
 rmatrixnorm <- function(n, mean, L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
                         V = t(R) %*% R, list = FALSE, array = NULL) {
+    if(!is.numeric(n)) stop("n is not numeric")
     if (!(n > 0)) stop("n must be > 0. n = ", n)
     mean = as.matrix(mean)
     U = as.matrix(U)
@@ -148,6 +151,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(mean)[1]),
 dmatrixnorm <- function(x, mean = array(0L, dim(x)[1:2]), L = diag(dim(x)[1]),
                         R = diag(dim(x)[2]), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
+  if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x = as.matrix(x)
     mean = as.matrix(mean)
     U = as.matrix(U)
@@ -209,6 +214,8 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
                              L = diag(dim(x)[1]), R = diag(dim(x)[2]),
                              U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
     # results should equal other option - works by unrolling into MVN
+  if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x = as.matrix(x)
     mean = as.matrix(mean)
     U = as.matrix(U)
@@ -278,6 +285,14 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(x)),
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 1e-09, max.iter = 100, U, V) {
+    if(!all(is.numeric(data),is.numeric(tol),
+            is.numeric(max.iter))) stop("Non-numeric input. ")
+    if(!(missing(U))){
+      if(!(is.numeric(U))) stop("Non-numeric input.")
+    }
+  if(!(missing(V))){
+    if(!(is.numeric(V))) stop("Non-numeric input.")
+  }
     if (class(data) == "list") data = aperm(array(unlist(data),
         dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data))),
         perm = c(3, 1, 2))

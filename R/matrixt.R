@@ -21,6 +21,8 @@
 rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
                          L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                          U = L %*% t(L), V = t(R) %*% R) {
+    if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
+             is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     mean = as.matrix(mean)
     U = as.matrix(U)
     V = as.matrix(V)
@@ -149,6 +151,9 @@ rmatrixt <- function(n, df, mean, L = diag(dim(mean)[1]),
 dmatrixt <- function(x, df, mean = array(0L, dim(x)[1:2]),
                      L = diag(dim(x)[1]), R = diag(dim(x)[2]),
                      U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
+  if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+           is.numeric(R), is.numeric(U),
+           is.numeric(V)))) stop("Non-numeric input. ")
     x = as.matrix(x)
     mean = as.matrix(mean)
     U = as.matrix(U)
@@ -200,6 +205,7 @@ lmvgamma <- function(x, p) {
     # p only makes sense as an integer but not testing that x *could* be
     # less than zero - same domain as gamma function making sure that object
     # returned is same shape as object passed
+    if(!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
     dims = if (is.vector(x))
         length(x) else dim(as.array(x))
     if (p < 1)
@@ -234,6 +240,7 @@ posmatsqrt <- function(A) {
     # this isn't the fastest way and if you have to do this a lot find a
     # better way returns symmetric square root of A if it exists: B %*% B = A
     # does not test if A is positive definite
+    if(!(is.numeric(A))) stop("Non-numeric input.")
     A = as.matrix(A)
     if (!(dim(A)[1] == dim(A)[2]))
         stop("Matrix must be square. Dimensions: ", dim(A))
@@ -270,6 +277,8 @@ posmatsqrt <- function(A) {
 rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
                             L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                             U = L %*% t(L), V = t(R) %*% R) {
+  if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     mean = as.matrix(mean)
     U = as.matrix(U)
     V = as.matrix(V)
@@ -364,6 +373,9 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 dmatrixinvt <- function(x, df, mean = array(0L, dim(x)[1:2]),
                         L = diag(dim(x)[1]), R = diag(dim(x)[2]),
                         U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
+  if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+           is.numeric(R), is.numeric(U),
+           is.numeric(V)))) stop("Non-numeric input. ")
     x = as.matrix(x)
     mean = as.matrix(mean)
     U = as.matrix(U)

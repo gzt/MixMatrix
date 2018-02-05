@@ -9,7 +9,8 @@ Description: Generating matrix distributions, computing densities for matrix dis
     and fitting parameters of matrix distributions. Currently for normal distributions, 
     but t-distributions can be produced.
 Depends: R (>= 2.0.0), base, stats
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown,
+    testthat
 VignetteBuilder: knitr
 License: GPL-3
 RoxygenNote: 6.0.1
