@@ -20,7 +20,8 @@ NULL
 #'    By default (inherited from above), an identity matrix. Should be
 #'    output of Cholesky decomposition from rmatrixnorm.
 #'
-#' @return Returns a matrix of one observation. This function is for internal use only.
+#' @return Returns a matrix of one observation. This function
+#'    is for internal use only.
 #' @keywords internal
 rmatrixnorm.one <- function(mean, L, R) {
 
@@ -153,7 +154,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
 #'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
 #'
-dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]), L = diag(dim(mean)[1]),
+dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
+                        L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
   if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
@@ -291,7 +293,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 1e-09, max.iter = 100, U, V) {
     if (class(data) == "list") data <- array(unlist(data),
-                                       dim = c(nrow(data[[1]]), ncol(data[[1]]), length(data)))
+                                       dim = c(nrow(data[[1]]),
+                                               ncol(data[[1]]), length(data)))
     if(!all(is.numeric(data),is.numeric(tol),
             is.numeric(max.iter))) stop("Non-numeric input. ")
     if(!(missing(U))){
@@ -350,7 +353,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         } else {
             inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
-            new.V <- matrix(apply(inter.V, 1, sum), nrow = dims[2])/(dims[3] * dims[1])
+            new.V <- matrix(apply(inter.V, 1, sum),
+                            nrow = dims[2])/(dims[3] * dims[1])
         }
 
         if (row.variance == "AR(1)") {
