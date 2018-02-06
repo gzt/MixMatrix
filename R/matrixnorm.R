@@ -330,7 +330,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
         # make intermediate matrix, then collapse to final version
         if (col.variance == "AR(1)") {
-          var = V[1,1]
+          var <- V[1,1]
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
                            function(x) t(x) %*% solve((V/var) %x% U) %*% x)) / (prod(dims))
           nLL <- function(theta) {
