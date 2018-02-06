@@ -6,7 +6,7 @@
 \usage{
 mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
   row.variance = "none", col.variance = "none", tol = 1e-09,
-  max.iter = 100, U, V)
+  max.iter = 100, U, V, ...)
 }
 \arguments{
 \item{data}{Either a list of matrices or a 3-D array with matrices in
@@ -21,7 +21,10 @@ common mean within each row. If both this and \code{row.mean} are
 \code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{row.variance}{Imposes a variance structure on the rows. Either
-'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).}
+'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).
+Note that while maximum likelihood estimators are available (and used) for
+the unconstrained variance matrices, \code{optim} is used for any
+constraints so it will be considerably slower.}
 
 \item{col.variance}{Imposes a variance structure on the columns.
 Either 'none' or 'AR(1)'. Only positive correlations are allowed for
@@ -37,6 +40,9 @@ By default, an identity matrix.}
 
 \item{V}{(optional) Can provide a starting point for the V matrix.
 By default, an identity matrix.}
+
+\item{...}{(optional) additional arguments can be passed to \code{optim}
+if using restrictions on the variance.}
 }
 \value{
 Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
@@ -44,6 +50,9 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
 }
 \description{
 Maximum likelihood estimation for matrix normal distributions
+
+Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
+unique for \eqn{N > max(p,q)}
 }
 \examples{
 set.seed(20180202)

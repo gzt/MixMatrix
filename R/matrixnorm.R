@@ -219,6 +219,9 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
+#' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
+#' unique for \eqn{N > max(p,q)}
+#'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 2 and 3, indexed by dimension 1.
 #' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
@@ -229,6 +232,9 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
 #'     'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).
+#'     Note that while maximum likelihood estimators are available (and used) for
+#'     the unconstrained variance matrices, \code{optim} is used for any
+#'     constraints so it will be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
 #'     Either 'none' or 'AR(1)'. Only positive correlations are allowed for
 #'     AR(1).
@@ -239,6 +245,8 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    By default, an identity matrix.
 #' @param V (optional) Can provide a starting point for the V matrix.
 #'    By default, an identity matrix.
+#' @param ... (optional) additional arguments can be passed to \code{optim}
+#'    if using restrictions on the variance.
 #'
 #' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
 #'    matrix, the number of iterations, and error at the time of stopping.
@@ -254,7 +262,7 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
-                           tol = 1e-09, max.iter = 100, U, V) {
+                           tol = 1e-09, max.iter = 100, U, V,...) {
     if (class(data) == "list") data <- array(unlist(data),
                                        dim = c(nrow(data[[1]]),
                                                ncol(data[[1]]), length(data)))
@@ -293,25 +301,46 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     iter <- 0
     error.term <- 1e+40
     if (col.variance == "AR(1)"){
-      if (V[1,2] > 0) rho.col = V[1,2] else rho.col <- 0.3
+      if (V[1,2] > 0) {
+        rho.col <- V[1,2]
+          } else {
+            inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
+            # collapsed into a (row*column) * n, which is then gathered and fixed.
+            V <- matrix(apply(inter.V, 1, sum),
+                            nrow = dims[2])/(dims[3] * dims[1])
+            rho.col <- V[1,2]/V[1,1]
+            if(rho.col > .9) rho.col <- .9
+            V <- toepgenerate(dims[2],rho.col)
+          }
     }
     if (row.variance == "AR(1)"){
-      if (V[1,2] > 0) rho.row = V[1,2] else rho.row <- 0.3
+      if (U[1,2] > 0) {
+        rho.row <- U[1,2]
+        } else {
+          inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
+          # collapsed into a (row*column) * n, which is then gathered and fixed.
+          U <- matrix(apply(inter.U, 1, sum), nrow = dims[1])/(dims[3] * dims[2])
+          rho.row <- U[1,2]/U[1,1]
+          if(rho.row > .9) rho.row <- .9
+          U <- toepgenerate(dims[1],rho.row)
+        }
     }
 
     while (iter < max.iter && error.term > tol) {
+
         # make intermediate matrix, then collapse to final version
         if (col.variance == "AR(1)") {
-            var <- V[1, 1]
-            nLL <- function(theta) {
-              Vmat <- theta[1] * toepgenerate(dims[2], theta[1]) - sum(apply(swept.data, 3,
-                  function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
-            }
-            fit0 <- stats::optim(c(var, rho.col), nLL, method = "L-BFGS-B",
-                 hessian = FALSE, lower = c(0, 0), upper = c(Inf, 0.999))
-            var <- fit0$par[1]
-            rho.col <- fit0$par[2]
-            new.V <- var * toepgenerate(dims[2], rho.col)
+          var = V[1,1]
+          var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
+                           function(x) t(x) %*% solve((V/var) %x% U) %*% x)) / (prod(dims))
+          nLL <- function(theta) {
+            Vmat <- var * toepgenerate(dims[2], theta)
+            - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
+          }
+          fit0 <- stats::optim(rho.col, nLL, method = "L-BFGS-B",
+               hessian = FALSE, lower = 0, upper =  0.99,...)
+          rho.col <- fit0$par
+          new.V <- var * toepgenerate(dims[2], rho.col)
         } else {
             inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
@@ -322,11 +351,10 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         if (row.variance == "AR(1)") {
             nLL <- function(theta){
               Umat <- toepgenerate(dims[1],theta)
-              -sum(apply(swept.data, 3,
-                  function(x) dmatrixnorm(x, log = TRUE, V = new.V, U = Umat)))
+              -sum(apply(swept.data, 3,function(x) dmatrixnorm(x, log = TRUE, V = new.V, U = Umat)))
             }
             fit0 <- stats::optim(rho.row, nLL, method = "L-BFGS-B",
-                                hessian = FALSE, lower = 0, upper = 0.999)
+                                hessian = FALSE, lower = 0, upper = 0.99,...)
             rho.row <- fit0$par
             new.U <- toepgenerate(dims[1], rho.row)
         } else {
@@ -346,7 +374,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (iter >= max.iter || error.term > tol)
         warning("Failed to converge")
 
-    return(list(mean = mu, U = U, V = V, iter = iter, tol = error.term))
+    return(list(mean = mu, U = U, V = V, iter = iter, tol = error.term,call = match.call()))
 }
 
 #' toepgenerate
