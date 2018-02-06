@@ -1,39 +1,3 @@
-#' rmatrixt.one
-#'
-#' @param df  degrees of freedom (\eqn{>0}, maybe non-integer),
-#'    \code{df = Inf} is allowed.
-#' @param mean \eqn{p X q} This is really a 'shift' rather than a mean as this
-#'    is a central T, though the expected value will be equal to this if
-#'    \eqn{df > 2}
-#' @param solveU \eqn{LL^T}  - \eqn{p X p}  the inverse of \eqn{U},
-#'    passed from \code{rmatrixt}.
-#' @param cholV \eqn{R^T R = V}  - \eqn{q X q}  Cholesky decomposition of \eqn{V}
-#'
-#' @return Returns a matrix of one observation. This function is for internal
-#'    use only.
-#' @keywords internal
-#'
-rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2), solveU, cholV ) {
-    if(!(all(is.numeric(df), is.numeric(mean),
-             is.numeric(solveU),is.numeric(cholV)))) stop("Non-numeric input. ")
-    mean <- as.matrix(mean)
-    dims <- dim(mean)
-    # moving some of this to the main function
-    n <- prod(dims)
-    mat <- matrix(stats::rnorm(n), nrow = dims[1])
-    # okay, here's the deal: the way this was formulated in the book
-    # would have solve(U) here, but after working out the math it is
-    # clear that what we have to do to get what is 'usually'
-    # expected on this count is multiply U by the degrees of freedom.
-    # somebody please correct me on this if wrong.
-    USigma <- stats::rWishart(1, df + dims[1] - 1, (1/df) * solveU)[, , 1]
-    # want this one - check the math, and it's faster!
-    cholU <- (solve(chol(USigma)))
-    result <- mean + (cholU) %*% mat %*% (cholV)
-    dimnames(result) <- dimnames(mean)
-    return(result)
-}
-
 #' rmatrixt
 #' @family matrixt
 #' @description Random generation for the matrix variate t-distribution
@@ -80,48 +44,56 @@ rmatrixt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2), solveU, cholV
 rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
                      R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                      V = t(R) %*% R, list = FALSE, array = NULL) {
-    if (!(n > 0))
-        stop("n must be > 0. n =", n)
-    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-    if( ((is.null(df)) || is.na(df) || (df < 0)))
-      stop("df must be >= 0. df =", df)
-    mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    dims <- dim(mean)
-    # should probably do better error checking, checks for
-    # conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
-    if(df == 0 || is.infinite(df))
-      return(rmatrixnorm(n = n, mean = mean, U = U,
-                         V = V, list = list, array = array))
-    solveU = solve(U)
-    cholV = chol(V)
-    if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixt.one(mean = mean, df = df,
-                            solveU = solveU, cholV = cholV))
-        # if n = 1 and you don't specify arguments, if just returns a matrix
-    }
-    if (list) {
-        return(lapply(1:n, function(x) rmatrixt.one(mean = mean, df = df,
-                                              solveU = solveU, cholV = cholV)))
-    }
-    if (!(list) && !(is.null(array))) {
-        if (!(array))
-            warning("list FALSE and array FALSE, returning array")
-    }
-    result <- array(data = NA, dim = c(dims,n),
-                   dimnames = list(dimnames(mean),NULL))
-    for (i in 1:n) {
-        # note this indexes by the first coord - use aperm() on
-        # results if you don't want that
-        result[ , , i] <- rmatrixt.one(mean = mean, df = df,
-                                       solveU = solveU, cholV = cholV)
-    }
-    return(result)
+  if (!(n > 0))
+    stop("n must be > 0. n =", n)
+
+  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+
+  if (((is.null(df)) || is.na(df) || (df < 0)))
+    stop("df must be >= 0. df =", df)
+  mean <- as.matrix(mean)
+  U <- as.matrix(U)
+  V <- as.matrix(V)
+  dims <- dim(mean)
+  # should probably do better error checking, checks for
+  # conformable matrix dimensions
+  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+        dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+  }
+  if (df == 0 || is.infinite(df))
+    return(rmatrixnorm(n = n, mean = mean, U = U,
+                       V = V, list = list, array = array))
+  solveU = solve(U)
+  cholV = chol(V)
+
+  nobs <- prod(dims)*n
+  mat <- array(stats::rnorm(nobs), dim = c(dims,n))
+
+  USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
+  # want solve(chol()) and not t(...)
+  # check the math, and it's faster than chol(solve())!
+  cholU <- array(apply(USigma, 3, function(x) solve(chol(x))),
+                 dim = c(dims[1],dims[1],n))
+  # so cholU is a 3D array so we can't just 'apply' it.
+
+  result <- array(dim = c(dims,n))
+  for (i in seq(n)){
+    result[ , , i] <- mean + (cholU[ , , i]) %*% mat[ , , i] %*% (cholV)
+  }
+
+  if (n == 1 && list == FALSE && is.null(array)) {
+    return(result[,,1])
+    # if n = 1 and you don't specify arguments, it just returns a matrix
+  }
+  if (list) {
+    return(lapply(seq(dim(result)[3]), function(x) result[ , , x]))
+  }
+  if (!(list) && !(is.null(array))) {
+    if (!(array))
+      warning("list FALSE and array FALSE, returning array")
+  }
+  return(result)
 }
 
 #' dmatrixt
@@ -155,13 +127,13 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
                      L = diag(dim(as.matrix(x))[1]),
                      R = diag(dim(as.matrix(x))[2]),
                      U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
-    if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+    if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
     if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-    if( ((is.null(df)) || is.na(df) || (df < 0)))
+    if ( ((is.null(df)) || is.na(df) || (df < 0)))
       stop("df must be >= 0. df =", df)
-    if( (df == 0 || is.infinite(df)) )
+    if ( (df == 0 || is.infinite(df)) )
       return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
     x <- as.matrix(x)
     mean <- as.matrix(mean)
@@ -221,7 +193,7 @@ lmvgamma <- function(x, p) {
     # p only makes sense as an integer but not testing that. x *could* be
     # less than zero - same domain as gamma function making sure that object
     # returned is same shape as object passed
-    if(!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
+    if (!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
     dims <- if (is.vector(x))
         length(x) else dim(as.array(x))
     if (p < 1)
@@ -256,14 +228,14 @@ posmatsqrt <- function(A) {
     # this isn't the fastest way and if you have to do this a lot find a
     # better way returns symmetric square root of A if it exists: B %*% B = A
     # does not test if A is positive definite
-    if(!(is.numeric(A))) stop("Non-numeric input.")
+    if (!(is.numeric(A))) stop("Non-numeric input.")
     A <- as.matrix(A)
     if (!(dim(A)[1] == dim(A)[2]))
         stop("Matrix must be square. Dimensions: ", dim(A))
 
     e <- eigen(A)
     V <- e$vectors
-    if(!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
+    if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
     B <- V %*% diag(sqrt(e$values)) %*% t(V)
     return(B)
 }
@@ -289,7 +261,7 @@ posmatsqrt <- function(A) {
 #'
 rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
                             Usqrt, Vsqrt) {
-  if(!(all(is.numeric(df), is.numeric(mean),
+  if (!(all(is.numeric(df), is.numeric(mean),
            is.numeric(Usqrt),is.numeric(Vsqrt)))) stop("Non-numeric input. ")
     mean <- as.matrix(mean)
     dims <- dim(mean)
@@ -339,10 +311,10 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
                         R = diag(dim(as.matrix(mean))[2]),
                         U = L %*% t(L), V = t(R) %*% R,
                         list=FALSE, array = NULL) {
-    if(!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
+    if (!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-       if( ((is.null(df)) || is.na(df) || (df < 0)))
+       if ( ((is.null(df)) || is.na(df) || (df < 0)))
       stop("df must be >= 0. df =", df)
     if (!(n > 0))
         stop("n must be > 0.", n)
@@ -405,13 +377,13 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
                         L = diag(dim(as.matrix(x))[1]),
                         R = diag(dim(as.matrix(x))[2]),
                         U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
-  if(!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+  if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
     if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-      if( ((is.null(df)) || is.na(df) || (df < 0)))
+      if ( ((is.null(df)) || is.na(df) || (df < 0)))
       stop("df must be >= 0. df =", df)
-    if(df <= 0 || is.infinite(df)) stop("Invalid input for df,
+    if (df <= 0 || is.infinite(df)) stop("Invalid input for df,
                                         must have 0 < df < Inf, df = ", df)
     x <- as.matrix(x)
     mean <- as.matrix(mean)

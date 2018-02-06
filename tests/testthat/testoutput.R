@@ -4,8 +4,8 @@ context("Checking outputs match")
 
 
 test_that("Testing helper functions:",{
-  expect_equal(lgamma(1:12)-lmvgamma(1:12,1),array(0,dim=12),tolerance=1e-7)
-  expect_equal(gamma(1:12) - mvgamma(1:12,1),array(0,dim=12),tolerance=1e-7)
+  expect_equal(lgamma(1:12) - lmvgamma(1:12,1), array(0,dim = 12),tolerance=1e-7)
+  expect_equal(gamma(1:12) - mvgamma(1:12,1),array(0,dim = 12),tolerance=1e-7)
   A = diag(5) + 1
   B = posmatsqrt(A)
   expect_equal(B,t(B))
@@ -27,14 +27,14 @@ test_that("Equivalent outputs for different options:",{
   expect_equal(A,B[[1]])
   expect_equal(A,C[,,1])
   set.seed(2018020202)
-  A <- rmatrixt(n=1, df = 2, mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+  A <- rmatrixt(n=1, df = 2, mean = matrix(c(100,0,-100,0,25,-1000),nrow=2),
                    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
   set.seed(2018020202)
-  B <- rmatrixt(n=10, df = 2,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+  B <- rmatrixt(n=1, df = 2,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
                    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
   set.seed(2018020202)
-  C <- rmatrixt(n=10, df = 2,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-                   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+  C <- rmatrixt(n=1, df = 2,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+                   L=matrix(c(2,1,0,.1),nrow=2),array=TRUE)
   expect_equal(A,B[[1]])
   expect_equal(A,C[,,1])
   set.seed(2018020203)
