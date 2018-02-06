@@ -311,48 +311,62 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
                         R = diag(dim(as.matrix(mean))[2]),
                         U = L %*% t(L), V = t(R) %*% R,
                         list=FALSE, array = NULL) {
-    if (!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
-           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
-    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-       if ( ((is.null(df)) || is.na(df) || (df < 0)))
-      stop("df must be >= 0. df =", df)
-    if (!(n > 0))
-        stop("n must be > 0.", n)
-    mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    dims <- dim(mean)
-    # checks for conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
-    Usqrt <- posmatsqrt(U)
-    Vsqrt <- posmatsqrt(V)
-    if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixinvt.one(df = df, mean = mean,
-                               Usqrt = Usqrt, Vsqrt = Vsqrt))
-        # if n = 1 and you don't specify arguments, if just returns a matrix
-    }
-    if (list) {
-        return(lapply(1:n, function(x) rmatrixinvt.one(df = df, mean = mean,
-                                                Usqrt = Usqrt, Vsqrt = Vsqrt)))
-    }
-    if (!(list) && !(is.null(array))) {
-        if (!(array))
-            warning("list FALSE and array FALSE, returning array")
-    }
-    result <- array(data = NA, dim = c(dims, n),
-                   dimnames = list(dimnames(mean),NULL))
-    for (i in 1:n) {
-        # note this indexes by the last coord - use aperm() on results if
-        # you don't want that
-        result[ , , i] <- rmatrixinvt.one(df = df, mean = mean,
-                                          Usqrt = Usqrt, Vsqrt = Vsqrt)
-    }
-    return(result)
+  if (!(all(is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+  if ( ((is.null(df)) || is.na(df) || (df < 0)))
+    stop("df must be >= 0. df =", df)
+  if (!(n > 0))
+    stop("n must be > 0.", n)
+  mean <- as.matrix(mean)
+  U <- as.matrix(U)
+  V <- as.matrix(V)
+  dims <- dim(mean)
+  # checks for conformable matrix dimensions
+  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+        dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+  }
 
+  Usqrt <- posmatsqrt(U)
+  Vsqrt <- posmatsqrt(V)
+
+  nobs <- prod(dims)*n
+  mat <- array(stats::rnorm(nobs), dim = c(dims,n))
+
+  S <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
+
+  SXX <- array(0,dim = c(dims[1],dims[1],n))
+
+  for(i in seq(n)) {
+    # if there's a way to do this with apply I want to see it
+    SXX[ , , i] <- array(solve(posmatsqrt(S[ , , i] +
+                                            mat[ , , i] %*% t(mat[ , , i]))),
+                         dim = c(dims[1],dims[1]))
+  }
+
+  result <- array(dim = c(dims,n))
+
+  for(i in seq(n)){
+    # if there's a way to do this with apply I want to see it
+    result[ , , i] <- Usqrt %*% SXX[ , , i] %*% mat[ , , i] %*% Vsqrt + mean
+  }
+
+  if (n == 1 && list == FALSE && is.null(array)) {
+    return(result[ , , 1])
+    # if n = 1 and you don't specify arguments, it just returns a matrix
+  }
+  if (list) {
+    return(lapply(seq(dim(result)[3]), function(x) result[ , , x]))
+  }
+  if (!(list) && !(is.null(array))) {
+    if (!(array))
+      warning("list FALSE and array FALSE, returning array")
+  }
+  return(result)
 }
+
+
 
 #' dmatrixinvt
 #' @family matrixt
@@ -415,3 +429,4 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
         return(exp(results))
       }
 }
+

@@ -51,15 +51,15 @@ NULL
 rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
                         R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                         V = t(R) %*% R, list = FALSE, array = NULL) {
-  if(!is.numeric(n)) stop("n is not numeric")
+  if (!is.numeric(n)) stop("n is not numeric")
   if (!(n > 0)) stop("n must be > 0. n = ", n)
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
   dims <- dim(mean)
-  if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
-           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
-  # non-conforming dimension check moved to rmatrixnorm
+  if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
+    stop("Non-numeric input. ")
+
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -71,9 +71,10 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
   nobs = prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-  result <- array(apply(mat, 3, function(x) mean + t(L) %*% x %*% (R)),dim = c(dims,n))
+  result <- array(apply(mat, 3, function(x) mean + t(cholU) %*% x %*% (cholV)),
+                  dim = c(dims,n))
   if (n == 1 && list == FALSE && is.null(array)) {
-    return(result[,,1])
+    return(result[ , , 1])
     # if n = 1 and you don't specify arguments, if just returns a matrix
   }
   if (list) {
@@ -83,7 +84,6 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
     if (!(array))
       warning("list FALSE and array FALSE, returning array")
   }
-
   return(result)
 }
 
@@ -121,7 +121,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
                         L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
-  if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+  if (!(all(is.numeric(x), is.numeric(mean),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x <- as.matrix(x)
     mean <- as.matrix(mean)
@@ -133,7 +133,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
       stop("Non-conforming dimensions.", dims, dim(U),dim(V))
     }
     # you should be using small enough matrices that determinants and
-    # inverses aren't a pain.  alsopresumes not using a singular matrix
+    # inverses aren't a pain.  also presumes not using a singular matrix
     # normal distribution
     p <- dim(U)[1]  #square matrices so only need first dimension
     n <- dim(V)[1]
@@ -184,7 +184,7 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
                              L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                              U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
     # results should equal other option - works by unrolling into MVN
-  if(!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+  if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x <- as.matrix(x)
     mean <- as.matrix(mean)
@@ -258,13 +258,13 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (class(data) == "list") data <- array(unlist(data),
                                        dim = c(nrow(data[[1]]),
                                                ncol(data[[1]]), length(data)))
-    if(!all(is.numeric(data),is.numeric(tol),
+    if (!all(is.numeric(data),is.numeric(tol),
             is.numeric(max.iter))) stop("Non-numeric input. ")
-    if(!(missing(U))){
-      if(!(is.numeric(U))) stop("Non-numeric input.")
+    if (!(missing(U))){
+      if (!(is.numeric(U))) stop("Non-numeric input.")
     }
-    if(!(missing(V))){
-      if(!(is.numeric(V))) stop("Non-numeric input.")
+    if (!(missing(V))){
+      if (!(is.numeric(V))) stop("Non-numeric input.")
     }
 
 
@@ -293,10 +293,10 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     iter <- 0
     error.term <- 1e+40
     if (col.variance == "AR(1)"){
-      if(V[1,2] > 0) rho.col = V[1,2] else rho.col <- 0.3
+      if (V[1,2] > 0) rho.col = V[1,2] else rho.col <- 0.3
     }
     if (row.variance == "AR(1)"){
-      if(V[1,2] > 0) rho.row = V[1,2] else rho.row <- 0.3
+      if (V[1,2] > 0) rho.row = V[1,2] else rho.row <- 0.3
     }
 
     while (iter < max.iter && error.term > tol) {
@@ -304,8 +304,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         if (col.variance == "AR(1)") {
             var <- V[1, 1]
             nLL <- function(theta) {
-              Vmat <- theta[1] * toepgenerate(dims[2], theta[1])
-              -sum(apply(swept.data, 3,
+              Vmat <- theta[1] * toepgenerate(dims[2], theta[1]) - sum(apply(swept.data, 3,
                   function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
             }
             fit0 <- stats::optim(c(var, rho.col), nLL, method = "L-BFGS-B",
