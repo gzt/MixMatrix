@@ -10,40 +10,6 @@
 #' @name matrixdist
 NULL
 
-#' rmatrixnorm.one
-#'
-#' @param mean \eqn{p X q}  matrix of means
-#' @param L \eqn{p X p}  matrix specifying relations among the rows.
-#'    By default (inherited from above), an identity matrix. Should be
-#'    output of Cholesky decomposition from rmatrixnorm.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default (inherited from above), an identity matrix. Should be
-#'    output of Cholesky decomposition from rmatrixnorm.
-#'
-#' @return Returns a matrix of one observation. This function
-#'    is for internal use only.
-#' @keywords internal
-rmatrixnorm.one <- function(mean, L, R) {
-
-  # removing a lot of error checking from this function as it should be
-  # done upstream - this is an internal function!
-  # should only be passed the cholesky or other sqrt matrices!
-
-  if(!(all(is.numeric(mean), is.numeric(L),
-           is.numeric(R)))) stop("Non-numeric input. ")
-    mean <- as.matrix(mean)
-    dims <- dim(mean)
-    # other computation moved upstream!
-    n = prod(dims)
-    mat <- matrix(stats::rnorm(n), nrow = dims[1])
-
-    result <- mean + t(L) %*% mat %*% (R)
-    dimnames(result) <- dimnames(mean)
-    return(result)
-}
-
-
-
 #' rmatrixnorm: matrix variate normal
 #'
 #' @description  generate random draws from a matrix variate normal distribution
@@ -85,43 +51,40 @@ rmatrixnorm.one <- function(mean, L, R) {
 rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
                         R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                         V = t(R) %*% R, list = FALSE, array = NULL) {
-    if(!is.numeric(n)) stop("n is not numeric")
-    if (!(n > 0)) stop("n must be > 0. n = ", n)
-    mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    dims <- dim(mean)
-    if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
-             is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
-    # non-conforming dimension check moved to rmatrixnorm
-    # checks for conformable matrix dimensions
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-      stop("Non-conforming dimensions.", dims, dim(U),dim(V))
-    }
+  if(!is.numeric(n)) stop("n is not numeric")
+  if (!(n > 0)) stop("n must be > 0. n = ", n)
+  mean <- as.matrix(mean)
+  U <- as.matrix(U)
+  V <- as.matrix(V)
+  dims <- dim(mean)
+  if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
+           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+  # non-conforming dimension check moved to rmatrixnorm
+  # checks for conformable matrix dimensions
+  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+        dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+    stop("Non-conforming dimensions.", dims, dim(U),dim(V))
+  }
 
-    cholU <- chol(U)
-    cholV <- chol(V)
+  cholU <- chol(U)
+  cholV <- chol(V)
+  nobs = prod(dims)*n
+  mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-    if (n == 1 && list == FALSE && is.null(array)) {
-        return(rmatrixnorm.one(mean, L = cholU, R = cholV))
-        # if n = 1 and you don't specify arguments, if just returns a matrix
-    }
-    if (list) {
-        return(lapply(1:n, function(x) rmatrixnorm.one(mean, L = cholU, R = cholV)))
-    }
-    if (!(list) && !(is.null(array))) {
-        if (!(array))
-            warning("list FALSE and array FALSE, returning array")
-    }
-    result <- array(data = NA, dim = c(dims,n),
-                   dimnames = list(dimnames(mean),NULL))
-    for (i in 1:n) {
-        # note this indexes by the first coord - use aperm() on results
-        # if you don't want that
-        result[ , , i] <- rmatrixnorm.one(mean, L = cholU, R = cholV)
-    }
-    return(result)
+  result <- array(apply(mat, 3, function(x) mean + t(L) %*% x %*% (R)),dim = c(dims,n))
+  if (n == 1 && list == FALSE && is.null(array)) {
+    return(result[,,1])
+    # if n = 1 and you don't specify arguments, if just returns a matrix
+  }
+  if (list) {
+    return(lapply(seq(dim(result)[3]), function(x) result[ , , x]))
+  }
+  if (!(list) && !(is.null(array))) {
+    if (!(array))
+      warning("list FALSE and array FALSE, returning array")
+  }
+
+  return(result)
 }
 
 

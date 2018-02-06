@@ -14,17 +14,10 @@ rmatrixt.one(df, mean = matrix(0, nrow = 2, ncol = 2), solveU, cholV)
 is a central T, though the expected value will be equal to this if
 \eqn{df > 2}}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows. By default,
-an identity matrix.}
+\item{solveU}{\eqn{LL^T}  - \eqn{p X p}  the inverse of \eqn{U},
+passed from \code{rmatrixt}.}
 
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns. By
-default, an identity matrix.}
-
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-computed from \eqn{L} if not specified. Note this is not the variance.}
-
-\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-computed from \eqn{R}  if not specified.  Note this is not the variance.}
+\item{cholV}{\eqn{R^T R = V}  - \eqn{q X q}  Cholesky decomposition of \eqn{V}}
 }
 \value{
 Returns a matrix of one observation. This function is for internal
