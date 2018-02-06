@@ -28,11 +28,9 @@ rmatrixnorm.one <- function(mean, L, R) {
   # done upstream - this is an internal function!
   # should only be passed the cholesky or other sqrt matrices!
 
-  if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
-           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+  if(!(all(is.numeric(mean), is.numeric(L),
+           is.numeric(R)))) stop("Non-numeric input. ")
     mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
     dims <- dim(mean)
     # other computation moved upstream!
     n = prod(dims)
@@ -92,7 +90,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
     U <- as.matrix(U)
     V <- as.matrix(V)
     dims <- dim(mean)
-
+    if(!(all(is.numeric(mean), is.numeric(L), is.numeric(R),
+             is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     # non-conforming dimension check moved to rmatrixnorm
     # checks for conformable matrix dimensions
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
