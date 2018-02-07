@@ -1,14 +1,4 @@
-#' matrixdist: a package for some random matrix distributions.
-#'
-#' The matrixdist package current provides for generating
-#' matrix variate random variables, computing matrix variate densities,
-#' and fitting the MLEs for parameters of matrix variate normal distributions.
-#' Currently, normal, t, and inverted t distributions are supported for generation
-#' and density computation.
-#'
-#' @docType package
-#' @name matrixdist
-NULL
+
 
 #' rmatrixnorm: matrix variate normal
 #'
@@ -287,7 +277,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         U <- diag(dims[1])
     if (missing(V))
         V <- diag(dims[2])
-    mu <- apply(data, c(1, 2), mean)
+    # mu <- apply(data, c(1, 2), mean)
+    mu <- rowMeans(data, dims = 2)
     if (row.mean) {
         # should make it so that the mean is constant within a row
         mu <- matrix(apply(mu, 1, mean), nrow = dims[1], ncol = dims[2])
@@ -306,7 +297,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           } else {
             inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
-            V <- matrix(apply(inter.V, 1, sum),
+            V <- matrix(rowSums(inter.V, dims=1),
                             nrow = dims[2])/(dims[3] * dims[1])
             rho.col <- V[1,2]/V[1,1]
             if(rho.col > .9) rho.col <- .9
@@ -319,7 +310,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         } else {
           inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
           # collapsed into a (row*column) * n, which is then gathered and fixed.
-          U <- matrix(apply(inter.U, 1, sum), nrow = dims[1])/(dims[3] * dims[2])
+          U <- matrix(rowSums(inter.U , dims=1),
+                      nrow = dims[1])/(dims[3] * dims[2])
           rho.row <- U[1,2]/U[1,1]
           if(rho.row > .9) rho.row <- .9
           U <- toepgenerate(dims[1],rho.row)
@@ -360,7 +352,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         } else {
             inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
-            new.U <- matrix(apply(inter.U, 1, sum), nrow = dims[1])/(dims[3] * dims[2])
+            new.U <- matrix(rowSums(inter.U, dims=1),
+                            nrow = dims[1])/(dims[3] * dims[2])
             new.U <- new.U/(new.U[1, 1])
         }
         # only identifiable up to a constant, so have to fix something at 1
