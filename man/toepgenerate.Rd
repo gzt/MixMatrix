@@ -12,16 +12,13 @@ toepgenerate(n, rho)
 \item{rho}{correlation parameter}
 }
 \value{
-Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on
-   the other diagonals, where $k$ is distance from the main diagonal.
+Toeplitz \eqn{n x n} matrix with 1 on the diagonal and \eqn{rho^k} on
+   the other diagonals, where \eqn{k} is distance from the main diagonal.
    Used internally but it is useful for generating your own random matrices.
 }
 \description{
 generate AR(1) correlation matrices
 }
 \examples{
-rho <- .9
-n <- 6
-toepgenerate(n,rho)
+toepgenerate(6,.9)
 }
-\keyword{internal}

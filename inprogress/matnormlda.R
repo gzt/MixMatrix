@@ -1,6 +1,7 @@
 
 
-## matnorm classification similar to LDA - create an object like LDA object that can be used on vectorized version
+## matnorm classification similar to LDA - create an object like LDA object that can be
+## used on vectorized version
 matnormlda <-
   function(x, grouping, prior, tol = 1.0e-4, ...)
   {
@@ -44,7 +45,7 @@ matnormlda <-
     #                sQuote(method)), domain = NA)
     group.means = array(0,dim=c(p,q,ng))
     for(i in seq(ng)){
-      group.means[,,i] = apply(x[,,g==levels(g)[i]],3, mean )
+      group.means[,,i] = rowMeans(x[,,g==levels(g)[i]],dims=2 )
     }
     f1 <- sqrt((apply((x - group.means[, , ]),c(1,2),var)))
     if(any(f1 < tol)) {
@@ -69,5 +70,6 @@ matnormlda <-
     structure(list(prior = prior, counts = counts, means = group.means,
                    scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
                    N = n, call = cl),
-              class = "matlda")
+              class = "lda"
+              )
   }

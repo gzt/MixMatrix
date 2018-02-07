@@ -21,6 +21,11 @@
 #'    \code{FALSE} , the function will return a matrix containing the one
 #'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 #'    If \code{list}  is \code{TRUE} , this will be ignored.
+#' @param force If TRUE, will take the input of \code{R}
+#'    directly - otherwise computes \code{V} and uses Cholesky
+#'    decompositions. Useful for generating degenerate t-distributions.
+#'    Will also override concerns about potentially singular matrices
+#'    unless they are not, in fact, invertible.
 #' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
 #'    a \eqn{n X p X q}  array.
 #' @export
@@ -43,7 +48,7 @@
 
 rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
                      R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
-                     V = t(R) %*% R, list = FALSE, array = NULL) {
+                     V = t(R) %*% R, list = FALSE, array = NULL, force = FALSE) {
   if (!(n > 0))
     stop("n must be > 0. n =", n)
 
@@ -54,12 +59,20 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
+  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # should probably do better error checking, checks for
   # conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+  }
+  if(force && !missing(R)) cholV <- R else cholV <- chol(V)
+
+  if(!force && min(diag(cholV))<1e-6 ) {
+    stop("Potentially singular covariance, use force = TRUE if intended. ",
+         min(diag(cholV)))
   }
   if (df == 0 || is.infinite(df))
     return(rmatrixnorm(n = n, mean = mean, U = U,
@@ -139,11 +152,15 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
+    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
       stop("Non-conforming dimensions.", dims, dim(U), dim(V))
     }
+
+
     xm <- x - mean
 
     detU <- det(U)
@@ -241,41 +258,6 @@ posmatsqrt <- function(A) {
 }
 
 
-#' rmatrixinvt.one
-#'
-#' @description Generate random draws from the inverted matrix variate
-#'    t-distribution.
-#' @param df  degrees of freedom (\eqn{>0}, maybe non-integer),
-#'     \code{df = Inf} is allowed.
-#' @param mean \eqn{p X q} This is really a 'shift' rather than a
-#'    mean as this is a central T, though the expected value will be equal
-#'    to this if \eqn{df > 2}
-#' @param Usqrt \eqn{LL^T}  - \eqn{p X p}  positive definite symm sqrt matrix for rows,
-#'    computed from \eqn{L} if not specified. Note this is not the variance.
-#' @param Vsqrt \eqn{R^T R}  - \eqn{q X q}  positive definite symm sqrt matrix for columns,
-#'    computed from \eqn{R}  if not specified.  Note this is not the variance.
-#'
-#' @return Returns a matrix of one observation. This function is for
-#'    internal use only.
-#' @keywords internal
-#'
-rmatrixinvt.one <- function(df, mean = matrix(0, nrow = 2, ncol = 2),
-                            Usqrt, Vsqrt) {
-  if (!(all(is.numeric(df), is.numeric(mean),
-           is.numeric(Usqrt),is.numeric(Vsqrt)))) stop("Non-numeric input. ")
-    mean <- as.matrix(mean)
-    dims <- dim(mean)
-    # conformable dimension check moved to rmatrixinvt
-
-    n <- prod(dims)
-    mat <- matrix(stats::rnorm(n), nrow = dims[1])
-    S <- stats::rWishart(1, df + dims[1] - 1, diag(dims[1]))[, , 1]
-
-    SXX <- solve(posmatsqrt(S + mat %*% t(mat)))
-    result <- Usqrt %*% SXX %*% mat %*% Vsqrt + mean
-    return(result)
-}
-
 #' rmatrixinvt
 #'
 #' @family matrixt
@@ -321,6 +303,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
+  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -403,11 +387,14 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
+    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
       stop("Non-conforming dimensions.", dims, dim(U), dim(V))
     }
+
     xm <- x - mean
     detU <- det(U)
     detV <- det(V)

@@ -6,7 +6,7 @@
 \usage{
 rmatrixt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
-  list = FALSE, array = NULL)
+  list = FALSE, array = NULL, force = FALSE)
 }
 \arguments{
 \item{n}{number of observations to generate}
@@ -37,6 +37,12 @@ output will be a list of matrices.}
 \code{FALSE} , the function will return a matrix containing the one
 observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 If \code{list}  is \code{TRUE} , this will be ignored.}
+
+\item{force}{If TRUE, will take the input of \code{R}
+directly - otherwise computes \code{V} and uses Cholesky
+decompositions. Useful for generating degenerate t-distributions.
+Will also override concerns about potentially singular matrices
+unless they are not, in fact, invertible.}
 }
 \value{
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices or

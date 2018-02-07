@@ -21,6 +21,11 @@
 #'    \code{FALSE} , the function will return a matrix containing the one
 #'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 #'    If \code{list}  is \code{TRUE} , this will be ignored.
+#' @param force If TRUE, will take the input of \code{L} and/or \code{R}
+#'    directly - otherwise computes \code{U} and \code{V} and uses Cholesky
+#'    decompositions. Useful for generating degenerate normal distributions.
+#'    Will also override concerns about potentially singular matrices
+#'    unless they are not, in fact, invertible.
 #' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
 #'    a \eqn{p X q X n}  array.
 #' @export
@@ -40,12 +45,14 @@
 #'
 rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
                         R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
-                        V = t(R) %*% R, list = FALSE, array = NULL) {
+                        V = t(R) %*% R, list = FALSE, array = NULL, force = FALSE) {
   if (!is.numeric(n)) stop("n is not numeric")
   if (!(n > 0)) stop("n must be > 0. n = ", n)
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
+  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
   dims <- dim(mean)
   if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
     stop("Non-numeric input. ")
@@ -55,9 +62,13 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
+  if(force && !missing(L)) cholU <- L else cholU <- chol(U)
+  if(force && !missing(R)) cholV <- R else cholV <- chol(V)
 
-  cholU <- chol(U)
-  cholV <- chol(V)
+  if(!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
+      stop("Potentially singular covariance, use force = TRUE if intended. ",
+           min(diag(cholU)), min(diag(cholV)))
+  }
   nobs = prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
@@ -117,6 +128,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
+    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -142,7 +155,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
       }
 }
 
-#' dmatrixnorm.test
+#' dmatrixnorm.unroll
 #' @description Equivalent to dmatrixnorm except it works by unrolling
 #'     to a vector.
 #' @param x \eqn{p X q} input matrix
@@ -167,10 +180,10 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2))
-#' \dontrun{dmatrixnorm.test (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#' \dontrun{dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
 
-dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
+dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
                              L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
                              U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
     # results should equal other option - works by unrolling into MVN
@@ -180,6 +193,8 @@ dmatrixnorm.test <- function(x, mean = array(0L, dim(as.matrix(x))),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
+    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -281,11 +296,11 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     mu <- rowMeans(data, dims = 2)
     if (row.mean) {
         # should make it so that the mean is constant within a row
-        mu <- matrix(apply(mu, 1, mean), nrow = dims[1], ncol = dims[2])
+        mu <- matrix(rowMeans(mu), nrow = dims[1], ncol = dims[2])
     }
     if (col.mean) {
         # should make it so that the mean is constant within a column
-        mu <- matrix(apply(mu, 2, mean), nrow = dims[1], ncol = dims[2], byrow = T)
+        mu <- matrix(colMeans(mu), nrow = dims[1], ncol = dims[2], byrow = T)
     }
     # if both are true, this should make it so the mean is constant all over
     swept.data <- sweep(data, c(1, 2), mu)
@@ -377,16 +392,13 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 #' @param n number of columns/rows
 #' @param rho correlation parameter
 #'
-#' @return Toeplitz $n x n$ matrix with 1 on the diagonal and $rho^k$ on
-#'    the other diagonals, where $k$ is distance from the main diagonal.
+#' @return Toeplitz \eqn{n x n} matrix with 1 on the diagonal and \eqn{rho^k} on
+#'    the other diagonals, where \eqn{k} is distance from the main diagonal.
 #'    Used internally but it is useful for generating your own random matrices.
-#' @keywords internal
 #' @export
 #'
 #' @examples
-#' rho <- .9
-#' n <- 6
-#' toepgenerate(n,rho)
+#' toepgenerate(6,.9)
 toepgenerate <- function(n, rho) {
     if (n <= 1)
         stop("n must be greater than 1.")
@@ -402,3 +414,30 @@ toepgenerate <- function(n, rho) {
     return(X)
 }
 
+
+#' Generate a compound symmetric correlation matrix
+#'
+#' @param n number of dimensions
+#' @param rho off-diagonal element - a correlation between -1 and 1. Will warn if less than 0.
+#'
+#' @return returns an \eqn{n x n} matrix with 1 on the diagonal and \code{rho} on the off-diagonal.
+#' @export
+#'
+#' @examples
+#' CSgenerate(3,.5)
+
+CSgenerate <- function(n,rho){
+  if (n <= 1)
+    stop("n must be greater than 1.")
+  if (rho >= 1)
+    stop("rho must be a correlation less than 1.")
+  if (rho <= -1)
+    stop("rho must be a correlation greater than -1.")
+  if (rho < 0)
+    warning("Rho = ", rho, " and should be greater than 0.")
+  if (rho > 0.99)
+    warning("Rho = ", rho, " high correlation may cause numerical problems.")
+  A = matrix(rho, nrow=n,ncol=n)
+  diag(A) <- 1
+  A
+}
