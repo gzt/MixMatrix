@@ -12,6 +12,8 @@ Depends: R (>= 2.0.0), base, stats
 Suggests: knitr, rmarkdown,
     testthat
 VignetteBuilder: knitr
+LazyData: true
 URL: http://github.com/gzt/matrixdist/
+BugReports: http://github.com/gzt/matrixdist/issues
 License: GPL-3
 RoxygenNote: 6.0.1

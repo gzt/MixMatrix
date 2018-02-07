@@ -2,9 +2,7 @@
 
 ## matnorm classification similar to LDA - create an object like LDA object that can be
 ## used on vectorized version
-matnormlda <-
-  function(x, grouping, prior, tol = 1.0e-4, ...)
-  {
+matnormlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
     if (class(x) == "list") x <- array(unlist(x),
                                              dim = c(nrow(x[[1]]),
                                                      ncol(x[[1]]), length(x)))
@@ -47,7 +45,11 @@ matnormlda <-
     for(i in seq(ng)){
       group.means[,,i] = rowMeans(x[,,g==levels(g)[i]],dims=2 )
     }
-    f1 <- sqrt((apply((x - group.means[, , ]),c(1,2),var)))
+    swept.group <- array(0,dims)
+    for(i in seq(n)){
+      swept.group[,,i] <- x[,,i] - group.means[,,as.numeric(g[i])]
+        }
+    f1 <- sqrt((apply(swept.group,c(1,2),var)))
     if(any(f1 < tol)) {
       const <- format((1L:(p*q)[f1 < tol]))
       stop(sprintf(ngettext(length(const),
@@ -68,8 +70,8 @@ matnormlda <-
     cl <- match.call()
     cl[[1L]] <- as.name("matnormlda")
     structure(list(prior = prior, counts = counts, means = group.means,
-                   scaling = scaling, lev = lev, svd = X.s$d[1L:rank],
-                   N = n, call = cl),
-              class = "lda"
+                   scaling = scaling, lev = lev, #svd = X.s$d[1L:rank],
+                   N = n, call = cl) #,
+#              class = "lda"
               )
   }
