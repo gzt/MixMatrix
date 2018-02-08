@@ -51,8 +51,10 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if(missing(L))
+    if(!symm.check(U)) stop("U not symmetric.")
+  if(missing(R))
+    if(!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
   if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
     stop("Non-numeric input. ")
@@ -62,8 +64,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
-  if(force && !missing(L)) cholU <- L else cholU <- chol(U)
-  if(force && !missing(R)) cholV <- R else cholV <- chol(V)
+  if(force && !missing(L)) cholU <- L else cholU <- chol.default(U)
+  if(force && !missing(R)) cholV <- R else cholV <- chol.default(V)
 
   if(!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
       stop("Potentially singular covariance, use force = TRUE if intended. ",
@@ -128,8 +130,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if(!symm.check(U)) stop("U not symmetric.")
+    if(!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -193,8 +195,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if(!symm.check(U)) stop("U not symmetric.")
+    if(!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -236,13 +238,14 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    common mean within each row. If both this and \code{row.mean} are
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
-#'     'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).
+#'     'none', 'AR(1)', or 'CS' for 'compound symmetry'.
+#'     Only positive correlations are allowed for AR(1) and CS.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it will be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
-#'     Either 'none' or 'AR(1)'. Only positive correlations are allowed for
-#'     AR(1).
+#'     Either 'none' or 'AR(1)' or 'CS'. Only positive correlations are allowed for
+#'     AR(1) and CS.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
@@ -279,8 +282,11 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(missing(V))){
       if (!(is.numeric(V))) stop("Non-numeric input.")
     }
+    row.set.var = FALSE
+    if(row.variance == "AR(1)" || row.variance == "CS" ) row.set.var = TRUE
 
-
+    col.set.var = FALSE
+    if(col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
     # if data is array, presumes indexed over first column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
     dims <- dim(data)
@@ -306,7 +312,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     swept.data <- sweep(data, c(1, 2), mu)
     iter <- 0
     error.term <- 1e+40
-    if (col.variance == "AR(1)"){
+    if(col.set.var){
+
       if (V[1,2] > 0) {
         rho.col <- V[1,2]
           } else {
@@ -314,12 +321,15 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             V <- matrix(rowSums(inter.V, dims=1),
                             nrow = dims[2])/(dims[3] * dims[1])
-            rho.col <- V[1,2]/V[1,1]
+            if(col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
+            if(col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
             if(rho.col > .9) rho.col <- .9
-            V <- toepgenerate(dims[2],rho.col)
+            V <- varmatgenerate(dims[2],rho.col,col.variance)
           }
     }
-    if (row.variance == "AR(1)"){
+
+
+    if(row.set.var){
       if (U[1,2] > 0) {
         rho.row <- U[1,2]
         } else {
@@ -327,27 +337,31 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           # collapsed into a (row*column) * n, which is then gathered and fixed.
           U <- matrix(rowSums(inter.U , dims=1),
                       nrow = dims[1])/(dims[3] * dims[2])
-          rho.row <- U[1,2]/U[1,1]
+          if(row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
+          if(row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
           if(rho.row > .9) rho.row <- .9
-          U <- toepgenerate(dims[1],rho.row)
+          U <- varmatgenerate(dims[1],rho.row,row.variance)
         }
     }
+
+
+
 
     while (iter < max.iter && error.term > tol) {
 
         # make intermediate matrix, then collapse to final version
-        if (col.variance == "AR(1)") {
+        if (col.set.var) {
           var <- V[1,1]
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
                            function(x) t(x) %*% solve((V/var) %x% U) %*% x)) / (prod(dims))
           nLL <- function(theta) {
-            Vmat <- var * toepgenerate(dims[2], theta)
+            Vmat <- var * varmatgenerate(dims[2], theta, col.variance)
             - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
           }
           fit0 <- stats::optim(rho.col, nLL, method = "L-BFGS-B",
                hessian = FALSE, lower = 0, upper =  0.99,...)
           rho.col <- fit0$par
-          new.V <- var * toepgenerate(dims[2], rho.col)
+          new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
             inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
@@ -355,15 +369,15 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                             nrow = dims[2])/(dims[3] * dims[1])
         }
 
-        if (row.variance == "AR(1)") {
+        if (row.set.var) {
             nLL <- function(theta){
-              Umat <- toepgenerate(dims[1],theta)
+              Umat <- varmatgenerate(dims[1],theta,row.variance)
               -sum(apply(swept.data, 3,function(x) dmatrixnorm(x, log = TRUE, V = new.V, U = Umat)))
             }
             fit0 <- stats::optim(rho.row, nLL, method = "L-BFGS-B",
                                 hessian = FALSE, lower = 0, upper = 0.99,...)
             rho.row <- fit0$par
-            new.U <- toepgenerate(dims[1], rho.row)
+            new.U <- varmatgenerate(dims[1], rho.row,row.variance)
         } else {
             inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
@@ -437,7 +451,60 @@ CSgenerate <- function(n,rho){
     warning("Rho = ", rho, " and should be greater than 0.")
   if (rho > 0.99)
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
-  A = matrix(rho, nrow=n,ncol=n)
+  A <- matrix(rho, nrow=n,ncol=n)
   diag(A) <- 1
   A
+}
+
+
+#' Quick symmetry check
+#'
+#' Quick check whether matrix input is symmetric -
+#' checks sum of absolute differences of transposes
+#' as well as dimensions. Not robust, so only an
+#' internal function to be used with known safe input.
+#'
+#' @param A Numeric real matrix. Does not real.
+#' @param tol tolerance - note that if you have a big matrix
+#'    it may need to be specified as it's a sum of entries.
+#'
+#' @return logical TRUE if symmetric FALSE otherwise. Not as robust as \code{isSymmetric()}.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' A = toepgenerate(5,.9)
+#' symm.check(A)
+#' A[1,2] = 5
+#' symm.check(A)}
+symm.check <- function(A, tol = 10 * .Machine$double.eps){
+  if(!is.matrix(A)) return(FALSE)
+  if(!is.numeric(A)) return(FALSE)
+  dims <- dim(A)
+  if(dims[1] != dims[2]) {
+    return(FALSE)
+  }
+  B <- sum(abs(A - t(A)))
+  return(B < prod(dims)*tol)
+}
+
+
+#' varmatgenerate: selects variance structure to generate.
+#'
+#' @param n number of dimensions
+#' @param rho parameter for selected variance structure.
+#' @param variance variance structure - AR(1) or CS.
+#'
+#' @return Specified matrix structure
+#'
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{varmatgenerate(5,.2,"AR(1)")}
+#'
+varmatgenerate <- function(n, rho, variance){
+  if (variance == "AR(1)") return(toepgenerate(n,rho))
+  if (variance == "CS") return(CSgenerate(n,rho))
+  else stop("Bad covariance structure input.", variance)
+
 }

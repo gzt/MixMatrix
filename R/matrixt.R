@@ -62,8 +62,8 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if (!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if (!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if (!symm.check(U)) stop("U not symmetric.")
+  if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # should probably do better error checking, checks for
   # conformable matrix dimensions
@@ -86,6 +86,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
   # want solve(chol()) and not t(...)
   # check the math, and it's faster than chol(solve())!
+  # why am i not just generating from an inv wishart if this is what i want?
   cholU <- array(apply(USigma, 3, function(x) solve(chol(x))),
                  dim = c(dims[1],dims[1],n))
   # so cholU is a 3D array so we can't just 'apply' it.
@@ -96,7 +97,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
-    return(result[,,1])
+    return(array(result[,,1], dim=dims[1:2]))
     # if n = 1 and you don't specify arguments, it just returns a matrix
   }
   if (list) {
@@ -152,8 +153,8 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if (!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if (!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if (!symm.check(U)) stop("U not symmetric.")
+    if (!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -249,7 +250,7 @@ posmatsqrt <- function(A) {
     if (!(dim(A)[1] == dim(A)[2]))
         stop("Matrix must be square. Dimensions: ", dim(A))
 
-    e <- eigen(A)
+    e <- eigen(A,symmetric=TRUE)
     V <- e$vectors
     if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
     B <- V %*% diag(sqrt(e$values)) %*% t(V)
@@ -302,8 +303,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if (!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if (!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if (!symm.check(U)) stop("U not symmetric.")
+  if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -336,8 +337,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
-    return(result[ , , 1])
-    # if n = 1 and you don't specify arguments, it just returns a matrix
+    return(array(result[,,1], dim=dims[1:2]))
+        # if n = 1 and you don't specify arguments, it just returns a matrix
   }
   if (list) {
     return(lapply(seq(dim(result)[3]), function(x) result[ , , x]))
@@ -386,8 +387,8 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if (!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if (!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if (!symm.check(U)) stop("U not symmetric.")
+    if (!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
