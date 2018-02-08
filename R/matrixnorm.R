@@ -51,8 +51,10 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if(missing(L))
+    if(!symm.check(U)) stop("U not symmetric.")
+  if(missing(R))
+    if(!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
   if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
     stop("Non-numeric input. ")
@@ -62,8 +64,8 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
-  if(force && !missing(L)) cholU <- L else cholU <- chol(U)
-  if(force && !missing(R)) cholV <- R else cholV <- chol(V)
+  if(force && !missing(L)) cholU <- L else cholU <- chol.default(U)
+  if(force && !missing(R)) cholV <- R else cholV <- chol.default(V)
 
   if(!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
       stop("Potentially singular covariance, use force = TRUE if intended. ",
@@ -128,8 +130,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if(!symm.check(U)) stop("U not symmetric.")
+    if(!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -193,8 +195,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if(!symm.check(U)) stop("U not symmetric.")
+    if(!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -437,7 +439,39 @@ CSgenerate <- function(n,rho){
     warning("Rho = ", rho, " and should be greater than 0.")
   if (rho > 0.99)
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
-  A = matrix(rho, nrow=n,ncol=n)
+  A <- matrix(rho, nrow=n,ncol=n)
   diag(A) <- 1
   A
+}
+
+
+#' Quick symmetry check
+#'
+#' Quick check whether matrix input is symmetric -
+#' checks sum of absolute differences of transposes
+#' as well as dimensions. Not robust, so only an
+#' internal function to be used with known safe input.
+#'
+#' @param A Numeric real matrix. Does not real.
+#' @param tol tolerance - note that if you have a big matrix
+#'    it may need to be specified as it's a sum of entries.
+#'
+#' @return logical TRUE if symmetric FALSE otherwise. Not as robust as \code{isSymmetric()}.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{
+#' A = toepgenerate(5,.9)
+#' symm.check(A)
+#' A[1,2] = 5
+#' symm.check(A)}
+symm.check <- function(A, tol = 10 * .Machine$double.eps){
+  if(!is.matrix(A)) return(FALSE)
+  if(!is.numeric(A)) return(FALSE)
+  dims <- dim(A)
+  if(dims[1] != dims[2]) {
+    return(FALSE)
+  }
+  B <- sum(abs(A - t(A)))
+  return(B < prod(dims)*tol)
 }
