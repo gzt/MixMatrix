@@ -21,14 +21,15 @@ common mean within each row. If both this and \code{row.mean} are
 \code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{row.variance}{Imposes a variance structure on the rows. Either
-'none' or 'AR(1)'. Only positive correlations are allowed for AR(1).
+'none', 'AR(1)', or 'CS' for 'compound symmetry'.
+Only positive correlations are allowed for AR(1) and CS.
 Note that while maximum likelihood estimators are available (and used) for
 the unconstrained variance matrices, \code{optim} is used for any
 constraints so it will be considerably slower.}
 
 \item{col.variance}{Imposes a variance structure on the columns.
-Either 'none' or 'AR(1)'. Only positive correlations are allowed for
-AR(1).}
+Either 'none' or 'AR(1)' or 'CS'. Only positive correlations are allowed for
+AR(1) and CS.}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}
