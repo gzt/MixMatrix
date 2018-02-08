@@ -71,5 +71,17 @@ set.seed(20180205)
   B = as.vector(rnorm(1e4))
   expect_equal(var(A), var(B), tolerance = .08)
   expect_equal(mean(A), mean(B), tolerance = .035)
+  U.one = V.two = matrix(1)
+  dim.one = c(1,6)
+  dim.two = c(6,1)
+  x = array(rep(1,6),dim = c(1,6))
+  U.two = V.one = toepgenerate(6, .7)
+  df = 5
 
+  #dmvt(x,sigma = U.two,df = 5)
+  expect_equal(dmatrixt(x, df, U = U.one, V = V.one, log = T),
+               dmatrixt(t(x), df, U = U.two, V = V.two, log = T),
+               tolerance = .0001)
+  expect_equal(dmatrixt(x, df, U = U.one, V = V.one, log = T),
+               -4.663386, tolerance = .0001)
 })

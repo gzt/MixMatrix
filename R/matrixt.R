@@ -22,7 +22,7 @@
 #'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 #'    If \code{list}  is \code{TRUE} , this will be ignored.
 #' @param force If TRUE, will take the input of \code{R}
-#'    directly - otherwise computes \code{V} and uses Cholesky
+#'    directly - otherwise uses \code{V} and uses Cholesky
 #'    decompositions. Useful for generating degenerate t-distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
@@ -56,11 +56,14 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
 
   if (((is.null(df)) || is.na(df) || (df < 0)))
     stop("df must be >= 0. df =", df)
+  if (df == 0 || is.infinite(df))
+    return(rmatrixnorm(n = n, mean = mean, U = U,
+                       V = V, list = list, array = array))
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if (!isSymmetric.matrix(U)) stop("U not symmetric.")
+  if (!isSymmetric.matrix(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # should probably do better error checking, checks for
   # conformable matrix dimensions
@@ -68,17 +71,14 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
-  if(force && !missing(R)) cholV <- R else cholV <- chol(V)
+  if (force && !missing(R)) cholV <- R else cholV <- chol(V)
 
-  if(!force && min(diag(cholV))<1e-6 ) {
+  if (!force && min(diag(cholV)) < 1e-6 ) {
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholV)))
   }
-  if (df == 0 || is.infinite(df))
-    return(rmatrixnorm(n = n, mean = mean, U = U,
-                       V = V, list = list, array = array))
+
   solveU = solve(U)
-  cholV = chol(V)
 
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
@@ -91,7 +91,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   # so cholU is a 3D array so we can't just 'apply' it.
 
   result <- array(dim = c(dims,n))
-  for (i in seq(n)){
+  for (i in seq(n)) {
     result[ , , i] <- mean + (cholU[ , , i]) %*% mat[ , , i] %*% (cholV)
   }
 
@@ -152,8 +152,8 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if (!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if (!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -172,14 +172,15 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     # rmatrixt as well (ie scale by df)
 
     if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
-
+    # gammas is constant
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    mats <- -0.5 * dims[2] * (log(detU)+dims[1]*log(df)) - 0.5 * dims[1] * log(detV) -
-         0.5 * (df + sum(dims) - 1) * log(det(diag(dims[1]) +
-         solve(df * U) %*% xm %*% solve(V) %*% t(xm)))
+    mats <- -0.5 * dims[2] * (log(detU)) - 0.5 * dims[2] * dims[1]*log(df) -
+            0.5 * dims[1] * log(detV) -
+            0.5 * (df + sum(dims) - 1) *
+            log(det(diag(dims[1]) + solve(df * U) %*% xm %*% solve(V) %*% t(xm)))
 
     results <- as.numeric(gammas + mats)
     if (log) {
@@ -217,10 +218,8 @@ lmvgamma <- function(x, p) {
         stop("p must be greater than or equal to 1. p = ", p)
     if (any(x <= 0))
         stop("x must be greater than 0. x = ", x)
-    i <- seq_along(p)
-    # the sum is why we have to do this awkwardly rather than just passing through
-    result <- sapply(x, function(y) (p * (p - 1)/4) * log(pi) +
-                       sum(lgamma(y + (1 - i)/2)))
+    result <- (p * (p - 1)/4) * log(pi) +
+      sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
     return(array(result, dim = dims))
 }
 
@@ -303,8 +302,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-  if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+  if (!isSymmetric.matrix(U)) stop("U not symmetric.")
+  if (!isSymmetric.matrix(V)) stop("V not symmetric.")
   dims <- dim(mean)
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -322,7 +321,7 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
   SXX <- array(0,dim = c(dims[1],dims[1],n))
 
-  for(i in seq(n)) {
+  for (i in seq(n)) {
     # if there's a way to do this with apply I want to see it
     SXX[ , , i] <- array(solve(posmatsqrt(S[ , , i] +
                                             mat[ , , i] %*% t(mat[ , , i]))),
@@ -331,7 +330,7 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
   result <- array(dim = c(dims,n))
 
-  for(i in seq(n)){
+  for (i in seq(n)){
     # if there's a way to do this with apply I want to see it
     result[ , , i] <- Usqrt %*% SXX[ , , i] %*% mat[ , , i] %*% Vsqrt + mean
   }
@@ -387,8 +386,8 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!isSymmetric.matrix(U)) stop("U not symmetric.")
-    if(!isSymmetric.matrix(V)) stop("V not symmetric.")
+    if (!isSymmetric.matrix(U)) stop("U not symmetric.")
+    if (!isSymmetric.matrix(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {

@@ -39,7 +39,7 @@ observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 If \code{list}  is \code{TRUE} , this will be ignored.}
 
 \item{force}{If TRUE, will take the input of \code{R}
-directly - otherwise computes \code{V} and uses Cholesky
+directly - otherwise uses \code{V} and uses Cholesky
 decompositions. Useful for generating degenerate t-distributions.
 Will also override concerns about potentially singular matrices
 unless they are not, in fact, invertible.}
