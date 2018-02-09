@@ -41,6 +41,7 @@ matnormlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
     # if(CV && !(method == "moment" || method == "mle"))
     #   stop(gettext("cannot use leave-one-out CV with method %s",
     #                sQuote(method)), domain = NA)
+
     group.means = array(0,dim=c(p,q,ng))
     for(i in seq(ng)){
       group.means[,,i] = rowMeans(x[,,g==levels(g)[i]],dims=2 )
@@ -62,6 +63,26 @@ matnormlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
 
     ### here is where I left off
 
+    # xbar <- colSums(prior %*% group.means)
+
+    xbar <- matrix(prior %*% t(matrix(group.means, ncol = ng, byrow = F)), nrow = p)
+    fac <-  1/(ng - 1)
+    X <- sqrt((n * prior) * fac) * scale(matrix(group.means,nrow=ng,byrow=T),
+                                          center = as.vector(xbar),
+                                          scale = FALSE) %*% diag(as.vector(scaling))
+    # X.s <- svd(X, nu = 0L)
+    # rank <- sum(X.s$d > tol * X.s$d[1L])
+    # if (rank == 0L)
+    #   stop("group means are numerically identical")
+    # scaling <- scaling %*% X.s$v[, 1L:rank]
+    # if (is.null(dimnames(x)))
+    #   dimnames(scaling) <- list(NULL, paste("LD", 1L:rank,
+    #                                         sep = ""))
+    # else {
+    #   dimnames(scaling) <- list(colnames(x), paste("LD", 1L:rank,
+    #                                                sep = ""))
+    #   dimnames(group.means)[[2L]] <- colnames(x)
+    # }
 
 
 
@@ -74,4 +95,5 @@ matnormlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
                    N = n, call = cl) #,
 #              class = "lda"
               )
-  }
+}
+
