@@ -533,3 +533,30 @@ varmatgenerate <- function(n, rho, variance) {
   else stop("Bad covariance structure input.", variance)
 
 }
+
+
+#' Determinant for an AR(1) covariance matrix.
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#' @param deriv logical whether to return the deterimant or the derivative of the determinant
+#'
+#' @return determinant of an AR(1) covariance matrix
+#' @keywords internal
+#'
+#' @examples
+ARdet <- function(n, rho, deriv = FALSE) {
+
+  if(!deriv) return(1-rho^2)^(n-1)
+    else -2*rho*(n-1)(1-rho^2)^(n-2)
+
+}
+
+derivinvAR <- function(n,rho){
+  #-(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
+  X = toeplitz(c(-(rho^2+1)/(1-rho^2)^2,4*rho/((1-rho^2)^2),rep(0,n-2)))
+  X[1,1] <-  2*rho/((1-rho^2)^2)
+  X[n,n] <-  2*rho/((1-rho^2)^2)
+
+}
+
