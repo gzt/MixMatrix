@@ -151,7 +151,7 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     Vinv <- chol2inv(cholV)
     XM <- x - mean
     logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * log(detU) -
-      0.5 * p * log(detV) - 0.5 * sum(diag(Vinv %*% t(XM) %*% Uinv %*% (XM)))
+      0.5 * p * log(detV) - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
     if (log) {
         return(logresult)
       } else {
@@ -336,7 +336,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         rho.col <- V[1,2]
           } else {
             inter.V <- apply(swept.data, 3,
-                        function(x) (t(x) %*% chol2inv(chol.default(U)) %*% x))
+                        function(x) crossprod((x), chol2inv(chol.default(U))) %*% x)
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             V <- matrix(rowSums(inter.V, dims = 1),
                             nrow = dims[2])/(dims[3] * dims[1])
@@ -352,7 +352,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         rho.row <- U[1,2]
         } else {
           inter.U <- apply(swept.data, 3,
-                        function(x) ((x) %*% chol2inv(chol.default(V)) %*% t(x)))
+                        function(x) ((x) %*% tcrossprod(chol2inv(chol.default(V)),(x))))
           # collapsed into a (row*column) * n, which is then gathered and fixed.
           U <- matrix(rowSums(inter.U , dims = 1),
                       nrow = dims[1])/(dims[3] * dims[2])
@@ -370,7 +370,14 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         if (col.set.var) {
           var <- V[1,1]
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
-                    function(x) t(x) %*% chol2inv(chol.default((V/var) %x% U)) %*% x)) / (prod(dims))
+                    function(x) crossprod(x, chol2inv(chol.default((V/var) %x% U))) %*% x)) / (prod(dims))
+          # can write LL for AR(1) directly and differentiate
+          # det(SIGMA) = (1-rho^2)^(n-1) -> d(det)/d\rho = -2*rho*(n-1)(1-rho^2)^(n-2)
+          # inv(SIGMA) -> 1/(1-rho^2) * tridiag with -rho on off diags, 1+rho^2, 1 on main
+          # derivs: -(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
+
+          # for CS det(S) = ?
+
           nLL <- function(theta) {
             Vmat <- var * varmatgenerate(dims[2], theta, col.variance)
             - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
@@ -380,7 +387,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           rho.col <- fit0$par
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
-            inter.V <- apply(swept.data, 3, function(x) (t(x) %*% chol2inv(chol.default(U)) %*% x))
+            inter.V <- apply(swept.data, 3, function(x) (crossprod(x, chol2inv(chol.default(U))) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             new.V <- matrix(apply(inter.V, 1, sum),
                             nrow = dims[2])/(dims[3] * dims[1])
@@ -396,7 +403,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             rho.row <- fit0$par
             new.U <- varmatgenerate(dims[1], rho.row,row.variance)
         } else {
-            inter.U <- apply(swept.data, 3, function(x) ((x) %*% chol2inv(chol.default(V)) %*% t(x)))
+            inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, chol2inv(chol.default(V))) %*%  t(x)))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             new.U <- matrix(rowSums(inter.U, dims = 1),
                             nrow = dims[1])/(dims[3] * dims[2])
@@ -496,14 +503,14 @@ CSgenerate <- function(n,rho) {
 #' A[1,2] = 5
 #' symm.check(A)}
 symm.check <- function(A, tol = 10 * .Machine$double.eps) {
-  if (!is.matrix(A)) return(FALSE)
-  if (!is.numeric(A)) return(FALSE)
+  # if (!is.matrix(A)) return(FALSE)
+  # if (!is.numeric(A)) return(FALSE)
+  # commented those out because it is always checked before running symm.check.
   dims <- dim(A)
   if (dims[1] != dims[2]) {
     return(FALSE)
   }
-  B <- sum(abs(A - t(A)))
-  return(B < prod(dims)*tol)
+  return(sum(abs(A - t(A))) < prod(dims)*tol)
 }
 
 
