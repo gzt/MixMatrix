@@ -51,10 +51,10 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
-  if(missing(L))
-    if(!symm.check(U)) stop("U not symmetric.")
-  if(missing(R))
-    if(!symm.check(V)) stop("V not symmetric.")
+  if (missing(L))
+    if (!symm.check(U)) stop("U not symmetric.")
+  if (missing(R))
+    if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
   if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
     stop("Non-numeric input. ")
@@ -64,10 +64,10 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
-  if(force && !missing(L)) cholU <- L else cholU <- chol.default(U)
-  if(force && !missing(R)) cholV <- R else cholV <- chol.default(V)
+  if (force && !missing(L)) cholU <- L else cholU <- chol.default(U)
+  if (force && !missing(R)) cholV <- R else cholV <- chol.default(V)
 
-  if(!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
+  if (!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
       stop("Potentially singular covariance, use force = TRUE if intended. ",
            min(diag(cholU)), min(diag(cholV)))
   }
@@ -130,8 +130,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!symm.check(U)) stop("U not symmetric.")
-    if(!symm.check(V)) stop("V not symmetric.")
+    if (!symm.check(U)) stop("U not symmetric.")
+    if (!symm.check(V)) stop("V not symmetric.")
     dims <- dim(x)
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
@@ -142,11 +142,13 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
     # normal distribution
     p <- dim(U)[1]  #square matrices so only need first dimension
     n <- dim(V)[1]
-    detU <- det(U)
-    detV <- det(V)
-    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
-    Uinv <- solve(U)
-    Vinv <- solve(V)
+    cholU = chol.default(U)
+    cholV = chol.default(V)
+    detU <- prod(diag(cholU))^2
+    detV <- prod(diag(cholV))^2
+    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
+    Uinv <- chol2inv(cholU)
+    Vinv <- chol2inv(cholV)
     XM <- x - mean
     logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * log(detU) -
       0.5 * p * log(detV) - 0.5 * sum(diag(Vinv %*% t(XM) %*% Uinv %*% (XM)))
@@ -159,7 +161,9 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
 
 #' dmatrixnorm.unroll
 #' @description Equivalent to dmatrixnorm except it works by unrolling
-#'     to a vector.
+#'     to a vector. Alternatively, it can work on a matrix that has
+#'     already been unrolled in the default R method (using
+#'     \code{as.vector}), as data may be stored in that fashion.
 #' @param x \eqn{p X q} input matrix
 #' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s
 #'     with size taken from \code{x}
@@ -171,13 +175,18 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
 #'    matrix for rows, computed from \eqn{L} if not specified.
 #' @param V \eqn{R^T R} - \eqn{q X q} positive definite variance-covariance
 #'    matrix for columns, computed from \eqn{R} if not specified.
-#' @param log Whether to return the density on the log scale.
+#' @param unrolled logical, \code{FALSE} by default. If \code{x}
+#'    is already unrolled, select \code{TRUE}. This will take the dimensions
+#'    from the variance matrices, so they must be specified.
+#' @param log logical - whether to return the density on the log scale.
 #'
 #' @return Returns the density at the provided observation. This is an
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
-#' @keywords internal
-#' #'
+#'
+#' @export
+#'
+#'
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -187,7 +196,8 @@ dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
 
 dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
                              L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
-                             U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
+                             U = L %*% t(L), V = t(R) %*% R, log = FALSE,
+                             unrolled = FALSE) {
     # results should equal other option - works by unrolling into MVN
   if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
@@ -195,25 +205,33 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
     mean <- as.matrix(mean)
     U <- as.matrix(U)
     V <- as.matrix(V)
-    if(!symm.check(U)) stop("U not symmetric.")
-    if(!symm.check(V)) stop("V not symmetric.")
-    dims <- dim(x)
+    if (!symm.check(U)) stop("U not symmetric.")
+    if (!symm.check(V)) stop("V not symmetric.")
+    dims <- dim(mean)
+    if (unrolled) {
+      dims <- c(dim(U)[1] ,dim(V)[1])
+    }
     if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
           dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
       stop("Non-conforming dimensions. ", dims, dim(U),dim(V))
     }
-    vecx <- as.vector(x)
+    if (!unrolled) {
+      vecx <- as.vector(x)
+    } else {
+      vecx <- x
+    }
     meanx <- as.vector(mean)
     VU <- V %x% U
     # you should be using small enough matrices that determinants aren't a pain
     # also presumes not using a singular matrix normal distribution
     p <- dim(U)[1]  #square matrices so only need first dimension
     n <- dim(V)[1]
-    detVU <- det(VU)
-    if (!(detVU > 0)) stop("non-invertible matrix")
-    UVinv <- solve(VU)
+    cholVU <- chol.default(VU)
+    detVU <- prod(diag(cholVU))^2
+    if (!(detVU > 1e-8)) stop("non-invertible matrix")
+    UVinv <- chol2inv(detVU)
     XM <- vecx - meanx
-    logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(det(VU)) -
+    logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(detVU) -
       0.5 * sum(diag(t(XM) %*% UVinv %*% XM))
     if (log) {
         return(logresult)
@@ -276,17 +294,17 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                                                ncol(data[[1]]), length(data)))
     if (!all(is.numeric(data),is.numeric(tol),
             is.numeric(max.iter))) stop("Non-numeric input. ")
-    if (!(missing(U))){
+    if (!(missing(U))) {
       if (!(is.numeric(U))) stop("Non-numeric input.")
     }
-    if (!(missing(V))){
+    if (!(missing(V))) {
       if (!(is.numeric(V))) stop("Non-numeric input.")
     }
     row.set.var = FALSE
-    if(row.variance == "AR(1)" || row.variance == "CS" ) row.set.var = TRUE
+    if (row.variance == "AR(1)" || row.variance == "CS" ) row.set.var = TRUE
 
     col.set.var = FALSE
-    if(col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
+    if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
     # if data is array, presumes indexed over first column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
     dims <- dim(data)
@@ -312,39 +330,38 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     swept.data <- sweep(data, c(1, 2), mu)
     iter <- 0
     error.term <- 1e+40
-    if(col.set.var){
+    if (col.set.var) {
 
       if (V[1,2] > 0) {
         rho.col <- V[1,2]
           } else {
-            inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
+            inter.V <- apply(swept.data, 3,
+                        function(x) (t(x) %*% chol2inv(chol.default(U)) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
-            V <- matrix(rowSums(inter.V, dims=1),
+            V <- matrix(rowSums(inter.V, dims = 1),
                             nrow = dims[2])/(dims[3] * dims[1])
-            if(col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
-            if(col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
-            if(rho.col > .9) rho.col <- .9
+            if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
+            if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
+            if (rho.col > .9) rho.col <- .9
             V <- varmatgenerate(dims[2],rho.col,col.variance)
           }
     }
 
-
-    if(row.set.var){
+        if (row.set.var) {
       if (U[1,2] > 0) {
         rho.row <- U[1,2]
         } else {
-          inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
+          inter.U <- apply(swept.data, 3,
+                        function(x) ((x) %*% chol2inv(chol.default(V)) %*% t(x)))
           # collapsed into a (row*column) * n, which is then gathered and fixed.
-          U <- matrix(rowSums(inter.U , dims=1),
+          U <- matrix(rowSums(inter.U , dims = 1),
                       nrow = dims[1])/(dims[3] * dims[2])
-          if(row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
-          if(row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
-          if(rho.row > .9) rho.row <- .9
+          if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
+          if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
+          if (rho.row > .9) rho.row <- .9
           U <- varmatgenerate(dims[1],rho.row,row.variance)
         }
     }
-
-
 
 
     while (iter < max.iter && error.term > tol) {
@@ -353,7 +370,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         if (col.set.var) {
           var <- V[1,1]
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
-                           function(x) t(x) %*% solve((V/var) %x% U) %*% x)) / (prod(dims))
+                    function(x) t(x) %*% chol2inv(chol.default((V/var) %x% U)) %*% x)) / (prod(dims))
           nLL <- function(theta) {
             Vmat <- var * varmatgenerate(dims[2], theta, col.variance)
             - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
@@ -363,14 +380,14 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           rho.col <- fit0$par
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
-            inter.V <- apply(swept.data, 3, function(x) (t(x) %*% solve(U) %*% x))
+            inter.V <- apply(swept.data, 3, function(x) (t(x) %*% chol2inv(chol.default(U)) %*% x))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             new.V <- matrix(apply(inter.V, 1, sum),
                             nrow = dims[2])/(dims[3] * dims[1])
         }
 
         if (row.set.var) {
-            nLL <- function(theta){
+            nLL <- function(theta) {
               Umat <- varmatgenerate(dims[1],theta,row.variance)
               -sum(apply(swept.data, 3,function(x) dmatrixnorm(x, log = TRUE, V = new.V, U = Umat)))
             }
@@ -379,9 +396,9 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             rho.row <- fit0$par
             new.U <- varmatgenerate(dims[1], rho.row,row.variance)
         } else {
-            inter.U <- apply(swept.data, 3, function(x) ((x) %*% solve(V) %*% t(x)))
+            inter.U <- apply(swept.data, 3, function(x) ((x) %*% chol2inv(chol.default(V)) %*% t(x)))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
-            new.U <- matrix(rowSums(inter.U, dims=1),
+            new.U <- matrix(rowSums(inter.U, dims = 1),
                             nrow = dims[1])/(dims[3] * dims[2])
             new.U <- new.U/(new.U[1, 1])
         }
@@ -440,7 +457,7 @@ toepgenerate <- function(n, rho) {
 #' @examples
 #' CSgenerate(3,.5)
 
-CSgenerate <- function(n,rho){
+CSgenerate <- function(n,rho) {
   if (n <= 1)
     stop("n must be greater than 1.")
   if (rho >= 1)
@@ -451,7 +468,7 @@ CSgenerate <- function(n,rho){
     warning("Rho = ", rho, " and should be greater than 0.")
   if (rho > 0.99)
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
-  A <- matrix(rho, nrow=n,ncol=n)
+  A <- matrix(rho, nrow = n,ncol = n)
   diag(A) <- 1
   A
 }
@@ -464,11 +481,12 @@ CSgenerate <- function(n,rho){
 #' as well as dimensions. Not robust, so only an
 #' internal function to be used with known safe input.
 #'
-#' @param A Numeric real matrix. Does not real.
+#' @param A Numeric real matrix. Does not check if real.
 #' @param tol tolerance - note that if you have a big matrix
 #'    it may need to be specified as it's a sum of entries.
 #'
-#' @return logical TRUE if symmetric FALSE otherwise. Not as robust as \code{isSymmetric()}.
+#' @return logical TRUE if symmetric FALSE otherwise.
+#' Not as robust as \code{isSymmetric()}.
 #' @keywords internal
 #'
 #' @examples
@@ -477,11 +495,11 @@ CSgenerate <- function(n,rho){
 #' symm.check(A)
 #' A[1,2] = 5
 #' symm.check(A)}
-symm.check <- function(A, tol = 10 * .Machine$double.eps){
-  if(!is.matrix(A)) return(FALSE)
-  if(!is.numeric(A)) return(FALSE)
+symm.check <- function(A, tol = 10 * .Machine$double.eps) {
+  if (!is.matrix(A)) return(FALSE)
+  if (!is.numeric(A)) return(FALSE)
   dims <- dim(A)
-  if(dims[1] != dims[2]) {
+  if (dims[1] != dims[2]) {
     return(FALSE)
   }
   B <- sum(abs(A - t(A)))
@@ -502,7 +520,7 @@ symm.check <- function(A, tol = 10 * .Machine$double.eps){
 #' @examples
 #' \dontrun{varmatgenerate(5,.2,"AR(1)")}
 #'
-varmatgenerate <- function(n, rho, variance){
+varmatgenerate <- function(n, rho, variance) {
   if (variance == "AR(1)") return(toepgenerate(n,rho))
   if (variance == "CS") return(CSgenerate(n,rho))
   else stop("Bad covariance structure input.", variance)

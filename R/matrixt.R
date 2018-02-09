@@ -78,14 +78,14 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
          min(diag(cholV)))
   }
 
-  solveU = solve(U)
+  solveU = chol2inv(chol.default(U))
 
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
   USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
-  # want solve(chol()) and not t(...)
-  # check the math, and it's faster than chol(solve())!
+  # chol(solve) -> solve(chol) -> chol2inv(chol(chol))
+  #
   # why am i not just generating from an inv wishart if this is what i want?
   cholU <- array(apply(USigma, 3, function(x) solve(chol(x))),
                  dim = c(dims[1],dims[1],n))
@@ -97,7 +97,7 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
-    return(array(result[,,1], dim=dims[1:2]))
+    return(array(result[,,1], dim = dims[1:2]))
     # if n = 1 and you don't specify arguments, it just returns a matrix
   }
   if (list) {
@@ -163,25 +163,27 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
 
 
     xm <- x - mean
-
-    detU <- det(U)
-    detV <- det(V)
+    cholU <- chol.default(U)
+    cholV <- chol.default(V)
+    detU <- prod(diag(cholU))^2
+    detV <- prod(diag(cholV))^2
 
     # breaking equation into two parts: the integrating constants (gammas)
     # and the matrix algebra parts (mats) done on the log scale
     # NB: I provided the correction to this that I did for
     # rmatrixt as well (ie scale by df)
 
-    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
+    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
     # gammas is constant
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
+    m <- (diag(dims[1]) + chol2inv(chol(df*U)) %*% xm %*% chol2inv(cholV) %*% t(xm))
+
     mats <- -0.5 * dims[2] * (log(detU)) - 0.5 * dims[2] * dims[1]*log(df) -
             0.5 * dims[1] * log(detV) -
-            0.5 * (df + sum(dims) - 1) *
-            log(det(diag(dims[1]) + solve(df * U) %*% xm %*% solve(V) %*% t(xm)))
+            0.5 * (df + sum(dims) - 1) * log(det(m))
 
     results <- as.numeric(gammas + mats)
     if (log) {
@@ -250,7 +252,7 @@ posmatsqrt <- function(A) {
     if (!(dim(A)[1] == dim(A)[2]))
         stop("Matrix must be square. Dimensions: ", dim(A))
 
-    e <- eigen(A,symmetric=TRUE)
+    e <- eigen(A, symmetric = TRUE)
     V <- e$vectors
     if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
     B <- V %*% diag(sqrt(e$values)) %*% t(V)
@@ -324,8 +326,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
   for (i in seq(n)) {
     # if there's a way to do this with apply I want to see it
-    SXX[ , , i] <- array(solve(posmatsqrt(S[ , , i] +
-                                            mat[ , , i] %*% t(mat[ , , i]))),
+    SXX[ , , i] <- array(chol2inv(chol.default((posmatsqrt(S[ , , i] +
+                                            mat[ , , i] %*% t(mat[ , , i]))))),
                          dim = c(dims[1],dims[1]))
   }
 
@@ -396,9 +398,11 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
     }
 
     xm <- x - mean
-    detU <- det(U)
-    detV <- det(V)
-    if (!(detU > 0 && detV > 0)) stop("non-invertible matrix", detU, detV)
+    cholU <- chol.default(U)
+    cholV <- chol.default(V)
+    detU <- prod(diag(cholU))^2
+    detV <- prod(diag(cholV))^2
+    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
 
     # breaking equation into two parts: the integrating constants
     # (gammas) and the matrix algebra parts (mats) done on the log scale
@@ -406,9 +410,12 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
 
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
       0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+
+    matrixterms <- chol.default(diag(dims[1]) -
+                      chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm))
+
     mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
-        0.5 * (df - 2) * log(det(diag(dims[1]) -
-        solve(U) %*% xm %*% solve(V) %*% t(xm)))
+        0.5 * (df - 2) * log(prod(diag(matrixterms))^2)
     results <- gammas + mats
     if (log) {
         return(results)

@@ -7,13 +7,14 @@
 symm.check(A, tol = 10 * .Machine$double.eps)
 }
 \arguments{
-\item{A}{Numeric real matrix. Does not real.}
+\item{A}{Numeric real matrix. Does not check if real.}
 
 \item{tol}{tolerance - note that if you have a big matrix
 it may need to be specified as it's a sum of entries.}
 }
 \value{
-logical TRUE if symmetric FALSE otherwise. Not as robust as \code{isSymmetric()}.
+logical TRUE if symmetric FALSE otherwise.
+Not as robust as \code{isSymmetric()}.
 }
 \description{
 Quick check whether matrix input is symmetric -

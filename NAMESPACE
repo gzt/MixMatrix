@@ -2,6 +2,7 @@
 
 export(CSgenerate)
 export(dmatrixnorm)
+export(dmatrixnorm.unroll)
 export(dmatrixt)
 export(lmvgamma)
 export(mle.matrixnorm)

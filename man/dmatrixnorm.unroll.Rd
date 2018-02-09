@@ -6,7 +6,7 @@
 \usage{
 dmatrixnorm.unroll(x, mean = array(0L, dim(as.matrix(x))),
   L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R, log = FALSE)
+  V = t(R) \%*\% R, log = FALSE, unrolled = FALSE)
 }
 \arguments{
 \item{x}{\eqn{p X q} input matrix}
@@ -26,7 +26,11 @@ matrix for rows, computed from \eqn{L} if not specified.}
 \item{V}{\eqn{R^T R} - \eqn{q X q} positive definite variance-covariance
 matrix for columns, computed from \eqn{R} if not specified.}
 
-\item{log}{Whether to return the density on the log scale.}
+\item{log}{logical - whether to return the density on the log scale.}
+
+\item{unrolled}{logical, \code{FALSE} by default. If \code{x}
+is already unrolled, select \code{TRUE}. This will take the dimensions
+from the variance matrices, so they must be specified.}
 }
 \value{
 Returns the density at the provided observation. This is an
@@ -35,7 +39,9 @@ Returns the density at the provided observation. This is an
 }
 \description{
 Equivalent to dmatrixnorm except it works by unrolling
-    to a vector.
+    to a vector. Alternatively, it can work on a matrix that has
+    already been unrolled in the default R method (using
+    \code{as.vector}), as data may be stored in that fashion.
 }
 \examples{
 set.seed(20180202)
@@ -44,5 +50,3 @@ A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 \dontrun{dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
 }
-\keyword{#'}
-\keyword{internal}
