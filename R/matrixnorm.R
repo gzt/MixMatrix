@@ -229,7 +229,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
     cholVU <- chol.default(VU)
     detVU <- prod(diag(cholVU))^2
     if (!(detVU > 1e-8)) stop("non-invertible matrix")
-    UVinv <- chol2inv(detVU)
+    UVinv <- chol2inv(cholVU)
     XM <- vecx - meanx
     logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(detVU) -
       0.5 * sum(diag(t(XM) %*% UVinv %*% XM))
@@ -288,7 +288,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
-                           tol = 1e-09, max.iter = 100, U, V,...) {
+                           tol = 1e-10, max.iter = 100, U, V,...) {
     if (class(data) == "list") data <- array(unlist(data),
                                        dim = c(nrow(data[[1]]),
                                                ncol(data[[1]]), length(data)))
@@ -331,7 +331,6 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     iter <- 0
     error.term <- 1e+40
     if (col.set.var) {
-
       if (V[1,2] > 0) {
         rho.col <- V[1,2]
           } else {
@@ -347,7 +346,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           }
     }
 
-        if (row.set.var) {
+  if (row.set.var) {
       if (U[1,2] > 0) {
         rho.row <- U[1,2]
         } else {
@@ -420,5 +419,6 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (iter >= max.iter || error.term > tol)
         warning("Failed to converge")
 
-    return(list(mean = mu, U = U, V = V, iter = iter, tol = error.term,call = match.call()))
+    return(list(mean = mu, U = U, V = V, iter = iter,
+                tol = error.term,call = match.call()))
 }

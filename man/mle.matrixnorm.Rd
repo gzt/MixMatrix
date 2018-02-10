@@ -5,7 +5,7 @@
 \title{mle.matrixnorm:}
 \usage{
 mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
-  row.variance = "none", col.variance = "none", tol = 1e-09,
+  row.variance = "none", col.variance = "none", tol = 1e-10,
   max.iter = 100, U, V, ...)
 }
 \arguments{

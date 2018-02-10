@@ -211,11 +211,8 @@ invCS <- function(n, rho, deriv = FALSE){
     return(X)
   }
 
-  alpha = sqrt(1 - rho)
-
   X = diag(1/alpha^2,n) - matrix(rho/(alpha^2 * (alpha^2 + n * rho)),
                                  nrow = n, ncol = n)
-
   return(X)
 }
 

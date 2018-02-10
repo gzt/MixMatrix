@@ -84,16 +84,18 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
   USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
-  # chol(solve) -> solve(chol) -> chol2inv(chol(chol))
-  #
+  # chol  here, backsolve later
   # why am i not just generating from an inv wishart if this is what i want?
-  cholU <- array(apply(USigma, 3, function(x) solve(chol(x))),
+  # or more to the point, isn't it ironic that i want the chol factor
+  # when the C works by generating the chol factor and using that
+  # to make matrix? I should just drop to C.
+  cholU <- array(apply(USigma, 3, function(x) (chol.default(x))),
                  dim = c(dims[1],dims[1],n))
   # so cholU is a 3D array so we can't just 'apply' it.
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
-    result[ , , i] <- mean + (cholU[ , , i]) %*% mat[ , , i] %*% (cholV)
+    result[ , , i] <- mean + (backsolve(cholU[ , , i], mat[ , , i])) %*% (cholV)
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -179,7 +181,7 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    m <- (diag(dims[1]) + chol2inv(chol(df*U)) %*% xm %*% chol2inv(cholV) %*% t(xm))
+    m <- (diag(dims[1]) + chol2inv((sqrt(df)*cholU)) %*% xm %*% chol2inv(cholV) %*% t(xm))
 
     mats <- -0.5 * dims[2] * (log(detU)) - 0.5 * dims[2] * dims[1]*log(df) -
             0.5 * dims[1] * log(detV) -
@@ -222,7 +224,7 @@ lmvgamma <- function(x, p) {
     if (any(x <= 0))
         stop("x must be greater than 0. x = ", x)
     result <- (p * (p - 1)/4) * log(pi) +
-      sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
+       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
     return(array(result, dim = dims))
 }
 
@@ -333,13 +335,13 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
   result <- array(dim = c(dims,n))
 
-  for (i in seq(n)){
+  for (i in seq(n)) {
     # if there's a way to do this with apply I want to see it
     result[ , , i] <- Usqrt %*% SXX[ , , i] %*% mat[ , , i] %*% Vsqrt + mean
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
-    return(array(result[,,1], dim=dims[1:2]))
+    return(array(result[,,1], dim = dims[1:2]))
         # if n = 1 and you don't specify arguments, it just returns a matrix
   }
   if (list) {
