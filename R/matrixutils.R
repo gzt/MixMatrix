@@ -327,3 +327,9 @@ rInvCholWishart <- function(n, df, Sigma){
     stop("inconsistent degrees of freedom and dimension")
   .Call("rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }
+
+
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("matrixdist", libpath)
+}
