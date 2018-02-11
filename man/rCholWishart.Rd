@@ -9,9 +9,9 @@ rCholWishart(n, df, Sigma)
 \arguments{
 \item{n}{integer sample size.}
 
-\item{df}{numeric parameter, “degrees of freedom”.}
+\item{df}{numeric parameter, "degrees of freedom".}
 
-\item{Sigma}{positive definite \eqn{(p * p)} “scale” matrix, the matrix parameter of the distribution.}
+\item{Sigma}{positive definite \eqn{(p * p)} "scale" matrix, the matrix parameter of the distribution.}
 }
 \value{
 a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
@@ -22,9 +22,9 @@ Generate n random matrices, distributed according to the Cholesky
     \code{df}, \eqn{W_p(Sigma, df)}.
 }
 \examples{
-\dontrun{
+
 rCholWishart(1,10,diag(5))
-}
+
 }
 \seealso{
 rWishart

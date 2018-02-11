@@ -223,8 +223,8 @@ invCS <- function(n, rho, deriv = FALSE){
 #'     \code{df}, \eqn{W_p(Sigma, df)}.
 #'
 #' @param n integer sample size.
-#' @param df numeric parameter, “degrees of freedom”.
-#' @param Sigma positive definite \eqn{(p * p)} “scale” matrix, the matrix parameter of the distribution.
+#' @param df numeric parameter, "degrees of freedom".
+#' @param Sigma positive definite \eqn{(p * p)} "scale" matrix, the matrix parameter of the distribution.
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
@@ -256,8 +256,8 @@ rCholWishart <- function(n, df, Sigma){
 #'     \code{df}, \eqn{W_p(Sigma, df)}.
 #'
 #' @param n integer sample size.
-#' @param df numeric parameter, “degrees of freedom”.
-#' @param Sigma positive definite \eqn{(p * p)} “scale” matrix, the matrix parameter of the distribution.
+#' @param df numeric parameter, "degrees of freedom".
+#' @param Sigma positive definite \eqn{(p * p)} "scale" matrix, the matrix parameter of the distribution.
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
