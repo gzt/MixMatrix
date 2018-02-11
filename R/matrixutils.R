@@ -233,9 +233,9 @@ invCS <- function(n, rho, deriv = FALSE){
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#'
 #' rCholWishart(1,10,diag(5))
-#' }
+#'
 rCholWishart <- function(n, df, Sigma){
   dims = dim(Sigma)
   if (n < 1)
@@ -244,7 +244,7 @@ rCholWishart <- function(n, df, Sigma){
     stop("'Sigma' must be a square, real matrix");
   if (df < dims[1] || dims[1] <= 0)
     stop("inconsistent degrees of freedom and dimension")
-  .Call("C_rCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
+  .Call("rCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }
 
 
@@ -266,9 +266,9 @@ rCholWishart <- function(n, df, Sigma){
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' rCholWishart(1,10,diag(5))
-#' }
+#'
+#' rInvCholWishart(1,10,diag(5))
+#'
 rInvCholWishart <- function(n, df, Sigma){
   dims = dim(Sigma)
   if (n < 1)
@@ -277,5 +277,5 @@ rInvCholWishart <- function(n, df, Sigma){
     stop("'Sigma' must be a square, real matrix");
   if (df < dims[1] || dims[1] <= 0)
     stop("inconsistent degrees of freedom and dimension")
-  .Call("C_rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
+  .Call("rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }

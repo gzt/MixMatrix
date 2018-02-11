@@ -73,7 +73,7 @@ triangular
   * @return
 */
   SEXP
-C_rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
+rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
 {
   SEXP ans;
   int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
@@ -135,7 +135,7 @@ C_rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
   * @return
   */
   SEXP
-    C_rCholWishart(SEXP ns, SEXP nuP, SEXP scal)
+    rCholWishart(SEXP ns, SEXP nuP, SEXP scal)
     {
       SEXP ans;
       int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
@@ -176,23 +176,3 @@ C_rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
       UNPROTECT(1);
       return ans;
     }
-
-  R_CallMethodDef callMethods[]  = {
-
-    {"C_rCholWishart", (DL_FUNC) &C_rCholWishart, 3},
-    {NULL, NULL, 0},
-    {"C_rInvCholWishart", (DL_FUNC) &C_rInvCholWishart, 3},
-    {NULL, NULL, 0}
-    };
-
-
-
-
-
-  void
-    R_init_matrixdist(DllInfo *info)
-    {
-      R_registerRoutines(info, NULL, callMethods, NULL, NULL);
-      R_useDynamicSymbols(info, (Rboolean)FALSE);
-    }
-

@@ -23,7 +23,7 @@ Generate n random matrices, distributed according to the Inverse of  Cholesky
 }
 \examples{
 \dontrun{
-rCholWishart(1,10,diag(5))
+rInvCholWishart(1,10,diag(5))
 }
 }
 \seealso{

@@ -89,4 +89,12 @@ set.seed(20180205)
                tolerance = .0001)
   expect_equal(dmatrixt(x, df, U = U.one, V = V.one, log = T),
                -4.663386, tolerance = .0001)
+  set.seed(20180211)
+  A <- rInvCholWishart(1,10,diag(5))[,,1]
+  set.seed(20180211)
+  B <- rCholWishart(1,10,diag(5))[,,1]
+  expect_equal(sum(A[lower.tri(A)]),0)
+  expect_equal(sum(B[lower.tri(B)]),0)
+  expect_equal(A %*% B, diag(5))
+
 })
