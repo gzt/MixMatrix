@@ -83,19 +83,22 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-  USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
+  # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
+
+  cholU <- rInvCholWishart(n, df + dims[1] - 1,(1/df) * solveU)
+
   # chol  here, backsolve later
   # why am i not just generating from an inv wishart if this is what i want?
   # or more to the point, isn't it ironic that i want the chol factor
   # when the C works by generating the chol factor and using that
   # to make matrix? I should just drop to C.
-  cholU <- array(apply(USigma, 3, function(x) (chol.default(x))),
-                 dim = c(dims[1],dims[1],n))
+  #cholU <- array(apply(USigma, 3, function(x) (chol.default(x))),
+  #               dim = c(dims[1],dims[1],n))
   # so cholU is a 3D array so we can't just 'apply' it.
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
-    result[ , , i] <- mean + (backsolve(cholU[ , , i], mat[ , , i])) %*% (cholV)
+    result[ , , i] <- mean + ((cholU[ , , i] %*% mat[ , , i])) %*% (cholV)
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -230,36 +233,6 @@ lmvgamma <- function(x, p) {
 
 mvgamma <- function(x, p) exp(lmvgamma(x, p))
 
-#' posmatsqrt
-#' @description Computes a positive symmetric square root  matrix for a
-#'    positive definite input matrix. Used in the inverted matrix variate
-#'    t-distribution.
-#' @param A positive definite p x p real-valued matrix.
-#'
-#' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
-#'    \eqn{B \%*\% B = A}.
-#' @export
-#'
-#' @examples
-#' A = diag(5) + 1
-#' B = posmatsqrt(A)
-#' sum(abs(B - t(B)))
-#' sum(abs(A - B %*% B))
-posmatsqrt <- function(A) {
-    # this isn't the fastest way and if you have to do this a lot find a
-    # better way returns symmetric square root of A if it exists: B %*% B = A
-    # does not test if A is positive definite
-    if (!(is.numeric(A))) stop("Non-numeric input.")
-    A <- as.matrix(A)
-    if (!(dim(A)[1] == dim(A)[2]))
-        stop("Matrix must be square. Dimensions: ", dim(A))
-
-    e <- eigen(A, symmetric = TRUE)
-    V <- e$vectors
-    if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
-    B <- V %*% diag(sqrt(e$values)) %*% t(V)
-    return(B)
-}
 
 
 #' rmatrixinvt

@@ -216,6 +216,39 @@ invCS <- function(n, rho, deriv = FALSE){
   return(X)
 }
 
+
+
+#' posmatsqrt
+#' @description Computes a positive symmetric square root  matrix for a
+#'    positive definite input matrix. Used in the inverted matrix variate
+#'    t-distribution.
+#' @param A positive definite p x p real-valued matrix.
+#'
+#' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
+#'    \eqn{B \%*\% B = A}.
+#' @export
+#'
+#' @examples
+#' A = diag(5) + 1
+#' B = posmatsqrt(A)
+#' sum(abs(B - t(B)))
+#' sum(abs(A - B %*% B))
+posmatsqrt <- function(A) {
+  # this isn't the fastest way and if you have to do this a lot find a
+  # better way returns symmetric square root of A if it exists: B %*% B = A
+  # does not test if A is positive definite
+  if (!(is.numeric(A))) stop("Non-numeric input.")
+  A <- as.matrix(A)
+  if (!(dim(A)[1] == dim(A)[2]))
+    stop("Matrix must be square. Dimensions: ", dim(A))
+
+  e <- eigen(A, symmetric = TRUE)
+  V <- e$vectors
+  if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
+  B <- V %*% diag(sqrt(e$values)) %*% t(V)
+  return(B)
+}
+
 #' Cholesky of Random Wishart Distributed Matrices
 #'
 #' @description Generate n random matrices, distributed according to the Cholesky
@@ -237,12 +270,15 @@ invCS <- function(n, rho, deriv = FALSE){
 #' rCholWishart(1,10,diag(5))
 #'
 rCholWishart <- function(n, df, Sigma){
+  if (!is.numeric(Sigma))
+    stop("Sigma must be numeric.")
+  Sigma <- as.matrix(Sigma)
   dims = dim(Sigma)
-  if (n < 1)
+  if (n < 1 || !(is.numeric(n)))
     stop("N must be 1 or larger.")
-  if (!is.matrix(Sigma) || dims[1] != dims[2])
+  if (!is.matrix(Sigma)  || dims[1] != dims[2])
     stop("'Sigma' must be a square, real matrix");
-  if (df < dims[1] || dims[1] <= 0)
+  if (!is.numeric(df) || df < dims[1] || dims[1] <= 0 )
     stop("inconsistent degrees of freedom and dimension")
   .Call("rCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }
@@ -270,12 +306,15 @@ rCholWishart <- function(n, df, Sigma){
 #' rInvCholWishart(1,10,diag(5))
 #'
 rInvCholWishart <- function(n, df, Sigma){
+  if (!is.numeric(Sigma))
+    stop("Sigma must be numeric.")
+  Sigma <- as.matrix(Sigma)
   dims = dim(Sigma)
-  if (n < 1)
+  if (n < 1 || !(is.numeric(n)))
     stop("N must be 1 or larger.")
-  if (!is.matrix(Sigma) || dims[1] != dims[2])
+  if (!is.matrix(Sigma)  || dims[1] != dims[2])
     stop("'Sigma' must be a square, real matrix");
-  if (df < dims[1] || dims[1] <= 0)
+  if (!is.numeric(df) || df < dims[1] || dims[1] <= 0 )
     stop("inconsistent degrees of freedom and dimension")
   .Call("rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }

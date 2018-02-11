@@ -76,6 +76,15 @@ test_that("trying wrong type of input", {
   expect_error(toepgenerate(7,"A"))
   expect_error(toepgenerate("A",.4))
 
+  expect_error(rCholWishart(1,df=5,Sigma="A"))
+  expect_error(rCholWishart(1,df="A",Sigma=diag(5)))
+  expect_error(rCholWishart("A",df=5,Sigma=diag(5)))
+  expect_error(rCholWishart(.4,df=5,Sigma=diag(5)))
+
+  expect_error(rInvCholWishart(1,df=5,Sigma="A"))
+  expect_error(rInvCholWishart(1,df="A",Sigma=diag(5)))
+  expect_error(rInvCholWishart("A",df=4,Sigma=diag(5)))
+  expect_error(rInvCholWishart(.4,df=4,Sigma=diag(5)))
 
 })
 
@@ -127,6 +136,10 @@ test_that("Testing bad matrix dimension input",{
 
   expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=A),U=B,V=A))
   expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=A),U=A,V=B))
+
+  expect_error(rCholWishart(1,10,matrix(c(3,1,1,1,1,3),nrow=2)))
+  expect_error(rInvCholWishart(1,10,matrix(c(3,1,1,1,1,3),nrow=2)))
+
 
 })
 
@@ -187,6 +200,18 @@ test_that("Out of bounds numeric input: ",{
   expect_error(dmatrixnorm(matrix(0,nrow=5,ncol=5), U = diag(5), R = A))
   expect_error(dmatrixnorm(1, matrix(0,nrow=5,ncol=5), L = A, V = diag(5)))
   expect_error(dmatrixnorm(1, matrix(0,nrow=5,ncol=5), U = diag(5), V= A))
+
+
+  expect_error(rCholWishart(1,10,-diag(5)))
+  expect_error(rInvCholWishart(1,10,-diag(5)))
+
+
+  expect_error(rCholWishart(1,4,diag(5)))
+  expect_error(rInvCholWishart(1,4,diag(5)))
+
+
+  expect_error(rCholWishart(-1,10,diag(5)))
+  expect_error(rInvCholWishart(-1,10,diag(5)))
 
 })
 
@@ -253,6 +278,10 @@ test_that("Bad rank in covariance:",{
                            U = matrix(c(1,1,.5,.5),nrow=2,ncol=2)))
   expect_error(dmatrixt(A, 5, mean=matrix(c(0),nrow=2,ncol=2),
                            V = matrix(c(1,1,.5,.5),nrow=2,ncol=2)))
+
+
+  expect_error(rCholWishart(1,10,matrix(c(1,1,1,1),nrow=2)))
+  expect_error(rInvCholWishart(1,10,matrix(c(1,1,1,1),nrow=2)))
 
 
 

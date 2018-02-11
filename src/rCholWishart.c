@@ -45,9 +45,10 @@ triangular
   static double
 *std_rWishart_factor(double nu, int p, int upper, double ans[])
 {
+  /* Original code from R stats: rWishart.c - this function unaltered */
   int pp1 = p + 1;
-
-
+  if (nu < (double) p || p <= 0)
+    error("inconsistent degrees of freedom and dimension");
 
   memset(ans, 0, p * p * sizeof(double));
   for (int j = 0; j < p; j++) {	/* jth column */
@@ -80,6 +81,9 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
   n = asInteger(ns), psqr;
   double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
 
+  if (!isMatrix(scal) || !isReal(scal) || dims[0] != dims[1])
+    error("'scal' must be a square, real matrix");
+
   if (n <= 0) n = 1;
   // allocate early to avoid memory leaks in Callocs below.
   PROTECT(ans = alloc3DArray(REALSXP, dims[0], dims[0], n));
@@ -102,13 +106,11 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
 
     /* Here we make the main change by omitting the A * A**T step */
     /* And inverting */
+    /* Original code from R stats: rWishart.c */
 
          F77_CALL(dtrtri)("U", "N", &(dims[1]), tmp,
                   &(dims[1]), &info);
 
-//         F77_CALL(dsyrk)("U", "T", &(dims[1]), &(dims[1]),
-//                  &one, tmp, &(dims[1]),
-//                  &zero, ansj, &(dims[1]));
 
     for (int i = 0; i < dims[0]; i++)
       for (int k = 0; k < dims[0]; k++)
@@ -142,6 +144,9 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
         n = asInteger(ns), psqr;
       double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
 
+
+      if (!isMatrix(scal) || !isReal(scal) || dims[0] != dims[1])
+        error("'scal' must be a square, real matrix");
       if (n <= 0) n = 1;
       // allocate early to avoid memory leaks in Callocs below.
       PROTECT(ans = alloc3DArray(REALSXP, dims[0], dims[0], n));
@@ -163,6 +168,7 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
                  &one, scCp, dims, tmp, dims);
 
         /* Here we make the main change by omitting the A * A**T step */
+        /* Original code from R stats: rWishart.c */
 
         for (int i = 0; i < dims[0]; i++)
           for (int k = 0; k < dims[0]; k++)
