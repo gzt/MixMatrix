@@ -123,7 +123,7 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
 dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
                         L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
-                        V = t(R) %*% R, log = FALSE) {
+                        V = R, log = FALSE) {
   if (!(all(is.numeric(x), is.numeric(mean),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x <- as.matrix(x)

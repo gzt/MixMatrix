@@ -6,7 +6,7 @@
 \usage{
 dmatrixnorm(x, mean = array(0L, dim(as.matrix(x))[1:2]),
   L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R, log = FALSE)
+  V = R, log = FALSE)
 }
 \arguments{
 \item{x}{\eqn{p X q} input matrix}

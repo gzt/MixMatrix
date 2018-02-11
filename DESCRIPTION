@@ -1,19 +1,19 @@
 Package: matrixdist
 Type: Package
 Title: Functions For Matrix Distributions
-Version: 0.0.0.9911
-Date: 2018-02-08
+Version: 0.0.0.9912
+Date: 2018-02-11
 Authors@R: person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"))
 Description: Sampling and density for matrix variate normal, t, and inverted 
           t-distributions. Fitting for matrix variate normal distributions
           including some restrictions on the parameters.
-Depends: R (>= 2.0.0), base, stats
+Depends: R (>= 3.0.0), base, stats
 Suggests: knitr, rmarkdown,
     testthat
 VignetteBuilder: knitr
 LazyData: true
 URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
-License: GPL-3
+License: GPL-3 + file LICENSE
 RoxygenNote: 6.0.1

@@ -216,3 +216,66 @@ invCS <- function(n, rho, deriv = FALSE){
   return(X)
 }
 
+#' Cholesky of Random Wishart Distributed Matrices
+#'
+#' @description Generate n random matrices, distributed according to the Cholesky
+#'     decomposition of a Wishart distribution with parameters \code{Sigma} and
+#'     \code{df}, \eqn{W_p(Sigma, df)}.
+#'
+#' @param n integer sample size.
+#' @param df numeric parameter, “degrees of freedom”.
+#' @param Sigma positive definite \eqn{(p * p)} “scale” matrix, the matrix parameter of the distribution.
+#'
+#' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
+#'
+#' @seealso rWishart
+#' @useDynLib matrixdist
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rCholWishart(1,10,diag(5))
+#' }
+rCholWishart <- function(n, df, Sigma){
+  dims = dim(Sigma)
+  if (n < 1)
+    stop("N must be 1 or larger.")
+  if (!is.matrix(Sigma) || dims[1] != dims[2])
+    stop("'Sigma' must be a square, real matrix");
+  if (df < dims[1] || dims[1] <= 0)
+    stop("inconsistent degrees of freedom and dimension")
+  .Call("C_rCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
+}
+
+
+
+#' Inverse of Cholesky of Random Wishart Distributed Matrices
+#'
+#' @description Generate n random matrices, distributed according to the Inverse of  Cholesky
+#'     decomposition of a Wishart distribution with parameters \code{Sigma} and
+#'     \code{df}, \eqn{W_p(Sigma, df)}.
+#'
+#' @param n integer sample size.
+#' @param df numeric parameter, “degrees of freedom”.
+#' @param Sigma positive definite \eqn{(p * p)} “scale” matrix, the matrix parameter of the distribution.
+#'
+#' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
+#'
+#' @seealso rWishart
+#' @useDynLib matrixdist
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' rCholWishart(1,10,diag(5))
+#' }
+rInvCholWishart <- function(n, df, Sigma){
+  dims = dim(Sigma)
+  if (n < 1)
+    stop("N must be 1 or larger.")
+  if (!is.matrix(Sigma) || dims[1] != dims[2])
+    stop("'Sigma' must be a square, real matrix");
+  if (df < dims[1] || dims[1] <= 0)
+    stop("inconsistent degrees of freedom and dimension")
+  .Call("C_rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
+}
