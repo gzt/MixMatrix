@@ -93,8 +93,12 @@ set.seed(20180205)
   A <- rInvCholWishart(1,10,diag(5))[,,1]
   set.seed(20180211)
   B <- rCholWishart(1,10,diag(5))[,,1]
-  expect_equal(sum(A[lower.tri(A)]),0)
-  expect_equal(sum(B[lower.tri(B)]),0)
+  set.seed(20180211)
+  C <- chol(rWishart(1,10,diag(5))[,,1])
+
+  expect_equal(sum(abs(A[lower.tri(A)])),0)
+  expect_equal(sum(abs(B[lower.tri(B)])),0)
   expect_equal(A %*% B, diag(5))
+  expect_equal(B,C)
 
 })

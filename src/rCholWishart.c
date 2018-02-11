@@ -1,6 +1,7 @@
 /*
   *  R : A Computer Language for Statistical Data Analysis
 *  Copyright (C) 2012-2016  The R Core Team
+*  Original file rWishart.c altered by GZ Thompson Feb 2018.
 *
   *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -105,7 +106,7 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
                     &one, scCp, dims, tmp, dims);
 
     /* Here we make the main change by omitting the A * A**T step */
-    /* And inverting */
+    /* And inverting. Altered Feb 2018. */
     /* Original code from R stats: rWishart.c */
 
          F77_CALL(dtrtri)("U", "N", &(dims[1]), tmp,
@@ -168,7 +169,7 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
                  &one, scCp, dims, tmp, dims);
 
         /* Here we make the main change by omitting the A * A**T step */
-        /* Original code from R stats: rWishart.c */
+        /* Original code from R stats: rWishart.c Altered Feb 2018. */
 
         for (int i = 0; i < dims[0]; i++)
           for (int k = 0; k < dims[0]; k++)

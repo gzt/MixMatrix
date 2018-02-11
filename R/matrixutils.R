@@ -261,13 +261,22 @@ posmatsqrt <- function(A) {
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
-#' @seealso rWishart
+#' @seealso rWishart, rInvCholWishart
 #' @useDynLib matrixdist
 #' @export
 #'
 #' @examples
+#' # How it is parameterized:
+#' set.seed(20180211)
+#' A <- rCholWishart(1,10,3*diag(5))[,,1]
 #'
-#' rCholWishart(1,10,diag(5))
+#' set.seed(20180211)
+#' B <- rInvCholWishart(1,10,3*diag(5))[,,1]
+#'
+#' A %*% B
+#'
+#' set.seed(20180211)
+#' C <- chol(rWishart(1,10,3*diag(5))[,,1])
 #'
 rCholWishart <- function(n, df, Sigma){
   if (!is.numeric(Sigma))
@@ -297,7 +306,7 @@ rCholWishart <- function(n, df, Sigma){
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
-#' @seealso rWishart
+#' @seealso rWishart, rInvCholWishart
 #' @useDynLib matrixdist
 #' @export
 #'

@@ -22,10 +22,19 @@ Generate n random matrices, distributed according to the Cholesky
     \code{df}, \eqn{W_p(Sigma, df)}.
 }
 \examples{
+# How it is parameterized:
+set.seed(20180211)
+A <- rCholWishart(1,10,3*diag(5))[,,1]
 
-rCholWishart(1,10,diag(5))
+set.seed(20180211)
+B <- rInvCholWishart(1,10,3*diag(5))[,,1]
+
+A \%*\% B
+
+set.seed(20180211)
+C <- chol(rWishart(1,10,3*diag(5))[,,1])
 
 }
 \seealso{
-rWishart
+rWishart, rInvCholWishart
 }
