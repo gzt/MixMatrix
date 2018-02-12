@@ -8,3 +8,4 @@
 ^inprogress$
 ^matrixdist\.Rproj$
 ^\.travis\.yml$
+^LICENSE

@@ -15,5 +15,5 @@ VignetteBuilder: knitr
 LazyData: true
 URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
-License: GPL-3 + file LICENSE
+License: GPL-3
 RoxygenNote: 6.0.1
