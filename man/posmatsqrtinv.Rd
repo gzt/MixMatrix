@@ -26,3 +26,6 @@ sum(abs(B - t(B)))
 sum(abs(A - B \%*\% B))
 B \%*\% C
 }
+\seealso{
+posmatsqrt
+}
