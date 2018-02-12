@@ -1,6 +1,6 @@
 Package: matrixdist
 Type: Package
-Title: Functions For Matrix Distributions
+Title: Functions for Matrix Distributions
 Version: 0.0.0.9915
 Date: 2018-02-11
 Authors@R: person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
@@ -15,5 +15,5 @@ VignetteBuilder: knitr
 LazyData: true
 URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
-License: GPL-3 + file LICENSE
+License: GPL-3 
 RoxygenNote: 6.0.1
