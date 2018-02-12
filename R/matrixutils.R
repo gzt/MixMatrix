@@ -218,7 +218,7 @@ invCS <- function(n, rho, deriv = FALSE){
 
 
 
-#' posmatsqrt
+#' Positive Matrix Square Root
 #' @description Computes a positive symmetric square root  matrix for a
 #'    positive definite input matrix. Used in the inverted matrix variate
 #'    t-distribution.
@@ -227,6 +227,7 @@ invCS <- function(n, rho, deriv = FALSE){
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
 #' @export
+#' @seealso posmatsqrtinv
 #'
 #' @examples
 #' A = diag(5) + 1
@@ -246,6 +247,40 @@ posmatsqrt <- function(A) {
   V <- e$vectors
   if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
   B <- V %*% diag(sqrt(e$values)) %*% t(V)
+  return(B)
+}
+
+#' Positive Matrix Square Root Inverse
+#' @description Computes the inverse of a positive symmetric square root  matrix for a
+#'    positive definite input matrix. Used in the inverted matrix variate
+#'    t-distribution.
+#' @param A positive definite p x p real-valued matrix.
+#'
+#' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
+#'    \eqn{B \%*\% B = A}.
+#' @export
+#' @seealso posmatsqrt
+#'
+#' @examples
+#' A = diag(5) + 1
+#' B = posmatsqrt(A)
+#' C = posmatsqrtinv(A)
+#' sum(abs(B - t(B)))
+#' sum(abs(A - B %*% B))
+#' B %*% C
+posmatsqrtinv <- function(A) {
+  # this isn't the fastest way and if you have to do this a lot find a
+  # better way returns symmetric square root of A if it exists: B %*% B = A
+  # does not test if A is positive definite
+  if (!(is.numeric(A))) stop("Non-numeric input.")
+  A <- as.matrix(A)
+  if (!(dim(A)[1] == dim(A)[2]))
+    stop("Matrix must be square. Dimensions: ", dim(A))
+
+  e <- eigen(A, symmetric = TRUE)
+  V <- e$vectors
+  if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
+  B <- V %*% diag(1/sqrt(e$values)) %*% t(V)
   return(B)
 }
 

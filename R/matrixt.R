@@ -301,8 +301,8 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
   for (i in seq(n)) {
     # if there's a way to do this with apply I want to see it
-    SXX[ , , i] <- array(chol2inv(chol.default((posmatsqrt(S[ , , i] +
-                                            mat[ , , i] %*% t(mat[ , , i]))))),
+    SXX[ , , i] <- array((posmatsqrtinv(S[ , , i] +
+                                            mat[ , , i] %*% t(mat[ , , i]))),
                          dim = c(dims[1],dims[1]))
   }
 

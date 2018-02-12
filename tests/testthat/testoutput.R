@@ -8,7 +8,11 @@ test_that("Testing helper functions:", {
   expect_equal(gamma(1:12) - mvgamma(1:12, 1), array(0, dim = 12), tolerance = 1e-7)
   A = diag(5) + 1
   B = posmatsqrt(A)
+  C = posmatsqrtinv(A)
+
+  expect_equal(B %*% C, diag(5))
   expect_equal(B, t(B))
+  expect_equal(C, t(C))
   expect_equal(A, (B %*% B))
   C = matrix(c(1, .5, .25, .5, 1, .5, .25, .5, 1), nrow = 3)
   expect_equal(toepgenerate(3, .5), C)
