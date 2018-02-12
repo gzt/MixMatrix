@@ -78,7 +78,7 @@ CSgenerate <- function(n,rho) {
 #' symm.check(A)
 #' A[1,2] = 5
 #' symm.check(A)}
-symm.check <- function(A, tol = 10 * .Machine$double.eps) {
+symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
   # if (!is.matrix(A)) return(FALSE)
   # if (!is.numeric(A)) return(FALSE)
   # commented those out because it is always checked before running symm.check.
