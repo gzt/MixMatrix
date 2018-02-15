@@ -210,6 +210,7 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
 #'     see mvgamma.
 #'
 #' @seealso mvgamma
+#' @useDynLib matrixdist
 #' @export
 #'
 #' @examples

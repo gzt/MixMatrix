@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrixutils.R
 \name{varmatgenerate}
 \alias{varmatgenerate}
-\title{varmatgenerate: selects variance structure to generate.}
+\title{Select a variance structure to generate.}
 \usage{
 varmatgenerate(n, rho, variance)
 }
@@ -17,7 +17,7 @@ varmatgenerate(n, rho, variance)
 Specified matrix structure
 }
 \description{
-varmatgenerate: selects variance structure to generate.
+Select a variance structure to generate.
 }
 \examples{
 \dontrun{varmatgenerate(5,.2,"AR(1)")}

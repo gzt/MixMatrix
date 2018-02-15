@@ -11,10 +11,12 @@ ARdet(n, rho, deriv = FALSE)
 
 \item{rho}{off-diagonal parameter}
 
-\item{deriv}{logical whether to return the deterimant or the derivative of the determinant}
+\item{deriv}{logical whether to return the determinant or the derivative of
+the log of the determinant}
 }
 \value{
-determinant of an AR(1) covariance matrix
+determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
+    will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 }
 \description{
 Determinant for an AR(1) covariance matrix.

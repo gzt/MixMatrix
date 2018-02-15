@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrixutils.R
 \name{toepgenerate}
 \alias{toepgenerate}
-\title{toepgenerate}
+\title{Generate a unit AR(1) covariance matrix}
 \usage{
 toepgenerate(n, rho)
 }

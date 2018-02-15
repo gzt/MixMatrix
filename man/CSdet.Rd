@@ -11,7 +11,8 @@ CSdet(n, rho, deriv = FALSE)
 
 \item{rho}{off-diagonal parameter}
 
-\item{deriv}{logical whether to return the deterimant or the derivative of the determinant}
+\item{deriv}{logical whether to return the determinant or the
+derivative of the log determinant of the inverse}
 }
 \value{
 determinant of an CS covariance matrix

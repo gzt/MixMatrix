@@ -1,5 +1,5 @@
 
-#' toepgenerate
+#' Generate a unit AR(1) covariance matrix
 #'
 #' @description generate AR(1) correlation matrices
 #'
@@ -90,7 +90,7 @@ symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
 }
 
 
-#' varmatgenerate: selects variance structure to generate.
+#' Select a variance structure to generate.
 #'
 #' @param n number of dimensions
 #' @param rho parameter for selected variance structure.
@@ -110,14 +110,57 @@ varmatgenerate <- function(n, rho, variance) {
 
 }
 
+#' Determinant selector for chosen covariance matrix.
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#' @param deriv logical whether to return the determinant or the derivative of
+#'     the log of the determinant
+#' @param variance  variance structure - AR(1) or CS.
+#'
+#' @return Determinant or derivative of log-inverse for the specified matrix structure.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{vardet(5,.5,TRUE, "AR(1)"}
+vardet <- function(n, rho, deriv, variance){
+  if (variance == "AR(1)") return(ARdet(n,rho, deriv))
+  if (variance == "CS") return(CSdet(n,rho, deriv))
+  else stop("Bad covariance structure input.", variance)
+}
+
+#' Inverse selector for chosen covariance matrix.
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#' @param deriv logical whether to return the inverse or the derivative of
+#'     the inverse
+#' @param variance  variance structure - AR(1) or CS.
+#'
+#' @return The inverse or derivative of the inverse of the selected matrix structure.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{varinv(5,.5,TRUE, "AR(1)"}
+varinv <- function(n, rho, deriv, variance){
+
+  if (variance == "AR(1)") return(invAR(n,rho, deriv))
+
+  if (variance == "CS") return(invCS(n,rho, deriv))
+
+  else stop("Bad covariance structure input. ", variance)
+}
+
 
 #' Determinant for an AR(1) covariance matrix.
 #'
 #' @param n dimensions
 #' @param rho off-diagonal parameter
-#' @param deriv logical whether to return the deterimant or the derivative of the determinant
+#' @param deriv logical whether to return the determinant or the derivative of
+#'     the log of the determinant
 #'
-#' @return determinant of an AR(1) covariance matrix
+#' @return determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
+#'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
 #'
 #' @examples
@@ -128,7 +171,7 @@ varmatgenerate <- function(n, rho, variance) {
 ARdet <- function(n, rho, deriv = FALSE) {
 
   if (!deriv) return(1 - rho^2)^(n - 1)
-  else -2*rho*(n - 1)(1 - rho^2)^(n - 2)
+  else (1 - n) * (-2 * rho) / (1 - rho^2)
 
 }
 
@@ -137,7 +180,8 @@ ARdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @param n dimensions
 #' @param rho off-diagonal parameter
-#' @param deriv logical whether to return the deterimant or the derivative of the determinant
+#' @param deriv logical whether to return the determinant or the
+#' derivative of the log determinant of the inverse
 #'
 #' @return determinant of an CS covariance matrix
 #' @keywords internal
@@ -150,8 +194,8 @@ ARdet <- function(n, rho, deriv = FALSE) {
 CSdet <- function(n, rho, deriv = FALSE) {
 
   if (!deriv) return((1 + rho*(n - 1))*(1 - rho)^(n - 1))
-  else -n*(n - 1) * rho * (1 - rho)^(n - 2)
-
+  else (n - 1) * n * rho /((1 - rho) * ((n - 1) * rho + 1) )
+  # -n*(n - 1) * rho * (1 - rho)^(n - 2)
 }
 
 
@@ -166,7 +210,7 @@ CSdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' derivinvAR(5,.5, TRUE)
+#' invAR(5,.5, TRUE)
 #' }
 invAR <- function(n,rho, deriv = FALSE){
   if (!(n > 1)) stop("n needs to be greater than 1")

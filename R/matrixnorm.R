@@ -378,12 +378,18 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           # for CS det(S) = ?
 
           nLL <- function(theta) {
-            Vmat <- var * varmatgenerate(dims[2], theta, col.variance)
-            - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
+            Vmat <- varinv(dims[2],theta,TRUE, col.variance)
+            B<-matrix(rowSums(apply(swept.data, 3,
+                                     function(x) Vmat %*% t(x) %*% chol2inv(chol.default(U)) %*% (x) )), nrow=dims[2])
+          #  - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
+            0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
+              2/(var) * sum(diag(B))
+
           }
-          fit0 <- stats::optim(rho.col, nLL, method = "L-BFGS-B",
-               hessian = FALSE, lower = 0, upper =  0.99,...)
-          rho.col <- fit0$par
+          #fit0 <- stats::optim(rho.col, nLL, method = "L-BFGS-B",
+          #     hessian = FALSE, lower = 0, upper =  0.99,...)
+          fit0 <- stats::uniroot(nLL, c(0,.999))
+          rho.col <- fit0$root
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
             inter.V <- apply(swept.data, 3, function(x) (crossprod(x, chol2inv(chol.default(U))) %*% x))
