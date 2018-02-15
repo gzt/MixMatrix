@@ -226,13 +226,14 @@ lmvgamma <- function(x, p) {
         stop("p must be greater than or equal to 1. p = ", p)
     if (any(x <= 0))
         stop("x must be greater than 0. x = ", x)
-    result <- (p * (p - 1)/4) * log(pi) +
-       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
+#    result <- (p * (p - 1)/4) * log(pi) +
+#       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
+    result <- .Call("lmvgamma", as.numeric(x), as.integer(p), PACKAGE = "matrixdist")
+
     return(array(result, dim = dims))
 }
 
 mvgamma <- function(x, p) exp(lmvgamma(x, p))
-
 
 
 #' rmatrixinvt
@@ -398,4 +399,3 @@ dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
         return(exp(results))
       }
 }
-

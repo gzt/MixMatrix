@@ -137,10 +137,10 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
   *
   * @return
   */
-  SEXP
-    rCholWishart(SEXP ns, SEXP nuP, SEXP scal)
-    {
-      SEXP ans;
+SEXP
+  rCholWishart(SEXP ns, SEXP nuP, SEXP scal)
+  {
+    SEXP ans;
       int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
         n = asInteger(ns), psqr;
       double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
@@ -169,7 +169,7 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
                  &one, scCp, dims, tmp, dims);
 
         /* Here we make the main change by omitting the A * A**T step */
-        /* Original code from R stats: rWishart.c Altered Feb 2018. */
+        /* Original code from R stats: rWishart.c Altered Feb 2018. l*/
 
         for (int i = 0; i < dims[0]; i++)
           for (int k = 0; k < dims[0]; k++)
@@ -181,5 +181,35 @@ rInvCholWishart(SEXP ns, SEXP nuP, SEXP scal)
       PutRNGstate();
       Free(scCp); Free(tmp);
       UNPROTECT(1);
-      return ans;
-    }
+    return ans;
+  }
+
+ double c_lmvgamma (double x, int p) {
+   int i;
+   double ans = 0;
+          if (p < 1)
+            error("p must be greater than or equal to 1.");
+            if (x <= 0)
+              error("x must be greater than 0.");
+          ans =(p * (p - 1)/4.0) * log(PI);
+          for (i = 0; i < p; i++){
+            ans = ans + (lgamma(x  - (i/2.0) ));
+          }
+          return ans;
+  }
+
+SEXP lmvgamma(SEXP x, SEXP p){
+  int n = length(x);
+  int i = 0;
+  SEXP ans = PROTECT(allocVector(REALSXP, n));
+  double *px, *pout;
+  px = REAL(x);
+  pout = REAL(ans);
+  for(i = 0 ; i < n ; i++){
+    if (px[i] <= 0)
+      error("x must be greater than 0.");
+    pout[i] = c_lmvgamma(px[i],asInteger(p));
+  }
+  UNPROTECT(1);
+  return ans;
+}
