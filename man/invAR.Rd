@@ -21,7 +21,7 @@ Returns the inverse of an AR(1) covariance matrix or its derivative
 }
 \examples{
 \dontrun{
-derivinvAR(5,.5, TRUE)
+invAR(5,.5, TRUE)
 }
 }
 \keyword{internal}
