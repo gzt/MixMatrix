@@ -1,5 +1,5 @@
 ---
-title: "Matrix Variate Normal Distributions"
+title: "Matrix Variate Normal Distributions with matrixdist"
 author: "Geoffrey Thompson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -75,29 +75,39 @@ dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 ## Parameter estimation for matrix variate normal distributions
 
-Maximum likelihood estimation is possible for the matrix variate normal distribution (see @dutilleul1999mle or @2013arXiv13096609G for details). The pair of variance matrices are only identifiable up to a constant, so this function sets the first element of $\mathbf{U}$ to $1$.
+Maximum likelihood estimation is possible for the matrix variate normal distribution (see @dutilleul1999mle or @2013arXiv13096609G for details). The pair of variance matrices are only identifiable up to a constant, so this function sets the first element of $\mathbf{U}$ to $1$. There is a closed-form solution for the mean matrix and the  $\mathbf{U}$ and  $\mathbf{V}$ have an iterative solution.
 
-There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands. Currently the only option is to impose an AR(1) structure by providing the `AR(1)` option. This works by using `optim` to find the appropriate $\rho$ - it is not fast but if this is the true structure it will be better than an unstructured variance matrix. The $\rho$ parameter should be $>0$ but is not forced to be non-negative.
-
-In order to fit parameters for an $n \times p$ matrix variate normal distribution, at least $\max (n/p,p/n) + 1$ observations are needed.
-
-The function expects data in a format produced by the `rmatrixnorm` function.
-The results are only the parameter estimates and do not include measures of uncertainty.
-
-```{r mle,warning=FALSE}
+```{r mleone, cache=T}
 set.seed(20180202)
 A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 results=mle.matrixnorm(A)
 print(results)
-results.fixrows = mle.matrixnorm(A, row.mean=TRUE)
+```
+
+There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands. 
+```{r mlerow, cache = T}
+results.fixrows = mle.matrixnorm(A, row.mean=TRUE, max.iter = 10)
 print(results.fixrows)
 # this failure is expected with misspecification! 
+```
+
+Currently the only options for variance restrictions are to impose an AR(1) structure by providing the `AR(1)` option or a compound symmetry structure by providing the `CS` option. This works by using `uniroot` to find the appropriate $\rho$ which sets the derivative of the log-likelihood to zero - it is not fast but if this is the true structure it will be better than an unstructured variance matrix. The $\rho$ parameter should be $>0$ and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.
+
+```{r mlevar,warning=FALSE}
+# tolerance and maximum iterations are limited here to make the vignette compile faster
 
 B = rmatrixnorm(n=50,mean=matrix(1:15,nrow=5),U=3*stats::toeplitz(.6^(1:5)))
-mle.matrixnorm(B,row.variance="AR(1)",U=3*stats::toeplitz(.6^(1:5)))
-mle.matrixnorm(B,U=3*stats::toeplitz(.6^(1:5)))
+mle.matrixnorm(B,row.variance="AR(1)", tol = 1e-5)
+mle.matrixnorm(B,tol=1e-5)
 
 ```
+
+In order to fit parameters for an $n \times p$ matrix variate normal distribution, at least $\max (n/p,p/n) + 1$ observations are needed. Maximum likelihood estimates are unique if there are more than $\max(p,n)$ observations.
+
+The function expects data in a format produced by the `rmatrixnorm` function.
+The results are only the parameter estimates and do not include measures of uncertainty.
+
+
 
 ## References
