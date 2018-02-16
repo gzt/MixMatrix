@@ -124,8 +124,11 @@ varmatgenerate <- function(n, rho, variance) {
 #' @examples
 #' \dontrun{vardet(5,.5,TRUE, "AR(1)"}
 vardet <- function(n, rho, deriv, variance){
+
   if (variance == "AR(1)") return(ARdet(n,rho, deriv))
+
   if (variance == "CS") return(CSdet(n,rho, deriv))
+
   else stop("Bad covariance structure input.", variance)
 }
 
@@ -170,7 +173,7 @@ varinv <- function(n, rho, deriv, variance){
 #'
 ARdet <- function(n, rho, deriv = FALSE) {
 
-  if (!deriv) return(1 - rho^2)^(n - 1)
+  if (!deriv) return((1 - rho^2)^(n - 1))
   else (1 - n) * (-2 * rho) / (1 - rho^2)
 
 }
@@ -224,7 +227,7 @@ invAR <- function(n,rho, deriv = FALSE){
     X[n,n] <-  2*rho
     return((1/(1 - rho^2)^2) * X)
   }
-  X =  stats::toeplitz( c(2, -rho, rep(0, n - 2)))
+  X =  stats::toeplitz( c(1 + rho^2, -rho, rep(0, n - 2)))
   X[1,1] <- X[n,n] <- 1
   return((1/(1 - rho^2)) * X)
 

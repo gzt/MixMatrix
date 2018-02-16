@@ -288,7 +288,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
-                           tol = 1e-10, max.iter = 100, U, V,...) {
+                           tol = 10*.Machine$double.eps^0.5, max.iter = 100, U, V,...) {
     if (class(data) == "list") data <- array(unlist(data),
                                        dim = c(nrow(data[[1]]),
                                                ncol(data[[1]]), length(data)))
@@ -319,14 +319,14 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     # mu <- apply(data, c(1, 2), mean)
     mu <- rowMeans(data, dims = 2)
     if (row.mean) {
-        # should make it so that the mean is constant within a row
+        # make it so that the mean is constant within a row
         mu <- matrix(rowMeans(mu), nrow = dims[1], ncol = dims[2])
     }
     if (col.mean) {
-        # should make it so that the mean is constant within a column
+        # make it so that the mean is constant within a column
         mu <- matrix(colMeans(mu), nrow = dims[1], ncol = dims[2], byrow = T)
     }
-    # if both are true, this should make it so the mean is constant all over
+    # if both are true, this makes it so the mean is constant all over
     swept.data <- sweep(data, c(1, 2), mu)
     iter <- 0
     error.term <- 1e+40
@@ -369,26 +369,23 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         if (col.set.var) {
           var <- V[1,1]
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
-                    function(x) crossprod(x, chol2inv(chol.default((V/var) %x% U))) %*% x)) / (prod(dims))
+                    function(x) crossprod(x,
+                                chol2inv(chol.default(V/var)) %x% chol2inv(chol.default((U)))) %*% x)) / (prod(dims))
           # can write LL for AR(1) directly and differentiate
           # det(SIGMA) = (1-rho^2)^(n-1) -> d(det)/d\rho = -2*rho*(n-1)(1-rho^2)^(n-2)
           # inv(SIGMA) -> 1/(1-rho^2) * tridiag with -rho on off diags, 1+rho^2, 1 on main
           # derivs: -(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
-
-          # for CS det(S) = ?
-
+          tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ), dim = c(dims[2],dims[2],dims[3]))
           nLL <- function(theta) {
-            Vmat <- varinv(dims[2],theta,TRUE, col.variance)
-            B<-matrix(rowSums(apply(swept.data, 3,
-                                     function(x) Vmat %*% t(x) %*% chol2inv(chol.default(U)) %*% (x) )), nrow=dims[2])
-          #  - sum(apply(swept.data, 3, function(x) dmatrixnorm(x, log = TRUE, U = U, V = Vmat)))
+            Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
+            B <- matrix(rowSums(apply(tmp, 3,
+                        function(x) Vmat %*% x )), nrow = dims[2])
+            # solved derivative, need to find where this is zero:
             0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
-              2/(var) * sum(diag(B))
+              (.5 ) * sum(diag(B)) # problem was wrong constant
 
           }
-          #fit0 <- stats::optim(rho.col, nLL, method = "L-BFGS-B",
-          #     hessian = FALSE, lower = 0, upper =  0.99,...)
-          fit0 <- stats::uniroot(nLL, c(0,.999))
+          fit0 <- stats::uniroot(nLL, c(0,.999),...)
           rho.col <- fit0$root
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
@@ -399,16 +396,20 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         }
 
         if (row.set.var) {
+          tmp <- array(apply(swept.data, 3, function(x) (x) %*% chol2inv(chol.default(new.V)) %*% t(x) ), dim = c(dims[1],dims[1],dims[3]))
             nLL <- function(theta) {
-              Umat <- varmatgenerate(dims[1],theta,row.variance)
-              - sum(apply(swept.data, 3,function(x) dmatrixnorm(x, log = TRUE, V = new.V, U = Umat)))
+              Umat <- varinv(dims[1],theta,TRUE, row.variance)
+              B <- matrix(rowSums(apply(tmp, 3,
+                          function(x) Umat %*% x)), nrow = dims[1])
+              # solved derivative, need to find where this is zero:
+              0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
+                (.5 ) * sum(diag(B)) # problem was wrong constant
             }
-            fit0 <- stats::optim(rho.row, nLL, method = "L-BFGS-B",
-                                hessian = FALSE, lower = 0, upper = 0.99,...)
-            rho.row <- fit0$par
+            fit0 <- stats::uniroot(nLL, c(0,.999),...)
+            rho.row <- fit0$root
             new.U <- varmatgenerate(dims[1], rho.row,row.variance)
         } else {
-            inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, chol2inv(chol.default(V))) %*%  t(x)))
+            inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, chol2inv(chol.default(new.V))) %*%  t(x)))
             # collapsed into a (row*column) * n, which is then gathered and fixed.
             new.U <- matrix(rowSums(inter.U, dims = 1),
                             nrow = dims[1])/(dims[3] * dims[2])
@@ -424,7 +425,10 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     }
     if (iter >= max.iter || error.term > tol)
         warning("Failed to converge")
-
+    logLik = 0
+    for (i in seq(dims[3])) {
+      logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
+    }
     return(list(mean = mu, U = U, V = V, iter = iter,
-                tol = error.term,call = match.call()))
+                tol = error.term, logLik = logLik, call = match.call()))
 }
