@@ -384,7 +384,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           # det(SIGMA) = (1-rho^2)^(n-1) -> d(det)/d\rho = -2*rho*(n-1)(1-rho^2)^(n-2)
           # inv(SIGMA) -> 1/(1-rho^2) * tridiag with -rho on off diags, 1+rho^2, 1 on main
           # derivs: -(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
-          tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ), dim = c(dims[2],dims[2],dims[3]))
+          tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ),
+                       dim = c(dims[2],dims[2],dims[3]))
           nLL <- function(theta) {
             Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
             B <- matrix(rowSums(apply(tmp, 3,
@@ -410,7 +411,8 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         }
 
         if (row.set.var) {
-          tmp <- array(apply(swept.data, 3, function(x) (x) %*% chol2inv(chol.default(new.V)) %*% t(x) ), dim = c(dims[1],dims[1],dims[3]))
+          tmp <- array(apply(swept.data, 3, function(x) (x) %*% chol2inv(chol.default(new.V)) %*% t(x) ),
+                       dim = c(dims[1],dims[1],dims[3]))
             nLL <- function(theta) {
               Umat <- varinv(dims[1],theta,TRUE, row.variance)
               B <- matrix(rowSums(apply(tmp, 3,
