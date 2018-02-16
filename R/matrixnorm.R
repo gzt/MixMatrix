@@ -245,7 +245,11 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
-#' unique for \eqn{N > max(p,q)}
+#' unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
+#' between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
+#' An AR(1) or compound symmetry restriction can be proposed for either or both
+#' variance matrices. However, if they are inappropriate for the data, they may fail with
+#' a warning.
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 2 and 3, indexed by dimension 1.
@@ -275,14 +279,17 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    if using restrictions on the variance.
 #'
 #' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-#'    matrix, the number of iterations, and error at the time of stopping.
+#'    matrix, the variance parameter (the first entry of the variance matrices
+#'    are constrained to be 1 for uniqueness), the number of iterations, the squared difference
+#'    between iterations of the variance matrices at the time of stopping, the log likelihood,
+#'    and a convergence code.
 #' @export
 #'
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-#' results=mle.matrixnorm(A)
+#' results=mle.matrixnorm(A, max.iter=3)
 #' print(results)
 #'
 #'
@@ -342,6 +349,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
             if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
             if (rho.col > .9) rho.col <- .9
+            if (rho.col < 0) rho.col <- 0
             V <- varmatgenerate(dims[2],rho.col,col.variance)
           }
     }
@@ -358,12 +366,13 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
           if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
           if (rho.row > .9) rho.row <- .9
+          if (rho.row < 0) rho.row = 0
           U <- varmatgenerate(dims[1],rho.row,row.variance)
         }
     }
 
-
-    while (iter < max.iter && error.term > tol) {
+    varflag = FALSE
+    while (iter < max.iter && error.term > tol && (!varflag)) {
 
         # make intermediate matrix, then collapse to final version
         if (col.set.var) {
@@ -385,8 +394,13 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
               (.5 ) * sum(diag(B)) # problem was wrong constant
 
           }
+          if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)){
+            warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+            varflag=TRUE
+          } else {
           fit0 <- stats::uniroot(nLL, c(0,.999),...)
           rho.col <- fit0$root
+          }
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
             inter.V <- apply(swept.data, 3, function(x) (crossprod(x, chol2inv(chol.default(U))) %*% x))
@@ -405,8 +419,13 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
               0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
                 (.5 ) * sum(diag(B)) # problem was wrong constant
             }
+            if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)){
+              warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+              varflag=TRUE
+            } else {
             fit0 <- stats::uniroot(nLL, c(0,.999),...)
             rho.row <- fit0$root
+            }
             new.U <- varmatgenerate(dims[1], rho.row,row.variance)
         } else {
             inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, chol2inv(chol.default(new.V))) %*%  t(x)))
@@ -423,12 +442,21 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         U <- new.U
         iter <- iter + 1
     }
-    if (iter >= max.iter || error.term > tol)
+    if (iter >= max.iter || error.term > tol || varflag)
         warning("Failed to converge")
+
+    converged = !(iter >= max.iter || error.term > tol || varflag)
     logLik = 0
     for (i in seq(dims[3])) {
       logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
     }
-    return(list(mean = mu, U = U, V = V, iter = iter,
-                tol = error.term, logLik = logLik, call = match.call()))
+    return(list(mean = mu,
+                U = U,
+                V = V/V[1,1],
+                var = V[1,1],
+                iter = iter,
+                tol = error.term,
+                logLik = logLik,
+                convergence = converged,
+                call = match.call()))
 }

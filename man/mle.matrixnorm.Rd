@@ -47,19 +47,26 @@ if using restrictions on the variance.}
 }
 \value{
 Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-   matrix, the number of iterations, and error at the time of stopping.
+   matrix, the variance parameter (the first entry of the variance matrices
+   are constrained to be 1 for uniqueness), the number of iterations, the squared difference
+   between iterations of the variance matrices at the time of stopping, the log likelihood,
+   and a convergence code.
 }
 \description{
 Maximum likelihood estimation for matrix normal distributions
 
 Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
-unique for \eqn{N > max(p,q)}
+unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
+between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
+An AR(1) or compound symmetry restriction can be proposed for either or both
+variance matrices. However, if they are inappropriate for the data, they may fail with
+a warning.
 }
 \examples{
 set.seed(20180202)
 A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-results=mle.matrixnorm(A)
+results=mle.matrixnorm(A, max.iter=3)
 print(results)
 
 
