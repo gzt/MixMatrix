@@ -334,11 +334,11 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
     gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
       0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    matrixterms <- chol.default(diag(dims[1]) -
-                      chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm))
+    matrixterms <- diag(dims[1]) -
+                      chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
 
     mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
-        0.5 * (df - 2) * log(prod(diag(matrixterms))^2)
+        0.5 * (df - 2) * log(det(matrixterms))
     results <- gammas + mats
     if (log) {
         return(results)

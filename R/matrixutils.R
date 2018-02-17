@@ -293,7 +293,8 @@ posmatsqrt <- function(A) {
   e <- eigen(A, symmetric = TRUE)
   V <- e$vectors
   if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
-  B <- V %*% diag(sqrt(e$values)) %*% t(V)
+  if (dim(A)[1] == 1) B <- (sqrt(e$values)) * V %*% t(V) else
+    B <- V %*% diag(sqrt(e$values)) %*% t(V)
   return(B)
 }
 
@@ -327,7 +328,8 @@ posmatsqrtinv <- function(A) {
   e <- eigen(A, symmetric = TRUE)
   V <- e$vectors
   if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
-  B <- V %*% diag(1/sqrt(e$values)) %*% t(V)
+  if (dim(A)[1] == 1) B <- (1/sqrt(e$values)) * V %*% t(V) else
+    B <- V %*% diag(1/sqrt(e$values)) %*% t(V)
   return(B)
 }
 
