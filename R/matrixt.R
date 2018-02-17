@@ -87,15 +87,6 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
 
   cholU <- rInvCholWishart(n, df + dims[1] - 1,(1/df) * solveU)
 
-  # chol  here, backsolve later
-  # why am i not just generating from an inv wishart if this is what i want?
-  # or more to the point, isn't it ironic that i want the chol factor
-  # when the C works by generating the chol factor and using that
-  # to make matrix? I should just drop to C.
-  #cholU <- array(apply(USigma, 3, function(x) (chol.default(x))),
-  #               dim = c(dims[1],dims[1],n))
-  # so cholU is a 3D array so we can't just 'apply' it.
-
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
     result[ , , i] <- mean + ((cholU[ , , i] %*% mat[ , , i])) %*% (cholV)
