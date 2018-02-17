@@ -2,19 +2,26 @@
 % Please edit documentation in R/matrixt.R
 \name{rmatrixinvt}
 \alias{rmatrixinvt}
-\title{rmatrixinvt}
+\alias{dmatrixinvt}
+\title{Distribution functions for matrix variate inverted t-distributions}
 \usage{
-rmatrixinvt(n, df, mean = matrix(0, nrow = 2, ncol = 2),
-  L = diag(dim(as.matrix(mean))[1]), R = diag(dim(as.matrix(mean))[2]),
-  U = L \%*\% t(L), V = t(R) \%*\% R, list = FALSE, array = NULL)
+rmatrixinvt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
+  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
+  list = FALSE, array = NULL)
+
+dmatrixinvt(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
+  L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]), U = L
+  \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
-\item{n}{number of observations}
+\item{n}{number of observations for generation}
 
-\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
-\code{df = Inf} is allowed.}
+\item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
+\code{df = 0, Inf} is allowed and will return a normal distribution.}
 
-\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean.}
+\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean,
+though the expected value will be equal to this if
+\eqn{df > 2}}
 
 \item{L}{\eqn{p X p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
@@ -23,10 +30,10 @@ By default, an identity matrix.}
 By default, an identity matrix.}
 
 \item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-computed from \eqn{L} if not specified. Note this is not the variance.}
+computed from \eqn{L} if not specified.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-computed from \eqn{R}  if not specified.  Note this is not the variance.}
+computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -35,19 +42,27 @@ output will be a list of matrices.}
 \code{FALSE} , the function will return a matrix containing the one
 observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 If \code{list}  is \code{TRUE} , this will be ignored.}
+
+\item{x}{quantile for density}
+
+\item{log}{logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+\code{rmatrixinvt} returns either a list of \eqn{n}  \eqn{p X q}  matrices or
    a \eqn{n X p X q}  array.
 
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices
-   or a \eqn{n X p X q}  array.
+   \code{dmatrixinvt} returns the density at quantile \code{x}.
 }
 \description{
 Generate random draws from the inverted matrix
    variate t-distribution
 }
-\seealso{
-Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{dmatrixt}}, \code{\link{rmatrixt}}
+\section{Functions}{
+\itemize{
+\item \code{dmatrixinvt}: Density function for inverted matrix t-distributions.
+}}
+
+\examples{
+A<-rmatrixinvt(n = 2, df = 10, diag(4))
+dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }

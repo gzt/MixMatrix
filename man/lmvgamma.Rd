@@ -2,9 +2,12 @@
 % Please edit documentation in R/matrixt.R
 \name{lmvgamma}
 \alias{lmvgamma}
+\alias{mvgamma}
 \title{lmvgamma}
 \usage{
 lmvgamma(x, p)
+
+mvgamma(x, p)
 }
 \arguments{
 \item{x}{non-negative numeric vector, matrix, or array}
@@ -19,9 +22,16 @@ log of multivariate gamma for each entry of x. For non-log variant,
 A special mathematical function related to the gamma function,
     generalized for multivariate gammas.
 }
+\section{Functions}{
+\itemize{
+\item \code{mvgamma}: Multivariate gamma function.
+}}
+
 \examples{
 lgamma(1:12)
 lmvgamma(1:12,1)
+mvgamma(1:12,1)
+gamma(1:12)
 }
 \seealso{
 mvgamma

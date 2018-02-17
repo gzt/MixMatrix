@@ -2,11 +2,16 @@
 % Please edit documentation in R/matrixnorm.R
 \name{rmatrixnorm}
 \alias{rmatrixnorm}
-\title{rmatrixnorm: matrix variate normal}
+\alias{dmatrixnorm}
+\title{matrixnorm: matrix variate Normal distribution functions}
 \usage{
 rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
   list = FALSE, array = NULL, force = FALSE)
+
+dmatrixnorm(x, mean = array(0, dim(as.matrix(x))[1:2]),
+  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
+  V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}
@@ -38,14 +43,23 @@ directly - otherwise computes \code{U} and \code{V} and uses Cholesky
 decompositions. Useful for generating degenerate normal distributions.
 Will also override concerns about potentially singular matrices
 unless they are not, in fact, invertible.}
+
+\item{x}{quantile for density}
+
+\item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }
 \value{
 This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
    a \eqn{p X q X n}  array.
 }
 \description{
-generate random draws from a matrix variate normal distribution
+Density and random generation for the matrix variate normal distribution
 }
+\section{Functions}{
+\itemize{
+\item \code{dmatrixnorm}: Density calculation for matrix variate normal distributions.
+}}
+
 \examples{
 set.seed(20180202)
 rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -58,8 +72,7 @@ set.seed(20180202)
 B <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 B[ , , 1]
+dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+  L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
-}
-\seealso{
-Other matrixnorm: \code{\link{dmatrixnorm}}
 }

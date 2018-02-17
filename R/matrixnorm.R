@@ -1,11 +1,12 @@
 
 
-#' rmatrixnorm: matrix variate normal
+#' matrixnorm: matrix variate Normal distribution functions
 #'
-#' @description  generate random draws from a matrix variate normal distribution
+#' @description  Density and random generation for the matrix variate normal distribution
 #'
 #' @family matrixnorm
 #' @param n number of observations to generate - must be a positive integer.
+#' @param x quantile for density
 #' @param mean \eqn{p X q}  matrix of means
 #' @param L \eqn{p X p}  matrix specifying relations among the rows.
 #'    By default, an identity matrix.
@@ -26,6 +27,7 @@
 #'    decompositions. Useful for generating degenerate normal distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
+#' @param log logical; if TRUE, probabilities p are given as log(p).
 #' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
 #'    a \eqn{p X q X n}  array.
 #' @export
@@ -42,6 +44,8 @@
 #' B <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 #' B[ , , 1]
+#' dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
 rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
                         R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
@@ -91,39 +95,13 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
 }
 
 
-#' dmatrixnorm: matrix variate normal
-#'
-#' @description compute densities from a matrix variate normal distribution
-#'
-#' @family matrixnorm
-#' @param x \eqn{p X q} input matrix
-#' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s
-#'    with size taken from \code{x}
-#' @param L \eqn{p X p} matrix specifying relations among the rows. By default,
-#'    an identity matrix.
-#' @param R \eqn{q X q} matrix specifying relations among the columns. By
-#'    default, an identity matrix.
-#' @param U \eqn{LL^T} - \eqn{p X p} positive definite variance-covariance matrix
-#'    for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^TR} - \eqn{q X q} positive definite variance-covariance matrix
-#'    for columns, computed from \eqn{R} if not specified.
-#' @param log logical; if TRUE, probabilities p are given as log(p).
-#'
-#' @return Returns the density at the provided observation.
+#' @describeIn rmatrixnorm Density calculation for matrix variate normal distributions.
 #' @export
 #'
-#' @examples
-#' set.seed(20180202)
-#' A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#' L <- matrix(c(2,1,0,.1),nrow=2))
-#' dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
-#'
-#'
-dmatrixnorm <- function(x, mean = array(0L, dim(as.matrix(x))[1:2]),
+dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
                         L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
-                        V = R, log = FALSE) {
+                        V = t(R) %*% R, log = FALSE) {
   if (!(all(is.numeric(x), is.numeric(mean),
            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x <- as.matrix(x)

@@ -1,54 +1,61 @@
-#' rmatrixt
+#' Distribution functions for the matrix variate t-distribution.
 #' @family matrixt
-#' @description Random generation for the matrix variate t-distribution
-#' @param n number of observations to generate
-#' @param df  degrees of freedom (\eqn{>0}, maybe non-integer),
-#'    \code{df = Inf} is allowed.
-#' @param mean \eqn{p X q} This is really a 'shift' rather than a mean as this
-#'    is a central T, though the expected value will be equal to this if
+#'
+#' Density and random generation for the matrix variate t-distribution
+#'
+#' @param n number of observations for generation
+#' @param x quantile for density
+#' @param df  degrees of freedom (\eqn{>0}, may be non-integer),
+#'    \code{df = 0, Inf} is allowed and will return a normal distribution.
+#' @param mean \eqn{p X q} This is really a 'shift' rather than a mean,
+#'    though the expected value will be equal to this if
 #'    \eqn{df > 2}
 #' @param L \eqn{p X p}  matrix specifying relations among the rows.
 #'     By default, an identity matrix.
 #' @param R \eqn{q X q}  matrix specifying relations among the columns.
 #'     By default, an identity matrix.
 #' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-#'    computed from \eqn{L} if not specified. Note this is not the variance.
+#'    computed from \eqn{L} if not specified.
 #' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-#'    computed from \eqn{R}  if not specified.  Note this is not the variance.
+#'    computed from \eqn{R}  if not specified.
 #' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 #'    output will be a list of matrices.
 #' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
 #'    \code{FALSE} , the function will return a matrix containing the one
 #'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 #'    If \code{list}  is \code{TRUE} , this will be ignored.
-#' @param force If TRUE, will take the input of \code{R}
+#' @param force In \code{rmatrix}: if TRUE, will take the input of \code{R}
 #'    directly - otherwise uses \code{V} and uses Cholesky
 #'    decompositions. Useful for generating degenerate t-distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
-#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+#' @param log logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).
+#' @return \code{rmatrixt} returns either a list of \eqn{n}  \eqn{p X q}  matrices or
 #'    a \eqn{n X p X q}  array.
+#'
+#'    \code{dmatrixt} returns the density at quantile \code{x}.
 #' @export
 #'
 #' @examples
 #' set.seed(20180202)
 #' rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-#' set.seed(20180202)
-#' A <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-#' A[[1]]
-#' set.seed(20180202)
-#' B <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-#' B[1 , , ]
 #' summary(rt(n=100,df=10))
 #' summary(rmatrixt(n=100,df=10,matrix(0)))
+#' set.seed(20180204)
+#' x = rmatrixt(n=1,mean=matrix(0),df=1)
+#' dt(x,1)
+#' dmatrixt(x,df=1)
 #'
 
-rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
-                     R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
-                     V = t(R) %*% R, list = FALSE, array = NULL, force = FALSE) {
+rmatrixt <- function(n, df, mean,
+                     L = diag(dim(as.matrix(mean))[1]),
+                     R = diag(dim(as.matrix(mean))[2]),
+                     U = L %*% t(L),
+                     V = t(R) %*% R,
+                     list = FALSE,
+                     array = NULL,
+                     force = FALSE) {
   if (!(n > 0))
     stop("n must be > 0. n =", n)
 
@@ -106,37 +113,13 @@ rmatrixt <- function(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   return(result)
 }
 
-#' dmatrixt
-#'
-#' @family matrixt
-#' @description Density function for the matrix variate t-distribution
-#' @param x \eqn{p X q} input matrix
-#' @param df degrees of freedom (\eqn{>0}, maybe non-integer), \code{df = Inf}
-#'    is allowed.
-#' @param mean by default 0, matrix of same size as observations \code{x}
-#' @param L \eqn{p X p}  matrix specifying relations among the rows. By
-#'    default, an identity matrix.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-#'    computed from \eqn{L} if not specified. Note this is not the variance.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-#'    computed from \eqn{R}  if not specified.  Note this is not the variance.
-#' @param log logical; if TRUE, probabilities p are given as log(p).
-#'
-#' @return returns the density.
+#' @describeIn rmatrixt Density function for matrix variate t-distribution
 #' @export
-#'
-#' @examples
-#' set.seed(20180204)
-#' x = rmatrixt(n=1,mean=matrix(0),df=1)
-#' dt(x,1)
-#' dmatrixt(x,df=1)
-#'
-dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
+dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
                      L = diag(dim(as.matrix(x))[1]),
                      R = diag(dim(as.matrix(x))[2]),
-                     U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
+                     U = L %*% t(L), V = t(R) %*% R,
+                     log = FALSE) {
     if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
            is.numeric(R), is.numeric(U),
            is.numeric(V)))) stop("Non-numeric input. ")
@@ -207,6 +190,8 @@ dmatrixt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
 #' @examples
 #' lgamma(1:12)
 #' lmvgamma(1:12,1)
+#' mvgamma(1:12,1)
+#' gamma(1:12)
 lmvgamma <- function(x, p) {
     # p only makes sense as an integer but not testing that. x *could* be
     # less than zero - same domain as gamma function making sure that object
@@ -225,40 +210,27 @@ lmvgamma <- function(x, p) {
     return(array(result, dim = dims))
 }
 
+#' @describeIn lmvgamma Multivariate gamma function.
+#' @export
 mvgamma <- function(x, p) exp(lmvgamma(x, p))
 
 
-#' rmatrixinvt
+#' Distribution functions for matrix variate inverted t-distributions
 #'
-#' @family matrixt
-#' @description Generate random draws from the inverted matrix
+#' Generate random draws from the inverted matrix
 #'    variate t-distribution
-#' @param n number of observations
-#' @param df  degrees of freedom (\eqn{>0}, maybe non-integer),
-#'    \code{df = Inf} is allowed.
-#' @param mean \eqn{p X q} This is really a 'shift' rather than a mean.
-#' @param L \eqn{p X p}  matrix specifying relations among the rows.
-#'    By default, an identity matrix.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-#'    computed from \eqn{L} if not specified. Note this is not the variance.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-#'    computed from \eqn{R}  if not specified.  Note this is not the variance.
-#' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
-#'    output will be a list of matrices.
-#' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
-#'    \code{FALSE} , the function will return a matrix containing the one
-#'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
-#'    If \code{list}  is \code{TRUE} , this will be ignored.
-#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+#' @family matrixt
+#' @inheritParams rmatrixt
+#' @return \code{rmatrixinvt} returns either a list of \eqn{n}  \eqn{p X q}  matrices or
 #'    a \eqn{n X p X q}  array.
 #'
-#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices
-#'    or a \eqn{n X p X q}  array.
+#'    \code{dmatrixinvt} returns the density at quantile \code{x}.
+
 #' @export
-#'
-rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
+#' @examples
+#' A<-rmatrixinvt(n = 2, df = 10, diag(4))
+#' dmatrixinvt(A[,,1], df = 10, mean = diag(4))
+rmatrixinvt <- function(n, df, mean,
                         L = diag(dim(as.matrix(mean))[1]),
                         R = diag(dim(as.matrix(mean))[2]),
                         U = L %*% t(L), V = t(R) %*% R,
@@ -322,26 +294,9 @@ rmatrixinvt <- function(n, df, mean = matrix(0, nrow = 2, ncol = 2),
 
 
 
-#' dmatrixinvt
-#' @family matrixt
-#' @description Compute densities for the inverted matrix variate
-#'    t-distribution.
-#' @param x \eqn{p X q} input matrix
-#' @param df degrees of freedom (\eqn{>0}, maybe non-integer),
-#'    \code{df = Inf} is allowed.
-#' @param mean by default 0, matrix of same size as observations \code{x}
-#' @param L \eqn{p X p}  matrix specifying relations among the rows.
-#'    By default, an identity matrix.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-#'    computed from \eqn{L} if not specified. Note this is not the variance.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-#'    computed from \eqn{R}  if not specified.  Note this is not the variance.
-#' @param log logical; if TRUE, probabilities p are given as log(p).
-#'
-#' @return returns the density.
-dmatrixinvt <- function(x, df, mean = array(0L, dim(as.matrix(x))[1:2]),
+#' @describeIn rmatrixinvt Density function for inverted matrix t-distributions.
+#' @export
+dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
                         L = diag(dim(as.matrix(x))[1]),
                         R = diag(dim(as.matrix(x))[2]),
                         U = L %*% t(L), V = t(R) %*% R, log = FALSE) {

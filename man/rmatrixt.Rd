@@ -2,20 +2,25 @@
 % Please edit documentation in R/matrixt.R
 \name{rmatrixt}
 \alias{rmatrixt}
-\title{rmatrixt}
+\alias{dmatrixt}
+\title{Distribution functions for the matrix variate t-distribution.}
 \usage{
 rmatrixt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
   list = FALSE, array = NULL, force = FALSE)
+
+dmatrixt(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
+  L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]), U = L
+  \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
-\item{n}{number of observations to generate}
+\item{n}{number of observations for generation}
 
-\item{df}{degrees of freedom (\eqn{>0}, maybe non-integer),
-\code{df = Inf} is allowed.}
+\item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
+\code{df = 0, Inf} is allowed and will return a normal distribution.}
 
-\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean as this
-is a central T, though the expected value will be equal to this if
+\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean,
+though the expected value will be equal to this if
 \eqn{df > 2}}
 
 \item{L}{\eqn{p X p}  matrix specifying relations among the rows.
@@ -25,10 +30,10 @@ By default, an identity matrix.}
 By default, an identity matrix.}
 
 \item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
-computed from \eqn{L} if not specified. Note this is not the variance.}
+computed from \eqn{L} if not specified.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
-computed from \eqn{R}  if not specified.  Note this is not the variance.}
+computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -38,36 +43,39 @@ output will be a list of matrices.}
 observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 If \code{list}  is \code{TRUE} , this will be ignored.}
 
-\item{force}{If TRUE, will take the input of \code{R}
+\item{force}{In \code{rmatrix}: if TRUE, will take the input of \code{R}
 directly - otherwise uses \code{V} and uses Cholesky
 decompositions. Useful for generating degenerate t-distributions.
 Will also override concerns about potentially singular matrices
 unless they are not, in fact, invertible.}
+
+\item{x}{quantile for density}
+
+\item{log}{logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
+\code{rmatrixt} returns either a list of \eqn{n}  \eqn{p X q}  matrices or
    a \eqn{n X p X q}  array.
+
+   \code{dmatrixt} returns the density at quantile \code{x}.
 }
 \description{
-Random generation for the matrix variate t-distribution
+Distribution functions for the matrix variate t-distribution.
 }
+\section{Functions}{
+\itemize{
+\item \code{dmatrixt}: Density function for matrix variate t-distribution
+}}
+
 \examples{
 set.seed(20180202)
 rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-set.seed(20180202)
-A <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-A[[1]]
-set.seed(20180202)
-B <- rmatrixt(n=10,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-B[1 , , ]
 summary(rt(n=100,df=10))
 summary(rmatrixt(n=100,df=10,matrix(0)))
+set.seed(20180204)
+x = rmatrixt(n=1,mean=matrix(0),df=1)
+dt(x,1)
+dmatrixt(x,df=1)
 
-}
-\seealso{
-Other matrixt: \code{\link{dmatrixinvt}},
-  \code{\link{dmatrixt}}, \code{\link{rmatrixinvt}}
 }
