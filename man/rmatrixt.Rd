@@ -62,6 +62,17 @@ unless they are not, in fact, invertible.}
 \description{
 Distribution functions for the matrix variate t-distribution.
 }
+\details{
+The matrix \eqn{t}-distribution is parameterized slightly
+ differently from the univariate and multivariate \eqn{t}-distributions
+ - the variance matrices are scaled by a factor of \code{df}.
+ In this parameterization, the variance for a \eqn{1 x 1} matrix variate
+ \eqn{t}-distributed random variable with identity variance matrices is
+ \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
+ for the matrix variate \eqn{T} is then that as \code{df} goes to
+ infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
+ \eqn{MVN(0,I_p,I_q)}.
+}
 \section{Functions}{
 \itemize{
 \item \code{dmatrixt}: Density function for matrix variate t-distribution
