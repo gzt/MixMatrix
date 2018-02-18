@@ -10,7 +10,7 @@ mle.matrixnorm(data, row.mean = FALSE, col.mean = FALSE,
 }
 \arguments{
 \item{data}{Either a list of matrices or a 3-D array with matrices in
-dimensions 2 and 3, indexed by dimension 1.}
+dimensions 1 and 2, indexed by dimension 3.}
 
 \item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
 common mean within each row. If both this and \code{col.mean} are
