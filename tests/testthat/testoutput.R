@@ -98,9 +98,9 @@ set.seed(20180205)
   #dmvt(x,sigma = U.two,df = 5)
   expect_equal(dmatrixt(x, df, U = U.one, V = df*V.one, log = T),
                dmatrixt(t(x), df, U = U.two, V = df*V.two, log = T),
-               tolerance = .0001)
+               tolerance = .000001)
   expect_equal(dmatrixt(x, df, U = U.one, V = df*V.one, log = T),
-               -4.663386, tolerance = .0001)
+               -4.663386, tolerance = .000001)
   set.seed(20180211)
   A <- rInvCholWishart(1,10,diag(5))[,,1]
   set.seed(20180211)
