@@ -73,13 +73,18 @@ set.seed(20180205)
 
   expect_equal(dnorm(1), dmatrixnorm(1))
   expect_equal(dt(1, 1), (dmatrixt(1, 1)))
-
+  expect_equal(dmatrixt(matrix(1),df = 10, U = 10*matrix(1)),
+               dt(1,10),
+               tolerance = 1e-6)
+  expect_equal(dmatrixt(matrix(1),df = 10, V = 10*matrix(1)),
+               dt(1,10),
+              tolerance = 1e-6)
   A = as.vector(rmatrixnorm(1e4, 0, list = FALSE))
   B = as.vector(rnorm(1e4))
   expect_equal(var(A), var(B), tolerance = .08)
   expect_equal(mean(A), mean(B), tolerance = .035)
-
-  A = as.vector(rmatrixt(1e4,df = 10, 0, list = FALSE))
+  df = 10
+  A = as.vector(rmatrixt(1e4,df = df, 0, V = df, list = FALSE))
   B = as.vector(rt(1e4, df = 10))
   expect_equal(var(A), var(B), tolerance = .08)
   expect_equal(mean(A), mean(B), tolerance = .035)
@@ -91,10 +96,10 @@ set.seed(20180205)
   df = 5
 
   #dmvt(x,sigma = U.two,df = 5)
-  expect_equal(dmatrixt(x, df, U = U.one, V = V.one, log = T),
-               dmatrixt(t(x), df, U = U.two, V = V.two, log = T),
+  expect_equal(dmatrixt(x, df, U = U.one, V = df*V.one, log = T),
+               dmatrixt(t(x), df, U = U.two, V = df*V.two, log = T),
                tolerance = .0001)
-  expect_equal(dmatrixt(x, df, U = U.one, V = V.one, log = T),
+  expect_equal(dmatrixt(x, df, U = U.one, V = df*V.one, log = T),
                -4.663386, tolerance = .0001)
   set.seed(20180211)
   A <- rInvCholWishart(1,10,diag(5))[,,1]

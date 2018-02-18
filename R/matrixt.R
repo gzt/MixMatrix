@@ -1,7 +1,7 @@
 #' Distribution functions for the matrix variate t-distribution.
 #' @family matrixt
 #'
-#' Density and random generation for the matrix variate t-distribution
+#' Density and random generation for the matrix variate t-distribution.
 #'
 #' @param n number of observations for generation
 #' @param x quantile for density
@@ -34,6 +34,17 @@
 #'    a \eqn{n X p X q}  array.
 #'
 #'    \code{dmatrixt} returns the density at quantile \code{x}.
+#' @section Warning
+#'
+#' The matrix \eqn{t}-distribution is parameterized slightly
+#'  differently from the univariate and multivariate \eqn{t}-distributions
+#'  - the variance matrices are scaled by a factor of \code{df}.
+#'  In this parameterization, the variance for a \eqn{1 x 1} matrix variate
+#'  \eqn{t}-distributed random variable with identity variance matrices is
+#'  \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. The Central Limit Theorem
+#'  for the matrix variate \eqn{T} is then that as \code{df} goes to
+#'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
+#'  \eqn{MVN(0,I_p,I_q)}.
 #' @export
 #'
 #' @examples
@@ -92,7 +103,7 @@ rmatrixt <- function(n, df, mean,
 
   # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
 
-  cholU <- rInvCholWishart(n, df + dims[1] - 1,(1/df) * solveU)
+  cholU <- rInvCholWishart(n, df + dims[1] - 1,solveU)
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
@@ -149,8 +160,6 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 
     # breaking equation into two parts: the integrating constants (gammas)
     # and the matrix algebra parts (mats) done on the log scale
-    # NB: I provided the correction to this that I did for
-    # rmatrixt as well (ie scale by df)
 
     if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
     # gammas is constant
@@ -158,9 +167,9 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
          0.5 * prod(dims) * log(pi) -
          lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    m <- (diag(dims[1]) + chol2inv((sqrt(df)*cholU)) %*% xm %*% chol2inv(cholV) %*% t(xm))
-
-    mats <- -0.5 * dims[2] * (log(detU)) - 0.5 * dims[2] * dims[1]*log(df) -
+    m <- diag(dims[1]) + chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
+    # - 0.5 * dims[2] * dims[1]*log(df) term disappears
+    mats <- -0.5 * dims[2] * (log(detU))  -
             0.5 * dims[1] * log(detV) -
             0.5 * (df + sum(dims) - 1) * log(det(m))
 
