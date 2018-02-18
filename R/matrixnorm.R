@@ -47,9 +47,14 @@
 #' dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
-rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
-                        R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
-                        V = t(R) %*% R, list = FALSE, array = NULL, force = FALSE) {
+rmatrixnorm <- function(n, mean,
+                        L = diag(dim(as.matrix(mean))[1]),
+                        R = diag(dim(as.matrix(mean))[2]),
+                        U = L %*% t(L),
+                        V = t(R) %*% R,
+                        list = FALSE,
+                        array = NULL,
+                        force = FALSE) {
   if (!is.numeric(n)) stop("n is not numeric")
   if (!(n > 0)) stop("n must be > 0. n = ", n)
   mean <- as.matrix(mean)
@@ -71,7 +76,7 @@ rmatrixnorm <- function(n, mean, L = diag(dim(as.matrix(mean))[1]),
   if (force && !missing(L)) cholU <- L else cholU <- chol.default(U)
   if (force && !missing(R)) cholV <- R else cholV <- chol.default(V)
 
-  if (!force && (min(diag(cholU))<1e-6 || min(diag(cholV))<1e-6) ) {
+  if (!force && (min(diag(cholU)) < 1e-6 || min(diag(cholV)) < 1e-6) ) {
       stop("Potentially singular covariance, use force = TRUE if intended. ",
            min(diag(cholU)), min(diag(cholV)))
   }
@@ -373,9 +378,10 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
               (.5 ) * sum(diag(B)) # problem was wrong constant
 
           }
-          if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)){
+          if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
             warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-            varflag=TRUE
+            rho.col = 0
+            varflag = TRUE
           } else {
           fit0 <- stats::uniroot(nLL, c(0,.999),...)
           rho.col <- fit0$root
@@ -399,9 +405,10 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
               0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
                 (.5 ) * sum(diag(B)) # problem was wrong constant
             }
-            if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)){
+            if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
               warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-              varflag=TRUE
+              rho.row = 0
+              varflag = TRUE
             } else {
             fit0 <- stats::uniroot(nLL, c(0,.999),...)
             rho.row <- fit0$root
