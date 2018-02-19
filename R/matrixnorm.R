@@ -223,7 +223,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
       }
 }
 
-#' mle.matrixnorm:
+#' MLmatrixnorm:
 #'
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
@@ -272,11 +272,11 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-#' results=mle.matrixnorm(A, tol = 1e-5)
+#' results=MLmatrixnorm(A, tol = 1e-5)
 #' print(results)
 #'
 #'
-mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
+MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 10*.Machine$double.eps^0.5, max.iter = 100, U, V,...) {
     if (class(data) == "list") data <- array(unlist(data),
@@ -295,7 +295,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
     col.set.var = FALSE
     if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
-    # if data is array, presumes indexed over first column (same as output
+    # if data is array, presumes indexed over third column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
     dims <- dim(data)
 
