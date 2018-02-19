@@ -32,6 +32,7 @@
 #'    a \eqn{p X q X n}  array.
 #' @export
 #'
+#' @seealso \code{\link[stats]{rnorm}} and \code{\link[stats]{Distributions}}
 #' @examples
 #' set.seed(20180202)
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -129,7 +130,7 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
     cholV = chol.default(V)
     detU <- prod(diag(cholU))^2
     detV <- prod(diag(cholV))^2
-    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
+    if (!(detU/(U[1,1]^(dims[1])) > 1e-15 && detV/(V[1,1]^(dims[2])) > 1e-15)) stop("non-invertible matrix", round(detU,5), round(detV,5))
     Uinv <- chol2inv(cholU)
     Vinv <- chol2inv(cholV)
     XM <- x - mean
@@ -223,7 +224,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
       }
 }
 
-#' mle.matrixnorm:
+#' MLmatrixnorm:
 #'
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
@@ -267,16 +268,17 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    between iterations of the variance matrices at the time of stopping, the log likelihood,
 #'    and a convergence code.
 #' @export
+#' @seealso \code{\link{rmatrixnorm}}
 #'
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-#' results=mle.matrixnorm(A, tol = 1e-5)
+#' results=MLmatrixnorm(A, tol = 1e-5)
 #' print(results)
 #'
 #'
-mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
+MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                            row.variance = "none", col.variance = "none",
                            tol = 10*.Machine$double.eps^0.5, max.iter = 100, U, V,...) {
     if (class(data) == "list") data <- array(unlist(data),
@@ -295,7 +297,7 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
     col.set.var = FALSE
     if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
-    # if data is array, presumes indexed over first column (same as output
+    # if data is array, presumes indexed over third column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
     dims <- dim(data)
 
@@ -427,6 +429,26 @@ mle.matrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         error.term <- sum((new.V - V)^2) + sum((new.U - U)^2)
         V <- new.V
         U <- new.U
+
+        # reset mu to account for mean estimation *if* restricted means
+        # unsure about this - I think only an issue if *known* covar matrix
+        # in which case estimation is biased unless you correct for it
+        #
+        if (col.mean || row.mean)
+          mu <- rowMeans(data, dims=2)
+        if (row.mean){
+          invV <- chol2inv(chol.default(V))
+          sumV <- sum(invV)
+          mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
+          }
+        if(col.mean){
+          invU <- chol2inv(chol.default(U))
+          sumU <- sum(invU)
+          mu <- matrix(colSums(invU) %*% mu /sumU, nrow = dims[1], ncol = dims[2], byrow = T)
+        }
+        if (col.mean || row.mean)
+          swept.data <- sweep(data, c(1, 2), mu)
+
         iter <- iter + 1
     }
     if (iter >= max.iter || error.term > tol || varflag)

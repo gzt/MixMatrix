@@ -1,4 +1,4 @@
-#' matrixdist: a package for some random matrix distributions.
+#' Functions for Matrix Distributions
 #'
 #' The matrixdist package current provides for generating
 #' matrix variate random variables, computing matrix variate densities,

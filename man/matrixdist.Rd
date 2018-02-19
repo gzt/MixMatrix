@@ -4,7 +4,7 @@
 \name{matrixdist}
 \alias{matrixdist}
 \alias{matrixdist-package}
-\title{matrixdist: a package for some random matrix distributions.}
+\title{Functions for Matrix Distributions}
 \description{
 The matrixdist package current provides for generating
 matrix variate random variables, computing matrix variate densities,
