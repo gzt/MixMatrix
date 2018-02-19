@@ -427,6 +427,26 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         error.term <- sum((new.V - V)^2) + sum((new.U - U)^2)
         V <- new.V
         U <- new.U
+
+        # reset mu to account for mean estimation *if* restricted means
+        # unsure about this - I think only an issue if *known* covar matrix
+        # in which case estimation is biased unless you correct for it
+        #
+        if (col.mean || row.mean)
+          mu <- rowMeans(data, dims=2)
+        if (row.mean){
+          invV <- chol2inv(chol.default(V))
+          sumV <- sum(invV)
+          mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
+          }
+        if(col.mean){
+          invU <- chol2inv(chol.default(U))
+          sumU <- sum(invU)
+          mu <- matrix(colSums(invU) %*% mu /sumU, nrow = dims[1], ncol = dims[2], byrow = T)
+        }
+        if (col.mean || row.mean)
+          swept.data <- sweep(data, c(1, 2), mu)
+
         iter <- iter + 1
     }
     if (iter >= max.iter || error.term > tol || varflag)
