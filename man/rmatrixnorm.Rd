@@ -76,3 +76,6 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
 }
+\seealso{
+\code{rnorm} \code{Distributions}
+}

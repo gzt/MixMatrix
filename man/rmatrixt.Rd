@@ -90,3 +90,6 @@ dt(x,1)
 dmatrixt(x,df=1)
 
 }
+\seealso{
+\code{rt} \code{Distributions}
+}

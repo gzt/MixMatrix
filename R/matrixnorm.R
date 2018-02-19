@@ -32,6 +32,7 @@
 #'    a \eqn{p X q X n}  array.
 #' @export
 #'
+#' @seealso \code{rnorm} \code{Distributions}
 #' @examples
 #' set.seed(20180202)
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -267,6 +268,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    between iterations of the variance matrices at the time of stopping, the log likelihood,
 #'    and a convergence code.
 #' @export
+#' @seealso \code{rmatrixnorm}
 #'
 #' @examples
 #' set.seed(20180202)

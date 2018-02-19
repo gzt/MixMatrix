@@ -27,5 +27,5 @@ rInvCholWishart(1,10,diag(5))
 
 }
 \seealso{
-rWishart, rInvCholWishart
+\link{rWishart}, \link{rCholWishart}
 }

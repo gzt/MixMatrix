@@ -1,6 +1,7 @@
 # matrixdist 0.0.0.9920
 
 * added change to mean estimation to account for restricted means
+* added changes to documentation
 
 
 # matrixdist 0.0.0.9919

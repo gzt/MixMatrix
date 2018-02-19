@@ -34,5 +34,5 @@ mvgamma(1:12,1)
 gamma(1:12)
 }
 \seealso{
-mvgamma
+\code{gamma} \code{lgamma}
 }

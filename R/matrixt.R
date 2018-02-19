@@ -44,6 +44,9 @@
 #'  for the matrix variate \eqn{T} is then that as \code{df} goes to
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
+#'
+#' @seealso \code{rt} \code{Distributions}
+#'
 #' @export
 #'
 #' @examples
@@ -191,7 +194,8 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 #' @return log of multivariate gamma for each entry of x. For non-log variant,
 #'     see mvgamma.
 #'
-#' @seealso mvgamma
+#' @seealso \code{gamma} \code{lgamma}
+#'
 #' @useDynLib matrixdist
 #' @export
 #'

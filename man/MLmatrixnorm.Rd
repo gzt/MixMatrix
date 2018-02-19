@@ -71,3 +71,6 @@ print(results)
 
 
 }
+\seealso{
+\code{rmatrixnorm}
+}

@@ -36,5 +36,5 @@ C <- chol(rWishart(1,10,3*diag(5))[,,1])
 
 }
 \seealso{
-rWishart, rInvCholWishart
+\link{rWishart}, \link{rInvCholWishart}
 }

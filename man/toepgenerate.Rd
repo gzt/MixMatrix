@@ -22,3 +22,6 @@ generate AR(1) correlation matrices
 \examples{
 toepgenerate(6,.9)
 }
+\seealso{
+\code{toeplitz}
+}
