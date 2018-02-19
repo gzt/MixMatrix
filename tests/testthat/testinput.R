@@ -66,11 +66,11 @@ test_that("trying wrong type of input", {
                              V = matrix(c("A",1,2,0,6,1,-1,2,10),nrow=3),log=TRUE ))
 
 
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=diag(5)), tol="Q"))
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=diag(5)), max.iter="Q"))
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=diag(5)),
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=diag(5)), tol="Q"))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=diag(5)), max.iter="Q"))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=diag(5)),
                               U = matrix("Q",nrow=5,ncol=5)))
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=diag(5)),
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=diag(5)),
                               V = matrix("Q",nrow=5,ncol=5)))
 
   expect_error(toepgenerate(7,"A"))
@@ -134,8 +134,8 @@ test_that("Testing bad matrix dimension input",{
   expect_error(dmatrixinvt(x = A, df =1, mean=A,U=A,V=B))
   expect_error(dmatrixinvt(x = A, df =1, mean=A,U=A,R=B))
 
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=A),U=B,V=A))
-  expect_error(mle.matrixnorm(rmatrixnorm(n = 100, mean=A),U=A,V=B))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=A),U=B,V=A))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean=A),U=A,V=B))
 
   expect_error(rCholWishart(1,10,matrix(c(3,1,1,1,1,3),nrow=2)))
   expect_error(rInvCholWishart(1,10,matrix(c(3,1,1,1,1,3),nrow=2)))
