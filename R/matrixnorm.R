@@ -130,7 +130,7 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
     cholV = chol.default(V)
     detU <- prod(diag(cholU))^2
     detV <- prod(diag(cholV))^2
-    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
+    if (!(detU/(U[1,1]^(dims[1])) > 1e-15 && detV/(V[1,1]^(dims[2])) > 1e-15)) stop("non-invertible matrix", round(detU,5), round(detV,5))
     Uinv <- chol2inv(cholU)
     Vinv <- chol2inv(cholV)
     XM <- x - mean
