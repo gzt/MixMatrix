@@ -27,5 +27,5 @@ sum(abs(A - B \%*\% B))
 B \%*\% C
 }
 \seealso{
-\link{posmatsqrt}
+\code{\link{posmatsqrt}}
 }

@@ -23,5 +23,5 @@ generate AR(1) correlation matrices
 toepgenerate(6,.9)
 }
 \seealso{
-\code{toeplitz}
+\code{\link[stats]{toeplitz}}
 }

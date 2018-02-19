@@ -25,5 +25,5 @@ sum(abs(B - t(B)))
 sum(abs(A - B \%*\% B))
 }
 \seealso{
-\link{posmatsqrtinv}
+\code{\link{posmatsqrtinv}}
 }

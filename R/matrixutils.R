@@ -9,7 +9,7 @@
 #' @return Toeplitz \eqn{n x n} matrix with 1 on the diagonal and \eqn{rho^k} on
 #'    the other diagonals, where \eqn{k} is distance from the main diagonal.
 #'    Used internally but it is useful for generating your own random matrices.
-#' @seealso \code{toeplitz}
+#' @seealso \code{\link[stats]{toeplitz}}
 #' @export
 #'
 #' @examples
@@ -275,7 +275,7 @@ invCS <- function(n, rho, deriv = FALSE){
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
 #' @export
-#' @seealso \link{posmatsqrtinv}
+#' @seealso \code{\link{posmatsqrtinv}}
 #'
 #' @examples
 #' A = diag(5) + 1
@@ -308,7 +308,7 @@ posmatsqrt <- function(A) {
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
 #' @export
-#' @seealso \link{posmatsqrt}
+#' @seealso \code{\link{posmatsqrt}}
 #'
 #' @examples
 #' A = diag(5) + 1
@@ -346,7 +346,7 @@ posmatsqrtinv <- function(A) {
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
-#' @seealso \link{rWishart}, \link{rInvCholWishart}
+#' @seealso \code{\link{rWishart}}, \code{\link{rInvCholWishart}}
 #' @useDynLib matrixdist
 #' @export
 #'
@@ -391,7 +391,7 @@ rCholWishart <- function(n, df, Sigma){
 #'
 #' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 #'
-#' @seealso \link{rWishart}, \link{rCholWishart}
+#' @seealso \code{\link{rWishart}} and \code{\link{rCholWishart}}
 #' @useDynLib matrixdist
 #' @export
 #'

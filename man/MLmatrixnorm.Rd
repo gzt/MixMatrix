@@ -72,5 +72,5 @@ print(results)
 
 }
 \seealso{
-\code{rmatrixnorm}
+\code{\link{rmatrixnorm}}
 }
