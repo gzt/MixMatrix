@@ -130,7 +130,7 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
     cholV = chol.default(V)
     detU <- prod(diag(cholU))^2
     detV <- prod(diag(cholV))^2
-    if (!(detU/(U[1,1]^(dims[1])) > 1e-15 && detV/(V[1,1]^(dims[2])) > 1e-15)) stop("non-invertible matrix", round(detU,5), round(detV,5))
+    if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
     Uinv <- chol2inv(cholU)
     Vinv <- chol2inv(cholV)
     XM <- x - mean
@@ -365,10 +365,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
                     function(x) crossprod(x,
                                 chol2inv(chol.default(V/var)) %x% chol2inv(chol.default((U)))) %*% x)) / (prod(dims))
-          # can write LL for AR(1) directly and differentiate
-          # det(SIGMA) = (1-rho^2)^(n-1) -> d(det)/d\rho = -2*rho*(n-1)(1-rho^2)^(n-2)
-          # inv(SIGMA) -> 1/(1-rho^2) * tridiag with -rho on off diags, 1+rho^2, 1 on main
-          # derivs: -(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
+
           tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ),
                        dim = c(dims[2],dims[2],dims[3]))
           nLL <- function(theta) {
@@ -435,16 +432,16 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         # in which case estimation is biased unless you correct for it
         #
         if (col.mean || row.mean)
-          mu <- rowMeans(data, dims=2)
-        if (row.mean){
+          mu <- rowMeans(data, dims = 2)
+        if (row.mean) {
           invV <- chol2inv(chol.default(V))
           sumV <- sum(invV)
           mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
           }
-        if(col.mean){
+        if (col.mean){
           invU <- chol2inv(chol.default(U))
           sumU <- sum(invU)
-          mu <- matrix(colSums(invU) %*% mu /sumU, nrow = dims[1], ncol = dims[2], byrow = T)
+          mu <- matrix(colSums(invU) %*% mu / sumU, nrow = dims[1], ncol = dims[2], byrow = T)
         }
         if (col.mean || row.mean)
           swept.data <- sweep(data, c(1, 2), mu)

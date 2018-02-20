@@ -93,7 +93,7 @@ rmatrixt <- function(n, df, mean,
   }
   if (force && !missing(R)) cholV <- R else cholV <- chol(V)
 
-  if (!force && min(diag(cholV)) < 1e-6 ) {
+  if (min(diag(cholV)) < 1e-6 && !force) {
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholV)))
   }
@@ -109,7 +109,8 @@ rmatrixt <- function(n, df, mean,
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
-    result[ , , i] <- mean + ((cholU[ , , i] %*% mat[ , , i])) %*% (cholV)
+    # just changed: pretty sure this is supposed to be t(chol(...))
+    result[ , , i] <- mean + (crossprod(cholU[ , , i] , mat[ , , i])) %*% (cholV)
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -133,54 +134,54 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
                      R = diag(dim(as.matrix(x))[2]),
                      U = L %*% t(L), V = t(R) %*% R,
                      log = FALSE) {
-    if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
-           is.numeric(R), is.numeric(U),
-           is.numeric(V)))) stop("Non-numeric input. ")
-    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-    if ( ((is.null(df)) || is.na(df) || (df < 0)))
-      stop("df must be >= 0. df =", df)
-    if ( (df == 0 || is.infinite(df)) )
-      return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
-    x <- as.matrix(x)
-    mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    if (!symm.check(U)) stop("U not symmetric.")
-    if (!symm.check(V)) stop("V not symmetric.")
-    dims <- dim(x)
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
+  if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
+            is.numeric(R), is.numeric(U),
+            is.numeric(V)))) stop("Non-numeric input. ")
+  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+  if ( ((is.null(df)) || is.na(df) || (df < 0)))
+    stop("df must be >= 0. df =", df)
+  if ( (df == 0 || is.infinite(df)) )
+    return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
+  x <- as.matrix(x)
+  mean <- as.matrix(mean)
+  U <- as.matrix(U)
+  V <- as.matrix(V)
+  if (!symm.check(U)) stop("U not symmetric.")
+  if (!symm.check(V)) stop("V not symmetric.")
+  dims <- dim(x)
+  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+        dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+  }
 
 
-    xm <- x - mean
-    cholU <- chol.default(U)
-    cholV <- chol.default(V)
-    detU <- prod(diag(cholU))^2
-    detV <- prod(diag(cholV))^2
+  xm <- x - mean
+  cholU <- chol.default(U)
+  cholV <- chol.default(V)
+  detU <- prod(diag(cholU))^2
+  detV <- prod(diag(cholV))^2
 
-    # breaking equation into two parts: the integrating constants (gammas)
-    # and the matrix algebra parts (mats) done on the log scale
+  # breaking equation into two parts: the integrating constants (gammas)
+  # and the matrix algebra parts (mats) done on the log scale
 
-    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
-    # gammas is constant
-    gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-         0.5 * prod(dims) * log(pi) -
-         lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+  if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  # gammas is constant
+  gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+    0.5 * prod(dims) * log(pi) -
+    lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    m <- diag(dims[1]) + chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
-    # - 0.5 * dims[2] * dims[1]*log(df) term disappears
-    mats <- -0.5 * dims[2] * (log(detU))  -
-            0.5 * dims[1] * log(detV) -
-            0.5 * (df + sum(dims) - 1) * log(det(m))
+  m <- diag(dims[1]) + chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
+  # - 0.5 * dims[2] * dims[1]*log(df) term disappears
+  mats <- -0.5 * dims[2] * (log(detU))  -
+    0.5 * dims[1] * log(detV) -
+    0.5 * (df + sum(dims) - 1) * log(det(m))
 
-    results <- as.numeric(gammas + mats)
-    if (log) {
-        return(results)
-      } else {
-        return(exp(results))
-      }
+  results <- as.numeric(gammas + mats)
+  if (log) {
+    return(results)
+  } else {
+    return(exp(results))
+  }
 }
 
 #' lmvgamma
@@ -205,21 +206,21 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 #' mvgamma(1:12,1)
 #' gamma(1:12)
 lmvgamma <- function(x, p) {
-    # p only makes sense as an integer but not testing that. x *could* be
-    # less than zero - same domain as gamma function making sure that object
-    # returned is same shape as object passed
-    if (!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
-    dims <- if (is.vector(x))
-        length(x) else dim(as.array(x))
-    if (p < 1)
-        stop("p must be greater than or equal to 1. p = ", p)
-    if (any(x <= 0))
-        stop("x must be greater than 0. x = ", x)
-#    result <- (p * (p - 1)/4) * log(pi) +
-#       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
-    result <- .Call("lmvgamma", as.numeric(x), as.integer(p), PACKAGE = "matrixdist")
+  # p only makes sense as an integer but not testing that. x *could* be
+  # less than zero - same domain as gamma function making sure that object
+  # returned is same shape as object passed
+  if (!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
+  dims <- if (is.vector(x))
+    length(x) else dim(as.array(x))
+  if (p < 1)
+    stop("p must be greater than or equal to 1. p = ", p)
+  if (any(x <= 0))
+    stop("x must be greater than 0. x = ", x)
+  #    result <- (p * (p - 1)/4) * log(pi) +
+  #       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
+  result <- .Call("lmvgamma", as.numeric(x), as.integer(p), PACKAGE = "matrixdist")
 
-    return(array(result, dim = dims))
+  return(array(result, dim = dims))
 }
 
 #' @describeIn lmvgamma Multivariate gamma function.
@@ -279,7 +280,7 @@ rmatrixinvt <- function(n, df, mean,
   for (i in seq(n)) {
     # if there's a way to do this with apply I want to see it
     SXX[ , , i] <- array((posmatsqrtinv(S[ , , i] +
-                                            mat[ , , i] %*% t(mat[ , , i]))),
+                                          mat[ , , i] %*% t(mat[ , , i]))),
                          dim = c(dims[1],dims[1]))
   }
 
@@ -292,7 +293,7 @@ rmatrixinvt <- function(n, df, mean,
 
   if (n == 1 && list == FALSE && is.null(array)) {
     return(array(result[,,1], dim = dims[1:2]))
-        # if n = 1 and you don't specify arguments, it just returns a matrix
+    # if n = 1 and you don't specify arguments, it just returns a matrix
   }
   if (list) {
     return(lapply(seq(dim(result)[3]), function(x) result[ , , x]))
@@ -313,48 +314,48 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
                         R = diag(dim(as.matrix(x))[2]),
                         U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
   if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
-           is.numeric(R), is.numeric(U),
-           is.numeric(V)))) stop("Non-numeric input. ")
-    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-      if ( ((is.null(df)) || is.na(df) || (df < 0)))
-      stop("df must be >= 0. df =", df)
-    if (df <= 0 || is.infinite(df)) stop("Invalid input for df,
+            is.numeric(R), is.numeric(U),
+            is.numeric(V)))) stop("Non-numeric input. ")
+  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+  if ( ((is.null(df)) || is.na(df) || (df < 0)))
+    stop("df must be >= 0. df =", df)
+  if (df <= 0 || is.infinite(df)) stop("Invalid input for df,
                                         must have 0 < df < Inf, df = ", df)
-    x <- as.matrix(x)
-    mean <- as.matrix(mean)
-    U <- as.matrix(U)
-    V <- as.matrix(V)
-    if (!symm.check(U)) stop("U not symmetric.")
-    if (!symm.check(V)) stop("V not symmetric.")
-    dims <- dim(x)
-    if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-          dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-      stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-    }
+  x <- as.matrix(x)
+  mean <- as.matrix(mean)
+  U <- as.matrix(U)
+  V <- as.matrix(V)
+  if (!symm.check(U)) stop("U not symmetric.")
+  if (!symm.check(V)) stop("V not symmetric.")
+  dims <- dim(x)
+  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
+        dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
+    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+  }
 
-    xm <- x - mean
-    cholU <- chol.default(U)
-    cholV <- chol.default(V)
-    detU <- prod(diag(cholU))^2
-    detV <- prod(diag(cholV))^2
-    if (!(detU > 1e-8 && detV > 1e-8)) stop("non-invertible matrix", detU, detV)
+  xm <- x - mean
+  cholU <- chol.default(U)
+  cholV <- chol.default(V)
+  detU <- prod(diag(cholU))^2
+  detV <- prod(diag(cholV))^2
+  if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
 
-    # breaking equation into two parts: the integrating constants
-    # (gammas) and the matrix algebra parts (mats) done on the log scale
-    # note I did not do the DF correction as for the matrix t distribution
+  # breaking equation into two parts: the integrating constants
+  # (gammas) and the matrix algebra parts (mats) done on the log scale
+  # note I did not do the DF correction as for the matrix t distribution
 
-    gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-      0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+  gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+    0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-    matrixterms <- diag(dims[1]) -
-                      chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
+  matrixterms <- diag(dims[1]) -
+    chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
 
-    mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
-        0.5 * (df - 2) * log(det(matrixterms))
-    results <- gammas + mats
-    if (log) {
-        return(results)
-      } else {
-        return(exp(results))
-      }
+  mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
+    0.5 * (df - 2) * log(det(matrixterms))
+  results <- gammas + mats
+  if (log) {
+    return(results)
+  } else {
+    return(exp(results))
+  }
 }
