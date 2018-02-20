@@ -21,14 +21,15 @@ common mean within each row. If both this and \code{row.mean} are
 \code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{row.variance}{Imposes a variance structure on the rows. Either
-'none', 'AR(1)', or 'CS' for 'compound symmetry'.
+'none', 'AR(1)', 'CS' for 'compound symmetry', or 'Independence' for
+independent and identical variance across the rows.
 Only positive correlations are allowed for AR(1) and CS.
 Note that while maximum likelihood estimators are available (and used) for
 the unconstrained variance matrices, \code{optim} is used for any
-constraints so it will be considerably slower.}
+constraints so it may be considerably slower.}
 
 \item{col.variance}{Imposes a variance structure on the columns.
-Either 'none' or 'AR(1)' or 'CS'. Only positive correlations are allowed for
+Either 'none', 'AR(1)', 'CS', or 'Independence'. Only positive correlations are allowed for
 AR(1) and CS.}
 
 \item{tol}{Convergence criterion. Measured against square deviation
@@ -58,7 +59,7 @@ Maximum likelihood estimation for matrix normal distributions
 Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
 unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
 between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
-An AR(1) or compound symmetry restriction can be proposed for either or both
+An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.
 }

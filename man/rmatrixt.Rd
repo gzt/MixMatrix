@@ -91,5 +91,5 @@ dmatrixt(x,df=1)
 
 }
 \seealso{
-\code{\link[stats]{rt}} and \code{\link[stats]{Distributions}}
+\code{\link{rt}} and \code{\link[stats]{Distributions}}
 }

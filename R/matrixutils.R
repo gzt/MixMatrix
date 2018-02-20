@@ -105,8 +105,10 @@ symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
 #' \dontrun{varmatgenerate(5,.2,"AR(1)")}
 #'
 varmatgenerate <- function(n, rho, variance) {
+  if (variance == "I" || variance == "independence" || variance == "Independence") variance = "I"
   if (variance == "AR(1)") return(toepgenerate(n,rho))
   if (variance == "CS") return(CSgenerate(n,rho))
+  if (variance == "I") return(diag(n))
   else stop("Bad covariance structure input.", variance)
 
 }

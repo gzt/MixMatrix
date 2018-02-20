@@ -32,7 +32,7 @@
 #'    a \eqn{p X q X n}  array.
 #' @export
 #'
-#' @seealso \code{\link[stats]{rnorm}} and \code{\link[stats]{Distributions}}
+#' @seealso \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 #' @examples
 #' set.seed(20180202)
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -231,7 +231,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
 #' unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
 #' between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
-#' An AR(1) or compound symmetry restriction can be proposed for either or both
+#' An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 #' variance matrices. However, if they are inappropriate for the data, they may fail with
 #' a warning.
 #'
@@ -244,13 +244,14 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    common mean within each row. If both this and \code{row.mean} are
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
-#'     'none', 'AR(1)', or 'CS' for 'compound symmetry'.
+#'     'none', 'AR(1)', 'CS' for 'compound symmetry', or 'Independence' for
+#'     independent and identical variance across the rows.
 #'     Only positive correlations are allowed for AR(1) and CS.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
-#'     constraints so it will be considerably slower.
+#'     constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
-#'     Either 'none' or 'AR(1)' or 'CS'. Only positive correlations are allowed for
+#'     Either 'none', 'AR(1)', 'CS', or 'Independence'. Only positive correlations are allowed for
 #'     AR(1) and CS.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
@@ -293,9 +294,19 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       if (!(is.numeric(V))) stop("Non-numeric input.")
     }
     row.set.var = FALSE
-    if (row.variance == "AR(1)" || row.variance == "CS" ) row.set.var = TRUE
+    if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+    if (grepl("^i", x = row.variance,ignore.case=T)) {
+      row.set.var = TRUE
+      row.variance = "I"
+    }
+    if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
 
     col.set.var = FALSE
+    if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+    if (grepl("^i", x = col.variance, ignore.case=T)) {
+      col.set.var = TRUE
+      col.variance = "I"
+    }
     if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
     # if data is array, presumes indexed over third column (same as output
     # of rmatrixnorm) if list, presumes is a list of the matrices
@@ -333,6 +344,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                             nrow = dims[2])/(dims[3] * dims[1])
             if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
             if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
+            if(col.variance == "I") rho.col = 0
             if (rho.col > .9) rho.col <- .9
             if (rho.col < 0) rho.col <- 0
             V <- varmatgenerate(dims[2],rho.col,col.variance)
@@ -350,6 +362,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                       nrow = dims[1])/(dims[3] * dims[2])
           if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
           if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
+          if (row.variance == "I") rho.row = 0
           if (rho.row > .9) rho.row <- .9
           if (rho.row < 0) rho.row = 0
           U <- varmatgenerate(dims[1],rho.row,row.variance)
@@ -365,25 +378,26 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           var <- sum(apply(matrix(swept.data,ncol = dims[3]),2,
                     function(x) crossprod(x,
                                 chol2inv(chol.default(V/var)) %x% chol2inv(chol.default((U)))) %*% x)) / (prod(dims))
+          if (col.variance != "I"){
+            tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ),
+                         dim = c(dims[2],dims[2],dims[3]))
+            nLL <- function(theta) {
+              Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
+              B <- matrix(rowSums(apply(tmp, 3,
+                          function(x) Vmat %*% x )), nrow = dims[2])
+              # solved derivative, need to find where this is zero:
+              0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
+                (.5 ) * sum(diag(B)) # problem was wrong constant
 
-          tmp <- array(apply(swept.data, 3, function(x) t(x) %*% chol2inv(chol.default(U)) %*% (x) ),
-                       dim = c(dims[2],dims[2],dims[3]))
-          nLL <- function(theta) {
-            Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
-            B <- matrix(rowSums(apply(tmp, 3,
-                        function(x) Vmat %*% x )), nrow = dims[2])
-            # solved derivative, need to find where this is zero:
-            0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
-              (.5 ) * sum(diag(B)) # problem was wrong constant
-
-          }
-          if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
-            warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-            rho.col = 0
-            varflag = TRUE
-          } else {
-          fit0 <- stats::uniroot(nLL, c(0,.999),...)
-          rho.col <- fit0$root
+            }
+            if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
+              warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+              rho.col = 0
+              varflag = TRUE
+            } else {
+            fit0 <- stats::uniroot(nLL, c(0,.999),...)
+            rho.col <- fit0$root
+            }
           }
           new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
         } else {
@@ -392,8 +406,9 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             new.V <- matrix(apply(inter.V, 1, sum),
                             nrow = dims[2])/(dims[3] * dims[1])
         }
-
-        if (row.set.var) {
+        if (row.variance == "I"){
+          new.U = diag(dims[1])
+        } else if (row.set.var) {
           tmp <- array(apply(swept.data, 3, function(x) (x) %*% chol2inv(chol.default(new.V)) %*% t(x) ),
                        dim = c(dims[1],dims[1],dims[3]))
             nLL <- function(theta) {
@@ -431,20 +446,21 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
         # unsure about this - I think only an issue if *known* covar matrix
         # in which case estimation is biased unless you correct for it
         #
-        if (col.mean || row.mean)
-          mu <- rowMeans(data, dims = 2)
-        if (row.mean) {
-          invV <- chol2inv(chol.default(V))
-          sumV <- sum(invV)
-          mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
-          }
-        if (col.mean){
-          invU <- chol2inv(chol.default(U))
-          sumU <- sum(invU)
-          mu <- matrix(colSums(invU) %*% mu / sumU, nrow = dims[1], ncol = dims[2], byrow = T)
-        }
-        if (col.mean || row.mean)
-          swept.data <- sweep(data, c(1, 2), mu)
+        # if (col.mean || row.mean)
+        #   mu <- rowMeans(data, dims = 2)
+        # if (row.mean) {
+        #   invV <- chol2inv(chol.default(V))
+        #   sumV <- sum(invV)
+        #   mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
+        #   }
+        # if (col.mean){
+        #   invU <- chol2inv(chol.default(U))
+        #   sumU <- sum(invU)
+        #   mu <- matrix(colSums(invU) %*% mu / sumU, nrow = dims[1], ncol = dims[2], byrow = T)
+        # }
+        # if (col.mean || row.mean)
+        #   swept.data <- sweep(data, c(1, 2), mu)
+        ### No, this should not be done - only if variance structures known in advance
 
         iter <- iter + 1
     }

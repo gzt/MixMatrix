@@ -45,7 +45,7 @@
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
-#' @seealso \code{\link[stats]{rt}} and \code{\link[stats]{Distributions}}
+#' @seealso \code{\link{rt}} and \code{\link[stats]{Distributions}}
 #'
 #' @export
 #'

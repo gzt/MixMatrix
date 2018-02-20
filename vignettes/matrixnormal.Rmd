@@ -85,14 +85,16 @@ results=MLmatrixnorm(A)
 print(results)
 ```
 
-There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands. 
+There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands.
+
 ```{r mlerow, cache = T}
 results.fixrows = MLmatrixnorm(A, row.mean=TRUE, max.iter = 10)
 print(results.fixrows)
-# this failure is expected with misspecification! 
+# this failure is expected with misspecification! The number of iterations is also 
+# fixed to be low so the vignette compiles quickly.
 ```
 
-Currently the only options for variance restrictions are to impose an AR(1) structure by providing the `AR(1)` option or a compound symmetry structure by providing the `CS` option. This works by using `uniroot` to find the appropriate $\rho$ which sets the derivative of the log-likelihood to zero - it is not fast but if this is the true structure it will be better than an unstructured variance matrix. The $\rho$ parameter should be $>0$ and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.
+Currently the only options for variance restrictions are to impose an AR(1) structure by providing the `AR(1)` option or a compound symmetry structure by providing the `CS` option or to impose an identical and independent structure by specifying `Independent` or `I`. This works by using `uniroot` to find the appropriate $\rho$ which sets the derivative of the log-likelihood to zero - it is not fast but if this is the true structure it will be better in some sense than an unstructured variance matrix. The $\rho$ parameter should be $>0$ and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.
 
 ```{r mlevar,warning=FALSE}
 # tolerance and maximum iterations are limited here to make the vignette compile faster
