@@ -139,7 +139,7 @@ SEXP
     SEXP ans;
     int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
       n = asInteger(ns), psqr;
-    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1, zero = 0;
+    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
 
     if (!isMatrix(scal) || !isReal(scal) || dims[0] != dims[1])
       error("'scal' must be a square, real matrix");
@@ -181,17 +181,14 @@ SEXP
                &(dims[1]), &info);
 
 
-      for (int i = 1; i < dims[0]; i++)
-        for (int k = 0; k < i; k++)
-          tmp[i + k * dims[0]] = tmp[k + i * dims[0]];
 
       F77_CALL(dpotrf)("U", &(dims[0]), tmp, &(dims[0]), &info);
-        if (info)
-          error("Inv Wishart matrix is not positive-definite");
+      if (info)
+        error("Inv Wishart matrix is not positive-definite");
 
-        for (int i = 0; i < dims[0]; i++)
-          for (int k = 0; k < dims[0]; k++)
-            ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
+      for (int i = 0; i < dims[0]; i++)
+        for (int k = 0; k < dims[0]; k++)
+          ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
     }
 
     PutRNGstate();
@@ -202,21 +199,21 @@ SEXP
 
 
 /**
-* Simulate a sample of random matrices from a Inverse Wishart distribution -
-*
-* @param ns Number of samples to generate
-* @param nuP Degrees of freedom
-* @param scal Positive-definite scale matrix
-*
-* @return
-*/
+ * Simulate a sample of random matrices from a Inverse Wishart distribution -
+ *
+ * @param ns Number of samples to generate
+ * @param nuP Degrees of freedom
+ * @param scal Positive-definite scale matrix
+ *
+ * @return
+ */
 SEXP
   rInvWishart(SEXP ns, SEXP nuP, SEXP scal)
   {
     SEXP ans;
     int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
       n = asInteger(ns), psqr;
-    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1, zero = 0;
+    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
 
     if (!isMatrix(scal) || !isReal(scal) || dims[0] != dims[1])
       error("'scal' must be a square, real matrix");
@@ -256,17 +253,17 @@ SEXP
       /* And inverting. Altered Feb 2018. */
       /* Original code from R stats: rWishart.c */
 
-               F77_CALL(dpotri)("U",&(dims[1]), tmp,
-                        &(dims[1]), &info);
+      F77_CALL(dpotri)("U",&(dims[1]), tmp,
+               &(dims[1]), &info);
 
 
-               for (int i = 1; i < dims[0]; i++)
-                 for (int k = 0; k < i; k++)
-                   tmp[i + k * dims[0]] = tmp[k + i * dims[0]];
+      for (int i = 1; i < dims[0]; i++)
+        for (int k = 0; k < i; k++)
+          tmp[i + k * dims[0]] = tmp[k + i * dims[0]];
 
-               for (int i = 0; i < dims[0]; i++)
-                 for (int k = 0; k < dims[0]; k++)
-                   ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
+      for (int i = 0; i < dims[0]; i++)
+        for (int k = 0; k < dims[0]; k++)
+          ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
     }
 
     PutRNGstate();
