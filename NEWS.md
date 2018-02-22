@@ -1,3 +1,8 @@
+# matrixdist 0.0.0.9923
+
+* Rewrote rInvCholWishart to fix a bug where it was not actually a Cholesky decomposition - while upper triangulart,
+tcrossprod() was InvWishart, not crossprod(). The method is a little slower since it involves computing rInvWishart and then taking the cholesky decomposition, but it is faster than doing it in R.
+
 # matrixdist 0.0.0.9922
  
 * Added LDA and QDA functions with predict() methods. These functions
