@@ -139,7 +139,7 @@ SEXP
     SEXP ans;
     int *dims = INTEGER(getAttrib(scal, R_DimSymbol)), info,
       n = asInteger(ns), psqr;
-    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1;
+    double *scCp, *ansp, *tmp, nu = asReal(nuP), one = 1, zero = 0;
 
     if (!isMatrix(scal) || !isReal(scal) || dims[0] != dims[1])
       error("'scal' must be a square, real matrix");
@@ -180,10 +180,17 @@ SEXP
 
       F77_CALL(dtrtri)("U", "N", &(dims[1]), tmp,
                &(dims[1]), &info);
+      F77_CALL(dsyrk)("U", "N", &(dims[1]), &(dims[1]),
+               &one, tmp, &(dims[1]),
+               &zero, ansj, &(dims[1]));
 
-      for (int i = 0; i < dims[0]; i++)
-        for (int k = 0; k < dims[0]; k++)
-          ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
+      for (int i = 1; i < dims[0]; i++)
+        for (int k = 0; k < i; k++)
+          ansj[i + k * dims[0]] = 0;
+
+      F77_CALL(dpotrf)("U", &(dims[0]), ansj, &(dims[0]), &info);
+        if (info)
+          error("Inv Wishart matrix is not positive-definite");
     }
 
     PutRNGstate();

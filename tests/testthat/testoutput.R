@@ -183,7 +183,7 @@ test_that("Equivalent outputs for different functions:", {
 
   expect_equal(sum(abs(A[lower.tri(A)])), 0)
   expect_equal(sum(abs(B[lower.tri(B)])), 0)
-  expect_equal(A %*% B, diag(5))
+  expect_equal(crossprod(A) %*% crossprod(B), diag(5))
   expect_equal(B, C)
 
   set.seed(20180221)
