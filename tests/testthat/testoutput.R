@@ -175,16 +175,23 @@ test_that("Equivalent outputs for different functions:", {
   -4.663386,
   tolerance = .000001)
   set.seed(20180211)
-  A <- rInvCholWishart(1, 10, diag(5))[, , 1]
+  A <- rInvCholWishart(1, 10, .5*diag(5))[, , 1]
   set.seed(20180211)
-  B <- rCholWishart(1, 10, diag(5))[, , 1]
+  B <- rCholWishart(1, 10, 2*diag(5))[, , 1]
   set.seed(20180211)
-  C <- chol(rWishart(1, 10, diag(5))[, , 1])
+  C <- chol(rWishart(1, 10, 2*diag(5))[, , 1])
 
   expect_equal(sum(abs(A[lower.tri(A)])), 0)
   expect_equal(sum(abs(B[lower.tri(B)])), 0)
   expect_equal(A %*% B, diag(5))
   expect_equal(B, C)
+
+  set.seed(20180221)
+  A <- rInvWishart(1,10,5*diag(5))[,,1]
+  set.seed(20180221)
+  B <- rWishart(1,10,.2*diag(5))[,,1]
+  expect_equal(A %*% B, diag(5))
+
   set.seed(20180219)
   A <-
     rmatrixnorm(40, mean = array(1, dim = c(2, 5)), V = ARgenerate(5, .8))
