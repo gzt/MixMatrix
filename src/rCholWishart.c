@@ -255,15 +255,24 @@ SEXP
       /* And inverting. Altered Feb 2018. */
       /* Original code from R stats: rWishart.c */
 
-      F77_CALL(dtrtri)("U", "N", &(dims[1]), tmp,
+     /* F77_CALL(dtrtri)("U", "N", &(dims[1]), tmp,
                &(dims[1]), &info);
       F77_CALL(dsyrk)("U", "N", &(dims[1]), &(dims[1]),
                &one, tmp, &(dims[1]),
                &zero, ansj, &(dims[1]));
 
+       */
+               F77_CALL(dpotri)("U",&(dims[1]), tmp,
+                        &(dims[1]), &info);
+
+
                for (int i = 1; i < dims[0]; i++)
                  for (int k = 0; k < i; k++)
-                   ansj[i + k * dims[0]] = ansj[k + i * dims[0]];
+                   tmp[i + k * dims[0]] = tmp[k + i * dims[0]];
+
+               for (int i = 0; i < dims[0]; i++)
+                 for (int k = 0; k < dims[0]; k++)
+                   ansj[i + k * dims[0]] = tmp[i + k * dims[0]];
     }
 
     PutRNGstate();
