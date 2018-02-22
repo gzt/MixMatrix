@@ -10,16 +10,16 @@ test_that("Testing helper functions:", {
   expect_equal((p * (p - 1) / 4 * log(pi) + lgamma(5 - 0) + lgamma(5 - .5)), as.numeric(lmvgamma(5, 2)))
   expect_equal((3 * (3 - 1) / 4 * log(pi) + lgamma(5 - 0) + lgamma(5 - .5) + lgamma(5 - 1)),
                as.numeric(lmvgamma(5, 3)))
-  A = diag(5) + 1
-  B = posmatsqrt(A)
-  C = posmatsqrtinv(A)
-
-  expect_equal(B %*% C, diag(5))
-  expect_equal(B, t(B))
-  expect_equal(C, t(C))
-  expect_equal(A, (B %*% B))
+  # A = diag(5) + 1
+  # B = posmatsqrt(A)
+  # C = posmatsqrtinv(A)
+  #
+  # expect_equal(B %*% C, diag(5))
+  # expect_equal(B, t(B))
+  # expect_equal(C, t(C))
+  # expect_equal(A, (B %*% B))
   C = matrix(c(1, .5, .25, .5, 1, .5, .25, .5, 1), nrow = 3)
-  expect_equal(toepgenerate(3, .5), C)
+  expect_equal(ARgenerate(3, .5), C)
 })
 
 test_that("Equivalent outputs for different options:", {
@@ -150,7 +150,7 @@ test_that("Equivalent outputs for different functions:", {
   dim.one = c(1, 6)
   dim.two = c(6, 1)
   x = array(rep(1, 6), dim = c(1, 6))
-  U.two = V.one = toepgenerate(6, .7)
+  U.two = V.one = ARgenerate(6, .7)
   df = 5
 
   #dmvt(x,sigma = U.two,df = 5)
@@ -187,7 +187,7 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(B, C)
   set.seed(20180219)
   A <-
-    rmatrixnorm(40, mean = array(1, dim = c(2, 5)), V = toepgenerate(5, .8))
+    rmatrixnorm(40, mean = array(1, dim = c(2, 5)), V = ARgenerate(5, .8))
   B <- MLmatrixnorm(A, row.mean = T)
   expect_equal(B$U[1, 1], 1)
   expect_equal(B$V[1, 1], 1)

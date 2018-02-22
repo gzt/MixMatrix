@@ -22,7 +22,7 @@ Determinant for an CS covariance matrix.
 }
 \examples{
 \dontrun{
-CSdet(toepgenerate(5,.4,deriv=TRUE))
+CSdet(ARgenerate(5,.4,deriv=TRUE))
 }
 
 }

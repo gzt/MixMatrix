@@ -23,7 +23,7 @@ Determinant for an AR(1) covariance matrix.
 }
 \examples{
 \dontrun{
-ARdet(toepgenerate(5,.4,deriv=TRUE))
+ARdet(ARgenerate(5,.4,deriv=TRUE))
 }
 
 }

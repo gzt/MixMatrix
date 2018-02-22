@@ -24,7 +24,7 @@ internal function to be used with known safe input.
 }
 \examples{
 \dontrun{
-A = toepgenerate(5,.9)
+A = ARgenerate(5,.9)
 symm.check(A)
 A[1,2] = 5
 symm.check(A)}

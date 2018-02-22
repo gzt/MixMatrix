@@ -20,12 +20,14 @@ Computes the inverse of a positive symmetric square root  matrix for a
 }
 \examples{
 A = diag(5) + 1
+\dontrun{
 B = posmatsqrt(A)
 C = posmatsqrtinv(A)
 sum(abs(B - t(B)))
 sum(abs(A - B \%*\% B))
-B \%*\% C
+B \%*\% C}
 }
 \seealso{
 \code{\link{posmatsqrt}}
 }
+\keyword{internal}

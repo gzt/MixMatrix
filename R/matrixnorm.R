@@ -168,7 +168,7 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
 #'
-#' @export
+#' @keywords internal
 #'
 #'
 #' @examples

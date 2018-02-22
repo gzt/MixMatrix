@@ -19,11 +19,14 @@ Computes a positive symmetric square root  matrix for a
    t-distribution.
 }
 \examples{
+\dontrun{
 A = diag(5) + 1
 B = posmatsqrt(A)
 sum(abs(B - t(B)))
 sum(abs(A - B \%*\% B))
 }
+}
 \seealso{
 \code{\link{posmatsqrtinv}}
 }
+\keyword{internal}

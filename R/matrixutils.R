@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#' toepgenerate(6,.9)
-toepgenerate <- function(n, rho) {
+#' ARgenerate(6,.9)
+ARgenerate <- function(n, rho) {
   if (n <= 1)
     stop("n must be greater than 1.")
   if (rho >= 1)
@@ -75,7 +75,7 @@ CSgenerate <- function(n,rho) {
 #'
 #' @examples
 #' \dontrun{
-#' A = toepgenerate(5,.9)
+#' A = ARgenerate(5,.9)
 #' symm.check(A)
 #' A[1,2] = 5
 #' symm.check(A)}
@@ -106,7 +106,7 @@ symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
 #'
 varmatgenerate <- function(n, rho, variance) {
   if (variance == "I" || variance == "independence" || variance == "Independence") variance = "I"
-  if (variance == "AR(1)") return(toepgenerate(n,rho))
+  if (variance == "AR(1)") return(ARgenerate(n,rho))
   if (variance == "CS") return(CSgenerate(n,rho))
   if (variance == "I") return(diag(n))
   else stop("Bad covariance structure input.", variance)
@@ -171,7 +171,7 @@ varinv <- function(n, rho, deriv, variance){
 #'
 #' @examples
 #' \dontrun{
-#' ARdet(toepgenerate(5,.4,deriv=TRUE))
+#' ARdet(ARgenerate(5,.4,deriv=TRUE))
 #' }
 #'
 ARdet <- function(n, rho, deriv = FALSE) {
@@ -194,7 +194,7 @@ ARdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' CSdet(toepgenerate(5,.4,deriv=TRUE))
+#' CSdet(ARgenerate(5,.4,deriv=TRUE))
 #' }
 #'
 CSdet <- function(n, rho, deriv = FALSE) {
@@ -276,14 +276,16 @@ invCS <- function(n, rho, deriv = FALSE){
 #'
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
-#' @export
+#' @keywords internal
 #' @seealso \code{\link{posmatsqrtinv}}
 #'
 #' @examples
+#' \dontrun{
 #' A = diag(5) + 1
 #' B = posmatsqrt(A)
 #' sum(abs(B - t(B)))
 #' sum(abs(A - B %*% B))
+#' }
 posmatsqrt <- function(A) {
   # this isn't the fastest way and if you have to do this a lot find a
   # better way returns symmetric square root of A if it exists: B %*% B = A
@@ -309,16 +311,17 @@ posmatsqrt <- function(A) {
 #'
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
-#' @export
+#' @keywords internal
 #' @seealso \code{\link{posmatsqrt}}
 #'
 #' @examples
 #' A = diag(5) + 1
+#' \dontrun{
 #' B = posmatsqrt(A)
 #' C = posmatsqrtinv(A)
 #' sum(abs(B - t(B)))
 #' sum(abs(A - B %*% B))
-#' B %*% C
+#' B %*% C}
 posmatsqrtinv <- function(A) {
   # this isn't the fastest way and if you have to do this a lot find a
   # better way returns symmetric square root of A if it exists: B %*% B = A
