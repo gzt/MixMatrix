@@ -184,49 +184,6 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   }
 }
 
-#' lmvgamma
-#'
-#' @description A special mathematical function related to the gamma function,
-#'     generalized for multivariate gammas.
-#'
-#' @param x non-negative numeric vector, matrix, or array
-#' @param p positive integer, dimension of a square matrix
-#'
-#' @return log of multivariate gamma for each entry of x. For non-log variant,
-#'     see mvgamma.
-#'
-#' @seealso \code{\link{gamma}} and \code{\link{lgamma}}
-#'
-#' @useDynLib matrixdist
-#' @export
-#'
-#' @examples
-#' lgamma(1:12)
-#' lmvgamma(1:12,1)
-#' mvgamma(1:12,1)
-#' gamma(1:12)
-lmvgamma <- function(x, p) {
-  # p only makes sense as an integer but not testing that. x *could* be
-  # less than zero - same domain as gamma function making sure that object
-  # returned is same shape as object passed
-  if (!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
-  dims <- if (is.vector(x))
-    length(x) else dim(as.array(x))
-  if (p < 1)
-    stop("p must be greater than or equal to 1. p = ", p)
-  if (any(x <= 0))
-    stop("x must be greater than 0. x = ", x)
-  #    result <- (p * (p - 1)/4) * log(pi) +
-  #       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
-  result <- .Call("lmvgamma", as.numeric(x), as.integer(p), PACKAGE = "matrixdist")
-
-  return(array(result, dim = dims))
-}
-
-#' @describeIn lmvgamma Multivariate gamma function.
-#' @export
-mvgamma <- function(x, p) exp(lmvgamma(x, p))
-
 
 #' Distribution functions for matrix variate inverted t-distributions
 #'

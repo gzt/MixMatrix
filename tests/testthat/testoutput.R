@@ -181,6 +181,7 @@ test_that("Equivalent outputs for different functions:", {
   set.seed(20180211)
   C <- chol(rWishart(1, 10, 2*diag(5))[, , 1])
 
+
   expect_equal(sum(abs(A[lower.tri(A)])), 0)
   expect_equal(sum(abs(B[lower.tri(B)])), 0)
   expect_equal(crossprod(A) %*% crossprod(B), diag(5))
@@ -191,6 +192,8 @@ test_that("Equivalent outputs for different functions:", {
   set.seed(20180221)
   B <- rWishart(1,10,.2*diag(5))[,,1]
   expect_equal(A %*% B, diag(5))
+
+  expect_equal(dWishart(diag(5), 10, 5*diag(5)), dInvWishart(diag(5), 10, .2*diag(5)))
 
   set.seed(20180219)
   A <-

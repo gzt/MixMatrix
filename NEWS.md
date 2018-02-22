@@ -1,3 +1,9 @@
+# matrixdist 0.0.0.9924
+
+* Wrote density functions for the Wishart and InvWishart distributions. Broke the Wishart functions and 
+mvgamma functions into a separate file just for them as they are all related and I may break them into 
+their own package.
+
 # matrixdist 0.0.0.9923
 
 * Rewrote rInvCholWishart to fix a bug where it was not actually a Cholesky decomposition - while upper triangulart,
