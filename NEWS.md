@@ -1,3 +1,8 @@
+# matrixdist 0.0.0.9922
+ 
+* Added LDA and QDA functions with predict() methods. These functions
+  are relatively fragile.
+
 # matrixdist 0.0.0.9921
 
 * Added support for using IID structure for covariance matrices
