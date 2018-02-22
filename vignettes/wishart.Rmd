@@ -12,14 +12,14 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = ""
+  comment = "##"
 )
 ```
 The `stats` implementation of `rWishart` is in C and is very fast. It is often the case that we do not want a draw from the Wishart distribution, but rather from the inverse of it or from the Cholesky decomposition of a draw from the Wishart distribution. Or even from the inverse of the Cholesky decomposition of a draw from the Wishart distribution. Funnily enough (if you have a weird sense of humor), when you inspect the [source code](https://github.com/SurajGupta/r-source/blob/master/src/library/stats/src/rWishart.c) for the `rWishart` distribution, it generates the Cholesky decomposition and then multiplies it out. Meanwhile, drawing from the `rWishart` and then inverting or doing a Cholesky decomposition or whatever in R is just slow -- comparatively.
 
 This suggests some obvious efficiencies: perhaps, if we would rather have the Cholesky decomposition of the Wishart random matrix, we could beg the computer to give that to us in the first place? And perhaps the computer would deign to give it to us? Well, some wishes come true.
 
-```{r chol}
+```{r chol, cache = TRUE}
 library('matrixdist')
 set.seed(20180220)
 A <- rWishart(1,10,5*diag(4))[,,1]

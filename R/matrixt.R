@@ -98,14 +98,14 @@ rmatrixt <- function(n, df, mean,
          min(diag(cholV)))
   }
 
-  #solveU = chol2inv(chol.default(U))
+  solveU = chol2inv(chol.default(U))
 
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
   # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
 
-  cholU <- rInvCholWishart(n, df + dims[1] - 1,U)
+  cholU <- rInvCholWishart(n, df + dims[1] - 1,solveU)
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
