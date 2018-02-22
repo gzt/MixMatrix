@@ -41,8 +41,8 @@ If $X \sim \textrm{W}(\nu,\Sigma)$. Then we define the Inverse Wishart as $Y = X
 So here is what happens with the results of the above:
 
 ```{r results}
-A %*% B - diag(4)
-C %*% D - diag(4)
+A %*% B 
+C %*% D 
 tcrossprod(D) %*% A
 crossprod(C) %*% B
 ```
