@@ -2,6 +2,7 @@
  
 * Added LDA and QDA functions with predict() methods. These functions
   are relatively fragile.
+* Marked some functions as internal to clean up the NAMESPACE
 
 # matrixdist 0.0.0.9921
 
