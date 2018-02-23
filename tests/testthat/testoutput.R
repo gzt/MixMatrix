@@ -180,6 +180,15 @@ test_that("Equivalent outputs for different functions:", {
                 dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE))
   expect_equal(dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE),
                -7.457784, tolerance = 1e-6)
+
+  set.seed(20180222)
+  A <- rWishart(1,7,diag(6))[,,1]
+  expect_equal(dmatrixt(t(rep(1,6)), df = 5, U = 5, V = A, log = TRUE),
+               dmatrixt((rep(1,6)),df = 5,V = 5,U = A, log = TRUE))
+  expect_equal(dmatrixt(t(rep(1,6)), df = 5, U = 5, V = A, log = TRUE),
+          -16.07342, tolerance = 1e-6)
+
+
   set.seed(20180211)
   A <- rInvCholWishart(1, 10, .5*diag(5))[, , 1]
   set.seed(20180211)
