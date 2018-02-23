@@ -3,7 +3,7 @@
 \name{lmvgamma}
 \alias{lmvgamma}
 \alias{mvgamma}
-\title{lmvgamma}
+\title{Multivariate Gamma Function}
 \usage{
 lmvgamma(x, p)
 
@@ -16,7 +16,7 @@ mvgamma(x, p)
 }
 \value{
 log of multivariate gamma for each entry of x. For non-log variant,
-    see mvgamma.
+    use \code{mvgamma}.
 }
 \description{
 A special mathematical function related to the gamma function,

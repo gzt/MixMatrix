@@ -20,6 +20,8 @@ test_that("Testing helper functions:", {
   # expect_equal(A, (B %*% B))
   C = matrix(c(1, .5, .25, .5, 1, .5, .25, .5, 1), nrow = 3)
   expect_equal(ARgenerate(3, .5), C)
+  expect_equal(digamma(1:100),mvdigamma(1:100,1))
+
 })
 
 test_that("Equivalent outputs for different options:", {
@@ -174,6 +176,10 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(dmatrixt(x, df, U = U.one, V = df * V.one, log = T),
   -4.663386,
   tolerance = .000001)
+  expect_equal( dmatrixt(t(rep(1,5)),df = 5,U = 5,log = TRUE),
+                dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE))
+  expect_equal(dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE),
+               -7.457784, tolerance = 1e-6)
   set.seed(20180211)
   A <- rInvCholWishart(1, 10, .5*diag(5))[, , 1]
   set.seed(20180211)

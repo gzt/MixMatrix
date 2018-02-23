@@ -186,7 +186,7 @@ dInvWishart <- function(x, df, Sigma, log = TRUE){
 }
 
 
-#' lmvgamma
+#' Multivariate Gamma Function
 #'
 #' @description A special mathematical function related to the gamma function,
 #'     generalized for multivariate gammas.
@@ -195,7 +195,7 @@ dInvWishart <- function(x, df, Sigma, log = TRUE){
 #' @param p positive integer, dimension of a square matrix
 #'
 #' @return log of multivariate gamma for each entry of x. For non-log variant,
-#'     see mvgamma.
+#'     use \code{mvgamma}.
 #'
 #' @seealso \code{\link{gamma}} and \code{\link{lgamma}}
 #'
@@ -218,8 +218,7 @@ lmvgamma <- function(x, p) {
     stop("p must be greater than or equal to 1. p = ", p)
   if (any(x <= 0))
     stop("x must be greater than 0. x = ", x)
-  #    result <- (p * (p - 1)/4) * log(pi) +
-  #       sapply(x, function(y) sum(lgamma(y + (1 - 1:p)/2 )))
+
   result <- .Call("lmvgamma", as.numeric(x), as.integer(p), PACKAGE = "matrixdist")
 
   return(array(result, dim = dims))
@@ -229,7 +228,32 @@ lmvgamma <- function(x, p) {
 #' @export
 mvgamma <- function(x, p) exp(lmvgamma(x, p))
 
+#' Multivariate Digamma
+#'
+#' @description A special mathematical function related to the gamma function,
+#'     generalized for multivariate distributions.
+#'     The digamma is the derivative of the gamma.
+#'
+#' @param x non-negative numeric vector, matrix, or array
+#' @param p positive integer, dimension of a square matrix
+#' @return vector of values of multivariate digamma function.
+#' @export
+#'
+#' @examples
+#' digamma(1:10)
+#' mvdigamma(1:10,1)
+mvdigamma <- function(x,p){
+  if (!all(is.numeric(x),is.numeric(p))) stop("Non-numeric input.")
+  dims <- if (is.vector(x))
+    length(x) else dim(as.array(x))
+  if (p < 1)
+    stop("p must be greater than or equal to 1. p = ", p)
+  if (any(x <= 0))
+    stop("x must be greater than 0. x = ", x)
 
+  .Call("mvdigamma",as.numeric(x),as.integer(p),PACKAGE = "matrixdist")
+
+}
 
 
 .onUnload <- function(libpath) {

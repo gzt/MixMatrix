@@ -108,7 +108,7 @@ SEXP
                &one, scCp, dims, tmp, dims);
 
       /* Here we make the main change by omitting the A * A**T step */
-      /* Original code from R stats: rWishart.c Altered Feb 2018. l*/
+      /* Original code from R stats: rWishart.c Altered Feb 2018. */
 
       for (int i = 0; i < dims[0]; i++)
         for (int k = 0; k < dims[0]; k++)
@@ -257,7 +257,6 @@ SEXP
       F77_CALL(dpotri)("U",&(dims[1]), tmp,
                &(dims[1]), &info);
 
-
       for (int i = 1; i < dims[0]; i++)
         for (int k = 0; k < i; k++)
           tmp[i + k * dims[0]] = tmp[k + i * dims[0]];
@@ -319,3 +318,54 @@ SEXP lmvgamma(SEXP x, SEXP p){
   UNPROTECT(1);
   return ans;
 }
+
+
+
+/**
+ * Compute multivariate digamma function
+ *
+ * @param x positive real input
+ * @param p dimensions, positive integer
+ *
+ * @return
+ */
+double c_mvdigamma (double x, int p) {
+  int i;
+  double ans = 0;
+  if (p < 1)
+    error("p must be greater than or equal to 1.");
+  if (x <= 0)
+    error("x must be greater than 0.");
+  ans =0.0;
+  for (i = 0; i < p; i++){
+    ans = ans + (digamma(x  - (i/2.0) ));
+  }
+  return ans;
+}
+
+
+
+/**
+ * Compute multivariate digamma function
+ *
+ * @param x positive real input
+ * @param p dimensions, positive integer
+ *
+ * @return
+ */
+SEXP mvdigamma(SEXP x, SEXP p){
+  int n = length(x);
+  int i = 0;
+  SEXP ans = PROTECT(allocVector(REALSXP, n));
+  double *px, *pout;
+  px = REAL(x);
+  pout = REAL(ans);
+  for(i = 0 ; i < n ; i++){
+    if (px[i] <= 0)
+      error("x must be greater than 0.");
+    pout[i] = c_mvdigamma(px[i],asInteger(p));
+  }
+  UNPROTECT(1);
+  return ans;
+}
+
