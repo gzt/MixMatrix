@@ -1,3 +1,9 @@
+# matrixdist 0.0.0.9925
+ 
+* add multivariate digamma 
+* add a couple tests for matrixt
+* new plan: add fitting for t-distribution, LDA for t-distribution?
+
 # matrixdist 0.0.0.9924
 
 * Wrote density functions for the Wishart and InvWishart distributions. Broke the Wishart functions and 
