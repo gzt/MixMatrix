@@ -1,8 +1,8 @@
 Package: matrixdist
 Type: Package
 Title: Functions for Matrix Distributions
-Version: 0.0.0.9924
-Date: 2018-02-20
+Version: 0.0.0.9925
+Date: 2018-02-22
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre")),  
           person("R Core Team", role = "ctb", comment="some code based on R stats functions"))
