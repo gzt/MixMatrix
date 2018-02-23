@@ -8,3 +8,4 @@ src/rCholWishart.o
 src/init.o
 *.o
 *.so
+inst/doc
