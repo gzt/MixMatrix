@@ -1,6 +1,6 @@
 ---
 title: "Discriminant Analysis for Matrix Variate Distributions"
-author: "Vignette Author"
+author: "Geoffrey Thompson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -25,7 +25,7 @@ data frames or the formula interface directly, which is reasonable, as there is 
 clear way to make that work for a collection of matrices - anybody using it would have to roll their own
 solutions anyway).
 
-```{r generatedata, cache=TRUE}
+```{r generatedata}
 set.seed(20180222)
 library('matrixdist')
 A <- rmatrixnorm(30, mean = matrix(0, nrow=2, ncol=3))
@@ -38,7 +38,7 @@ matlda <- matrixlda(x = ABC,grouping = groups, prior = prior)
 matqda <- matrixqda(x = ABC,grouping = groups, prior = prior)
 ```
 
-This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple linear/quadratic 
+This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple regularized linear/quadratic 
 discriminant function based on the likelihood function (see previous post for details). 
 As such, the reported posteriors are based on the normal distribution.
 
@@ -49,7 +49,7 @@ It is possible to set variance or mean restrictions using the `...` argument. Th
 The `predict` method for these objects works in much the same way as for `lda` or `qda` objects: provide the function and the new data, then it will return the MAP class assignments and the posterior. If no new data is 
 provided, it will attempt to run it on the original data if it is available in the environment.
 
-```{r predict, cache=TRUE}
+```{r predict}
 ABC[,,c(1,31,61)] # true class memberships: A, B, C
 
 predict(matlda, ABC[,,c(1,31,61)])
