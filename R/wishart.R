@@ -44,11 +44,13 @@ rCholWishart <- function(n, df, Sigma){
 
 
 
-#' Inverse of Cholesky of Random Wishart Distributed Matrices
+#' Cholesky Factor of Random Inverse Wishart Distributed Matrices
 #'
-#' @description Generate n random matrices, distributed according to the Inverse of  Cholesky
-#'     decomposition of a Wishart distribution with parameters \code{Sigma} and
-#'     \code{df}, \eqn{W_p(Sigma, df)}.
+#' @description Generate n random matrices, distributed according
+#'    to the Cholesky factor of an inverse Wishart distribution with
+#'    parameters \code{Sigma} and \code{df}, \eqn{W_p(Sigma, df)}.
+#'    Note there are different ways of parameterizing the Inverse
+#'    Wishart distribution, so check which one you need.
 #'
 #' @param n integer sample size.
 #' @param df numeric parameter, "degrees of freedom".
@@ -78,16 +80,18 @@ rInvCholWishart <- function(n, df, Sigma){
   .Call("rInvCholWishart", n, df, Sigma, PACKAGE = "matrixdist")
 }
 
-#' Inverse Random Wishart Distributed Matrices
+#' Random Inverse Wishart Distributed Matrices
 #'
-#' @description Generate n random matrices, distributed according to the Inverse Wishart distribution with parameters \code{Sigma} and
-#'     \code{df}, \eqn{W_p(Sigma, df)}.
+#' @description Generate n random matrices, distributed according
+#'     to the inverse Wishart distribution with parameters \code{Sigma} and
+#'     \code{df}, \eqn{W_p(Sigma, df)}. Note there are different ways
+#'     of parameterizing this distribution, so check which one you need.
 #'
 #' @param n integer sample size.
 #' @param df numeric parameter, "degrees of freedom".
 #' @param Sigma positive definite \eqn{(p * p)} "scale" matrix, the matrix parameter of the distribution.
 #'
-#' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a realization of the Inverse Wishart distribution \eqn{IW_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function. If \eqn{X \sim IW_p(Sigma, df)} then \eqn{X^{-1} \sim W_p(Sigma^{-1}, df)}
+#' @return a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a realization of the inverse Wishart distribution \eqn{IW_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function. If \eqn{X \sim IW_p(Sigma, df)} then \eqn{X^{-1} \sim W_p(Sigma^{-1}, df)}
 #'
 #' @seealso \code{\link{rWishart}} and \code{\link{rCholWishart}}
 #' @useDynLib matrixdist
@@ -123,7 +127,8 @@ rInvWishart <- function(n, df, Sigma){
 #'
 #' If \eqn{X} is distributed as a \eqn{p * p} Wishart random variable with \eqn{n > p} degrees of
 #' freedom and a covariance matrix \eqn{Sigma}, then \eqn{X^{-1} = Y} is distributed as an
-#' Inverse Wishart with \eqn{n} degrees of freedom and a covarariance matrix \eqn{Sigma^{-1}}.
+#' inverse Wishart with \eqn{n} degrees of freedom and a covarariance matrix \eqn{Sigma^{-1}}. Note there are different ways of parameterizing the
+#'    inverse Wishart distribution, check which one you need.
 #'
 #' @param x positive definite \eqn{p * p} observation for density estimation
 #' @param df numeric parameter, "degrees of freedom".

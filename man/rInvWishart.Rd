@@ -2,7 +2,7 @@
 % Please edit documentation in R/wishart.R
 \name{rInvWishart}
 \alias{rInvWishart}
-\title{Inverse Random Wishart Distributed Matrices}
+\title{Random Inverse Wishart Distributed Matrices}
 \usage{
 rInvWishart(n, df, Sigma)
 }
@@ -14,11 +14,13 @@ rInvWishart(n, df, Sigma)
 \item{Sigma}{positive definite \eqn{(p * p)} "scale" matrix, the matrix parameter of the distribution.}
 }
 \value{
-a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a realization of the Inverse Wishart distribution \eqn{IW_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function. If \eqn{X \sim IW_p(Sigma, df)} then \eqn{X^{-1} \sim W_p(Sigma^{-1}, df)}
+a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a realization of the inverse Wishart distribution \eqn{IW_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function. If \eqn{X \sim IW_p(Sigma, df)} then \eqn{X^{-1} \sim W_p(Sigma^{-1}, df)}
 }
 \description{
-Generate n random matrices, distributed according to the Inverse Wishart distribution with parameters \code{Sigma} and
-    \code{df}, \eqn{W_p(Sigma, df)}.
+Generate n random matrices, distributed according
+    to the inverse Wishart distribution with parameters \code{Sigma} and
+    \code{df}, \eqn{W_p(Sigma, df)}. Note there are different ways
+    of parameterizing this distribution, so check which one you need.
 }
 \examples{
 set.seed(20180221)

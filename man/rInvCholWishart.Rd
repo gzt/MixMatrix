@@ -2,7 +2,7 @@
 % Please edit documentation in R/wishart.R
 \name{rInvCholWishart}
 \alias{rInvCholWishart}
-\title{Inverse of Cholesky of Random Wishart Distributed Matrices}
+\title{Cholesky Factor of Random Inverse Wishart Distributed Matrices}
 \usage{
 rInvCholWishart(n, df, Sigma)
 }
@@ -17,9 +17,11 @@ rInvCholWishart(n, df, Sigma)
 a numeric array, say R, of dimension \eqn{p * p * n}, where each \code{R[,,i]} is a Cholesky decomposition of a realization of the Wishart distribution \eqn{W_p(Sigma, df)}. Based on a modification of the existing code for the \code{rWishart} function
 }
 \description{
-Generate n random matrices, distributed according to the Inverse of  Cholesky
-    decomposition of a Wishart distribution with parameters \code{Sigma} and
-    \code{df}, \eqn{W_p(Sigma, df)}.
+Generate n random matrices, distributed according
+   to the Cholesky factor of an inverse Wishart distribution with
+   parameters \code{Sigma} and \code{df}, \eqn{W_p(Sigma, df)}.
+   Note there are different ways of parameterizing the Inverse
+   Wishart distribution, so check which one you need.
 }
 \examples{
 
