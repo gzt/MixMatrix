@@ -97,20 +97,21 @@ rmatrixt <- function(n, df, mean,
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholV)))
   }
-
-  solveU = chol2inv(chol.default(U))
+  # this is not necessary, the correct input is
+  # U, not U^-1
+  #solveU = chol2inv(chol.default(U))
 
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
   # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
 
-  cholU <- rInvCholWishart(n, df + dims[1] - 1,solveU)
+  cholU <- rInvCholWishart(n, df + dims[1] - 1,U)
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
     # just changed: pretty sure this is supposed to be t(chol(...))
-    result[ , , i] <- mean + (crossprod(cholU[ , , i] , mat[ , , i])) %*% (cholV)
+    result[ , , i] <- mean + (crossprod(cholU[ , , i], mat[ , , i])) %*% (cholV)
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
