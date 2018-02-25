@@ -11,7 +11,8 @@ Description: Sampling and density for matrix variate normal, t, and inverted
           including some restrictions on the parameters.
 Depends: R (>= 3.0.0), base, stats
 Suggests: knitr, rmarkdown,
-    testthat
+    testthat,
+    covr
 VignetteBuilder: knitr
 LazyData: true
 URL: http://github.com/gzt/matrixdist/
