@@ -181,8 +181,8 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE),
                -7.457784, tolerance = 1e-6)
 
-  expect_equal( dmatrixinvt(t(rep(.5,5)),df = 10,U = 1,log = TRUE),
-                 dmatrixinvt((rep(.5,5)),df = 10,V = 1,log = TRUE))
+  expect_equal( dmatrixinvt(t(rep(.5,5)),df = 10,U = 5,log = TRUE),
+                 dmatrixinvt((rep(.5,5)),df = 10,V = 5,log = TRUE))
 
   set.seed(20180222)
   A <- rWishart(1,7,diag(6))[,,1]
