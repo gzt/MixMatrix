@@ -229,3 +229,26 @@ test_that("Equivalent outputs for different functions:", {
   C <- MLmatrixnorm(A, col.variance = "I")
   expect_equal(C$V[1,4],0)
 })
+
+
+test_that("Output of LDA/QDA/Predict", {
+  A <- rmatrixnorm(30, mean = matrix(0, nrow = 2, ncol = 2))
+  B <- rmatrixnorm(30, mean = matrix(1, nrow = 2, ncol = 2))
+  C <- array(c(A,B), dim = c(2,2,60))
+  D <- array(0, dim = c(2,2,30))
+  groups <- c(rep(1,30),rep(2,30))
+  groups.empty <- factor(rep("1",60), levels = c("1","2"))
+  priors=c(.5,.5)
+  ldamodel <- matrixlda(C, groups, priors)
+  qdamodel <- matrixqda(C, groups, priors)
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow=3,ncol=2)))
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow=2,ncol=3)))
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow=3,ncol=2)))
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow=2,ncol=3)))
+
+  expect_equal(sum(predict(ldamodel, newdata = matrix(0,nrow=2,ncol=2))$posterior),1)
+
+  expect_equal(sum(predict(qdamodel, newdata = matrix(0,nrow=2,ncol=2))$posterior),1)
+
+
+})

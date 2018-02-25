@@ -450,6 +450,57 @@ test_that("Testing bad matrix dimension input", {
   expect_error(rInvCholWishart(1, 10, matrix(c(3, 1, 1, 1, 1, 3), nrow =
                                                2)))
 
+})
+
+test_that("Testing bad input to LDA/QDA", {
+  A <- rmatrixnorm(30, mean = matrix(0, nrow = 2, ncol = 2))
+  B <- rmatrixnorm(30, mean = matrix(1, nrow = 2, ncol = 2))
+  C <- array(c(A,B), dim = c(2,2,60))
+  D <- array(0, dim = c(2,2,30))
+  E <- array(c(A,D), dim = c(2,2,60))
+
+  groups <- c(rep(1,30),rep(2,30))
+  groups.empty <- factor(rep("1",60), levels = c("1","2"))
+  priors=c(.5,.5)
+  expect_error(
+    matrixlda(c(C), grouping = c(rep(1,120),rep(2,120)), prior = priors)
+  )
+  expect_error(
+    matrixlda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors)
+  )
+  expect_error(
+    matrixlda(C, grouping = groups, prior = c(.5,.4))
+  )
+  expect_error(
+    matrixlda(C, grouping = groups, prior = c(.4,.4,.2))
+  )
+  expect_warning(
+    matrixlda(C, grouping = groups.empty, prior = priors)
+  )
+  expect_error(
+    matrixlda(E, grouping = groups, prior = priors)
+  )
+
+  expect_error(
+    matrixqda(c(C), grouping = c(rep(1,120),rep(2,120)), prior = priors)
+  )
+  expect_error(
+    matrixqda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors)
+  )
+  expect_error(
+    matrixqda(C, grouping = groups, prior = c(.5,.4))
+  )
+  expect_error(
+    matrixqda(C, grouping = groups, prior = c(.4,.4,.2))
+  )
+  expect_warning(
+    matrixqda(C, grouping = groups.empty, prior = priors)
+  )
+  expect_error(
+    matrixqda(E, grouping = groups, prior = priors)
+  )
+
+
 
 })
 

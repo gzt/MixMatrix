@@ -218,7 +218,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
       x <- array(unlist(newdata),
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
-
+    if(length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 
 
     if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
@@ -477,6 +477,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       x <- array(unlist(newdata),
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
+
+    if(length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
+
     if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
       stop("wrong column dimension of matrices")
     if (nrow(x[, , 1]) != nrow(object$means[, , 1]))
@@ -498,15 +501,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    solveU = array(dim = c(p, p, n))
-    solveV = array(dim = c(q, q, n))
+    solveU = array(dim = c(p, p, ng))
+    solveV = array(dim = c(q, q, ng))
     for (j in seq(ng)) {
       solveV[, , j] = solve(object$V[, , j])
       solveU[, , j] = solve(object$U[, , j])
     }
     VMUM = numeric(ng)
     detfactor =  numeric(ng)
-    VMU = array(dim = c(q, p, n))
+    VMU = array(dim = c(q, p, ng))
     for (j in seq(ng)) {
       VMUM[j] = mattrace((-.5) * solveV[, , j] %*% t(object$means[, , j]) %*% solveU[, , j] %*% object$means[, , j])
       VMU[, , j] = solveV[, , j] %*% t(object$means[, , j]) %*% solveU[, , j]
@@ -514,7 +517,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     }
 
     for (i in seq(n)) {
-      Xi = x[, , i]
+      Xi = (x[, , i])
       for (j in seq(ng)) {
         dist[i, j] = mattrace(-.5 * solveV[, , j] %*% t(Xi) %*% solveU[, , j] %*% Xi) +
           mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j]) +
