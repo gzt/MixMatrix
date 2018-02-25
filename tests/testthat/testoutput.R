@@ -211,8 +211,8 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(dWishart(diag(5), 10, 5*diag(5)), dInvWishart(diag(5), 10, .2*diag(5)))
 
   set.seed(20180219)
-  A <-
-    rmatrixnorm(40, mean = array(1, dim = c(2, 5)), V = ARgenerate(5, .8))
+  A <- rmatrixnorm(40, mean = array(1, dim = c(4, 5)),
+                U = CSgenerate(4,.2), V = ARgenerate(5, .8))
   B <- MLmatrixnorm(A, row.mean = T)
   expect_equal(B$U[1, 1], 1)
   expect_equal(B$V[1, 1], 1)
@@ -222,6 +222,8 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(C$mean[1, 1], C$mean[2, 1])
   C <- MLmatrixnorm(A, col.variance = "CS")
   expect_equal(C$V[1,2],C$V[1,5])
+  C <- MLmatrixnorm(A, row.variance = "AR(1)")
+  expect_equal(C$U[2,1],C$U[3,2])
   C <- MLmatrixnorm(A, row.variance = "I")
   expect_equal(C$U[1,2],0)
   C <- MLmatrixnorm(A, col.variance = "I")
