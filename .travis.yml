@@ -4,6 +4,9 @@ language: R
 r_packages:
   - covr
 sudo: false
+os:
+  - linux
+  - osx
 cache: packages
 warnings_are_errors: true
 notifications:
