@@ -1,5 +1,8 @@
 # matrixdist
 
+ [![Travis-CI Build Status](https://travis-ci.org/gzt/matrixdist.svg?branch=master)](https://travis-ci.org/gzt/matrixdist)
+ [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/matrixdist?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/matrixdist)
+
 A package for matrix variate distributions, including the normal, *t*, and inverted *t*. 
 Currently with sampling and density functions for those distributions as well as methods for 
 parameter estimation for matrix variate normals with some restrictions on mean and variance
@@ -20,4 +23,4 @@ The software can be installed by running:
 
 Please let me know if you have any issues or suggestions here: https://github.com/gzt/matrixdist/issues
 
-[![Travis-CI Build Status](https://travis-ci.org/gzt/matrixdist.svg?branch=master)](https://travis-ci.org/gzt/matrixdist)
+
