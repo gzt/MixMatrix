@@ -106,7 +106,7 @@ rmatrixt <- function(n, df, mean,
 
   # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
 
-  cholU <- rInvCholWishart(n, df + dims[1] - 1,U)
+  cholU <- CholWishart::rInvCholWishart(n, df + dims[1] - 1,U)
 
   result <- array(dim = c(dims,n))
   for (i in seq(n)) {
@@ -167,9 +167,9 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 
   if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
   # gammas is constant
-  gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
     0.5 * prod(dims) * log(pi) -
-    lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+    CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
   m <- diag(dims[1]) + chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
   # - 0.5 * dims[2] * dims[1]*log(df) term disappears
@@ -302,8 +302,8 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   # (gammas) and the matrix algebra parts (mats) done on the log scale
   # note I did not do the DF correction as for the matrix t distribution
 
-  gammas <- lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-    0.5 * prod(dims) * log(pi) - lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+    0.5 * prod(dims) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
   matrixterms <- diag(dims[1]) -
     chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
