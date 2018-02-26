@@ -221,12 +221,12 @@ test_that("Equivalent outputs for different functions:", {
 
 
 test_that("Output of LDA/QDA/Predict", {
-  A <- rmatrixnorm(30, mean = matrix(0, nrow = 2, ncol = 2))
-  B <- rmatrixnorm(30, mean = matrix(1, nrow = 2, ncol = 2))
-  C <- array(c(A,B), dim = c(2,2,60))
-  D <- array(0, dim = c(2,2,30))
-  groups <- c(rep(1,30),rep(2,30))
-  groups.empty <- factor(rep("1",60), levels = c("1","2"))
+  A <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
+  B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
+  C <- array(c(A,B), dim = c(2,2,8))
+  D <- array(0, dim = c(2,2,4))
+  groups <- c(rep(1,4),rep(2,4))
+  groups.empty <- factor(rep("1",8), levels = c("1","2"))
   priors = c(.5,.5)
   ldamodel <- matrixlda(C, groups, priors)
   qdamodel <- matrixqda(C, groups, priors)
@@ -241,6 +241,16 @@ test_that("Output of LDA/QDA/Predict", {
 
   expect_equal(sum(predict(qdamodel, newdata = matrix(
     0, nrow = 2, ncol = 2))$posterior), 1)
+
+  newlda <- ldamodel
+  newqda <- qdamodel
+  newprior <- c(-1,2)
+
+  expect_error(predict(newlda, prior = newprior))
+  expect_error(predict(newqda, prior = newprior))
+  newprior <- c(.7,.7)
+  expect_error(predict(newlda, prior = newprior))
+  expect_error(predict(newqda, prior = newprior))
 
 
 })

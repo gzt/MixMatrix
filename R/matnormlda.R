@@ -227,11 +227,11 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
+      if(length(prior != ng)) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
-      if (length(prior) != ng)
-        stop("'prior' is of incorrect length")
     }
+
 
     dims = dim(x)
     # x is a p x q x n array
@@ -486,10 +486,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
+      if(length(prior != ng)) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
-      if (length(prior) != ng)
-        stop("'prior' is of incorrect length")
     }
 
     dims = dim(x)
