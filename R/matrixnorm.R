@@ -168,15 +168,15 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
 #'
-#' @keywords internal
+#' @export
 #'
 #'
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2))
-#' \dontrun{dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
+#' dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
 dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
                              L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
