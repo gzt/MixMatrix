@@ -3,6 +3,7 @@
 language: R
 r_packages:
   - covr
+  - CholWishart
 sudo: false
 os:
   - linux
