@@ -126,6 +126,18 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(A, D)
 
   expect_equal(dnorm(1), dmatrixnorm(1))
+  expect_equal(dnorm(1), dmatrixnorm.unroll(1))
+
+  expect_equal(dmatrixnorm.unroll(x = matrix(.5, nrow = 10, ncol = 2),
+                                  log = TRUE),
+               dmatrixnorm(x = matrix(.5, nrow = 10,ncol = 2),
+                           log = TRUE))
+  expect_equal(dmatrixnorm.unroll(x = matrix(.5, nrow = 2, ncol = 10),
+                                  log = TRUE),
+               dmatrixnorm(x = matrix(.5, nrow = 10,ncol = 2),
+                           log = TRUE))
+
+
   expect_equal(dt(1, 1), (dmatrixt(1, 1)))
   expect_equal(dmatrixt(matrix(1), df = 10, U = 10 * matrix(1)),
                dt(1, 10),
@@ -241,17 +253,20 @@ test_that("Output of LDA/QDA/Predict", {
   D <- array(0, dim = c(2,2,30))
   groups <- c(rep(1,30),rep(2,30))
   groups.empty <- factor(rep("1",60), levels = c("1","2"))
-  priors=c(.5,.5)
+  priors = c(.5,.5)
   ldamodel <- matrixlda(C, groups, priors)
   qdamodel <- matrixqda(C, groups, priors)
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow=3,ncol=2)))
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow=2,ncol=3)))
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow=3,ncol=2)))
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow=2,ncol=3)))
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)))
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)))
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)))
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)))
 
-  expect_equal(sum(predict(ldamodel, newdata = matrix(0,nrow=2,ncol=2))$posterior),1)
 
-  expect_equal(sum(predict(qdamodel, newdata = matrix(0,nrow=2,ncol=2))$posterior),1)
+  expect_equal(sum(predict(ldamodel, newdata = matrix(
+    0, nrow = 2, ncol = 2))$posterior), 1)
+
+  expect_equal(sum(predict(qdamodel, newdata = matrix(
+    0, nrow = 2, ncol = 2))$posterior), 1)
 
 
 })

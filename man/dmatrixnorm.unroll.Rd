@@ -47,7 +47,6 @@ Equivalent to dmatrixnorm except it works by unrolling
 set.seed(20180202)
 A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
     L=matrix(c(2,1,0,.1),nrow=2))
-\dontrun{dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-    L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )}
+dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+    L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 }
-\keyword{internal}
