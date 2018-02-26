@@ -8,7 +8,7 @@ Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
 Description: Sampling and density for matrix variate normal, t, and inverted 
           t-distributions. Fitting for matrix variate normal distributions
           including some restrictions on the parameters.
-Depends: R (>= 3.0.0), base
+Depends: R (>= 3.0.0)
 Imports: 
     stats, 
     CholWishart
