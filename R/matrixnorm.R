@@ -56,7 +56,8 @@ rmatrixnorm <- function(n, mean,
                         list = FALSE,
                         array = NULL,
                         force = FALSE) {
-  if (!is.numeric(n)) stop("n is not numeric")
+  if (!(all(is.numeric(n), is.numeric(mean), is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
   if (!(n > 0)) stop("n must be > 0. n = ", n)
   mean <- as.matrix(mean)
   U <- as.matrix(U)
@@ -108,8 +109,8 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
                         L = diag(dim(mean)[1]),
                         R = diag(dim(mean)[2]), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
-  if (!(all(is.numeric(x), is.numeric(mean),
-           is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
+  if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
     x <- as.matrix(x)
     mean <- as.matrix(mean)
     U <- as.matrix(U)

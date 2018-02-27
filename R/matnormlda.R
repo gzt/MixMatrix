@@ -89,10 +89,6 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
   proportions <- counts / n
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
-  # method <- match.arg(method)
-  # if(CV && !(method == "moment" || method == "mle"))
-  #   stop(gettext("cannot use leave-one-out CV with method %s",
-  #                sQuote(method)), domain = NA)
 
   group.means = array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
@@ -227,7 +223,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
-      if(length(prior != ng)) stop("invalid prior length")
+      if(length(prior) != ng) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
     }
@@ -486,7 +482,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
-      if(length(prior != ng)) stop("invalid prior length")
+      if(length(prior) != ng) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
     }

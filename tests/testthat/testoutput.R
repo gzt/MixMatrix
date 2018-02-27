@@ -225,15 +225,20 @@ test_that("Output of LDA/QDA/Predict", {
   B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
   C <- array(c(A,B), dim = c(2,2,8))
   D <- array(0, dim = c(2,2,4))
+  E <- array(c(A,D), dim = c(2,2,8))
   groups <- c(rep(1,4),rep(2,4))
   groups.empty <- factor(rep("1",8), levels = c("1","2"))
   priors = c(.5,.5)
   ldamodel <- matrixlda(C, groups, priors)
   qdamodel <- matrixqda(C, groups, priors)
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)))
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)))
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)))
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)))
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
+               "dimension")
+  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
+               "dimension")
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
+               "dimension")
+  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
+               "dimension")
 
 
   expect_equal(sum(predict(ldamodel, newdata = matrix(
@@ -246,11 +251,15 @@ test_that("Output of LDA/QDA/Predict", {
   newqda <- qdamodel
   newprior <- c(-1,2)
 
-  expect_error(predict(newlda, prior = newprior))
-  expect_error(predict(newqda, prior = newprior))
+  expect_error(predict(newlda, prior = newprior),
+               "invalid 'prior'")
+  expect_error(predict(newqda, prior = newprior),
+               "invalid 'prior'")
   newprior <- c(.7,.7)
-  expect_error(predict(newlda, prior = newprior))
-  expect_error(predict(newqda, prior = newprior))
+  expect_error(predict(newlda, prior = newprior),
+               "invalid 'prior'")
+  expect_error(predict(newqda, prior = newprior),
+               "invalid 'prior'")
 
 
 })

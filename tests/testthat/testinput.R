@@ -4,42 +4,43 @@ context("Testing input integrity")
 
 
 test_that("trying wrong type of input", {
-  expect_error(rmatrixnorm(n = 1, mean = matrix(c("A", 1))))
-  expect_error(rmatrixt(n = 1, df = 1, mean = matrix(c("A", 1))))
-  expect_error(rmatrixinvt(n = 1, df = 1, mean = matrix(c("A", 1))))
-  expect_error(dmatrixnorm(x = matrix(c("A", 1))))
-  expect_error(dmatrixt(x = matrix(c("A", 1)), df = 1))
-  expect_error(dmatrixinvt(x = matrix(c("A", 1)), df = 1))
+  expect_error(rmatrixnorm(n = 1, mean = matrix(c("A", 1))),"numeric")
+  expect_error(rmatrixt(n = 1, df = 1, mean = matrix(c("A", 1))),"numeric")
+  expect_error(rmatrixinvt(n = 1, df = 1, mean = matrix(c("A", 1))),"numeric")
+  expect_error(dmatrixnorm(x = matrix(c("A", 1))),"numeric")
+  expect_error(dmatrixt(x = matrix(c("A", 1)), df = 1),"numeric")
+  expect_error(dmatrixinvt(x = matrix(c("A", 1)), df = 1),"numeric")
 
   expect_error(rmatrixnorm(
     n = 1,
     mean = matrix(c(0, 0)),
-    U = matrix(c("A", 0, 0, 1), nrow = 2)
-  ))
+    U = matrix(c("A", 0, 0, 1), nrow = 2)),
+    "non-numeric", ignore.case = TRUE)
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = matrix(c(0, 0)),
-    U = matrix(c("A", 0, 0, 1), nrow = 2)
-  ))
+    U = matrix(c("A", 0, 0, 1), nrow = 2)),
+    "non-numeric", ignore.case = TRUE)
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
     mean = matrix(c(0, 0)),
-    U = matrix(c("A", 0, 0, 1), nrow = 2)
-  ))
-  expect_error(dmatrixnorm(x = matrix(c(0, 0)), U = matrix(c("A", 0, 0, 1), nrow =
-                                                             2)))
+    U = matrix(c("A", 0, 0, 1), nrow = 2)),
+    "non-numeric", ignore.case = TRUE)
+  expect_error(dmatrixnorm(x = matrix(c(0, 0)),
+                           U = matrix(c("A", 0, 0, 1), nrow = 2)),
+               "non-numeric", ignore.case = TRUE)
   expect_error(dmatrixt(
     x = matrix(c(0, 0)),
     df = 1,
-    U = matrix(c("A", 0, 0, 1), nrow = 2)
-  ))
+    U = matrix(c("A", 0, 0, 1), nrow = 2)),
+    "non-numeric", ignore.case = TRUE)
   expect_error(dmatrixinvt(
     x = mean(matrix(c(0, 0))),
     df = 1,
-    U = matrix(c("A", 0, 0, 1), nrow = 2)
-  ))
+    U = matrix(c("A", 0, 0, 1), nrow = 2)),
+    "non-numeric", ignore.case = TRUE)
 
 
   expect_error(rmatrixnorm(
@@ -47,83 +48,68 @@ test_that("trying wrong type of input", {
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
     R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
-    list = FALSE
-  ))
+    list = FALSE),
+    "non-numeric", ignore.case = TRUE)
   expect_error(rmatrixnorm(
     n = 10,
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = "A"),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow =
-                 3),
-    list = FALSE
-  ))
+    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
+    list = FALSE),
+    "non-numeric", ignore.case = TRUE)
   expect_error(rmatrixnorm(
     n = 10,
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c("A", 1, 0, .1), nrow = 2),
-    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow =
-                 3),
-    list = FALSE
-  ))
+    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
+    list = FALSE))
   expect_error(rmatrixnorm(
     n = 10,
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    R = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow =
-                 3),
-    list = FALSE
-  ))
+    R = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
+    list = FALSE))
   expect_error(rmatrixnorm(
     n = 10,
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    R = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow =
-                 3),
-    list = TRUE
-  ))
+    R = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
+    list = TRUE))
   expect_error(rmatrixnorm(
     n = 10,
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     U = matrix(c("A", 1, 0, .1), nrow = 2),
-    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow =
-                 3),
-    list = FALSE
-  ))
+    R = matrix(c(5, 1, 2, 0, 6, 1, -1, 2, 10), nrow = 3),
+    list = FALSE),
+    "non-numeric", ignore.case = TRUE)
 
   expect_error(dmatrixnorm(
     matrix(c("A", 0, -100, 0, 25, -1000), nrow = 2),
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    log = TRUE
-  ))
+    log = TRUE),
+    "non-numeric", ignore.case = TRUE)
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = "A"),
-    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
-                    2),
+    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    log = TRUE
-  ))
+    log = TRUE),
+    "non-numeric", ignore.case = TRUE)
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-    mean = matrix(c("A", 0, -100, 0, 25, -1000), nrow =
-                    2),
+    mean = matrix(c("A", 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = 2),
-    log = TRUE
-  ))
+    log = TRUE))
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
-                    2),
+    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c("A", 1, 0, .1), nrow = 2),
-    log = TRUE
-  ))
+    log = TRUE))
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
-                    2),
+    mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     L = matrix(c(2, 1, 0, .1), nrow = "A"),
-    log = TRUE
-  ))
+    log = TRUE))
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
@@ -131,15 +117,14 @@ test_that("trying wrong type of input", {
     L = matrix(c(2, 1, 0, .1), nrow = 2),
     R = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow =
                  3),
-    log = TRUE
-  ))
+    log = TRUE))
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
                     2),
     U = matrix(c("A", 1, 0, .1), nrow = 2),
-    log = TRUE
-  ))
+    log = TRUE),
+    "non-numeric", ignore.case = TRUE)
   expect_error(dmatrixnorm(
     matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
     mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow =
@@ -147,21 +132,23 @@ test_that("trying wrong type of input", {
     L = matrix(c(2, 1, 0, .1), nrow = 2),
     V = matrix(c("A", 1, 2, 0, 6, 1, -1, 2, 10), nrow =
                  3),
-    log = TRUE
-  ))
+    log = TRUE),
+    "non-numeric", ignore.case = TRUE)
 
 
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)), tol =
-                              "Q"))
+                              "Q"), "non-numeric", ignore.case = TRUE)
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)), max.iter =
-                              "Q"))
+                              "Q"), "non-numeric", ignore.case = TRUE)
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)),
-                            U = matrix("Q", nrow = 5, ncol = 5)))
+                            U = matrix("Q", nrow = 5, ncol = 5)),
+               "non-numeric", ignore.case = TRUE)
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)),
-                            V = matrix("Q", nrow = 5, ncol = 5)))
+                            V = matrix("Q", nrow = 5, ncol = 5)),
+               "non-numeric", ignore.case = TRUE)
 
-  expect_error(toepgenerate(7, "A"))
-  expect_error(toepgenerate("A", .4))
+  # expect_error(toepgenerate(7, "A"))
+  # expect_error(toepgenerate("A", .4))
 
 
 })
@@ -175,43 +162,43 @@ test_that("Testing bad matrix dimension input", {
     mean = A,
     L = B,
     R = A,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixnorm(
     n = 1,
     mean = A,
     L = A,
     R = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixnorm(
     n = 1,
     mean = A,
     U = B,
     R = A,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixnorm(
     n = 1,
     mean = A,
     L = A,
     V = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixnorm(
     n = 1,
     mean = A,
     U = A,
     V = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixnorm(
     n = 1,
     mean = A,
     U = A,
     R = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
 
   expect_error(rmatrixt(
     n = 1,
@@ -219,48 +206,48 @@ test_that("Testing bad matrix dimension input", {
     mean = A,
     L = B,
     R = A,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = A,
     L = A,
     R = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = A,
     U = B,
     R = A,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = A,
     L = A,
     V = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = A,
     U = A,
     V = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixt(
     n = 1,
     df = 1,
     mean = A,
     U = A,
     R = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
 
   expect_error(rmatrixinvt(
     n = 1,
@@ -268,16 +255,17 @@ test_that("Testing bad matrix dimension input", {
     mean = A,
     L = B,
     R = A,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
+
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
     mean = A,
     L = A,
     R = B,
-    list = FALSE
-  ))
+    list = FALSE),
+    "Non-conforming")
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
@@ -285,7 +273,8 @@ test_that("Testing bad matrix dimension input", {
     U = B,
     R = A,
     list = FALSE
-  ))
+  ),
+  "Non-conforming")
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
@@ -293,7 +282,8 @@ test_that("Testing bad matrix dimension input", {
     L = A,
     V = B,
     list = FALSE
-  ))
+  ),
+  "Non-conforming")
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
@@ -301,7 +291,8 @@ test_that("Testing bad matrix dimension input", {
     U = A,
     V = B,
     list = FALSE
-  ))
+  ),
+  "Non-conforming")
   expect_error(rmatrixinvt(
     n = 1,
     df = 1,
@@ -309,44 +300,48 @@ test_that("Testing bad matrix dimension input", {
     U = A,
     R = B,
     list = FALSE
-  ))
+  ),
+  "Non-conforming")
 
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     L = B,
     R = A
-  ))
+  ),
+  "Non-conforming")
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     L = A,
     R = B
-  ))
+  ),
+  "Non-conforming")
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     U = B,
     R = A
-  ))
+  ),
+  "Non-conforming")
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     L = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     U = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixnorm(
     x = A,
     mean = A,
     U = A,
     R = B
-  ))
+  ), "Non-conforming")
 
   expect_error(dmatrixt(
     x = A,
@@ -354,42 +349,42 @@ test_that("Testing bad matrix dimension input", {
     mean = A,
     L = B,
     R = A
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixt(
     x = A,
     df = 1,
     mean = A,
     L = A,
     R = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixt(
     x = A,
     df = 1,
     mean = A,
     U = B,
     R = A
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixt(
     x = A,
     df = 1,
     mean = A,
     L = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixt(
     x = A,
     df = 1,
     mean = A,
     U = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixt(
     x = A,
     df = 1,
     mean = A,
     U = A,
     R = B
-  ))
+  ), "Non-conforming")
 
   expect_error(dmatrixinvt(
     x = A,
@@ -397,42 +392,42 @@ test_that("Testing bad matrix dimension input", {
     mean = A,
     L = B,
     R = A
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixinvt(
     x = A,
     df = 1,
     mean = A,
     L = A,
     R = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixinvt(
     x = A,
     df = 1,
     mean = A,
     U = B,
     R = A
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixinvt(
     x = A,
     df = 1,
     mean = A,
     L = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixinvt(
     x = A,
     df = 1,
     mean = A,
     U = A,
     V = B
-  ))
+  ), "Non-conforming")
   expect_error(dmatrixinvt(
     x = A,
     df = 1,
     mean = A,
     U = A,
     R = B
-  ))
+  ), "Non-conforming")
 
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = B, V = A))
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = A, V = B))
@@ -441,60 +436,70 @@ test_that("Testing bad matrix dimension input", {
 })
 
 test_that("Testing bad input to LDA/QDA", {
-  A <- rmatrixnorm(30, mean = matrix(0, nrow = 2, ncol = 2))
-  B <- rmatrixnorm(30, mean = matrix(1, nrow = 2, ncol = 2))
-  C <- array(c(A,B), dim = c(2,2,60))
-  D <- array(0, dim = c(2,2,30))
-  E <- array(c(A,D), dim = c(2,2,60))
+  A <- rmatrixnorm(5, mean = matrix(0, nrow = 2, ncol = 2))
+  B <- rmatrixnorm(5, mean = matrix(1, nrow = 2, ncol = 2))
+  C <- array(c(A,B), dim = c(2,2,10))
+  D <- array(0, dim = c(2,2,5))
+  E <- array(c(A,D), dim = c(2,2,10))
 
-  groups <- c(rep(1,30),rep(2,30))
-  groups.empty <- factor(rep("1",60), levels = c("1","2"))
-  priors=c(.5,.5)
+  groups <- c(rep(1,5),rep(2,5))
+  groups.empty <- factor(rep("1",10), levels = c("1","2"))
+  priors = c(.5,.5)
   expect_error(
-    matrixlda(c(C), grouping = c(rep(1,120),rep(2,120)), prior = priors)
+    matrixlda(c(C), grouping = c(rep(1,40),rep(2,40)), prior = priors),
+    "array"
   )
   expect_error(
-    matrixlda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors)
+    matrixlda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors),
+    "are different"
   )
   expect_error(
-    matrixlda(C, grouping = groups, prior = c(.5,.4))
+    matrixlda(C, grouping = groups, prior = c(.5,.4)),
+    "invalid 'prior'"
   )
   expect_error(
-    matrixlda(C, grouping = groups, prior = c(.4,.4,.2))
+    matrixlda(C, grouping = groups, prior = c(.4,.4,.2)),
+    "incorrect length"
+
   )
   expect_warning(
-    matrixlda(C, grouping = groups.empty, prior = priors)
+    matrixlda(C, grouping = groups.empty, prior = priors),
+    "empty"
   )
   expect_error(
     matrixlda(E, grouping = groups, prior = priors)
   )
 
+
   expect_error(
-    matrixqda(c(C), grouping = c(rep(1,120),rep(2,120)), prior = priors)
+    matrixqda(c(C), grouping = c(rep(1,40),rep(2,40)), prior = priors),
+    "array"
   )
   expect_error(
-    matrixqda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors)
+    matrixqda(C, grouping = c(rep(1,120), rep(2,120)), prior = priors),
+    "are different"
   )
   expect_error(
-    matrixqda(C, grouping = groups, prior = c(.5,.4))
+    matrixqda(C, grouping = groups, prior = c(.5,.4)),
+    "invalid 'prior'"
   )
   expect_error(
-    matrixqda(C, grouping = groups, prior = c(.4,.4,.2))
+    matrixqda(C, grouping = groups, prior = c(.4,.4,.2)),
+    "incorrect length"
+
   )
   expect_warning(
-    matrixqda(C, grouping = groups.empty, prior = priors)
+    matrixqda(C, grouping = groups.empty, prior = priors),
+    "empty"
   )
   expect_error(
     matrixqda(E, grouping = groups, prior = priors)
   )
 
-
-
 })
 
+
 test_that("Out of bounds numeric input: ", {
-  expect_error(lmvgamma(-1, 5))
-  expect_error(lmvgamma(1, -5))
   A <- diag(5)
   A[5, 5] <- 0
   expect_error(rmatrixt(

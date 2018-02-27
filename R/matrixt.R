@@ -69,6 +69,9 @@ rmatrixt <- function(n, df, mean,
                      list = FALSE,
                      array = NULL,
                      force = FALSE) {
+  if (!(all(is.numeric(n),is.numeric(df), is.numeric(mean),
+            is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
   if (!(n > 0))
     stop("n must be > 0. n =", n)
 
