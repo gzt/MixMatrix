@@ -4,7 +4,7 @@
 \alias{symm.check}
 \title{Quick symmetry check}
 \usage{
-symm.check(A, tol = 10 * (.Machine$double.eps)^0.5)
+symm.check(A, tol = (.Machine$double.eps)^0.5)
 }
 \arguments{
 \item{A}{Numeric real matrix. Does not check if real.}

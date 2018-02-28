@@ -9,10 +9,12 @@ Description: Sampling and density for matrix variate normal, t, and inverted
           t-distributions. Fitting for matrix variate normal distributions
           including some restrictions on the parameters.
 Depends: R (>= 3.0.0)
-Imports: 
+Imports:
     stats, 
-    CholWishart
-Suggests: 
+    CholWishart,
+    Rcpp,
+    RcppArmadillo
+Suggests:
     knitr, 
     rmarkdown,
     testthat,
@@ -23,3 +25,4 @@ URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
 License: GPL-3
 RoxygenNote: 6.0.1
+LinkingTo: Rcpp, RcppArmadillo

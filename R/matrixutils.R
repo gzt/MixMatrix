@@ -79,7 +79,7 @@ CSgenerate <- function(n,rho) {
 #' symm.check(A)
 #' A[1,2] = 5
 #' symm.check(A)}
-symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
+symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
    if (!is.matrix(A)) return(FALSE)
    if (!is.numeric(A)) return(FALSE)
   # commented those out because it is always checked before running symm.check.
@@ -87,7 +87,9 @@ symm.check <- function(A, tol = 10 * (.Machine$double.eps)^.5) {
   if (dims[1] != dims[2]) {
     return(FALSE)
   }
-  return(sum(abs(A - t(A))) < prod(dims)*tol)
+  tol = prod(dims) * tol
+  return(testsymmetric(A, tol))
+#  return(sum(abs(A - t(A))) < prod(dims)*tol)
 }
 
 
@@ -278,6 +280,8 @@ invCS <- function(n, rho, deriv = FALSE){
 #'    \eqn{B \%*\% B = A}.
 #' @keywords internal
 #' @seealso \code{\link{posmatsqrtinv}}
+#' @useDynLib matrixdist
+#' @importFrom Rcpp sourceCpp
 #'
 #' @examples
 #' \dontrun{
@@ -294,13 +298,10 @@ posmatsqrt <- function(A) {
   A <- as.matrix(A)
   if (!(dim(A)[1] == dim(A)[2]))
     stop("Matrix must be square. Dimensions: ", dim(A))
+  if(!symm.check(A))
+    stop("Matrix must be symmetric")
 
-  e <- eigen(A, symmetric = TRUE)
-  V <- e$vectors
-  if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
-  if (dim(A)[1] == 1) B <- (sqrt(e$values)) * V %*% t(V) else
-    B <- V %*% diag(sqrt(e$values)) %*% t(V)
-  return(B)
+  return(posdefsqrt(A))
 }
 
 #' Positive Matrix Square Root Inverse
@@ -330,11 +331,9 @@ posmatsqrtinv <- function(A) {
   A <- as.matrix(A)
   if (!(dim(A)[1] == dim(A)[2]))
     stop("Matrix must be square. Dimensions: ", dim(A))
+  if(!symm.check(A))
+    stop("Matrix must be symmetric")
 
-  e <- eigen(A, symmetric = TRUE)
-  V <- e$vectors
-  if (!(all(e$values > 0))) stop("Not all eigenvalues positive. e =",e$values)
-  if (dim(A)[1] == 1) B <- (1/sqrt(e$values)) * V %*% t(V) else
-    B <- V %*% diag(1/sqrt(e$values)) %*% t(V)
-  return(B)
+  return(posdefinvsqrt(A))
+
 }
