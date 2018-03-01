@@ -230,7 +230,7 @@ rmatrixinvt <- function(n, df, mean,
 
   Usqrt <- posmatsqrt(U)
   Vsqrt <- posmatsqrt(V)
-  if(!is.finite(Usqrt) || !is.finite(Vsqrt)) stop("Non-positive definite U or V matrix.")
+  if(any(!is.finite(Usqrt)) || any(!is.finite(Vsqrt))) stop("Non-positive definite U or V matrix.")
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 

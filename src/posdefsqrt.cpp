@@ -8,7 +8,7 @@ arma::mat posdefsqrt(arma::mat & x){
   arma::vec eigvec;
 
   arma::eig_sym(eigvec, eigmat, x);
-
+  if(min(eigvec) < 1e-7) stop("error: possibly singular matrix");
   return eigmat * diagmat(sqrt(eigvec)) * eigmat.t();
 }
 
@@ -18,7 +18,7 @@ arma::mat posdefinvsqrt(arma::mat & x){
   arma::vec eigvec;
 
   arma::eig_sym(eigvec, eigmat, x);
-
+  if(min(eigvec) < 1e-7) stop("error: possibly singular matrix");
   return eigmat * diagmat(1/sqrt(eigvec)) * eigmat.t();
 }
 
