@@ -151,6 +151,7 @@ test_that("trying wrong type of input", {
   # expect_error(toepgenerate("A", .4))
 
 
+
 })
 
 test_that("Testing bad matrix dimension input", {
@@ -432,6 +433,28 @@ test_that("Testing bad matrix dimension input", {
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = B, V = A))
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = A, V = B))
 
+
+})
+
+test_that("Bad input to generators", {
+
+  n = 0
+  rho = .5
+  expect_error(ARgenerate(n,rho), "greater")
+  expect_error(CSgenerate(n,rho), "greater")
+  rho = 1.2
+  n = 2
+  expect_error(ARgenerate(n,rho), "less")
+  expect_error(CSgenerate(n,rho), "less")
+  rho = -.5
+  expect_warning(ARgenerate(n,rho), "greater")
+  expect_warning(CSgenerate(n,rho), "greater")
+  rho = .999
+  expect_warning(ARgenerate(n,rho), "correlation")
+  expect_warning(CSgenerate(n,rho), "correlation")
+  rho = -2.5
+  expect_error(ARgenerate(n,rho), "greater")
+  expect_error(CSgenerate(n,rho), "greater")
 
 })
 
