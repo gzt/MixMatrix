@@ -7,7 +7,7 @@ r_packages:
 sudo: false
 os:
   - linux
-  - osx
+#  - osx
 cache: packages
 warnings_are_errors: true
 notifications:
