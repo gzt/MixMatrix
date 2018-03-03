@@ -35,3 +35,26 @@ bool testsymmetric(arma::mat & x, double tol){
   }
   return (total < tol);
 }
+
+// [[Rcpp::export]]
+arma::mat txax(arma::mat & x, arma::mat & A){
+  // outputs t(x) %*% A %*% x
+  int nrow = x.n_rows;
+  // int ncol = x.n_cols;
+  int nArow = A.n_rows;
+  int nAcol = A.n_cols;
+  if(nArow != nAcol || nrow != nArow) stop("error: non-conformable dimensions");
+  return(x.t() * A * x);
+}
+
+// [[Rcpp::export]]
+arma::mat xatx(arma::mat & x, arma::mat & A){
+  // outputs (x) %*% A %*% t(x)
+  // int nrow = x.n_rows;
+  int ncol = x.n_cols;
+  int nArow = A.n_rows;
+  int nAcol = A.n_cols;
+  if(nArow != nAcol || ncol != nArow) stop("error: non-conformable dimensions");
+  return(x * A * x.t());
+}
+

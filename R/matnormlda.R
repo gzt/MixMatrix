@@ -241,7 +241,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     VMUM = numeric(ng)
     VMU = array(0, dim = c(q, p, ng))
     for (j in seq(ng)) {
-      VMUM[j] = mattrace((-.5) * solveV %*% t(object$means[, , j]) %*% solveU %*% object$means[, , j])
+      VMUM[j] = mattrace((-.5) * solveV %*% txax(object$means[, , j], solveU ))
       VMU[, , j] = solveV %*% t(object$means[, , j]) %*% solveU
     }
 
@@ -506,7 +506,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     detfactor =  numeric(ng)
     VMU = array(dim = c(q, p, ng))
     for (j in seq(ng)) {
-      VMUM[j] = mattrace((-.5) * solveV[, , j] %*% t(object$means[, , j]) %*% solveU[, , j] %*% object$means[, , j])
+      VMUM[j] = mattrace((-.5) * solveV[, , j] %*% txax(object$means[, , j], solveU[, , j]))
       VMU[, , j] = solveV[, , j] %*% t(object$means[, , j]) %*% solveU[, , j]
       detfactor[j] = .5 * (p * log(det(solveU[, , j])) + n * log(det(solveV[, , j])))
     }
@@ -514,7 +514,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     for (i in seq(n)) {
       Xi = (x[, , i])
       for (j in seq(ng)) {
-        dist[i, j] = mattrace(-.5 * solveV[, , j] %*% t(Xi) %*% solveU[, , j] %*% Xi) +
+        dist[i, j] = mattrace(-.5 * solveV[, , j] %*% txax(Xi, solveU[, , j])) +
           mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j]) +
           detfactor[j]
       }

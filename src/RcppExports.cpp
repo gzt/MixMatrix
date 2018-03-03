@@ -40,11 +40,37 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// txax
+arma::mat txax(arma::mat& x, arma::mat& A);
+RcppExport SEXP _matrixdist_txax(SEXP xSEXP, SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(txax(x, A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// xatx
+arma::mat xatx(arma::mat& x, arma::mat& A);
+RcppExport SEXP _matrixdist_xatx(SEXP xSEXP, SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(xatx(x, A));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
     {"_matrixdist_posdefinvsqrt", (DL_FUNC) &_matrixdist_posdefinvsqrt, 1},
     {"_matrixdist_testsymmetric", (DL_FUNC) &_matrixdist_testsymmetric, 2},
+    {"_matrixdist_txax", (DL_FUNC) &_matrixdist_txax, 2},
+    {"_matrixdist_xatx", (DL_FUNC) &_matrixdist_xatx, 2},
     {NULL, NULL, 0}
 };
 
