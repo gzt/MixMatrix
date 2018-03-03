@@ -134,6 +134,8 @@ vardet <- function(n, rho, deriv, variance){
 
   if (variance == "CS") return(CSdet(n,rho, deriv))
 
+  if (variance == "I") return(1)
+
   else stop("Bad covariance structure input.", variance)
 }
 
@@ -155,6 +157,8 @@ varinv <- function(n, rho, deriv, variance){
   if (variance == "AR(1)") return(invAR(n,rho, deriv))
 
   if (variance == "CS") return(invCS(n,rho, deriv))
+
+  if (variance == "I") return(diag(n))
 
   else stop("Bad covariance structure input. ", variance)
 }
