@@ -174,7 +174,7 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
     0.5 * prod(dims) * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
-  m <- diag(dims[1]) + chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
+  m <- diag(dims[1]) + crossprod(chol2inv(cholU), xm) %*% tcrossprod(chol2inv(cholV), xm)
   #m <- diag(dims[1]) + chol2inv(cholU) %*% xatx(xm, chol2inv(cholV))
   # - 0.5 * dims[2] * dims[1]*log(df) term disappears
   mats <- -0.5 * dims[2] * (log(detU))  -
@@ -311,7 +311,7 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 
   matrixterms <- diag(dims[1]) -
     #chol2inv(cholU) %*% xatx(xm,  chol2inv(cholV))
-    chol2inv(cholU) %*% xm %*% chol2inv(cholV) %*% t(xm)
+    chol2inv(cholU) %*% xm %*% tcrossprod(chol2inv(cholV),(xm))
 
   mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
     0.5 * (df - 2) * log(det(matrixterms))

@@ -85,7 +85,7 @@ rmatrixnorm <- function(n, mean,
   nobs = prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-  result <- array(apply(mat, 3, function(x) mean + t(cholU) %*% x %*% (cholV)),
+  result <- array(apply(mat, 3, function(x) mean + crossprod(cholU, x) %*% (cholV)),
                   dim = c(dims,n))
   if (n == 1 && list == FALSE && is.null(array)) {
     return(result[ , , 1])
@@ -218,7 +218,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
   UVinv <- chol2inv(cholVU)
   XM <- vecx - meanx
   logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(detVU) -
-    0.5 * sum(diag(t(XM) %*% UVinv %*% XM))
+    0.5 * sum(diag(crossprod(XM, UVinv) %*% XM))
   if (log) {
     return(logresult)
   } else {
@@ -425,7 +425,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     } else if (row.set.var) {
       invV = chol2inv(chol.default(new.V))
       # (x) %*% invV %*% t(x)
-      tmp <- array(apply(swept.data, 3, function(x) (x) %*% invV %*% t(x) ),
+      tmp <- array(apply(swept.data, 3, function(x) (x) %*% tcrossprod(invV ,x) ),
                    dim = c(dims[1],dims[1],dims[3]))
       nLL <- function(theta) {
         Umat <- varinv(dims[1],theta,TRUE, row.variance)
