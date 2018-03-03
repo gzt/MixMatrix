@@ -13,11 +13,3 @@ testsymmetric <- function(x, tol) {
     .Call('_matrixdist_testsymmetric', PACKAGE = 'matrixdist', x, tol)
 }
 
-txax <- function(x, A) {
-    .Call('_matrixdist_txax', PACKAGE = 'matrixdist', x, A)
-}
-
-xatx <- function(x, A) {
-    .Call('_matrixdist_xatx', PACKAGE = 'matrixdist', x, A)
-}
-

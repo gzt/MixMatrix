@@ -136,8 +136,8 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
   Vinv <- chol2inv(cholV)
   XM <- x - mean
   logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * log(detU) -
-    0.5 * p * log(detV) - 0.5 * sum(diag( Vinv %*% txax(XM, t(Uinv))))
-    #0.5 * p * log(detV) - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
+    #0.5 * p * log(detV) - 0.5 * sum(diag( Vinv %*% txax(XM, t(Uinv))))
+    0.5 * p * log(detV) - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
   if (log) {
     return(logresult)
   } else {
@@ -341,8 +341,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     } else {
       invU = chol2inv(chol.default(U))
       inter.V <- apply(swept.data, 3,
-                       function(x) txax((x), invU ))
-                       #function(x) crossprod((x), invU ) %*% x)
+                       #function(x) txax((x), invU ))
+                       function(x) crossprod((x), invU ) %*% x)
       # collapsed into a (row*column) * n, which is then gathered and fixed.
       V <- matrix(rowSums(inter.V, dims = 1),
                   nrow = dims[2])/(dims[3] * dims[1])
@@ -361,8 +361,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     } else {
       invV = chol2inv(chol.default(V))
       inter.U <- apply(swept.data, 3,
-                       function(x) xatx(x,t(invV)))
-                       #function(x) ((x) %*% tcrossprod(invV,(x))))
+                       #function(x) xatx(x,t(invV)))
+                       function(x) ((x) %*% tcrossprod(invV,(x))))
       # collapsed into a (row*column) * n, which is then gathered and fixed.
       U <- matrix(rowSums(inter.U , dims = 1),
                   nrow = dims[1])/(dims[3] * dims[2])
@@ -390,8 +390,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                                               invV %x% invU) %*% x)) / (prod(dims))
       if (col.variance != "I") {
         invU = chol2inv(chol.default(U))
-        #tmp <- array(apply(swept.data, 3, function(x) crossprod(x, invU) %*% (x) ),
-        tmp <- array(apply(swept.data, 3, function(x) txax(x, invU) ),
+        tmp <- array(apply(swept.data, 3, function(x) crossprod(x, invU) %*% (x) ),
+        #tmp <- array(apply(swept.data, 3, function(x) txax(x, invU) ),
                      dim = c(dims[2],dims[2],dims[3]))
         nLL <- function(theta) {
           Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
@@ -415,7 +415,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     } else {
       invU = chol2inv(chol.default(U))
       # (crossprod(x, invU) %*% x)
-      inter.V <- apply(swept.data, 3, function(x) txax(x, invU))
+      inter.V <- apply(swept.data, 3, function(x) (crossprod(x, invU) %*% x))
       # collapsed into a (row*column) * n, which is then gathered and fixed.
       new.V <- matrix(apply(inter.V, 1, sum),
                       nrow = dims[2])/(dims[3] * dims[1])
@@ -425,7 +425,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     } else if (row.set.var) {
       invV = chol2inv(chol.default(new.V))
       # (x) %*% invV %*% t(x)
-      tmp <- array(apply(swept.data, 3, function(x) xatx(x, invV) ),
+      tmp <- array(apply(swept.data, 3, function(x) (x) %*% invV %*% t(x) ),
                    dim = c(dims[1],dims[1],dims[3]))
       nLL <- function(theta) {
         Umat <- varinv(dims[1],theta,TRUE, row.variance)
@@ -448,7 +448,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       invV = chol2inv(chol.default(new.V))
       # (tcrossprod(x, invV) %*%  t(x))
       # t(invV) = invV
-      inter.U <- apply(swept.data, 3, function(x) xatx(x, (invV)))
+      inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, invV) %*%  t(x)))
       # collapsed into a (row*column) * n, which is then gathered and fixed.
       new.U <- matrix(rowSums(inter.U, dims = 1),
                       nrow = dims[1])/(dims[3] * dims[2])

@@ -335,7 +335,7 @@ posmatsqrtinv <- function(A) {
   A <- as.matrix(A)
   if (!(dim(A)[1] == dim(A)[2]))
     stop("Matrix must be square. Dimensions: ", dim(A))
-  if(!symm.check(A))
+  if (!symm.check(A))
     stop("Matrix must be symmetric")
 
   return(posdefinvsqrt(A))
