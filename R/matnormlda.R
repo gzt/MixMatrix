@@ -496,11 +496,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
+    cholU = array(dim = c(p, p, ng))
+    cholV = array(dim = c(q, q, ng))
     solveU = array(dim = c(p, p, ng))
     solveV = array(dim = c(q, q, ng))
     for (j in seq(ng)) {
-      solveV[, , j] = solve(object$V[, , j])
-      solveU[, , j] = solve(object$U[, , j])
+      cholV[, , j] = chol(object$V[, , j])
+      cholU[, , j] = chol(object$U[, , j])
+      solveV[, , j] = chol2inv(cholV[, , j])
+      solveU[, , j] = chol2inv(cholU[, , j])
     }
     VMUM = numeric(ng)
     detfactor =  numeric(ng)
@@ -508,8 +512,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     for (j in seq(ng)) {
       VMU[, , j] = solveV[, , j] %*% crossprod(object$means[, , j], solveU[, , j])
       VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
-
-      detfactor[j] = .5 * (p * log(det(solveU[, , j])) + n * log(det(solveV[, , j])))
+      logdetU = 2*sum(log(diag(cholU[, , j])))
+      logdetV = 2*sum(log(diag(cholV[, , j])))
+      detfactor[j] = .5 * (p * logdetU + n * logdetV)
     }
 
     for (i in seq(n)) {
