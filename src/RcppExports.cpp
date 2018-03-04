@@ -29,12 +29,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // testsymmetric
-bool testsymmetric(arma::mat& x, double tol);
+bool testsymmetric(arma::mat x, double tol);
 RcppExport SEXP _matrixdist_testsymmetric(SEXP xSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
     rcpp_result_gen = Rcpp::wrap(testsymmetric(x, tol));
     return rcpp_result_gen;

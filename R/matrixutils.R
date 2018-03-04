@@ -87,7 +87,7 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
   if (dims[1] != dims[2]) {
     return(FALSE)
   }
-  tol = prod(dims) * tol
+  #tol = prod(dims) * tol
   return(testsymmetric(A, tol))
 #  return(sum(abs(A - t(A))) < prod(dims)*tol)
 }

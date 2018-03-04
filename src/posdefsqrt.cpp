@@ -23,15 +23,17 @@ arma::mat posdefinvsqrt(arma::mat & x){
 }
 
 // [[Rcpp::export]]
-bool testsymmetric(arma::mat & x, double tol){
+bool testsymmetric(arma::mat x, double tol){
   int nrow = x.n_rows;
   int ncol = x.n_cols;
   double total = 0.0;
-  arma::mat flop = abs((x - x.t()));
+  arma::mat flop = abs((x - trans(x)));
+  //LogicalMatrix res = (flop < tol);
   for(int i = 0; i < nrow; i++){
-    for(int j = 0; j < ncol; j++){
-     total += (flop(i,j));
-    }
-  }
+     for(int j = 0; j < ncol; j++){
+      total += (flop(i,j));
+     }
+   }
+
   return (total < tol);
 }

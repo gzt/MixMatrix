@@ -78,7 +78,7 @@ rmatrixnorm <- function(n, mean,
   if (force && !missing(L)) cholU <- L else cholU <- chol.default(U)
   if (force && !missing(R)) cholV <- R else cholV <- chol.default(V)
 
-  if (!force && (min(diag(cholU)) < 1e-6 || min(diag(cholV)) < 1e-6) ) {
+  if (!force && (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) ) {
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholU)), min(diag(cholV)))
   }
@@ -131,15 +131,15 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
   n <- dim(V)[1]
   cholU = chol.default(U)
   cholV = chol.default(V)
-  detU <- prod(diag(cholU))^2
-  detV <- prod(diag(cholV))^2
-  if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  logdetU <- 2*sum(log(diag(cholU)))
+  logdetV <- 2*sum(log(diag(cholV)))
   Uinv <- chol2inv(cholU)
   Vinv <- chol2inv(cholV)
   XM <- x - mean
-  logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * log(detU) -
+  logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * logdetU -
     #0.5 * p * log(detV) - 0.5 * sum(diag( Vinv %*% txax(XM, t(Uinv))))
-    0.5 * p * log(detV) - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
+    0.5 * p * logdetV - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
   if (log) {
     return(logresult)
   } else {
@@ -450,7 +450,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       invV = chol2inv(chol.default(new.V))
       # (tcrossprod(x, invV) %*%  t(x))
       # t(invV) = invV
-      inter.U <- apply(swept.data, 3, function(x) (tcrossprod(x, invV) %*%  t(x)))
+      inter.U <- apply(swept.data, 3, function(x) (x %*% tcrossprod(invV,x)))
       # collapsed into a (row*column) * n, which is then gathered and fixed.
       new.U <- matrix(rowSums(inter.U, dims = 1),
                       nrow = dims[1])/(dims[3] * dims[2])

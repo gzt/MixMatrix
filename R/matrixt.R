@@ -158,17 +158,15 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
 
-
   xm <- x - mean
   cholU <- chol.default(U)
   cholV <- chol.default(V)
-  detU <- prod(diag(cholU))^2
-  detV <- prod(diag(cholV))^2
-
   # breaking equation into two parts: the integrating constants (gammas)
   # and the matrix algebra parts (mats) done on the log scale
 
-  if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  logdetU <- 2*sum(log(diag(cholU)))
+  logdetV <- 2*sum(log(diag(cholV)))
   # gammas is constant
   gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
     0.5 * prod(dims) * log(pi) -
@@ -177,8 +175,8 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   m <- diag(dims[1]) + crossprod(chol2inv(cholU), xm) %*% tcrossprod(chol2inv(cholV), xm)
   #m <- diag(dims[1]) + chol2inv(cholU) %*% xatx(xm, chol2inv(cholV))
   # - 0.5 * dims[2] * dims[1]*log(df) term disappears
-  mats <- -0.5 * dims[2] * (log(detU))  -
-    0.5 * dims[1] * log(detV) -
+  mats <- -0.5 * dims[2] * (logdetU)  -
+    0.5 * dims[1] * logdetV -
     0.5 * (df + sum(dims) - 1) * log(det(m))
 
   results <- as.numeric(gammas + mats)
@@ -298,10 +296,10 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   xm <- x - mean
   cholU <- chol.default(U)
   cholV <- chol.default(V)
-  detU <- prod(diag(cholU))^2
-  detV <- prod(diag(cholV))^2
-  if (!(min(diag(cholU)) > 1e-6 && min(diag(cholV)) > 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
 
+  if ( (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6))) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
+  logdetU <- 2*sum(log(diag(cholU)))
+  logdetV <- 2*sum(log(diag(cholV)))
   # breaking equation into two parts: the integrating constants
   # (gammas) and the matrix algebra parts (mats) done on the log scale
   # note I did not do the DF correction as for the matrix t distribution
@@ -313,7 +311,7 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
     #chol2inv(cholU) %*% xatx(xm,  chol2inv(cholV))
     chol2inv(cholU) %*% xm %*% tcrossprod(chol2inv(cholV),(xm))
 
-  mats <- -0.5 * dims[2] * log(detU) - 0.5 * dims[1] * log(detV) -
+  mats <- -0.5 * dims[2] * logdetU - 0.5 * dims[1] * logdetV -
     0.5 * (df - 2) * log(det(matrixterms))
   results <- gammas + mats
   if (log) {
