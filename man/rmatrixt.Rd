@@ -19,20 +19,20 @@ dmatrixt(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
 \item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
 \code{df = 0, Inf} is allowed and will return a normal distribution.}
 
-\item{mean}{\eqn{p X q} This is really a 'shift' rather than a mean,
+\item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a mean,
 though the expected value will be equal to this if
 \eqn{df > 2}}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows.
+\item{L}{\eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
 
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
+\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the columns.
 By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite matrix for rows,
+\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for rows,
 computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite matrix for columns,
+\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for columns,
 computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
@@ -54,8 +54,8 @@ unless they are not, in fact, invertible.}
 \item{log}{logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).}
 }
 \value{
-\code{rmatrixt} returns either a list of \eqn{n}  \eqn{p X q}  matrices or
-   a \eqn{n X p X q}  array.
+\code{rmatrixt} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+   a \eqn{p \times q \times n}{p * q * n}  array.
 
    \code{dmatrixt} returns the density at quantile \code{x}.
 }
@@ -66,7 +66,7 @@ Distribution functions for the matrix variate t-distribution.
 The matrix \eqn{t}-distribution is parameterized slightly
  differently from the univariate and multivariate \eqn{t}-distributions
  - the variance is scaled by a factor of \code{1/df}.
- In this parameterization, the variance for a \eqn{1 x 1} matrix variate
+ In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix variate
  \eqn{t}-distributed random variable with identity variance matrices is
  \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
  for the matrix variate \eqn{T} is then that as \code{df} goes to

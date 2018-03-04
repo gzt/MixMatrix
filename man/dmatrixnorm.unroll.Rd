@@ -9,21 +9,21 @@ dmatrixnorm.unroll(x, mean = array(0L, dim(as.matrix(x))),
   V = t(R) \%*\% R, log = FALSE, unrolled = FALSE)
 }
 \arguments{
-\item{x}{\eqn{p X q} input matrix}
+\item{x}{\eqn{p \times q}{p * q} input matrix}
 
-\item{mean}{\eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s
+\item{mean}{\eqn{p \times q}{p * q} matrix of means. By default, a matrix of \eqn{0}s
 with size taken from \code{x}}
 
-\item{L}{\eqn{p X p} matrix specifying relations among the rows. By default,
+\item{L}{\eqn{p \times p}{p * p} matrix specifying relations among the rows. By default,
 an identity matrix.}
 
-\item{R}{\eqn{q X q} matrix specifying relations among the columns. By
+\item{R}{\eqn{q \times q}{q * q} matrix specifying relations among the columns. By
 default, an identity matrix.}
 
-\item{U}{\eqn{LL^T} - \eqn{p X p} positive definite variance-covariance
+\item{U}{\eqn{LL^T} - \eqn{p \times p}{p * p} positive definite variance-covariance
 matrix for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R} - \eqn{q X q} positive definite variance-covariance
+\item{V}{\eqn{R^T R} - \eqn{q \times q}{q * q} positive definite variance-covariance
 matrix for columns, computed from \eqn{R} if not specified.}
 
 \item{log}{logical - whether to return the density on the log scale.}

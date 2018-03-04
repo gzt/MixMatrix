@@ -7,14 +7,14 @@
 #' @family matrixnorm
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
-#' @param mean \eqn{p X q}  matrix of means
-#' @param L \eqn{p X p}  matrix specifying relations among the rows.
+#' @param mean \eqn{p \times q}{p * q}  matrix of means
+#' @param L  \eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 #'    By default, an identity matrix.
-#' @param R \eqn{q X q}  matrix specifying relations among the columns.
+#' @param R \eqn{q \times q}{q * q}  matrix specifying relations among the columns.
 #'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance
+#' @param U \eqn{LL^T}  - \eqn{p \times p}{p * p}  positive definite variance-covariance
 #'    matrix for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance
+#' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite variance-covariance
 #'    matrix for columns, computed from \eqn{R}  if not specified.
 #' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 #'    output will be a list of matrices.
@@ -28,8 +28,8 @@
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
 #' @param log logical; if TRUE, probabilities p are given as log(p).
-#' @return This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
-#'    a \eqn{p X q X n}  array.
+#' @return This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+#'    a \eqn{p \times q \times n}{p * q * n}  array.
 #' @export
 #'
 #' @seealso \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
@@ -150,16 +150,16 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
 #'     to a vector. Alternatively, it can work on a matrix that has
 #'     already been unrolled in the default R method (using
 #'     \code{as.vector}), as data may be stored in that fashion.
-#' @param x \eqn{p X q} input matrix
-#' @param mean \eqn{p X q} matrix of means. By default, a matrix of \eqn{0}s
+#' @param x \eqn{p \times q}{p * q} input matrix
+#' @param mean \eqn{p \times q}{p * q} matrix of means. By default, a matrix of \eqn{0}s
 #'     with size taken from \code{x}
-#' @param L \eqn{p X p} matrix specifying relations among the rows. By default,
+#' @param L \eqn{p \times p}{p * p} matrix specifying relations among the rows. By default,
 #'     an identity matrix.
-#' @param R \eqn{q X q} matrix specifying relations among the columns. By
+#' @param R \eqn{q \times q}{q * q} matrix specifying relations among the columns. By
 #'    default, an identity matrix.
-#' @param U \eqn{LL^T} - \eqn{p X p} positive definite variance-covariance
+#' @param U \eqn{LL^T} - \eqn{p \times p}{p * p} positive definite variance-covariance
 #'    matrix for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R} - \eqn{q X q} positive definite variance-covariance
+#' @param V \eqn{R^T R} - \eqn{q \times q}{q * q} positive definite variance-covariance
 #'    matrix for columns, computed from \eqn{R} if not specified.
 #' @param unrolled logical, \code{FALSE} by default. If \code{x}
 #'    is already unrolled, select \code{TRUE}. This will take the dimensions

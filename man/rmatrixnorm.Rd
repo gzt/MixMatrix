@@ -16,18 +16,18 @@ dmatrixnorm(x, mean = array(0, dim(as.matrix(x))[1:2]),
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}
 
-\item{mean}{\eqn{p X q}  matrix of means}
+\item{mean}{\eqn{p \times q}{p * q}  matrix of means}
 
-\item{L}{\eqn{p X p}  matrix specifying relations among the rows.
+\item{L}{\eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
 
-\item{R}{\eqn{q X q}  matrix specifying relations among the columns.
+\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the columns.
 By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p X p}  positive definite variance-covariance
+\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}  positive definite variance-covariance
 matrix for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q X q}  positive definite variance-covariance
+\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite variance-covariance
 matrix for columns, computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
@@ -49,8 +49,8 @@ unless they are not, in fact, invertible.}
 \item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p X q}  matrices or
-   a \eqn{p X q X n}  array.
+This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+   a \eqn{p \times q \times n}{p * q * n}  array.
 }
 \description{
 Density and random generation for the matrix variate normal distribution

@@ -6,7 +6,7 @@
 #' @param n number of columns/rows
 #' @param rho correlation parameter
 #'
-#' @return Toeplitz \eqn{n x n} matrix with 1 on the diagonal and \eqn{rho^k} on
+#' @return Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \eqn{rho^k} on
 #'    the other diagonals, where \eqn{k} is distance from the main diagonal.
 #'    Used internally but it is useful for generating your own random matrices.
 #' @seealso \code{\link[stats]{toeplitz}}
@@ -35,7 +35,7 @@ ARgenerate <- function(n, rho) {
 #' @param n number of dimensions
 #' @param rho off-diagonal element - a correlation between -1 and 1. Will warn if less than 0.
 #'
-#' @return returns an \eqn{n x n} matrix with 1 on the diagonal and \code{rho} on the off-diagonal.
+#' @return returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \code{rho} on the off-diagonal.
 #' @export
 #'
 #' @examples
@@ -278,7 +278,7 @@ invCS <- function(n, rho, deriv = FALSE){
 #' @description Computes a positive symmetric square root  matrix for a
 #'    positive definite input matrix. Used in the inverted matrix variate
 #'    t-distribution.
-#' @param A positive definite p x p real-valued matrix.
+#' @param A positive definite \eqn{p \times p}{p * p} real-valued matrix.
 #'
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.
@@ -312,7 +312,7 @@ posmatsqrt <- function(A) {
 #' @description Computes the inverse of a positive symmetric square root  matrix for a
 #'    positive definite input matrix. Used in the inverted matrix variate
 #'    t-distribution.
-#' @param A positive definite p x p real-valued matrix.
+#' @param A positive definite \eqn{p \times p}{p * } real-valued matrix.
 #'
 #' @return a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
 #'    \eqn{B \%*\% B = A}.

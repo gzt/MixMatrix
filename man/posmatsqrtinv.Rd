@@ -7,7 +7,7 @@
 posmatsqrtinv(A)
 }
 \arguments{
-\item{A}{positive definite p x p real-valued matrix.}
+\item{A}{positive definite \eqn{p \times p}{p * } real-valued matrix.}
 }
 \value{
 a symmetric square root matrix for A. ie, \eqn{B = t(B)} and
