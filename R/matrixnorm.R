@@ -82,6 +82,7 @@ rmatrixnorm <- function(n, mean,
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholU)), min(diag(cholV)))
   }
+  ## this is the point at which C++ would take over
   nobs = prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
@@ -125,6 +126,7 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
   # you should be using small enough matrices that determinants and
   # inverses aren't a pain.  also presumes not using a singular matrix
   # normal distribution
+  # could do in CPP
   p <- dim(U)[1]  #square matrices so only need first dimension
   n <- dim(V)[1]
   cholU = chol.default(U)

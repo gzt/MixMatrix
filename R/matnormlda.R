@@ -214,7 +214,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
       x <- array(unlist(newdata),
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
-    if(length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
+    if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 
 
     if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
@@ -223,7 +223,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
-      if(length(prior) != ng) stop("invalid prior length")
+      if (length(prior) != ng) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
     }
@@ -241,8 +241,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     VMUM = numeric(ng)
     VMU = array(0, dim = c(q, p, ng))
     for (j in seq(ng)) {
-      VMUM[j] = mattrace((-.5) * solveV %*% crossprod(object$means[, , j], solveU ) %*% object$means[, , j])
-      VMU[, , j] = solveV %*% t(object$means[, , j]) %*% solveU
+      VMU[, , j] = solveV %*% crossprod(object$means[, , j], solveU )
+      VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
     }
 
     for (i in seq(n)) {
@@ -474,7 +474,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
 
-    if(length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
+    if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 
     if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
       stop("wrong column dimension of matrices")
@@ -482,7 +482,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
-      if(length(prior) != ng) stop("invalid prior length")
+      if (length(prior) != ng) stop("invalid prior length")
       if (any(prior < 0) || round(sum(prior), 5) != 1)
         stop("invalid 'prior'")
     }
@@ -506,8 +506,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     detfactor =  numeric(ng)
     VMU = array(dim = c(q, p, ng))
     for (j in seq(ng)) {
-      VMUM[j] = mattrace((-.5) * solveV[, , j] %*% crossprod(object$means[, , j], solveU[, , j]) %*% object$means[, , j])
-      VMU[, , j] = solveV[, , j] %*% t(object$means[, , j]) %*% solveU[, , j]
+      VMU[, , j] = solveV[, , j] %*% crossprod(object$means[, , j], solveU[, , j])
+      VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
+
       detfactor[j] = .5 * (p * log(det(solveU[, , j])) + n * log(det(solveV[, , j])))
     }
 
