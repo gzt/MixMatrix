@@ -137,7 +137,7 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
            L = diag(p),
            R = diag(n), U = L %*% t(L),
            V = t(R) %*% R, log = FALSE){
-  # x <- as.matrix(x)
+
   dims <- dim(x)
   if (is.null(dims) || length(dims) == 1) x <- matrix(x)
 
@@ -165,42 +165,26 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
 
   # gammas is constant
-  gammas <- CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+  # this could be shifted into C++ but I don't want to pull out of CholWishart
+  gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
     0.5 * dims[1]*dims[2] * log(pi) -
-    CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+    CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-  ## starting here, can try to put in CPP
 
-  xm <- array(0, dim = c(p,n,dims[3]))
-  for(i in seq(dims[3])){
-  xm[, , i] <- x[, , i] - mean
-  }
-  cholU <- chol.default(U)
-  cholV <- chol.default(V)
-  # breaking equation into two parts: the integrating constants (gammas)
-  # and the matrix algebra parts (mats) done on the log scale
 
-  if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
-  logdetU <- 2*sum(log(diag(cholU)))
-  logdetV <- 2*sum(log(diag(cholV)))
-  results <- rep(gammas, dims[3])
-  for(i in seq(dims[3])){
-  m <- diag(dims[1]) + crossprod(chol2inv(cholU), matrix(xm[,,i], dims[1], dims[2])) %*%
-    tcrossprod(chol2inv(cholV),matrix(xm[,,i], dims[1], dims[2]))
-  #m <- diag(dims[1]) + chol2inv(cholU) %*% xatx(xm, chol2inv(cholV))
-  # - 0.5 * dims[2] * dims[1]*log(df) term disappears
-  mats <- -0.5 * dims[2] * (logdetU)  -
-    0.5 * dims[1] * logdetV -
-    0.5 * (df + dims[1] + dims[2] - 1) * log(det(m))
-
-  results[i] <- results[i] + mats
-  }
+  results = as.numeric(dmat_t_calc(x, df, mean, U, V))
+  results = results + gammas
   if (log) {
     return(results)
   } else {
     return(exp(results))
   }
 }
+
+
+
+
+
 
 
 #' Distribution functions for matrix variate inverted t-distributions

@@ -105,6 +105,11 @@ test_that("Equivalent outputs for different options:", {
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
 
+  expect_equal( dmatrixnorm(array(1:10, dim = c(1,1,10)),0,U=4),
+                dnorm(1:10,0,2))
+  expect_equal( dmatrixnorm(array(1:10, dim = c(1,1,10)),0,V=16),
+                dnorm(1:10,0,4))
+
 })
 
 test_that("Equivalent outputs for different functions:", {

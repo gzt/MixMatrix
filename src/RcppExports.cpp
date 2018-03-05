@@ -54,12 +54,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dmat_t_calc
+arma::colvec dmat_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
+RcppExport SEXP _matrixdist_dmat_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    rcpp_result_gen = Rcpp::wrap(dmat_t_calc(x, df, mean, U, V));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
     {"_matrixdist_posdefinvsqrt", (DL_FUNC) &_matrixdist_posdefinvsqrt, 1},
     {"_matrixdist_testsymmetric", (DL_FUNC) &_matrixdist_testsymmetric, 2},
     {"_matrixdist_dmatnorm_calc", (DL_FUNC) &_matrixdist_dmatnorm_calc, 4},
+    {"_matrixdist_dmat_t_calc", (DL_FUNC) &_matrixdist_dmat_t_calc, 5},
     {NULL, NULL, 0}
 };
 
