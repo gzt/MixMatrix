@@ -13,3 +13,7 @@ testsymmetric <- function(x, tol) {
     .Call('_matrixdist_testsymmetric', PACKAGE = 'matrixdist', x, tol)
 }
 
+dmatnorm_calc <- function(x, mean, U, V) {
+    .Call('_matrixdist_dmatnorm_calc', PACKAGE = 'matrixdist', x, mean, U, V)
+}
+

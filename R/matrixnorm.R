@@ -130,26 +130,9 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
-  # you should be using small enough matrices that determinants and
-  # inverses aren't a pain.  also presumes not using a singular matrix
-  # normal distribution
-  # could do in CPP
-  # p <- dim(U)[1]  #square matrices so only need first dimension
-  # n <- dim(V)[1]
-  cholU = chol.default(U)
-  cholV = chol.default(V)
-  if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
-  logdetU <- 2*sum(log(diag(cholU)))
-  logdetV <- 2*sum(log(diag(cholV)))
-  Uinv <- chol2inv(cholU)
-  Vinv <- chol2inv(cholV)
-  XM <- array(apply(x, 3, function(y) y - mean),dim = dims)
-  logresult <- rep(0,dims[3])
-  for (i in 1:dims[3]) {
-  logresult[i] <- -0.5 * n * p * log(2 * pi) - 0.5 * n * logdetU -
-    #0.5 * p * log(detV) - 0.5 * sum(diag( Vinv %*% txax(XM, t(Uinv))))
-    0.5 * p * logdetV - 0.5 * sum(diag( tcrossprod(Vinv, matrix(XM[,,i], nrow = dims[1], ncol = dims[2])) %*% crossprod(Uinv, matrix(XM[,,i],nrow = dims[1], ncol = dims[2]))))
-}
+
+  logresult <- as.numeric(dmatnorm_calc(x, mean, U, V))
+
   if (log) {
     return(logresult)
   } else {
