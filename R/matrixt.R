@@ -157,7 +157,12 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
+  # gammas is constant
+  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+    0.5 * prod(dims) * log(pi) -
+    CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
+  ## starting here, can try to put in CPP
   xm <- x - mean
   cholU <- chol.default(U)
   cholV <- chol.default(V)
@@ -167,10 +172,6 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
   logdetU <- 2*sum(log(diag(cholU)))
   logdetV <- 2*sum(log(diag(cholV)))
-  # gammas is constant
-  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-    0.5 * prod(dims) * log(pi) -
-    CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
   m <- diag(dims[1]) + crossprod(chol2inv(cholU), xm) %*% tcrossprod(chol2inv(cholV), xm)
   #m <- diag(dims[1]) + chol2inv(cholU) %*% xatx(xm, chol2inv(cholV))
@@ -293,6 +294,10 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
 
+  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
+    0.5 * prod(dims) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+
+  ## starting here can put in CPP
   xm <- x - mean
   cholU <- chol.default(U)
   cholV <- chol.default(V)
@@ -304,8 +309,7 @@ dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   # (gammas) and the matrix algebra parts (mats) done on the log scale
   # note I did not do the DF correction as for the matrix t distribution
 
-  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-    0.5 * prod(dims) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+
 
   matrixterms <- diag(dims[1]) -
     #chol2inv(cholU) %*% xatx(xm,  chol2inv(cholV))

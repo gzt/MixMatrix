@@ -1,3 +1,9 @@
+# matrixdist 0.0.0.9926
+
+* split Wishart functions into CholWishart package
+* migrate some internal functions to RcppArmadillo to improve speed
+* add support for multiple observation input to dmatrixnorm function
+
 # matrixdist 0.0.0.9925
  
 * add multivariate digamma 
