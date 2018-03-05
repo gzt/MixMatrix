@@ -3,6 +3,7 @@
 * split Wishart functions into CholWishart package
 * migrate some internal functions to RcppArmadillo to improve speed
 * add support for multiple observation input to dmatrixnorm function
+* improve speed of MLmatrixnorm by migrating more to C++ and fixing some R bottlenecks
 
 # matrixdist 0.0.0.9925
  
