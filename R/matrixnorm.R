@@ -334,13 +334,15 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (V[1,2] > 0) {
       rho.col <- V[1,2]
     } else {
-      invU = chol2inv(chol.default(U))
-      inter.V <- apply(swept.data, 3,
-                       #function(x) txax((x), invU ))
-                       function(x) crossprod((x), invU ) %*% x)
+      #invU = chol2inv(chol.default(U))
+      #inter.V <- apply(swept.data, 3,
+                       ##function(x) txax((x), invU ))
+                       #function(x) crossprod((x), invU ) %*% x)
       # collapsed into a (row*column) * n, which is then gathered and fixed.
-      V <- matrix(rowSums(inter.V, dims = 1),
-                  nrow = dims[2])/(dims[3] * dims[1])
+      #V <- matrix(rowSums(inter.V, dims = 1),
+      #            nrow = dims[2])/(dims[3] * dims[1])
+      inter.V <- txax(swept.data, U)
+      V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
       if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
       if (col.variance == "I") rho.col = 0
@@ -354,13 +356,15 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (U[1,2] > 0) {
       rho.row <- U[1,2]
     } else {
-      invV = chol2inv(chol.default(V))
-      inter.U <- apply(swept.data, 3,
-                       #function(x) xatx(x,t(invV)))
-                       function(x) ((x) %*% tcrossprod(invV,(x))))
-      # collapsed into a (row*column) * n, which is then gathered and fixed.
-      U <- matrix(rowSums(inter.U , dims = 1),
-                  nrow = dims[1])/(dims[3] * dims[2])
+      # invV = chol2inv(chol.default(V))
+      # inter.U <- apply(swept.data, 3,
+      #                  #function(x) xatx(x,t(invV)))
+      #                  function(x) ((x) %*% tcrossprod(invV,(x))))
+      # # collapsed into a (row*column) * n, which is then gathered and fixed.
+      # U <- matrix(rowSums(inter.U , dims = 1),
+      #             nrow = dims[1])/(dims[3] * dims[2])
+      inter.U <- xatx(swept.data, V)
+      U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
       if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
       if (row.variance == "I") rho.row = 0
@@ -384,14 +388,14 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                         function(x) crossprod(x,
                                               invV %x% invU) %*% x)) / (prod(dims))
       if (col.variance != "I") {
-        invU = chol2inv(chol.default(U))
-        tmp <- array(apply(swept.data, 3, function(x) crossprod(x, invU) %*% (x) ),
+        #invU = chol2inv(chol.default(U))
+        #tmp <- array(apply(swept.data, 3, function(x) crossprod(x, invU) %*% (x) ),
         #tmp <- array(apply(swept.data, 3, function(x) txax(x, invU) ),
-                     dim = c(dims[2],dims[2],dims[3]))
+        #             dim = c(dims[2],dims[2],dims[3]))
+        tmp <- txax(swept.data, U)
         nLL <- function(theta) {
           Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
-          B <- matrix(rowSums(apply(tmp, 3,
-                                    function(x) Vmat %*% x )), nrow = dims[2])
+          B <- Vmat %*% matrix(rowSums(tmp,FALSE,dims = 2), nrow = dims[2])
           # solved derivative, need to find where this is zero:
           0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
             (.5 ) * sum(diag(B)) # problem was wrong constant
@@ -408,24 +412,26 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       }
       new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
     } else {
-      invU = chol2inv(chol.default(U))
-      # (crossprod(x, invU) %*% x)
-      inter.V <- apply(swept.data, 3, function(x) (crossprod(x, invU) %*% x))
-      # collapsed into a (row*column) * n, which is then gathered and fixed.
-      new.V <- matrix(apply(inter.V, 1, sum),
-                      nrow = dims[2])/(dims[3] * dims[1])
+      # invU = chol2inv(chol.default(U))
+      # # (crossprod(x, invU) %*% x)
+      # inter.V <- apply(swept.data, 3, function(x) (crossprod(x, invU) %*% x))
+      # # collapsed into a (row*column) * n, which is then gathered and fixed.
+      # new.V <- matrix(apply(inter.V, 1, sum),
+      #                 nrow = dims[2])/(dims[3] * dims[1])
+      inter.V <- txax(swept.data, U)
+      new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
     }
     if (row.variance == "I") {
       new.U = diag(dims[1])
     } else if (row.set.var) {
-      invV = chol2inv(chol.default(new.V))
+      #invV = chol2inv(chol.default(new.V))
       # (x) %*% invV %*% t(x)
-      tmp <- array(apply(swept.data, 3, function(x) (x) %*% tcrossprod(invV ,x) ),
-                   dim = c(dims[1],dims[1],dims[3]))
+      #tmp <- array(apply(swept.data, 3, function(x) (x) %*% tcrossprod(invV ,x) ),
+      #             dim = c(dims[1],dims[1],dims[3]))
+      tmp <- xatx(swept.data, V)
       nLL <- function(theta) {
         Umat <- varinv(dims[1],theta,TRUE, row.variance)
-        B <- matrix(rowSums(apply(tmp, 3,
-                                  function(x) Umat %*% x)), nrow = dims[1])
+        B <- Umat %*% matrix(rowSums(tmp, dims=2), nrow = dims[1])
         # solved derivative, need to find where this is zero:
         0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
           (.5 ) * sum(diag(B)) # problem was wrong constant
@@ -440,13 +446,15 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       }
       new.U <- varmatgenerate(dims[1], rho.row,row.variance)
     } else {
-      invV = chol2inv(chol.default(new.V))
+      #invV = chol2inv(chol.default(new.V))
       # (tcrossprod(x, invV) %*%  t(x))
       # t(invV) = invV
-      inter.U <- apply(swept.data, 3, function(x) (x %*% tcrossprod(invV,x)))
+      #inter.U <- apply(swept.data, 3, function(x) (x %*% tcrossprod(invV,x)))
       # collapsed into a (row*column) * n, which is then gathered and fixed.
-      new.U <- matrix(rowSums(inter.U, dims = 1),
-                      nrow = dims[1])/(dims[3] * dims[2])
+      #new.U <- matrix(rowSums(inter.U, dims = 1),
+      #                nrow = dims[1])/(dims[3] * dims[2])
+      inter.U <- xatx(swept.data, new.V)
+      new.U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       new.U <- new.U/(new.U[1, 1])
     }
     # only identifiable up to a constant, so have to fix something at 1

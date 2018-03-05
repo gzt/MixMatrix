@@ -130,4 +130,3 @@ arma::cube txax(arma::cube & x, arma::mat & U){
   }
   return results;
 }
-
