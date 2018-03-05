@@ -32,6 +32,7 @@ bool testsymmetric(arma::mat x, double tol){
   for(int i = 0; i < nrow; i++){
      for(int j = 0; j < ncol; j++){
       total += 1.0*(flop(i,j) > tol);
+      if ( total >= 1) break;
      }
    }
 
