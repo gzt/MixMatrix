@@ -38,3 +38,37 @@ bool testsymmetric(arma::mat x, double tol){
 
   return (total < 1);
 }
+
+
+
+// [[Rcpp::export]]
+arma::colvec dmatnorm_calc(arma::cube & x, arma::mat & mean,
+                           arma::mat & U, arma::mat & V){
+  arma::colvec eigvalU;
+  arma::mat eigvecU;
+  arma::colvec eigvalV;
+  arma::mat eigvecV;
+  arma::eig_sym(eigvalU, eigvecU, U);
+  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  arma::eig_sym(eigvalV, eigvecV, V);
+  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  int n = x.n_rows;
+  int p = x.n_cols;
+  int numslices = x.n_slices;
+  // char* uchar = "U";
+  double logdetU = 2*sum(log(eigvalU));
+  double logdetV = 2*sum(log(eigvalV));
+  arma::mat Uinv = eigvecU * diagmat(1/eigvalU) * eigvecU.t();
+  arma::mat Vinv =  eigvecV * diagmat(1/eigvalV) * eigvecV.t();
+  arma::cube XM(x.n_rows, x.n_cols, x.n_slices);
+  for (int i = 0; i < numslices; i++) {
+    XM.slice(i) = x.slice(i) - mean;
+  }
+  arma::colvec logresult(x.n_slices);
+  for (int i = 0; i < numslices; i++) {
+    logresult(i) = -0.5 * n * p * log(2 * PI) - 0.5 * n * logdetU -
+      0.5 * p * logdetV - 0.5 * trace( Vinv * trans(XM.slice(i)) * Uinv * XM.slice(i));
+  }
+  return logresult;
+}
+
