@@ -88,7 +88,7 @@ arma::colvec dmat_t_calc(arma::cube & x, double df, arma::mat & mean,
   double logdetU = sum(log(eigvalU));
   double logdetV = sum(log(eigvalV));
   arma::mat Uinv = eigvecU * diagmat(1/eigvalU) * eigvecU.t();
-  arma::mat Vinv =  eigvecV * diagmat(1/eigvalV) * eigvecV.t();
+  arma::mat Vinv = eigvecV * diagmat(1/eigvalV) * eigvecV.t();
   arma::colvec logresult(x.n_slices);
 
   for (int i = 0; i < numslices; i++) {
@@ -101,3 +101,33 @@ arma::colvec dmat_t_calc(arma::cube & x, double df, arma::mat & mean,
   return logresult;
 
 }
+
+// [[Rcpp::export]]
+arma::cube xatx(arma::cube & x, arma::mat & U){
+  // generates X * solve(U) * t(X)
+  int n = x.n_rows;
+  int numslices = x.n_slices;
+  if (x.n_cols != U.n_rows || x.n_cols != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
+  arma::mat Uinv = arma::inv_sympd(U);
+  arma::cube results(n,n,numslices);
+  for(int i = 0; i < numslices; i++){
+    results.slice(i) = (x.slice(i)) * Uinv * trans(x.slice(i));
+  }
+  return results;
+}
+
+
+// [[Rcpp::export]]
+arma::cube txax(arma::cube & x, arma::mat & U){
+  // generates t(X) * solve(U) * X
+  int p = x.n_cols;
+  int numslices = x.n_slices;
+  if (x.n_rows != U.n_rows || x.n_rows != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
+  arma::mat Uinv = arma::inv_sympd(U);
+  arma::cube results(p,p,numslices);
+  for(int i = 0; i < numslices; i++){
+    results.slice(i) = trans(x.slice(i)) * Uinv * x.slice(i);
+  }
+  return results;
+}
+

@@ -21,3 +21,11 @@ dmat_t_calc <- function(x, df, mean, U, V) {
     .Call('_matrixdist_dmat_t_calc', PACKAGE = 'matrixdist', x, df, mean, U, V)
 }
 
+xatx <- function(x, U) {
+    .Call('_matrixdist_xatx', PACKAGE = 'matrixdist', x, U)
+}
+
+txax <- function(x, U) {
+    .Call('_matrixdist_txax', PACKAGE = 'matrixdist', x, U)
+}
+
