@@ -28,12 +28,12 @@ bool testsymmetric(arma::mat x, double tol){
   int ncol = x.n_cols;
   double total = 0.0;
   arma::mat flop = abs((x - trans(x)));
-  //LogicalMatrix res = (flop < tol);
+
   for(int i = 0; i < nrow; i++){
      for(int j = 0; j < ncol; j++){
-      total += (flop(i,j));
+      total += 1.0*(flop(i,j) > tol);
      }
    }
 
-  return (total < tol);
+  return (total < 1);
 }

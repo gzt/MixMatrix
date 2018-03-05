@@ -106,19 +106,26 @@ rmatrixnorm <- function(n, mean,
 #' @describeIn rmatrixnorm Density calculation for matrix variate normal distributions.
 #' @export
 #'
-dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
-                        L = diag(dim(mean)[1]),
-                        R = diag(dim(mean)[2]), U = L %*% t(L),
+dmatrixnorm <- function(x, mean = matrix(0, p, n),
+                        L = diag(p),
+                        R = diag(n), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
+  # x <- as.matrix(x)
+  dims <- dim(x)
+  if (is.null(dims) || length(dims) == 1) x <- matrix(x)
+  dims <- dim(x)
+  if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims,1)))
+  p <- dims[1]
+  n <- dims[2]
   if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
             is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
-  x <- as.matrix(x)
+
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
   if (!symm.check(U)) stop("U not symmetric.")
   if (!symm.check(V)) stop("V not symmetric.")
-  dims <- dim(x)
+
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U),dim(V))
@@ -127,8 +134,8 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
   # inverses aren't a pain.  also presumes not using a singular matrix
   # normal distribution
   # could do in CPP
-  p <- dim(U)[1]  #square matrices so only need first dimension
-  n <- dim(V)[1]
+  # p <- dim(U)[1]  #square matrices so only need first dimension
+  # n <- dim(V)[1]
   cholU = chol.default(U)
   cholV = chol.default(V)
   if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
@@ -136,10 +143,13 @@ dmatrixnorm <- function(x, mean = array(0, dim(as.matrix(x))[1:2]),
   logdetV <- 2*sum(log(diag(cholV)))
   Uinv <- chol2inv(cholU)
   Vinv <- chol2inv(cholV)
-  XM <- x - mean
-  logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * n * logdetU -
+  XM <- array(apply(x, 3, function(y) y - mean),dim = dims)
+  logresult <- rep(0,dims[3])
+  for (i in 1:dims[3]) {
+  logresult[i] <- -0.5 * n * p * log(2 * pi) - 0.5 * n * logdetU -
     #0.5 * p * log(detV) - 0.5 * sum(diag( Vinv %*% txax(XM, t(Uinv))))
-    0.5 * p * logdetV - 0.5 * sum(diag( tcrossprod(Vinv, XM) %*% crossprod(Uinv, XM)))
+    0.5 * p * logdetV - 0.5 * sum(diag( tcrossprod(Vinv, matrix(XM[,,i], nrow = dims[1], ncol = dims[2])) %*% crossprod(Uinv, matrix(XM[,,i],nrow = dims[1], ncol = dims[2]))))
+}
   if (log) {
     return(logresult)
   } else {
@@ -490,9 +500,10 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
   converged = !(iter >= max.iter || error.term > tol || varflag)
   logLik = 0
-  for (i in seq(dims[3])) {
-    logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
-  }
+  #for (i in seq(dims[3])) {
+  #  logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
+  #}
+  logLik = sum(dmatrixnorm(data, mu, U = U, V = V, log = TRUE))
   return(list(mean = mu,
               U = U,
               V = V/V[1,1],

@@ -9,9 +9,8 @@ rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
   list = FALSE, array = NULL, force = FALSE)
 
-dmatrixnorm(x, mean = array(0, dim(as.matrix(x))[1:2]),
-  L = diag(dim(mean)[1]), R = diag(dim(mean)[2]), U = L \%*\% t(L),
-  V = t(R) \%*\% R, log = FALSE)
+dmatrixnorm(x, mean = matrix(0, p, n), L = diag(p), R = diag(n), U = L
+  \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}

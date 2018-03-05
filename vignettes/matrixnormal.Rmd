@@ -88,7 +88,7 @@ print(results)
 There are two restrictions possible for the mean matrices: `row.mean` will force a common  mean within a row and `col.mean` will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands.
 
 ```{r mlerow, cache = T}
-results.fixrows = MLmatrixnorm(A, row.mean=TRUE, max.iter = 10)
+results.fixrows = MLmatrixnorm(A, row.mean = TRUE, max.iter = 5)
 print(results.fixrows)
 # this failure is expected with misspecification! The number of iterations is also 
 # fixed to be low so the vignette compiles quickly.
@@ -99,9 +99,10 @@ Currently the only options for variance restrictions are to impose an AR(1) stru
 ```{r mlevar,warning=FALSE}
 # tolerance and maximum iterations are limited here to make the vignette compile faster
 
-B = rmatrixnorm(n=50,mean=matrix(1:15,nrow=5),U=3*stats::toeplitz(.6^(1:5)))
-MLmatrixnorm(B,row.variance="AR(1)", tol = 1e-5)
-MLmatrixnorm(B,tol=1e-5)
+B = rmatrixnorm(n = 50, mean = matrix(1:15,nrow = 5), 
+                U = 3*stats::toeplitz(.6^(1:5)))
+MLmatrixnorm(B, row.variance = "AR(1)", tol = 1e-5)
+MLmatrixnorm(B, tol = 1e-5)
 
 ```
 

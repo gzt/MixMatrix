@@ -120,8 +120,8 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(A, C)
   expect_equal(A, D)
 
-  expect_equal(dnorm(1), dmatrixnorm(1))
-  expect_equal(dnorm(1), dmatrixnorm.unroll(1))
+  expect_equal(dnorm(1), dmatrixnorm(matrix(1)))
+  expect_equal(dnorm(1), dmatrixnorm.unroll(matrix(1)))
 
   expect_equal(dmatrixnorm.unroll(x = matrix(.5, nrow = 10, ncol = 2),
                                   log = TRUE),
