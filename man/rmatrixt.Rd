@@ -9,8 +9,7 @@ rmatrixt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
   list = FALSE, array = NULL, force = FALSE)
 
-dmatrixt(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
-  L = diag(dim(as.matrix(x))[1]), R = diag(dim(as.matrix(x))[2]), U = L
+dmatrixt(x, df, mean = matrix(0, p, n), L = diag(p), R = diag(n), U = L
   \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{

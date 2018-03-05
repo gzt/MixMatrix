@@ -133,37 +133,48 @@ rmatrixt <- function(n, df, mean,
 
 #' @describeIn rmatrixt Density function for matrix variate t-distribution
 #' @export
-dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
-                     L = diag(dim(as.matrix(x))[1]),
-                     R = diag(dim(as.matrix(x))[2]),
-                     U = L %*% t(L), V = t(R) %*% R,
-                     log = FALSE) {
-  if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
-            is.numeric(R), is.numeric(U),
-            is.numeric(V)))) stop("Non-numeric input. ")
+dmatrixt <- function(x, df, mean = matrix(0, p, n),
+           L = diag(p),
+           R = diag(n), U = L %*% t(L),
+           V = t(R) %*% R, log = FALSE){
+  # x <- as.matrix(x)
+  dims <- dim(x)
+  if (is.null(dims) || length(dims) == 1) x <- matrix(x)
+
+  dims <- dim(x)
+  if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims,1)))
+  p <- dims[1]
+  n <- dims[2]
+  if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
   if ( ((is.null(df)) || is.na(df) || (df < 0)))
     stop("df must be >= 0. df =", df)
-  if ( (df == 0 || is.infinite(df)) )
-    return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
-  x <- as.matrix(x)
+
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
   if (!symm.check(U)) stop("U not symmetric.")
   if (!symm.check(V)) stop("V not symmetric.")
-  dims <- dim(x)
+
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+    stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
+  if ( (df == 0 || is.infinite(df)) )
+    return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
+
   # gammas is constant
-  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-    0.5 * prod(dims) * log(pi) -
+  gammas <- CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+    0.5 * dims[1]*dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
 
   ## starting here, can try to put in CPP
-  xm <- x - mean
+
+  xm <- array(0, dim = c(p,n,dims[3]))
+  for(i in seq(dims[3])){
+  xm[, , i] <- x[, , i] - mean
+  }
   cholU <- chol.default(U)
   cholV <- chol.default(V)
   # breaking equation into two parts: the integrating constants (gammas)
@@ -172,15 +183,18 @@ dmatrixt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
   if (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6)) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
   logdetU <- 2*sum(log(diag(cholU)))
   logdetV <- 2*sum(log(diag(cholV)))
-
-  m <- diag(dims[1]) + crossprod(chol2inv(cholU), xm) %*% tcrossprod(chol2inv(cholV), xm)
+  results <- rep(gammas, dims[3])
+  for(i in seq(dims[3])){
+  m <- diag(dims[1]) + crossprod(chol2inv(cholU), matrix(xm[,,i], dims[1], dims[2])) %*%
+    tcrossprod(chol2inv(cholV),matrix(xm[,,i], dims[1], dims[2]))
   #m <- diag(dims[1]) + chol2inv(cholU) %*% xatx(xm, chol2inv(cholV))
   # - 0.5 * dims[2] * dims[1]*log(df) term disappears
   mats <- -0.5 * dims[2] * (logdetU)  -
     0.5 * dims[1] * logdetV -
-    0.5 * (df + sum(dims) - 1) * log(det(m))
+    0.5 * (df + dims[1] + dims[2] - 1) * log(det(m))
 
-  results <- as.numeric(gammas + mats)
+  results[i] <- results[i] + mats
+  }
   if (log) {
     return(results)
   } else {
