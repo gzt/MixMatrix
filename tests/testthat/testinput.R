@@ -1,6 +1,6 @@
 library(matrixdist)
 
-context("Testing input integrity")
+context("Testing input type integrity")
 
 
 test_that("trying wrong type of input", {
@@ -153,6 +153,10 @@ test_that("trying wrong type of input", {
 
 
 })
+
+context("Testing input dimension integrity")
+
+
 
 test_that("Testing bad matrix dimension input", {
   A <- diag(3)
@@ -732,6 +736,9 @@ test_that("Out of bounds numeric input: ", {
 
 
 })
+
+context("Testing input positive definite/invertible integrity")
+
 
 test_that("Bad rank in covariance:", {
   A = matrix(0, nrow = 2, ncol = 2)

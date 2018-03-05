@@ -49,9 +49,9 @@ arma::colvec dmatnorm_calc(arma::cube & x, arma::mat & mean,
   arma::colvec eigvalV;
   arma::mat eigvecV;
   arma::eig_sym(eigvalU, eigvecU, U);
-  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly singular input");
   arma::eig_sym(eigvalV, eigvecV, V);
-  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly singular input");
   int n = x.n_rows;
   int p = x.n_cols;
   int numslices = x.n_slices;
@@ -78,9 +78,9 @@ arma::colvec dmat_t_calc(arma::cube & x, double df, arma::mat & mean,
   arma::colvec eigvalV;
   arma::mat eigvecV;
   arma::eig_sym(eigvalU, eigvecU, U);
-  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly singular input");
   arma::eig_sym(eigvalV, eigvecV, V);
-  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly non-singular input");
+  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly singular input");
   int n = x.n_rows;
   int p = x.n_cols;
   int numslices = x.n_slices;
@@ -108,7 +108,9 @@ arma::cube xatx(arma::cube & x, arma::mat & U){
   int n = x.n_rows;
   int numslices = x.n_slices;
   if (x.n_cols != U.n_rows || x.n_cols != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
-  arma::mat Uinv = arma::inv_sympd(U);
+  arma::mat Uinv;
+  bool res = arma::inv_sympd(Uinv, U);
+  if(!res) stop("error: singular or non-positive definite input");
   arma::cube results(n,n,numslices);
   for(int i = 0; i < numslices; i++){
     results.slice(i) = (x.slice(i)) * Uinv * trans(x.slice(i));
@@ -123,7 +125,9 @@ arma::cube txax(arma::cube & x, arma::mat & U){
   int p = x.n_cols;
   int numslices = x.n_slices;
   if (x.n_rows != U.n_rows || x.n_rows != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
-  arma::mat Uinv = arma::inv_sympd(U);
+  arma::mat Uinv;
+  bool res = arma::inv_sympd(Uinv, U);
+  if(!res) stop("error: singular or non-positive definite input");
   arma::cube results(p,p,numslices);
   for(int i = 0; i < numslices; i++){
     results.slice(i) = trans(x.slice(i)) * Uinv * x.slice(i);
