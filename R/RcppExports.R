@@ -29,3 +29,11 @@ txax <- function(x, U) {
     .Call('_matrixdist_txax', PACKAGE = 'matrixdist', x, U)
 }
 
+rmat_inv_t_calc <- function(S, mat, U, V, mean) {
+    .Call('_matrixdist_rmat_inv_t_calc', PACKAGE = 'matrixdist', S, mat, U, V, mean)
+}
+
+dmat_inv_t_calc <- function(x, df, mean, U, V) {
+    .Call('_matrixdist_dmat_inv_t_calc', PACKAGE = 'matrixdist', x, df, mean, U, V)
+}
+

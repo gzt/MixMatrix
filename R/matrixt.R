@@ -88,8 +88,7 @@ rmatrixt <- function(n, df, mean,
   if (!symm.check(U)) stop("U not symmetric.")
   if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
-  # should probably do better error checking, checks for
-  # conformable matrix dimensions
+
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
@@ -100,20 +99,15 @@ rmatrixt <- function(n, df, mean,
     stop("Potentially singular covariance, use force = TRUE if intended. ",
          min(diag(cholV)))
   }
-  # this is not necessary, the correct input is
-  # U, not U^-1
-  #solveU = chol2inv(chol.default(U))
 
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-  # USigma <- stats::rWishart(n, df + dims[1] - 1, (1/df) * solveU)
-
   cholU <- CholWishart::rInvCholWishart(n, df + dims[1] - 1,U)
 
   result <- array(dim = c(dims,n))
+
   for (i in seq(n)) {
-    # just changed: pretty sure this is supposed to be t(chol(...))
     result[ , , i] <- mean + (crossprod(cholU[ , , i], mat[ , , i])) %*% (cholV)
   }
 
@@ -170,8 +164,6 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     0.5 * dims[1]*dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-
-
   results = as.numeric(dmat_t_calc(x, df, mean, U, V))
   results = results + gammas
   if (log) {
@@ -180,11 +172,6 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     return(exp(results))
   }
 }
-
-
-
-
-
 
 
 #' Distribution functions for matrix variate inverted t-distributions
@@ -226,29 +213,13 @@ rmatrixinvt <- function(n, df, mean,
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
 
-  Usqrt <- posmatsqrt(U)
-  Vsqrt <- posmatsqrt(V)
-  if (any(!is.finite(Usqrt)) || any(!is.finite(Vsqrt))) stop("Non-positive definite U or V matrix.")
   nobs <- prod(dims)*n
   mat <- array(stats::rnorm(nobs), dim = c(dims,n))
 
-  S <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
+   S <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
 
-  SXX <- array(0,dim = c(dims[1],dims[1],n))
+  result = rmat_inv_t_calc(S, mat, U, V, mean)
 
-  for (i in seq(n)) {
-    # if there's a way to do this with apply I want to see it
-    SXX[ , , i] <- array((posmatsqrtinv(S[ , , i] +
-                                          tcrossprod(mat[ , , i]))),
-                         dim = c(dims[1],dims[1]))
-  }
-
-  result <- array(dim = c(dims,n))
-
-  for (i in seq(n)) {
-    # if there's a way to do this with apply I want to see it
-    result[ , , i] <- Usqrt %*% SXX[ , , i] %*% mat[ , , i] %*% Vsqrt + mean
-  }
 
   if (n == 1 && list == FALSE && is.null(array)) {
     return(array(result[,,1], dim = dims[1:2]))
@@ -268,54 +239,39 @@ rmatrixinvt <- function(n, df, mean,
 
 #' @describeIn rmatrixinvt Density function for inverted matrix t-distributions.
 #' @export
-dmatrixinvt <- function(x, df, mean = array(0, dim(as.matrix(x))[1:2]),
-                        L = diag(dim(as.matrix(x))[1]),
-                        R = diag(dim(as.matrix(x))[2]),
-                        U = L %*% t(L), V = t(R) %*% R, log = FALSE) {
-  if (!(all(is.numeric(x),is.numeric(df), is.numeric(mean), is.numeric(L),
-            is.numeric(R), is.numeric(U),
-            is.numeric(V)))) stop("Non-numeric input. ")
+dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
+                     L = diag(p),
+                     R = diag(n), U = L %*% t(L),
+                     V = t(R) %*% R, log = FALSE){
+
+  dims <- dim(x)
+  if (is.null(dims) || length(dims) == 1) x <- matrix(x)
+
+  dims <- dim(x)
+  if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims,1)))
+  p <- dims[1]
+  n <- dims[2]
+  if (!(all(is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
+            is.numeric(U),is.numeric(V)))) stop("Non-numeric input. ")
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
   if ( ((is.null(df)) || is.na(df) || (df < 0)))
     stop("df must be >= 0. df =", df)
-  if (df <= 0 || is.infinite(df)) stop("Invalid input for df,
-                                        must have 0 < df < Inf, df = ", df)
-  x <- as.matrix(x)
+
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
   if (!symm.check(U)) stop("U not symmetric.")
   if (!symm.check(V)) stop("V not symmetric.")
-  dims <- dim(x)
+
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
         dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
+    stop("Non-conforming dimensions.", dims, dim(U),dim(V))
   }
+  gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+    0.5 * prod(dims[1:2]) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-  gammas <- CholWishart::lmvgamma((0.5) * (df + sum(dims) - 1), dims[1]) -
-    0.5 * prod(dims) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
-
-  ## starting here can put in CPP
-  xm <- x - mean
-  cholU <- chol.default(U)
-  cholV <- chol.default(V)
-
-  if ( (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6))) stop("non-invertible matrix", min(diag(cholU)), min(diag(cholV)))
-  logdetU <- 2*sum(log(diag(cholU)))
-  logdetV <- 2*sum(log(diag(cholV)))
-  # breaking equation into two parts: the integrating constants
-  # (gammas) and the matrix algebra parts (mats) done on the log scale
-  # note I did not do the DF correction as for the matrix t distribution
-
-
-
-  matrixterms <- diag(dims[1]) -
-    #chol2inv(cholU) %*% xatx(xm,  chol2inv(cholV))
-    chol2inv(cholU) %*% xm %*% tcrossprod(chol2inv(cholV),(xm))
-
-  mats <- -0.5 * dims[2] * logdetU - 0.5 * dims[1] * logdetV -
-    0.5 * (df - 2) * log(det(matrixterms))
-  results <- gammas + mats
+  results = as.numeric(dmat_inv_t_calc(x, df,  mean, U, V))
+  results <- gammas + results
   if (log) {
     return(results)
   } else {

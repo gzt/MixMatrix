@@ -93,6 +93,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rmat_inv_t_calc
+arma::cube rmat_inv_t_calc(arma::cube& S, arma::cube& mat, arma::mat& U, arma::mat& V, arma::mat& mean);
+RcppExport SEXP _matrixdist_rmat_inv_t_calc(SEXP SSEXP, SEXP matSEXP, SEXP USEXP, SEXP VSEXP, SEXP meanSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmat_inv_t_calc(S, mat, U, V, mean));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dmat_inv_t_calc
+arma::colvec dmat_inv_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
+RcppExport SEXP _matrixdist_dmat_inv_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    rcpp_result_gen = Rcpp::wrap(dmat_inv_t_calc(x, df, mean, U, V));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
@@ -102,6 +132,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_dmat_t_calc", (DL_FUNC) &_matrixdist_dmat_t_calc, 5},
     {"_matrixdist_xatx", (DL_FUNC) &_matrixdist_xatx, 2},
     {"_matrixdist_txax", (DL_FUNC) &_matrixdist_txax, 2},
+    {"_matrixdist_rmat_inv_t_calc", (DL_FUNC) &_matrixdist_rmat_inv_t_calc, 5},
+    {"_matrixdist_dmat_inv_t_calc", (DL_FUNC) &_matrixdist_dmat_inv_t_calc, 5},
     {NULL, NULL, 0}
 };
 
