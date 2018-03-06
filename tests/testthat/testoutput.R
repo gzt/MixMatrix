@@ -268,3 +268,15 @@ test_that("Output of LDA/QDA/Predict", {
 
 
 })
+
+test_that("Warning messages for inverted t",{
+
+  expect_warning(dmatrixinvt(matrix(1, nrow=5, ncol=1), df = 5, V = 4), "undefined")
+
+  expect_warning(A <- dmatrixinvt(t(matrix(1, nrow=5, ncol=1)), df = 5, U = 4), "undefined")
+  # A <- dmatrixinvt(matrix(1, nrow=5, ncol=1), df = 5, V = 4)
+  expect_true(is.nan(A))
+
+
+
+})

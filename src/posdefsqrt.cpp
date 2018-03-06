@@ -177,7 +177,14 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
     arma::mat XM = x.slice(i) - mean;
     arma::mat identitymat = arma::eye(n, n);
     arma::mat m = identitymat - Uinv * XM * Vinv * trans(XM) ;
-    logresult[i] = -.5 * p * logdetU - .5 * n * logdetV - .5 * (df - 2) * log(det(m));
+    double mval, sign;
+    log_det(mval, sign, m);
+    if(sign <= 0){
+      logresult[i] = R_NaN;
+      warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
+    } else{
+    logresult[i] = -.5 * p * logdetU - .5 * n * logdetV - .5 * (df - 2) * mval;
+    }
   }
   return logresult;
 }
