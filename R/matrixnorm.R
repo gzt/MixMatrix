@@ -388,14 +388,12 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                         function(x) crossprod(x,
                                               invV %x% invU) %*% x)) / (prod(dims))
       if (col.variance != "I") {
-        #invU = chol2inv(chol.default(U))
-        #tmp <- array(apply(swept.data, 3, function(x) crossprod(x, invU) %*% (x) ),
-        #tmp <- array(apply(swept.data, 3, function(x) txax(x, invU) ),
-        #             dim = c(dims[2],dims[2],dims[3]))
+
         tmp <- txax(swept.data, U)
+        tmpsummary <- matrix(rowSums(tmp,FALSE,dims = 2), nrow = dims[2])
         nLL <- function(theta) {
           Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
-          B <- Vmat %*% matrix(rowSums(tmp,FALSE,dims = 2), nrow = dims[2])
+          B <- Vmat %*% tmpsummary
           # solved derivative, need to find where this is zero:
           0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
             (.5 ) * sum(diag(B)) # problem was wrong constant
@@ -424,14 +422,12 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (row.variance == "I") {
       new.U = diag(dims[1])
     } else if (row.set.var) {
-      #invV = chol2inv(chol.default(new.V))
-      # (x) %*% invV %*% t(x)
-      #tmp <- array(apply(swept.data, 3, function(x) (x) %*% tcrossprod(invV ,x) ),
-      #             dim = c(dims[1],dims[1],dims[3]))
+
       tmp <- xatx(swept.data, V)
+      tmpsummary <- matrix(rowSums(tmp, dims = 2), nrow = dims[1])
       nLL <- function(theta) {
         Umat <- varinv(dims[1],theta,TRUE, row.variance)
-        B <- Umat %*% matrix(rowSums(tmp, dims=2), nrow = dims[1])
+        B <- Umat %*% tmpsummary
         # solved derivative, need to find where this is zero:
         0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
           (.5 ) * sum(diag(B)) # problem was wrong constant
