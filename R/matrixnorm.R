@@ -334,13 +334,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (V[1,2] > 0) {
       rho.col <- V[1,2]
     } else {
-      #invU = chol2inv(chol.default(U))
-      #inter.V <- apply(swept.data, 3,
-                       ##function(x) txax((x), invU ))
-                       #function(x) crossprod((x), invU ) %*% x)
-      # collapsed into a (row*column) * n, which is then gathered and fixed.
-      #V <- matrix(rowSums(inter.V, dims = 1),
-      #            nrow = dims[2])/(dims[3] * dims[1])
+
       inter.V <- txax(swept.data, U)
       V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
@@ -356,13 +350,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (U[1,2] > 0) {
       rho.row <- U[1,2]
     } else {
-      # invV = chol2inv(chol.default(V))
-      # inter.U <- apply(swept.data, 3,
-      #                  #function(x) xatx(x,t(invV)))
-      #                  function(x) ((x) %*% tcrossprod(invV,(x))))
-      # # collapsed into a (row*column) * n, which is then gathered and fixed.
-      # U <- matrix(rowSums(inter.U , dims = 1),
-      #             nrow = dims[1])/(dims[3] * dims[2])
+
       inter.U <- xatx(swept.data, V)
       U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
@@ -410,12 +398,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       }
       new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
     } else {
-      # invU = chol2inv(chol.default(U))
-      # # (crossprod(x, invU) %*% x)
-      # inter.V <- apply(swept.data, 3, function(x) (crossprod(x, invU) %*% x))
-      # # collapsed into a (row*column) * n, which is then gathered and fixed.
-      # new.V <- matrix(apply(inter.V, 1, sum),
-      #                 nrow = dims[2])/(dims[3] * dims[1])
+
       inter.V <- txax(swept.data, U)
       new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
     }
@@ -442,13 +425,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       }
       new.U <- varmatgenerate(dims[1], rho.row,row.variance)
     } else {
-      #invV = chol2inv(chol.default(new.V))
-      # (tcrossprod(x, invV) %*%  t(x))
-      # t(invV) = invV
-      #inter.U <- apply(swept.data, 3, function(x) (x %*% tcrossprod(invV,x)))
-      # collapsed into a (row*column) * n, which is then gathered and fixed.
-      #new.U <- matrix(rowSums(inter.U, dims = 1),
-      #                nrow = dims[1])/(dims[3] * dims[2])
+
       inter.U <- xatx(swept.data, new.V)
       new.U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       new.U <- new.U/(new.U[1, 1])

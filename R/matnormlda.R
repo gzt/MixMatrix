@@ -100,6 +100,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
   }
   f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
+    # this should be caught before this in the MLmatrixnorm stage
     const <- format((1L:(p * q)[f1 < tol]))
     stop(sprintf(
       ngettext(
@@ -368,6 +369,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, ...)  {
   }
   f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
+    # this should be caught before this in the MLmatrixnorm stage
     const <- format((1L:(p * q)[f1 < tol]))
     stop(sprintf(
       ngettext(
