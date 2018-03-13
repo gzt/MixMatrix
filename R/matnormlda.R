@@ -67,8 +67,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
   lev <- lev1 <- levels(g)
   counts <- as.vector(table(g))
   if (!missing(prior)) {
-    if (any(prior < 0) ||
-        round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1)
       stop("invalid 'prior'")
     if (length(prior) != nlevels(g))
       stop("'prior' is of incorrect length")
@@ -345,10 +344,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, ...)  {
   proportions <- counts / n
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
-  # method <- match.arg(method)
-  # if(CV && !(method == "moment" || method == "mle"))
-  #   stop(gettext("cannot use leave-one-out CV with method %s",
-  #                sQuote(method)), domain = NA)
+
 
   group.means = array(0, dim = c(p, q, ng))
   groupU = array(0, dim = c(p, p, ng))
