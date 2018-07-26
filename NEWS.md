@@ -1,3 +1,7 @@
+# matrixdist 0.0.0.9927
+
+* include EM algorithm (actually an ECME) for estimation of parameters of matrix-variate *t*-distributions
+
 # matrixdist 0.0.0.9926
 
 * split Wishart functions into CholWishart package

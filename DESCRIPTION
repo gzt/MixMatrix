@@ -1,12 +1,12 @@
 Package: matrixdist
 Type: Package
 Title: Functions for Matrix Distributions
-Version: 0.0.0.9926
-Date: 2018-03-06
+Version: 0.0.0.9927
+Date: 2018-07-26
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre")))
 Description: Sampling and density for matrix variate normal, t, and inverted 
-          t-distributions. Fitting for matrix variate normal distributions
+          t-distributions. Fitting for matrix variate normal and t-distributions
           including some restrictions on the parameters.
 Depends: R (>= 3.3.0)
 Imports:

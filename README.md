@@ -7,12 +7,13 @@
 A package for matrix variate distributions, including the normal, *t*, and inverted *t*. 
 Currently with sampling and density functions for those distributions as well as methods for 
 parameter estimation for matrix variate normals with some restrictions on mean and variance
-parameters.
+parameters. This also has EM for parameter estimation for matrix variate *t*-distributions, which is new.
 
 See the [vignette](../vignettes/matrixnormal.html) for more.
 
-I plan to expand this to include EM for parameter estimation with *t*-distributions and 
-introduce some further possible restrictions on variance matrices.
+I plan to expand this to include introduce some further possible restrictions on variance matrices. The $t$-distributions do not, at the moment, have any such restrictions implemented.
+
+
 There isn't much R software out there for working with these distributions. The 
 excellent [matrixsampling](https://cran.r-project.org/package=matrixsampling) package 
 has sampling and distribution functions for these and many other matrix distributions,
