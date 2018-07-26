@@ -9,3 +9,5 @@ src/init.o
 *.o
 *.so
 inst/doc
+fMRI-act-CT.rda
+installed_old.rda
