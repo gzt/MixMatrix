@@ -37,3 +37,15 @@ dmat_inv_t_calc <- function(x, df, mean, U, V) {
     .Call('_matrixdist_dmat_inv_t_calc', PACKAGE = 'matrixdist', x, df, mean, U, V)
 }
 
+cubeinv <- function(x) {
+    .Call('_matrixdist_cubeinv', PACKAGE = 'matrixdist', x)
+}
+
+cubemult <- function(x, y) {
+    .Call('_matrixdist_cubemult', PACKAGE = 'matrixdist', x, y)
+}
+
+detsum <- function(x) {
+    .Call('_matrixdist_detsum', PACKAGE = 'matrixdist', x)
+}
+

@@ -190,3 +190,49 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
 }
 
 
+// [[Rcpp::export]]
+arma::cube cubeinv(arma::cube & x){
+  // generates a cube of X_i^{-1} for i = 1:n, X_i is p x p
+  int p = x.n_cols;
+  int numslices = x.n_slices;
+  if (x.n_rows != x.n_cols) Rcpp::stop("error: non-conformable dimensions");
+  arma::cube results(p, p, numslices);
+  for(int i = 0; i < numslices; i++){
+    arma::mat Xinv;
+    bool res = arma::inv_sympd(Xinv, x.slice(i));
+    if(!res) stop("error: singular or non-positive definite input");
+    results.slice(i) = Xinv;
+  }
+  return results;
+}
+
+// [[Rcpp::export]]
+arma::cube cubemult(arma::cube & x, arma::cube & y){
+  // multiplies t(x) * y by slice
+    int q  = x.n_cols;
+  int r = y.n_cols;
+  int numslices = x.n_slices;
+  if (y.n_rows != x.n_rows) Rcpp::stop("error: non-conformable dimensions");
+  arma::cube results(q, r, numslices);
+  for(int i = 0; i < numslices; i++){
+    results.slice(i) = trans(x.slice(i)) * y.slice(i);
+  }
+  return results;
+}
+
+// [[Rcpp::export]]
+double detsum(arma::cube & x){
+  if (x.n_rows != x.n_cols) Rcpp::stop("error: non-conformable dimensions");
+  int numslices = x.n_slices;
+  double result = 0;
+  double mval, sign;
+  for(int i = 0; i < numslices; i++){
+  log_det(mval, sign, x.slice(i));
+  if(sign <= 0){
+      Rcpp::stop("error: result undefined when det < 0. observation: %d ", i+1);
+    }
+  result += mval;
+  }
+  return result;
+}
+

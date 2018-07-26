@@ -123,6 +123,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cubeinv
+arma::cube cubeinv(arma::cube& x);
+RcppExport SEXP _matrixdist_cubeinv(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cubeinv(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cubemult
+arma::cube cubemult(arma::cube& x, arma::cube& y);
+RcppExport SEXP _matrixdist_cubemult(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(cubemult(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// detsum
+double detsum(arma::cube& x);
+RcppExport SEXP _matrixdist_detsum(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(detsum(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
@@ -134,6 +168,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_txax", (DL_FUNC) &_matrixdist_txax, 2},
     {"_matrixdist_rmat_inv_t_calc", (DL_FUNC) &_matrixdist_rmat_inv_t_calc, 5},
     {"_matrixdist_dmat_inv_t_calc", (DL_FUNC) &_matrixdist_dmat_inv_t_calc, 5},
+    {"_matrixdist_cubeinv", (DL_FUNC) &_matrixdist_cubeinv, 1},
+    {"_matrixdist_cubemult", (DL_FUNC) &_matrixdist_cubemult, 2},
+    {"_matrixdist_detsum", (DL_FUNC) &_matrixdist_detsum, 1},
     {NULL, NULL, 0}
 };
 

@@ -6,7 +6,7 @@
 \usage{
 MLmatrixt(data, row.mean = FALSE, col.mean = FALSE, row.variance = "none",
   col.variance = "none", df = 10, fixed = TRUE, tol = 10 *
-  .Machine$double.eps^0.5, max.iter = 100, U, V, ...)
+  .Machine$double.eps^0.5, max.iter = 5000, U, V, ...)
 }
 \arguments{
 \item{data}{Either a list of matrices or a 3-D array with matrices in
