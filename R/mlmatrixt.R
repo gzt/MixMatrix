@@ -97,6 +97,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     U <- diag(dims[1])
   if (missing(V))
     V <- diag(dims[2])
+  if(df == (Inf || 0)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
   # mu <- apply(data, c(1, 2), mean)
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
