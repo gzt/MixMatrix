@@ -203,8 +203,34 @@ Smatrix = array(0,c(p,p,n))
       }
     #new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% solve(SS) %*% (SSX))
 
-    new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-    new.V = new.V/new.V[1,1]
+    if (col.variance == "I") {
+      new.V = diag(dims[2])
+    } else if (col.set.var) {
+
+      nLL <- function(theta) {
+        vardetmat <- vardet(dims[2], theta, TRUE, col.variance)
+        varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
+        SXOX = rowSums(axbt(SSXtmp,varinvmat,data ),dims=2)
+
+        return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% new.Mu %*% varinvmat %*% t(new.Mu) - SSX %*% varinvmat %*% t(new.Mu) - new.Mu %*% varinvmat %*% t(SSX)))
+      }
+      if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
+        warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+        rho.col = 0
+        varflag = TRUE
+      } else {
+        fit0 <- stats::uniroot(nLL, c(0,.999),...)
+        rho.col <- fit0$root
+      }
+      new.V <- varmatgenerate(dims[2], rho.col,col.variance)
+    } else {
+
+      new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
+      new.V = new.V/new.V[1,1]
+    }
+
+
+
     # Fix V to have unit variance on first component
 
     newUinv = (dfmult/(n * (df + p - 1))) * SS

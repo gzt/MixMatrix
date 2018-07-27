@@ -157,6 +157,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// axbt
+arma::cube axbt(arma::cube& a, arma::mat& x, arma::cube& b);
+RcppExport SEXP _matrixdist_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(axbt(a, x, b));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
@@ -171,6 +184,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_matrixdist_cubeinv", (DL_FUNC) &_matrixdist_cubeinv, 1},
     {"_matrixdist_cubemult", (DL_FUNC) &_matrixdist_cubemult, 2},
     {"_matrixdist_detsum", (DL_FUNC) &_matrixdist_detsum, 1},
+    {"_matrixdist_axbt", (DL_FUNC) &_matrixdist_axbt, 3},
     {NULL, NULL, 0}
 };
 

@@ -222,6 +222,7 @@ arma::cube cubemult(arma::cube & x, arma::cube & y){
 
 // [[Rcpp::export]]
 double detsum(arma::cube & x){
+  // takes log det of each slice and adds it up
   if (x.n_rows != x.n_cols) Rcpp::stop("error: non-conformable dimensions");
   int numslices = x.n_slices;
   double result = 0;
@@ -234,5 +235,21 @@ double detsum(arma::cube & x){
   result += mval;
   }
   return result;
+}
+
+
+// [[Rcpp::export]]
+arma::cube axbt(arma::cube & a, arma::mat & x, arma::cube & b){
+  // a is p x q x n, x is q x q, b is r x q x n; returns a * x * t(b) cube
+  int p = a.n_rows;
+  // int q  = x.n_cols;
+  int r = b.n_rows;
+  int numslices = a.n_slices;
+  if (x.n_rows != x.n_cols || a.n_cols != x.n_rows || x.n_cols != b.n_cols) Rcpp::stop("error: non-conformable dimensions");
+  arma::cube results(p, r, numslices);
+  for(int i = 0; i < numslices; i++){
+    results.slice(i) = (a.slice(i)) * x * trans(b.slice(i));
+  }
+  return results;
 }
 

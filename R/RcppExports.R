@@ -49,3 +49,7 @@ detsum <- function(x) {
     .Call('_matrixdist_detsum', PACKAGE = 'matrixdist', x)
 }
 
+axbt <- function(a, x, b) {
+    .Call('_matrixdist_axbt', PACKAGE = 'matrixdist', a, x, b)
+}
+
