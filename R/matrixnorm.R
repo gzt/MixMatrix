@@ -292,7 +292,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
   row.set.var = FALSE
   if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  if (grepl("^i", x = row.variance,ignore.case = T)) {
+  if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
     row.set.var = TRUE
     row.variance = "I"
   }
@@ -300,7 +300,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
   col.set.var = FALSE
   if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-  if (grepl("^i", x = col.variance, ignore.case = T)) {
+  if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
     col.set.var = TRUE
     col.variance = "I"
   }
