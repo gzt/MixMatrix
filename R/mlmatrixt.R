@@ -144,18 +144,6 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     }
   }
 
-matrixtrace = function(A){
-  b = dim(A)
-  result = 0
-  if (b[1] != b[2]) warning("non-conformable dimensions")
-    else {
-      for (i in 1:b[1]) {
-        result = result + A[i,i]
-      }
-    }
-  return(result)
-}
-
   varflag = FALSE
 p = dims[1]
 q = dims[2]

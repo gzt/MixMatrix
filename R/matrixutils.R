@@ -393,3 +393,23 @@ derivCS <- function(n, rho){
   return(A)
 }
 
+
+
+#' Trace of a matrix
+#'
+#' @param A square numeric matrix
+#'
+#' @return trace of a matrix
+#' @export
+#'
+#' @examples
+#' A <- diag(6:1)
+#' matrixtrace(A)
+matrixtrace = function(A){
+  b = dim(A)
+  if (b[1] != b[2]) warning("non-conformable dimensions")
+  result = sum(diag(A))
+  return(result)
+}
+
+
