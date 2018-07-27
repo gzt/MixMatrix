@@ -222,6 +222,9 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(C$U[1,2],0)
   C <- MLmatrixnorm(A, col.variance = "I")
   expect_equal(C$V[1,4],0)
+
+  D <- MLmatrixt(A)
+  expect_true(D$convergence)
 })
 
 
