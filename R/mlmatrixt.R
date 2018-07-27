@@ -60,7 +60,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
                          df = 10, fixed = TRUE,
                          tol = 10*.Machine$double.eps^0.5, max.iter = 5000, U, V,...) {
-  if(df == 0|| is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
+  if (df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
     if (class(data) == "list") data <- array(unlist(data),
                                            dim = c(nrow(data[[1]]),
                                                    ncol(data[[1]]), length(data)))
@@ -144,29 +144,39 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     }
   }
 
+matrixtrace = function(A){
+  b = dim(A)
+  result = 0
+  if (b[1] != b[2]) warning("non-conformable dimensions")
+    else {
+      for (i in 1:b[1]) {
+        result = result + A[i,i]
+      }
+    }
+  return(result)
+}
+
   varflag = FALSE
 p = dims[1]
 q = dims[2]
 n = dims[3]
 Smatrix = array(0,c(p,p,n))
 
-
-
   while (iter < max.iter && error.term > tol && (!varflag)) {
     swept.data <- sweep(data, c(1, 2), mu)
     dfmult = df + p + q - 1
+
     ### E step
+
     Stmp = xatx(swept.data,V)
-    for(i in 1:n) Stmp[,,i] = Stmp[,,i] + U
+    for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U
     Smatrix = cubeinv(Stmp)
 
     SS = rowSums(Smatrix,FALSE, 2)
-    #SSXtmp = array(0,c(p,q,n))
-    #for(i in 1:n) SSXtmp[,,i] = Smatrix[,,i] %*% data[,,i]
+
     SSXtmp = cubemult(Smatrix, data)
     SSX = rowSums(SSXtmp, FALSE, 2)
-    #SSXXtmp = array(0,c(q,q,n))
-    #for(i in 1:n) SSXXtmp[,,i] = crossprod(data[,,i], SSXtmp[,,i])
+
     SSXXtmp = cubemult(data,SSXtmp)
     SSXX = rowSums(SSXXtmp,FALSE, 2)
     #print(SS)
@@ -175,7 +185,22 @@ Smatrix = array(0,c(p,p,n))
     #print(iter)
 
     ### CM STEP
+
+      if (row.mean && col.mean) {
+        # make it so that the mean is constant within a row
+        scalarmu = matrixtrace(SSX %*% solve(V) %*% matrix(1, nrow = q, ncol = p)) / matrixtrace(SS %*% matrix(1, nrow = p, ncol = q) %*% solve(V) %*% matrix(1, nrow = q, ncol = p))
+        new.Mu <-   scalarmu * matrix(1, nrow = p, ncol = q)
+        } else if (col.mean) {
+        # make it so that the mean is constant within a column
+        # ie mu = p x 1, times ones 1 x q
+        new.Mu <- matrix(1, nrow = p, ncol = p) %*% SSX / sum(SS)
+        } else if (row.mean) {
+          # make it so that the mean is constant within a row
+          # ie  ones p x 1 times mu = 1 x q
+        new.Mu = solve( SS) %*% SSX %*% (solve(V) %*% matrix(1, nrow = q, ncol = q)) / sum(solve(V))
+          } else {
     new.Mu =  solve( SS) %*% SSX
+      }
     new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% solve(SS) %*% (SSX))
     new.V = new.V/new.V[1,1]
     newUinv = (dfmult/(n * (df + p - 1))) * SS
@@ -185,29 +210,29 @@ Smatrix = array(0,c(p,p,n))
 
 
     ### IF NU UPDATE
-    if(!fixed){
+    if (!fixed) {
     new.df = df
     ## insert E step for NU and M step for NU
-    #SSDtmp = sum(apply(Smatrix, 3, function(x) (determinant(x,logarithm = TRUE)$modulus)))
+
     SSDtmp = detsum(Smatrix)
     detSS = determinant(SS, logarithm = TRUE)$modulus[1]
-    nuLL = function(nu) {(  CholWishart::mvdigamma((nu + p -1)/2,p) -
-                             CholWishart::mvdigamma((nu + p + q -1)/2,p) -
-                            (SSDtmp/n - (detSS - p*log(n*(nu + p -1)/(nu + p + q -1)))))
+    nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
+                             CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
+                            (SSDtmp/n - (detSS - p*log(n*(nu + p - 1)/(nu + p + q - 1)))))
                           # this latest ECME-ish one gives SLIGHTLY different results but is faster
                           #  (SSDtmp + n * determinant(new.U)$modulus[1] ))
     }
-    if (!isTRUE(sign(nuLL(p-1)) * sign(nuLL(1000)) <= 0)) {
+    if (!isTRUE(sign(nuLL(p - 1)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
       varflag = TRUE
     }else{
-    fit0 <- stats::uniroot(nuLL, c(p-1,1000),...)
+    fit0 <- stats::uniroot(nuLL, c(p - 1, 1000),...)
     new.df = fit0$root
     }
     #print(new.df)
     } else new.df = df
     ### CHECK CONVERGENCE
-    error.term <- sum((new.V - V)^2) + sum((new.U - U)^2) + sum((new.Mu - mu)^2 + 1/(n*p*q) *(df-new.df)^2)
+    error.term <- sum((new.V - V)^2) + sum((new.U - U)^2) + sum((new.Mu - mu)^2 + 1/(n*p*q) * (df - new.df)^2)
     V <- new.V
     U <- new.U
     mu <- new.Mu
