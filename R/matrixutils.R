@@ -23,7 +23,7 @@ ARgenerate <- function(n, rho) {
     stop("rho must be a correlation greater than -1.")
   if (rho < 0)
     warning("Rho = ", rho, " and should be greater than 0.")
-  if (rho > 0.99)
+  if (rho > 0.999)
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
   X <- stats::toeplitz(c(1, rho^(1:(n - 1))))
   return(X)
@@ -50,7 +50,7 @@ CSgenerate <- function(n,rho) {
     stop("rho must be a correlation greater than -1.")
   if (rho < 0)
     warning("Rho = ", rho, " and should be greater than 0.")
-  if (rho > 0.99)
+  if (rho > 0.999)
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
   A <- matrix(rho, nrow = n,ncol = n)
   diag(A) <- 1
@@ -341,3 +341,55 @@ posmatsqrtinv <- function(A) {
   return(posdefinvsqrt(A))
 
 }
+
+
+#' Derivative selector for chosen covariance matrix.
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#' @param variance  variance structure - AR(1) or CS.
+#'
+#' @return The derivative of the selected matrix structure.
+#' @keywords internal
+#'
+#' @examples
+#' \dontrun{varderiv(5, .5, "AR(1)"}
+varderiv <- function(n, rho, variance){
+
+  if (variance == "AR(1)") return(derivAR(n,rho))
+
+  if (variance == "CS") return(derivCS(n,rho))
+
+  if (variance == "I") return(matrix(0,n,n))
+
+  else stop("Bad covariance structure input. ", variance)
+}
+
+#' Derivative of AR(1) covariance matrix
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#'
+derivAR <- function(n, rho){
+  if (!(n > 1)) stop("n needs to be greater than 1")
+  if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
+  x <- 0:(n-1)
+  y <- rho^(-1:(n-2))
+  A <- toeplitz(x*y)
+  return(A)
+}
+
+
+#' Derivative of compound symmetric covariance matrix
+#'
+#' @param n dimensions
+#' @param rho off-diagonal parameter
+#'
+derivCS <- function(n, rho){
+  if (!(n > 1)) stop("n needs to be greater than 1")
+  if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
+
+  A <- toeplitz(c(0, rep(1,(n-1))))
+  return(A)
+}
+
