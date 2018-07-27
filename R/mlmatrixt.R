@@ -59,7 +59,7 @@
 MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
                          df = 10, fixed = TRUE,
-                         tol = 10*.Machine$double.eps^0.5, max.iter = 5000, U, V,...) {
+                         tol = .Machine$double.eps^0.5, max.iter = 5000, U, V,...) {
   if (df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
     if (class(data) == "list") data <- array(unlist(data),
                                            dim = c(nrow(data[[1]]),
@@ -201,11 +201,15 @@ Smatrix = array(0,c(p,p,n))
           } else {
     new.Mu =  solve( SS) %*% SSX
       }
-    new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% solve(SS) %*% (SSX))
+    #new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% solve(SS) %*% (SSX))
+
+    new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
     new.V = new.V/new.V[1,1]
+    # Fix V to have unit variance on first component
+
     newUinv = (dfmult/(n * (df + p - 1))) * SS
     new.U = solve(newUinv)
-    # Fix U to have unit variance on first component
+
 
 
 
@@ -232,7 +236,7 @@ Smatrix = array(0,c(p,p,n))
     #print(new.df)
     } else new.df = df
     ### CHECK CONVERGENCE
-    error.term <- sum((new.V - V)^2) + sum((new.U - U)^2) + sum((new.Mu - mu)^2 + 1/(n*p*q) * (df - new.df)^2)
+    error.term <- sum((new.V - V)^2)/(q*q) + sum((new.U - U)^2)/(p*p) + sum((new.Mu - mu)^2/(p*q) + 1/(n*p*q) * (df - new.df)^2)
     V <- new.V
     U <- new.U
     mu <- new.Mu
