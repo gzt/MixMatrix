@@ -9,6 +9,7 @@
 ^matrixdist\.Rproj$
 ^\.travis\.yml$
 ^LICENSE
-
+^fMRI-act-CT.rda
+^installed_old.rda
 ^appveyor\.yml$
 ^codecov\.yml$

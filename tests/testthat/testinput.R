@@ -467,7 +467,7 @@ test_that("Bad input to generators", {
   rho = -.5
   expect_warning(ARgenerate(n,rho), "greater")
   expect_warning(CSgenerate(n,rho), "greater")
-  rho = .999
+  rho = .9995
   expect_warning(ARgenerate(n,rho), "correlation")
   expect_warning(CSgenerate(n,rho), "correlation")
   rho = -2.5

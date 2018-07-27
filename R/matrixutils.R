@@ -375,7 +375,7 @@ derivAR <- function(n, rho){
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
   x <- 0:(n-1)
   y <- rho^(-1:(n-2))
-  A <- toeplitz(x*y)
+  A <- stats::toeplitz(x*y)
   return(A)
 }
 
@@ -389,7 +389,7 @@ derivCS <- function(n, rho){
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
 
-  A <- toeplitz(c(0, rep(1,(n-1))))
+  A <- stats::toeplitz(c(0, rep(1,(n-1))))
   return(A)
 }
 
