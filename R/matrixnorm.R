@@ -324,7 +324,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
   if (col.mean) {
     # make it so that the mean is constant within a column
-    mu <- matrix(colMeans(mu), nrow = dims[1], ncol = dims[2], byrow = T)
+    mu <- matrix(colMeans(mu), nrow = dims[1], ncol = dims[2], byrow = TRUE)
   }
   # if both are true, this makes it so the mean is constant all over
   swept.data <- sweep(data, c(1, 2), mu)
