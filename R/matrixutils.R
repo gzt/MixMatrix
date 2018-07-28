@@ -412,4 +412,20 @@ matrixtrace = function(A){
   return(result)
 }
 
+#' Matrix of ones
+#'
+#' @param nrow Number of rows
+#' @param ncol Number of columns
+#'
+#' @return Matrix of ones
+#' @export
+#'
+#' @examples
+#' A <- ones(5,3)
+#' print(A)
+ones = function(nrow, ncol){
+ matrix(1,nrow = nrow, ncol = ncol)
+}
+
+
 

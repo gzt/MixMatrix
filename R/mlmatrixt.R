@@ -176,16 +176,16 @@ Smatrix = array(0,c(p,p,n))
 
       if (row.mean && col.mean) {
         # make it so that the mean is constant within a row
-        scalarmu = matrixtrace(SSX %*% solve(V) %*% matrix(1, nrow = q, ncol = p)) / matrixtrace(SS %*% matrix(1, nrow = p, ncol = q) %*% solve(V) %*% matrix(1, nrow = q, ncol = p))
-        new.Mu <-   scalarmu * matrix(1, nrow = p, ncol = q)
+        scalarmu = matrixtrace(SSX %*% solve(V) %*% ones(q,p)) / matrixtrace(SS %*% ones(p,q) %*% solve(V) %*% ones(q,p))
+        new.Mu <-   scalarmu * ones(p,q)
         } else if (col.mean) {
         # make it so that the mean is constant within a column
         # ie mu = p x 1, times ones 1 x q
-        new.Mu <- matrix(1, nrow = p, ncol = p) %*% SSX / sum(SS)
+        new.Mu <- ones(p,p) %*% SSX / sum(SS)
         } else if (row.mean) {
           # make it so that the mean is constant within a row
           # ie  ones p x 1 times mu = 1 x q
-        new.Mu = solve( SS) %*% SSX %*% (solve(V) %*% matrix(1, nrow = q, ncol = q)) / sum(solve(V))
+        new.Mu = solve( SS) %*% SSX %*% (solve(V) %*% ones(q,q)) / sum(solve(V))
           } else {
     new.Mu =  solve( SS) %*% SSX
       }
@@ -198,7 +198,7 @@ Smatrix = array(0,c(p,p,n))
       nLL <- function(theta) {
         vardetmat <- vardet(dims[2], theta, TRUE, col.variance)
         varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
-        SXOX = rowSums(axbt(SSXtmp,varinvmat,data ),dims=2)
+        SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
 
         return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% new.Mu %*% varinvmat %*% t(new.Mu) - SSX %*% varinvmat %*% t(new.Mu) - new.Mu %*% varinvmat %*% t(SSX)))
       }
@@ -218,20 +218,14 @@ Smatrix = array(0,c(p,p,n))
     }
     # Fix V to have unit variance on first component
 
-
-
-
     if (row.variance == "I") {
       new.U = diag(dims[1]) * n * (df + p - 1)*p/matrixtrace(SS * dfmult)
     } else if (row.set.var) {
 
       nLL <- function(theta) {
         vardetmat <- vardet(dims[1], theta, TRUE, row.variance)
-        #varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
-        #SXOX = rowSums(axbt(SSXtmp,varinvmat,data ),dims=2)
         Sigma = varmatgenerate(dims[1], theta, row.variance)
         var = n * (df + p - 1)*p/matrixtrace(Sigma %*% SS * dfmult)
-        #var = n * (df + p - 1)*p/matrixtrace(Sigma %*% SS * dfmult)
         varderivative = varderiv(dims[1],theta, row.variance)
         return(var*dfmult*matrixtrace(varderivative %*% SS) + n*(df + p - 1)*vardetmat)
       }
@@ -253,8 +247,6 @@ Smatrix = array(0,c(p,p,n))
     new.U = solve(newUinv)
     }
 
-
-
     ### IF NU UPDATE
     if (!fixed) {
     new.df = df
@@ -266,7 +258,6 @@ Smatrix = array(0,c(p,p,n))
                              CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
                             (SSDtmp/n - (detSS - p*log(n*(nu + p - 1)/(nu + p + q - 1)))))
                           # this latest ECME-ish one gives SLIGHTLY different results but is faster
-                          #  (SSDtmp + n * determinant(new.U)$modulus[1] ))
     }
     if (!isTRUE(sign(nuLL(p - 1)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
@@ -292,9 +283,7 @@ Smatrix = array(0,c(p,p,n))
 
   converged = !(iter >= max.iter || error.term > tol || varflag)
   logLik = 0
-  #for (i in seq(dims[3])) {
-  #  logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
-  #}
+
   logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
   return(list(mean = mu,
               U = U/U[1,1],
