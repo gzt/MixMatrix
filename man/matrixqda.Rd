@@ -56,3 +56,4 @@ Other matrixlda: \code{\link{matrixlda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
 }
+\concept{matrixlda}

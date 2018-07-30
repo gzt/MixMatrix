@@ -6,11 +6,11 @@
 \title{matrixnorm: matrix variate Normal distribution functions}
 \usage{
 rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
-  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
-  list = FALSE, array = NULL, force = FALSE)
+  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
+  R, list = FALSE, array = NULL, force = FALSE)
 
-dmatrixnorm(x, mean = matrix(0, p, n), L = diag(p), R = diag(n), U = L
-  \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
+dmatrixnorm(x, mean = matrix(0, p, n), L = diag(p), R = diag(n),
+  U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
 }
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}
@@ -78,3 +78,4 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 \seealso{
 \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 }
+\concept{matrixnorm}

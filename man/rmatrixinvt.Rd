@@ -6,8 +6,8 @@
 \title{Distribution functions for matrix variate inverted t-distributions}
 \usage{
 rmatrixinvt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
-  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\% R,
-  list = FALSE, array = NULL)
+  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
+  R, list = FALSE, array = NULL)
 
 dmatrixinvt(x, df, mean = matrix(0, p, n), L = diag(p), R = diag(n),
   U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
@@ -65,3 +65,4 @@ Generate random draws from the inverted matrix
 A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }
+\concept{matrixt}
