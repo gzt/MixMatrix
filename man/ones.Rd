@@ -19,5 +19,5 @@ Matrix of ones
 }
 \examples{
 A <- ones(5,3)
-
+print(A)
 }

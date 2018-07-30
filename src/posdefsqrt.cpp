@@ -7,7 +7,7 @@ arma::mat posdefsqrt(arma::mat & x){
   arma::mat eigmat;
   arma::vec eigvec;
   arma::eig_sym(eigvec, eigmat, x);
-  if(min(eigvec) < 1e-7) stop("error: possibly singular matrix");
+  if(min(eigvec) < 1e-7) Rcpp::stop("error: possibly singular matrix");
   return eigmat * diagmat(sqrt(eigvec)) * eigmat.t();
 }
 
@@ -16,7 +16,7 @@ arma::mat posdefinvsqrt(arma::mat & x){
   arma::mat eigmat;
   arma::vec eigvec;
   arma::eig_sym(eigvec, eigmat, x);
-  if(min(eigvec) < 1e-7) stop("error: possibly singular matrix");
+  if(min(eigvec) < 1e-7) Rcpp::stop("error: possibly singular matrix");
   return eigmat * diagmat(1/sqrt(eigvec)) * eigmat.t();
 }
 
@@ -102,7 +102,7 @@ arma::cube xatx(arma::cube & x, arma::mat & U){
   if (x.n_cols != U.n_rows || x.n_cols != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
   arma::mat Uinv;
   bool res = arma::inv_sympd(Uinv, U);
-  if(!res) stop("error: singular or non-positive definite input");
+  if(!res) Rcpp::stop("error: singular or non-positive definite input");
   arma::cube results(n,n,numslices);
   for(int i = 0; i < numslices; i++){
     results.slice(i) = (x.slice(i)) * Uinv * trans(x.slice(i));
@@ -119,7 +119,7 @@ arma::cube txax(arma::cube & x, arma::mat & U){
   if (x.n_rows != U.n_rows || x.n_rows != U.n_cols) Rcpp::stop("error: non-conformable dimensions");
   arma::mat Uinv;
   bool res = arma::inv_sympd(Uinv, U);
-  if(!res) stop("error: singular or non-positive definite input");
+  if(!res) Rcpp::stop("error: singular or non-positive definite input");
   arma::cube results(p, p, numslices);
   for(int i = 0; i < numslices; i++){
     results.slice(i) = trans(x.slice(i)) * Uinv * x.slice(i);
@@ -181,7 +181,7 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
     log_det(mval, sign, m);
     if(sign <= 0){
       logresult[i] = R_NaN;
-      warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
+      Rcpp::warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
     } else{
     logresult[i] = -.5 * p * logdetU - .5 * n * logdetV - .5 * (df - 2) * mval;
     }
@@ -200,7 +200,7 @@ arma::cube cubeinv(arma::cube & x){
   for(int i = 0; i < numslices; i++){
     arma::mat Xinv;
     bool res = arma::inv_sympd(Xinv, x.slice(i));
-    if(!res) stop("error: singular or non-positive definite input");
+    if(!res) Rcpp::stop("error: singular or non-positive definite input");
     results.slice(i) = Xinv;
   }
   return results;

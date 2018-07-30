@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Geoffrey Thompson" />
+
+<meta name="date" content="2018-07-28" />
+
+<title>Discriminant Analysis for Matrix Variate Distributions</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Discriminant Analysis for Matrix Variate Distributions</h1>
+<h4 class="author"><em>Geoffrey Thompson</em></h4>
+<h4 class="date"><em>2018-07-28</em></h4>
+
+
+
+<p>In the <code>matrixdist</code> package, I now have some functions for training a linear or quadratic classifier. The usage is pretty similar to the function <code>MASS::lda()</code> or <code>MASS::qda()</code>, however it requires the input as an array or list of matrices and the group variable provided as a vector (that is, it cannot handle data frames or the formula interface directly, which is reasonable, as there is no immediately clear way to make that work for a collection of matrices - anybody using it would have to roll their own solutions anyway).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">20180222</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(<span class="st">'matrixdist'</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">B &lt;-<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">C &lt;-<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">ABC &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="kw">c</span>(A,B,C), <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>))</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">groups &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;A&quot;</span>,<span class="dv">30</span>),<span class="kw">rep</span>(<span class="st">&quot;B&quot;</span>,<span class="dv">30</span>),<span class="kw">rep</span>(<span class="st">&quot;C&quot;</span>,<span class="dv">30</span>)))</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">prior =<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">matlda &lt;-<span class="st"> </span><span class="kw">matrixlda</span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior)</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">matqda &lt;-<span class="st"> </span><span class="kw">matrixqda</span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior)</a></code></pre></div>
+<p>This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple regularized linear/quadratic discriminant function based on the likelihood function (see previous post for details). As such, the reported posteriors are based on the normal distribution.</p>
+<p>The <code>matrixlda</code> function presumes equal covariance parameters while <code>matrixqda</code> fits separate covariance parameters.</p>
+<p>It is possible to set variance or mean restrictions using the <code>...</code> argument. These restrictions are applied to all groups.</p>
+<p>The <code>predict</code> method for these objects works in much the same way as for <code>lda</code> or <code>qda</code> objects: provide the function and the new data, then it will return the MAP class assignments and the posterior. If no new data is provided, it will attempt to run it on the original data if it is available in the environment.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">ABC[,,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">## , , 1</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">## </a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">##             [,1]       [,2]      [,3]</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">## [1,] -0.07020924  0.8559433 0.9827602</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">## [2,]  1.30097854 -0.6893054 0.2830575</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">## </a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">## , , 2</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">## </a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">##           [,1]     [,2]        [,3]</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">## [1,] 2.2374662 2.408268 -0.37053822</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">## [2,] 0.9653824 0.630897 -0.08850761</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">## </a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">## , , 3</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">## </a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">##            [,1]       [,2]      [,3]</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">## [1,] -1.6961217 -1.5642705 0.2045711</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">## [2,]  0.7782369  0.1842012 0.3869149</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="kw">predict</span>(matlda, ABC[,,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">## $class</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">## [1] B B A</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">## Levels: A B C</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">## </a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">## $posterior</a>
+<a class="sourceLine" id="cb2-26" data-line-number="26">##           [,1]        [,2]       [,3]</a>
+<a class="sourceLine" id="cb2-27" data-line-number="27">## [1,] 0.2848957 0.676956971 0.03814737</a>
+<a class="sourceLine" id="cb2-28" data-line-number="28">## [2,] 0.0368267 0.951800210 0.01137309</a>
+<a class="sourceLine" id="cb2-29" data-line-number="29">## [3,] 0.5314847 0.001123022 0.46739225</a>
+<a class="sourceLine" id="cb2-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="kw">predict</span>(matqda,  ABC[,,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb2-32" data-line-number="32">## $class</a>
+<a class="sourceLine" id="cb2-33" data-line-number="33">## [1] B B A</a>
+<a class="sourceLine" id="cb2-34" data-line-number="34">## Levels: A B C</a>
+<a class="sourceLine" id="cb2-35" data-line-number="35">## </a>
+<a class="sourceLine" id="cb2-36" data-line-number="36">## $posterior</a>
+<a class="sourceLine" id="cb2-37" data-line-number="37">##            [,1]        [,2]        [,3]</a>
+<a class="sourceLine" id="cb2-38" data-line-number="38">## [1,] 0.21908081 0.759188619 0.021730570</a>
+<a class="sourceLine" id="cb2-39" data-line-number="39">## [2,] 0.02891752 0.967683854 0.003398627</a>
+<a class="sourceLine" id="cb2-40" data-line-number="40">## [3,] 0.51365460 0.008473296 0.477872107</a></code></pre></div>
+<p>In this example, points from classes A, B, and C were selected and they ended up being classifed as B, B, and A. The QDA and LDA rules had only minor disagreements, which is to be expected when they do truly have the same covariances.</p>
+<div id="details-of-the-modeling-choices" class="section level2">
+<h2>Details of the modeling choices</h2>
+<p>Suppose there are two populations, <span class="math inline">\(\pi_1\)</span> and <span class="math inline">\(\pi_2\)</span> with prior probabilities of belonging to these classes, <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span>. Define a function, <span class="math inline">\(c(1|2)\)</span> as the cost of misclassifying a member of population <span class="math inline">\(\pi_2\)</span> as a member of class <span class="math inline">\(1\)</span> (and vice versa). Further, define <span class="math inline">\(P(1|2)\)</span> as the probability of classifying a member of population <span class="math inline">\(\pi_2\)</span> as a member of class <span class="math inline">\(1\)</span> (and vice versa). Then we define the <em>expected cost of misclassification</em> as:</p>
+<p><span class="math display">\[ECM = c(2|1)P(2|1)p_1 + c(1|2)P(1|2)p_2 \]</span></p>
+</div>
+<div id="classification-rule" class="section level2">
+<h2>Classification Rule</h2>
+<p>A reasonable classification rule based on ECM is the following:</p>
+<p>Classify as class <span class="math inline">\(1\)</span> if:</p>
+<p><span class="math display">\[ \frac{f_1(x)}{f_2(x)} \geq \frac{c(1|2) p_2}{c(2|1)p_1} \]</span></p>
+<p>Where <span class="math inline">\(f_i(x)\)</span> is the probability density function for group <span class="math inline">\(\pi_i\)</span> evaluated at <span class="math inline">\(x\)</span>.</p>
+</div>
+<div id="matrix-variate-normal-populations" class="section level2">
+<h2>Matrix Variate Normal Populations</h2>
+<p>Recall the probability density function for a matrix variate normal distribution:</p>
+<p><span class="math display">\[f(\mathbf{X};\mathbf{M}, \mathbf{U}, \mathbf{V}) = \frac{\exp\left( -\frac{1}{2} \, \mathrm{tr}\left[ \mathbf{V}^{-1} (\mathbf{X} - \mathbf{M})^{T} \mathbf{U}^{-1} (\mathbf{X} - \mathbf{M}) \right] \right)}{(2\pi)^{np/2} |\mathbf{V}|^{n/2} |\mathbf{U}|^{p/2}} \]</span></p>
+<p><span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{M}\)</span> are <span class="math inline">\(n \times p\)</span>, <span class="math inline">\(\mathbf{U}\)</span> is <span class="math inline">\(n \times n\)</span> and describes the covariance relationship between the rows, and <span class="math inline">\(\mathbf{V}\)</span> is <span class="math inline">\(p \times p\)</span> and describes the covariance relationship between the columns.</p>
+</div>
+<div id="estimated-minimum-ecm-rule-for-two-matrix-variate-normal-populations" class="section level2">
+<h2>Estimated Minimum ECM Rule for Two Matrix Variate Normal Populations</h2>
+<p>A decision rule for this case:</p>
+<span class="math display">\[\begin{eqnarray} 
+R(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_1^{-1} \mathbf{X}^{T} \mathbf{U}_1^{-1} \mathbf{X} - \mathbf{V}_2^{-1} \mathbf{X}^{T} \mathbf{U}_2^{-1} \mathbf{X}) \\
+ &amp;  &amp; +(\mathbf{V}_1^{-1} \mathbf{M}_1^{T} \mathbf{U}_1^{-1} - \mathbf{V}_2^{-1} \mathbf{M}_2^{T} \mathbf{U}_2^{-1}) \mathbf{X} \\
+ &amp;  &amp; -\frac{1}{2}(\mathbf{V}_1^{-1} \mathbf{M}_1^{T} \mathbf{U}_1^{-1} \mathbf{M}_1 - \mathbf{V}_2^{-1} \mathbf{M}_2^{T} \mathbf{U}_2^{-1} \mathbf{M}_2) \big]   \\ 
+ &amp;  &amp; -\frac{1}{2}(p (\log|\mathbf{U}_1|-\log|\mathbf{U}_2|)+ n(\log|\mathbf{V}_1|-\log|\mathbf{V}_2|) )   
+\end{eqnarray}\]</span>
+</div>
+<div id="how-to-classify-based-on-this" class="section level2">
+<h2>How to classify based on this:</h2>
+<p>If <span class="math inline">\(R(\mathbf{X}) \geq \log(c(1|2)p_2) - \log(c(2|1)p_1)\)</span>, assign <span class="math inline">\(\mathbf{X}\)</span> to group <span class="math inline">\(1\)</span>, otherwise assign to group <span class="math inline">\(2\)</span>.</p>
+<p>In the multivariate case, this is equivalent to the LDA/QDA rules - term (1) is the quadratic form which vanishes in case of equal covariances between groups, term (2) is the LDA term, and terms (3) and (4) are constants which depend on the parameters and not <span class="math inline">\(\mathrm{X}\)</span>.</p>
+<p>Typically, the models we have used have implicitly used an equal probability prior and an equal cost of misclassification, but other inputs can be specified. In case of equal priors and equal cost of misclassification, this term is 0.</p>
+</div>
+<div id="if-there-were-equal-covariances" class="section level2">
+<h2>If there were equal covariances:</h2>
+<p>If the two groups have the same covariances, then this simplifies. The classification rule is then: <span class="math display">\[\begin{eqnarray} 
+R(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ (\mathbf{V}^{-1} (\mathbf{M}_1 -\mathbf{M}_2)^{T}\mathbf{U}^{-1}) \mathbf{X} \\
+ &amp;  &amp; -\frac{1}{2}(\mathbf{V}^{-1} \mathbf{M}_1^{T} \mathbf{U}^{-1} \mathbf{M}_1 - \mathbf{V}^{-1} \mathbf{M}_2^{T} \mathbf{U}^{-1} \mathbf{M}_2) \big]    \\ 
+   &amp; \geq &amp; \log(c(1|2)p_2) - \log(c(2|1)p_1)
+\end{eqnarray}\]</span></p>
+<p>Classify to group <span class="math inline">\(1\)</span> if the last term is true. Note this is linear in <span class="math inline">\(\mathbf{X}\)</span>. This is directly analogous to LDA in the multivariate case.</p>
+</div>
+<div id="generalizing-to-multiple-classes" class="section level2">
+<h2>Generalizing to multiple classes</h2>
+<p>The factor <span class="math inline">\(R\)</span> for each group <span class="math inline">\(g\)</span> in a QDA setting is:</p>
+<span class="math display">\[\begin{eqnarray} 
+R_g(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_g^{-1} \mathbf{X}^{T} \mathbf{U}_g^{-1} \mathbf{X}  +(\mathbf{V}_g^{-1} \mathbf{M}_g^{T} \mathbf{U}_g^{-1}) \mathbf{X}  -\frac{1}{2}(\mathbf{V}_g^{-1} \mathbf{M}_g^{T} \mathbf{U}_g^{-1} \mathbf{M}_g)  \big]   \\ 
+ &amp;  &amp; -\frac{1}{2}(p (\log|\mathbf{U}_g|)+ n(\log|\mathbf{V}_g|) )  + \log p_g 
+\end{eqnarray}\]</span>
+<p>When <span class="math inline">\(U_i = U_j\)</span> for all groups <span class="math inline">\(i,j\)</span>, several of these terms cancel. The posterior probability is:</p>
+<p><span class="math display">\[ P(\mathbf{X} \in g) = \frac{ \exp (R_g (\mathbf{X}))}{\sum_i \exp (R_i(\mathbf{X}))} \]</span> with the bottom sum being over all groups <span class="math inline">\(i\)</span>.</p>
+</div>
+<div id="structure-of-the-objects" class="section level2">
+<h2>Structure of the objects</h2>
+<p>The objects returned by <code>matrixlda</code> and <code>matrixqda</code> are S3 classes. See below example output:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">matlda</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">## $prior</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">##         A         B         C </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">## 0.3333333 0.3333333 0.3333333 </a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">## </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">## $counts</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">##  A  B  C </a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">## 30 30 30 </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">## </a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">## $means</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">## , , 1</a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">## </a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">##            [,1]        [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">## [1,] 0.08629672 -0.06362916 -0.3045685</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">## [2,] 0.03851982 -0.01375580  0.3978759</a>
+<a class="sourceLine" id="cb3-16" data-line-number="16">## </a>
+<a class="sourceLine" id="cb3-17" data-line-number="17">## , , 2</a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">## </a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">##           [,1]       [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">## [1,] 1.2872487  1.1199220 1.01282774</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">## [2,] 0.3044151 -0.3797203 0.06539076</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22">## </a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">## , , 3</a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">## </a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">##            [,1]       [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-26" data-line-number="26">## [1,] 0.07377351 -0.3278233 -0.3031961</a>
+<a class="sourceLine" id="cb3-27" data-line-number="27">## [2,] 0.92568372  1.3738475  0.9353985</a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">## </a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">## </a>
+<a class="sourceLine" id="cb3-30" data-line-number="30">## $scaling</a>
+<a class="sourceLine" id="cb3-31" data-line-number="31">##         A </a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">## 0.9958636 </a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">## </a>
+<a class="sourceLine" id="cb3-34" data-line-number="34">## $U</a>
+<a class="sourceLine" id="cb3-35" data-line-number="35">##            [,1]       [,2]</a>
+<a class="sourceLine" id="cb3-36" data-line-number="36">## [1,] 1.00000000 0.04623491</a>
+<a class="sourceLine" id="cb3-37" data-line-number="37">## [2,] 0.04623491 0.98892536</a>
+<a class="sourceLine" id="cb3-38" data-line-number="38">## </a>
+<a class="sourceLine" id="cb3-39" data-line-number="39">## $V</a>
+<a class="sourceLine" id="cb3-40" data-line-number="40">##             [,1]        [,2]        [,3]</a>
+<a class="sourceLine" id="cb3-41" data-line-number="41">## [1,]  1.00000000  0.01838505 -0.06543824</a>
+<a class="sourceLine" id="cb3-42" data-line-number="42">## [2,]  0.01838505  0.94920005 -0.04772430</a>
+<a class="sourceLine" id="cb3-43" data-line-number="43">## [3,] -0.06543824 -0.04772430  0.97384432</a>
+<a class="sourceLine" id="cb3-44" data-line-number="44">## </a>
+<a class="sourceLine" id="cb3-45" data-line-number="45">## $lev</a>
+<a class="sourceLine" id="cb3-46" data-line-number="46">## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;</a>
+<a class="sourceLine" id="cb3-47" data-line-number="47">## </a>
+<a class="sourceLine" id="cb3-48" data-line-number="48">## $N</a>
+<a class="sourceLine" id="cb3-49" data-line-number="49">## [1] 90</a>
+<a class="sourceLine" id="cb3-50" data-line-number="50">## </a>
+<a class="sourceLine" id="cb3-51" data-line-number="51">## $call</a>
+<a class="sourceLine" id="cb3-52" data-line-number="52">## matnormlda(x = ABC, grouping = groups, prior = prior)</a>
+<a class="sourceLine" id="cb3-53" data-line-number="53">## </a>
+<a class="sourceLine" id="cb3-54" data-line-number="54">## attr(,&quot;class&quot;)</a>
+<a class="sourceLine" id="cb3-55" data-line-number="55">## [1] &quot;matrixlda&quot;</a>
+<a class="sourceLine" id="cb3-56" data-line-number="56"></a>
+<a class="sourceLine" id="cb3-57" data-line-number="57">matqda</a>
+<a class="sourceLine" id="cb3-58" data-line-number="58">## $prior</a>
+<a class="sourceLine" id="cb3-59" data-line-number="59">##         A         B         C </a>
+<a class="sourceLine" id="cb3-60" data-line-number="60">## 0.3333333 0.3333333 0.3333333 </a>
+<a class="sourceLine" id="cb3-61" data-line-number="61">## </a>
+<a class="sourceLine" id="cb3-62" data-line-number="62">## $counts</a>
+<a class="sourceLine" id="cb3-63" data-line-number="63">##  A  B  C </a>
+<a class="sourceLine" id="cb3-64" data-line-number="64">## 30 30 30 </a>
+<a class="sourceLine" id="cb3-65" data-line-number="65">## </a>
+<a class="sourceLine" id="cb3-66" data-line-number="66">## $means</a>
+<a class="sourceLine" id="cb3-67" data-line-number="67">## , , 1</a>
+<a class="sourceLine" id="cb3-68" data-line-number="68">## </a>
+<a class="sourceLine" id="cb3-69" data-line-number="69">##            [,1]        [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-70" data-line-number="70">## [1,] 0.08629672 -0.06362916 -0.3045685</a>
+<a class="sourceLine" id="cb3-71" data-line-number="71">## [2,] 0.03851982 -0.01375580  0.3978759</a>
+<a class="sourceLine" id="cb3-72" data-line-number="72">## </a>
+<a class="sourceLine" id="cb3-73" data-line-number="73">## , , 2</a>
+<a class="sourceLine" id="cb3-74" data-line-number="74">## </a>
+<a class="sourceLine" id="cb3-75" data-line-number="75">##           [,1]       [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-76" data-line-number="76">## [1,] 1.2872487  1.1199220 1.01282774</a>
+<a class="sourceLine" id="cb3-77" data-line-number="77">## [2,] 0.3044151 -0.3797203 0.06539076</a>
+<a class="sourceLine" id="cb3-78" data-line-number="78">## </a>
+<a class="sourceLine" id="cb3-79" data-line-number="79">## , , 3</a>
+<a class="sourceLine" id="cb3-80" data-line-number="80">## </a>
+<a class="sourceLine" id="cb3-81" data-line-number="81">##            [,1]       [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-82" data-line-number="82">## [1,] 0.07377351 -0.3278233 -0.3031961</a>
+<a class="sourceLine" id="cb3-83" data-line-number="83">## [2,] 0.92568372  1.3738475  0.9353985</a>
+<a class="sourceLine" id="cb3-84" data-line-number="84">## </a>
+<a class="sourceLine" id="cb3-85" data-line-number="85">## </a>
+<a class="sourceLine" id="cb3-86" data-line-number="86">## $U</a>
+<a class="sourceLine" id="cb3-87" data-line-number="87">## , , 1</a>
+<a class="sourceLine" id="cb3-88" data-line-number="88">## </a>
+<a class="sourceLine" id="cb3-89" data-line-number="89">##            [,1]       [,2]</a>
+<a class="sourceLine" id="cb3-90" data-line-number="90">## [1,] 1.00000000 0.02620514</a>
+<a class="sourceLine" id="cb3-91" data-line-number="91">## [2,] 0.02620514 0.95989647</a>
+<a class="sourceLine" id="cb3-92" data-line-number="92">## </a>
+<a class="sourceLine" id="cb3-93" data-line-number="93">## , , 2</a>
+<a class="sourceLine" id="cb3-94" data-line-number="94">## </a>
+<a class="sourceLine" id="cb3-95" data-line-number="95">##            [,1]       [,2]</a>
+<a class="sourceLine" id="cb3-96" data-line-number="96">## [1,]  1.0000000 -0.0173514</a>
+<a class="sourceLine" id="cb3-97" data-line-number="97">## [2,] -0.0173514  0.9456145</a>
+<a class="sourceLine" id="cb3-98" data-line-number="98">## </a>
+<a class="sourceLine" id="cb3-99" data-line-number="99">## , , 3</a>
+<a class="sourceLine" id="cb3-100" data-line-number="100">## </a>
+<a class="sourceLine" id="cb3-101" data-line-number="101">##          [,1]     [,2]</a>
+<a class="sourceLine" id="cb3-102" data-line-number="102">## [1,] 1.000000 0.129851</a>
+<a class="sourceLine" id="cb3-103" data-line-number="103">## [2,] 0.129851 1.061265</a>
+<a class="sourceLine" id="cb3-104" data-line-number="104">## </a>
+<a class="sourceLine" id="cb3-105" data-line-number="105">## </a>
+<a class="sourceLine" id="cb3-106" data-line-number="106">## $V</a>
+<a class="sourceLine" id="cb3-107" data-line-number="107">## , , 1</a>
+<a class="sourceLine" id="cb3-108" data-line-number="108">## </a>
+<a class="sourceLine" id="cb3-109" data-line-number="109">##             [,1]        [,2]        [,3]</a>
+<a class="sourceLine" id="cb3-110" data-line-number="110">## [1,]  1.05498245 -0.07418973  0.09476411</a>
+<a class="sourceLine" id="cb3-111" data-line-number="111">## [2,] -0.07418973  0.98800103 -0.04390729</a>
+<a class="sourceLine" id="cb3-112" data-line-number="112">## [3,]  0.09476411 -0.04390729  0.79903040</a>
+<a class="sourceLine" id="cb3-113" data-line-number="113">## </a>
+<a class="sourceLine" id="cb3-114" data-line-number="114">## , , 2</a>
+<a class="sourceLine" id="cb3-115" data-line-number="115">## </a>
+<a class="sourceLine" id="cb3-116" data-line-number="116">##             [,1]       [,2]        [,3]</a>
+<a class="sourceLine" id="cb3-117" data-line-number="117">## [1,]  1.09941477 0.12678075 -0.03952663</a>
+<a class="sourceLine" id="cb3-118" data-line-number="118">## [2,]  0.12678075 0.94606849  0.03910645</a>
+<a class="sourceLine" id="cb3-119" data-line-number="119">## [3,] -0.03952663 0.03910645  0.85913748</a>
+<a class="sourceLine" id="cb3-120" data-line-number="120">## </a>
+<a class="sourceLine" id="cb3-121" data-line-number="121">## , , 3</a>
+<a class="sourceLine" id="cb3-122" data-line-number="122">## </a>
+<a class="sourceLine" id="cb3-123" data-line-number="123">##              [,1]         [,2]       [,3]</a>
+<a class="sourceLine" id="cb3-124" data-line-number="124">## [1,]  0.833193637  0.008466708 -0.2084547</a>
+<a class="sourceLine" id="cb3-125" data-line-number="125">## [2,]  0.008466708  0.875328749 -0.1142510</a>
+<a class="sourceLine" id="cb3-126" data-line-number="126">## [3,] -0.208454704 -0.114250988  1.1520533</a>
+<a class="sourceLine" id="cb3-127" data-line-number="127">## </a>
+<a class="sourceLine" id="cb3-128" data-line-number="128">## </a>
+<a class="sourceLine" id="cb3-129" data-line-number="129">## $lev</a>
+<a class="sourceLine" id="cb3-130" data-line-number="130">## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot;</a>
+<a class="sourceLine" id="cb3-131" data-line-number="131">## </a>
+<a class="sourceLine" id="cb3-132" data-line-number="132">## $N</a>
+<a class="sourceLine" id="cb3-133" data-line-number="133">## [1] 90</a>
+<a class="sourceLine" id="cb3-134" data-line-number="134">## </a>
+<a class="sourceLine" id="cb3-135" data-line-number="135">## $call</a>
+<a class="sourceLine" id="cb3-136" data-line-number="136">## matrixqda(x = ABC, grouping = groups, prior = prior)</a>
+<a class="sourceLine" id="cb3-137" data-line-number="137">## </a>
+<a class="sourceLine" id="cb3-138" data-line-number="138">## attr(,&quot;class&quot;)</a>
+<a class="sourceLine" id="cb3-139" data-line-number="139">## [1] &quot;matrixqda&quot;</a></code></pre></div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

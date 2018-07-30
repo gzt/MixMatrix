@@ -51,3 +51,4 @@ predict(D)$posterior[1:10,]
 Other matrixlda: \code{\link{matrixlda}},
   \code{\link{matrixqda}}, \code{\link{predict.matrixqda}}
 }
+\concept{matrixlda}
