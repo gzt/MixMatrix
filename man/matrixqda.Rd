@@ -4,7 +4,8 @@
 \alias{matrixqda}
 \title{Quadratic Discriminant Analysis for Matrix Variate Observations}
 \usage{
-matrixqda(x, grouping, prior, tol = 1e-04, ...)
+matrixqda(x, grouping, prior, tol = 1e-04, method = "normal",
+  nu = 10, ...)
 }
 \arguments{
 \item{x}{3-D array or list of matrix data.}
@@ -16,6 +17,11 @@ as the number of classes}
 
 \item{tol}{by default, \code{1e-4}. Tolerance parameter checks
 for 0 variance.}
+
+\item{method}{whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
+By default, normal.}
+
+\item{nu}{If using the t-distribution, the degrees of freedom paramter. By default, 10.}
 
 \item{...}{Arguments passed to or from other methods, such
 as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
@@ -32,6 +38,8 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{V}}{the between-column covariance matrices}
       \item{\code{lev}}{levels of the grouping factor}
       \item{\code{N}}{The number of observations used.}
+      \item{\code{method}}{The method used.}
+      \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
       \item{\code{call}}{The (matched) function call.}
    }
 }

@@ -18,6 +18,9 @@
 #'    as the number of classes
 #' @param tol by default, \code{1e-4}. Tolerance parameter checks
 #'    for 0 variance.
+#' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
+#'    By default, normal.
+#' @param nu If using the t-distribution, the degrees of freedom paramter. By default, 10.
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
@@ -34,6 +37,8 @@
 #'       \item{\code{V}}{the between-column covariance matrix}
 #'       \item{\code{lev}}{levels of the grouping factor}
 #'       \item{\code{N}}{The number of observations used.}
+#'       \item{\code{method}}{The method used.}
+#'       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
@@ -47,7 +52,7 @@
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' matrixlda(C, groups, prior)
-matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
+matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 10,...)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -131,8 +136,9 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
       U = Uresult,
       V = Vresult,
       lev = lev,
-      #svd = X.s$d[1L:rank],
       N = n,
+      method = method,
+      nu = nu,
       call = cl
     ) ,
     class = "matrixlda"
@@ -275,6 +281,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'    as the number of classes
 #' @param tol by default, \code{1e-4}. Tolerance parameter checks
 #'    for 0 variance.
+#' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
+#'    By default, normal.
+#' @param nu If using the t-distribution, the degrees of freedom paramter. By default, 10.
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
@@ -289,6 +298,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{V}}{the between-column covariance matrices}
 #'       \item{\code{lev}}{levels of the grouping factor}
 #'       \item{\code{N}}{The number of observations used.}
+#'       \item{\code{method}}{The method used.}
+#'       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
@@ -302,7 +313,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' D <- matrixqda(C, groups, prior)
-matrixqda <- function(x, grouping, prior, tol = 1.0e-4, ...)  {
+matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10,...)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -351,7 +362,11 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, ...)  {
   groupV = array(0, dim = c(q, q, ng))
   for (i in seq(ng)) {
     # hiding this htere: , ...
-    mlfit =  MLmatrixnorm(x[, , g == levels(g)[i]], ...)
+    if(method == "t"){
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i]], df = nu, ...)
+    } else{
+      mlfit =  MLmatrixnorm(x[, , g == levels(g)[i]], ...)
+    }
     if (mlfit$convergence == FALSE)
       warning("ML fit failed for group ", i)
 
@@ -391,6 +406,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, ...)  {
       V = groupV,
       lev = lev,
       N = n,
+      method = method,
+      nu = nu,
       call = cl
     ) ,
     class = "matrixqda"
@@ -512,7 +529,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
       logdetU = 2*sum(log(diag(cholU[, , j])))
       logdetV = 2*sum(log(diag(cholV[, , j])))
-      detfactor[j] = .5 * (p * logdetU + n * logdetV)
+      detfactor[j] = .5 * (q * logdetU + p * logdetV)
     }
 
     for (i in seq(n)) {
