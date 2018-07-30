@@ -91,7 +91,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
 
   group.means = array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] = rowMeans(x[, , g == levels(g)[i]], dims = 2)
+    group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i]], max.iter = 1,...)$mean)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
@@ -115,7 +115,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, ...)  {
   Vresult = matrix(0, q, q)
   varresult = 0
   for (i in seq(ng)) {
-    varfit <- MLmatrixnorm(swept.group[, , g == levels(g)[i]])
+    varfit <- MLmatrixnorm(swept.group[, , g == levels(g)[i]],...)
     Uresult = Uresult + prior[i] * varfit$U
     Vresult = Vresult + prior[i] * varfit$V
     varresult = varresult + prior[i] * varfit$var
