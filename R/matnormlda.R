@@ -96,7 +96,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
 
   group.means = array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i]], max.iter = 1,...)$mean)
+    group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], max.iter = 1, ...)$mean)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
@@ -116,17 +116,51 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     ),
     domain = NA)
   }
-  Uresult = matrix(0, p, p)
-  Vresult = matrix(0, q, q)
-  varresult = 0
-  for (i in seq(ng)) {
-    varfit <- MLmatrixnorm(swept.group[, , g == levels(g)[i]],...)
-    Uresult = Uresult + prior[i] * varfit$U
-    Vresult = Vresult + prior[i] * varfit$V
-    varresult = varresult + prior[i] * varfit$var
+
+
+  if(method == "t"){
+    # for method t with df specified
+    Uresult = diag(p)
+    Vresult = diag(q)
+    varresult = 1
+    error = 1e6
+    itercount = 0
+    while(error > sqrt(tol) && itercount < 1e4){
+      # this loop is somewhat inelegant
+      newUresult = matrix(0,p,p)
+      newVresult = matrix(0,q,q)
+      newvarresult = 0
+      for (i in seq(ng)) {
+        varfit <- MLmatrixt(x[, , g == levels(g)[i]], df = nu,
+                            U = Uresult, V = Vresult,...)
+        group.means[, , i] <- varfit$mean
+        newUresult = newUresult + proportions[i] * varfit$U
+        newVresult = newVresult + proportions[i] * varfit$V
+        newvarresult = newvarresult + proportions[i] * varfit$var
+        if (varfit$convergence == FALSE)
+          warning("ML fit failed for group ", i)
+      }
+
+      error = sum((newUresult - Uresult)^2) + sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
+      Uresult = newUresult
+      Vresult = newVresult
+      varresult = newvarresult
+      itercount = itercount + 1
+    }
+
+  } else {
+    Uresult = matrix(0,p,p)
+    Vresult = matrix(0,q,q)
+    varresult = 0
+    for (i in seq(ng)) {
+      varfit <- MLmatrixnorm(swept.group[, , g == levels(g)[i], drop = FALSE],...)
+      Uresult = Uresult + prior[i] * varfit$U
+      Vresult = Vresult + prior[i] * varfit$V
+      varresult = varresult + prior[i] * varfit$var
+    }
   }
   cl <- match.call()
-  cl[[1L]] <- as.name("matnormlda")
+  cl[[1L]] <- as.name("matrixlda")
   structure(
     list(
       prior = prior,
@@ -223,9 +257,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 
 
-    if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
+    if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
       stop("wrong column dimension of matrices")
-    if (nrow(x[, , 1]) != nrow(object$means[, , 1]))
+    if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE]))
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
@@ -247,16 +281,22 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     VMUM = numeric(ng)
     VMU = array(0, dim = c(q, p, ng))
     for (j in seq(ng)) {
-      VMU[, , j] = solveV %*% crossprod(object$means[, , j], solveU )
+      VMU[, , j] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
       VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
     }
 
     for (i in seq(n)) {
       Xi = x[, , i]
       for (j in seq(ng)) {
-        dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
+        if (object$method == "t"){
+          dist[i, j] = mattrace(VMU[, , j, drop = FALSE] %*% Xi) +  VMUM[j] + log(prior[j])
+        } else dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
       }
     }
+
+    dist <- matrix(sapply(dist, function(x) min(x,300)),n,ng)
+    dist <- matrix(sapply(dist, function(x) max(x,-300)),n,ng)
+    dist <- ( (dist - apply(dist, 1L, min, na.rm=TRUE)))
     posterior = exp(dist)
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
@@ -363,9 +403,9 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   for (i in seq(ng)) {
     # hiding this htere: , ...
     if(method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i]], df = nu, ...)
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu, ...)
     } else{
-      mlfit =  MLmatrixnorm(x[, , g == levels(g)[i]], ...)
+      mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
     }
     if (mlfit$convergence == FALSE)
       warning("ML fit failed for group ", i)
@@ -376,7 +416,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
-    swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]
+    swept.group[, , i, drop = FALSE] <- x[, , i, drop = FALSE] - group.means[, , as.numeric(g[i]), drop = FALSE]
   }
   f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
@@ -540,7 +580,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
           detfactor[j]
       }
     }
-    posterior = exp(dist)
+    posterior = exp( (dist - apply(dist, 1L, min, na.rm=TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
     nm <- names(object$prior)
