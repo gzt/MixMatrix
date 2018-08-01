@@ -125,13 +125,13 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     varresult = 1
     error = 1e6
     itercount = 0
-    while(error > sqrt(tol) && itercount < 1e4){
+    while (error > sqrt(tol) && itercount < 1e4) {
       # this loop is somewhat inelegant
       newUresult = matrix(0,p,p)
       newVresult = matrix(0,q,q)
       newvarresult = 0
       for (i in seq(ng)) {
-        varfit <- MLmatrixt(x[, , g == levels(g)[i]], df = nu,
+        varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu,
                             U = Uresult, V = Vresult,...)
         group.means[, , i] <- varfit$mean
         newUresult = newUresult + proportions[i] * varfit$U
@@ -276,8 +276,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     q <- dims[2]
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    solveV = solve(object$V * object$scaling)
-    solveU = solve(object$U)
+    solveV = matrix(solve(object$V * object$scaling),q,q)
+    solveU = matrix(solve(object$U),p,p)
     VMUM = numeric(ng)
     VMU = array(0, dim = c(q, p, ng))
     for (j in seq(ng)) {
@@ -286,17 +286,15 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     }
 
     for (i in seq(n)) {
-      Xi = x[, , i]
+      Xi = matrix(x[, , i],p,q)
       for (j in seq(ng)) {
-        if (object$method == "t"){
-          dist[i, j] = mattrace(VMU[, , j, drop = FALSE] %*% Xi) +  VMUM[j] + log(prior[j])
+        if (object$method == "t") {
+          dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
         } else dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
       }
     }
 
-    dist <- matrix(sapply(dist, function(x) min(x,300)),n,ng)
-    dist <- matrix(sapply(dist, function(x) max(x,-300)),n,ng)
-    dist <- ( (dist - apply(dist, 1L, min, na.rm=TRUE)))
+    dist <- ((dist - apply(dist, 1L, max, na.rm = TRUE)))
     posterior = exp(dist)
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
@@ -353,7 +351,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' D <- matrixqda(C, groups, prior)
-matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10,...)  {
+matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -416,7 +414,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
-    swept.group[, , i, drop = FALSE] <- x[, , i, drop = FALSE] - group.means[, , as.numeric(g[i]), drop = FALSE]
+    swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]
   }
   f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
@@ -531,9 +529,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
 
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 
-    if (ncol(x[, , 1]) != ncol(object$means[, , 1]))
+    if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
       stop("wrong column dimension of matrices")
-    if (nrow(x[, , 1]) != nrow(object$means[, , 1]))
+    if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE]))
       stop("wrong row dimension of matrices")
     ng <- length(object$prior)
     if (!missing(prior)) {
@@ -551,36 +549,44 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    cholU = array(dim = c(p, p, ng))
-    cholV = array(dim = c(q, q, ng))
-    solveU = array(dim = c(p, p, ng))
-    solveV = array(dim = c(q, q, ng))
+    # cholU = array(dim = c(p, p, ng))
+    # cholV = array(dim = c(q, q, ng))
+    # solveU = array(dim = c(p, p, ng))
+    # solveV = array(dim = c(q, q, ng))
+    cholU = vector("list", ng)
+    cholV = vector("list", ng)
+    solveU = vector("list", ng)
+    solveV = vector("list", ng)
     for (j in seq(ng)) {
-      cholV[, , j] = chol(object$V[, , j])
-      cholU[, , j] = chol(object$U[, , j])
-      solveV[, , j] = chol2inv(cholV[, , j])
-      solveU[, , j] = chol2inv(cholU[, , j])
+      # cholV[, , j] = chol(object$V[, , j])
+      # cholU[, , j] = chol(object$U[, , j])
+      # solveV[, , j] = chol2inv(cholV[, , j])
+      # solveU[, , j] = chol2inv(cholU[, , j])
+      cholV[[j]] = chol(object$V[, , j])
+      cholU[[j]] = chol(object$U[, , j])
+      solveV[[j]] = chol2inv(cholV[[j]])
+      solveU[[j]] = chol2inv(cholU[[j]])
     }
     VMUM = numeric(ng)
     detfactor =  numeric(ng)
-    VMU = array(dim = c(q, p, ng))
+    VMU = vector("list",ng)
     for (j in seq(ng)) {
-      VMU[, , j] = solveV[, , j] %*% crossprod(object$means[, , j], solveU[, , j])
-      VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
-      logdetU = 2*sum(log(diag(cholU[, , j])))
-      logdetV = 2*sum(log(diag(cholV[, , j])))
+      VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
+      VMUM[j] = mattrace((-.5) * VMU[[j]] %*% matrix(object$means[, , j], p, q))
+      logdetU = 2*sum(log(diag(cholU[[j]])))
+      logdetV = 2*sum(log(diag(cholV[[j]])))
       detfactor[j] = .5 * (q * logdetU + p * logdetV)
     }
 
     for (i in seq(n)) {
-      Xi = (x[, , i])
+      Xi = matrix(x[, , i], p, q)
       for (j in seq(ng)) {
-        dist[i, j] = mattrace(-.5 * solveV[, , j] %*% crossprod(Xi, solveU[, , j]) %*% Xi) +
-          mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j]) +
+        dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
+          mattrace(VMU[[j]] %*% Xi) +  VMUM[j] + log(prior[j]) +
           detfactor[j]
       }
     }
-    posterior = exp( (dist - apply(dist, 1L, min, na.rm=TRUE)))
+    posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
     nm <- names(object$prior)
