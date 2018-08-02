@@ -19,14 +19,16 @@
 #'    common mean within each row. If both this and \code{row.mean} are
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
-#'     'none', 'AR(1)', 'CS' for 'compound symmetry', or 'Independence' for
+#'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
+#'     correlation matrix, or 'Independence' for
 #'     independent and identical variance across the rows.
 #'     Only positive correlations are allowed for AR(1) and CS.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
-#'     Either 'none', 'AR(1)', 'CS', or 'Independence'. Only positive correlations are allowed for
+#'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
+#'     Only positive correlations are allowed for
 #'     AR(1) and CS.
 #' @param df Starting value for the degrees of freedom. If fixed = TRUE, then this is required and not updated. By default, set to 10.
 #' @param fixed Whether nu is estimated or fixed. By default, TRUE.
@@ -78,15 +80,37 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     row.set.var = TRUE
     row.variance = "I"
   }
-  if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
-
+  # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
+  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
+    # row.set.var = TRUE
+    row.variance = "cor"
+  }
+  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
+    row.set.var = TRUE
+    row.variance = "AR(1)"
+  }
+  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
+    row.set.var = TRUE
+    row.variance = "CS"
+  }
   col.set.var = FALSE
   if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
   if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
     col.set.var = TRUE
     col.variance = "I"
   }
-  if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
+  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+    # col.set.var = TRUE
+    col.variance = "cor"
+  }
+  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
+    col.set.var = TRUE
+    col.variance = "AR(1)"
+  }
+  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
+    col.set.var = TRUE
+    col.variance = "CS"
+  }
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
@@ -214,7 +238,8 @@ Smatrix = array(0,c(p,p,n))
     } else {
 
       new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-      new.V = new.V/new.V[1,1]
+      if (col.variance == "cor") new.V = cov2cor(new.V) else
+        new.V = new.V/new.V[1,1]
     }
     # Fix V to have unit variance on first component
 
@@ -245,6 +270,10 @@ Smatrix = array(0,c(p,p,n))
 
     newUinv = (dfmult/(n * (df + p - 1))) * SS
     new.U = solve(newUinv)
+    if (row.variance == "cor") {
+      vartmp = exp(mean(log(diag(new.U)))) # should be pos def so no problems
+      new.U = vartmp * cov2cor(new.U)
+      }
     }
 
     ### IF NU UPDATE

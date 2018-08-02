@@ -241,14 +241,16 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    common mean within each row. If both this and \code{row.mean} are
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
-#'     'none', 'AR(1)', 'CS' for 'compound symmetry', or 'Independence' for
+#'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
+#'     correlation matrix, or 'Independence' for
 #'     independent and identical variance across the rows.
 #'     Only positive correlations are allowed for AR(1) and CS.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
-#'     Either 'none', 'AR(1)', 'CS', or 'Independence'. Only positive correlations are allowed for
+#'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
+#'     Only positive correlations are allowed for
 #'     AR(1) and CS.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
@@ -296,15 +298,38 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     row.set.var = TRUE
     row.variance = "I"
   }
-  if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
-
+  # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
+  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
+    # row.set.var = TRUE
+    row.variance = "cor"
+  }
+  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
+    row.set.var = TRUE
+    row.variance = "AR(1)"
+  }
+  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
+    row.set.var = TRUE
+    row.variance = "CS"
+  }
   col.set.var = FALSE
   if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
   if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
     col.set.var = TRUE
     col.variance = "I"
   }
-  if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
+  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+    # col.set.var = TRUE
+    col.variance = "cor"
+  }
+  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
+    col.set.var = TRUE
+    col.variance = "AR(1)"
+  }
+  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
+    col.set.var = TRUE
+    col.variance = "CS"
+  }
+  # if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
@@ -332,7 +357,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   error.term <- 1e+40
   if (col.set.var) {
     if (V[1,2] > 0) {
-      rho.col <- V[1,2]
+      rho.col <- V[1,2]/max(V[1,1],1)
     } else {
 
       inter.V <- txax(swept.data, U)
@@ -348,7 +373,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
   if (row.set.var) {
     if (U[1,2] > 0) {
-      rho.row <- U[1,2]
+      rho.row <- U[1,2]/max(U[1,1],1)
     } else {
 
       inter.U <- xatx(swept.data, V)
@@ -358,7 +383,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       if (row.variance == "I") rho.row = 0
       if (rho.row > .9) rho.row <- .9
       if (rho.row < 0) rho.row = 0
-      U <- varmatgenerate(dims[1],rho.row,row.variance)
+      # if (row.variance == "cor") U = cov2cor(U) else
+        U <- varmatgenerate(dims[1],rho.row,row.variance)
     }
   }
 
@@ -401,6 +427,10 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
       inter.V <- txax(swept.data, U)
       new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
+      if (col.variance == "cor") {
+        vartmp = exp(mean(log(diag(new.V)))) # matrix should be pos definite, so not a prob
+        new.V = vartmp * cov2cor(new.V)
+      }
     }
     if (row.variance == "I") {
       new.U = diag(dims[1])
@@ -429,6 +459,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       inter.U <- xatx(swept.data, new.V)
       new.U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       new.U <- new.U/(new.U[1, 1])
+      if (row.variance == "cor") new.U = cov2cor(new.U)
     }
     # only identifiable up to a constant, so have to fix something at 1
     # should perhaps change - makes doing other restrictions on variance
