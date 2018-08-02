@@ -22,7 +22,8 @@ common mean within each row. If both this and \code{row.mean} are
 \code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{row.variance}{Imposes a variance structure on the rows. Either
-'none', 'AR(1)', 'CS' for 'compound symmetry', or 'Independence' for
+'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
+correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
 Only positive correlations are allowed for AR(1) and CS.
 Note that while maximum likelihood estimators are available (and used) for
@@ -30,7 +31,8 @@ the unconstrained variance matrices, \code{optim} is used for any
 constraints so it may be considerably slower.}
 
 \item{col.variance}{Imposes a variance structure on the columns.
-Either 'none', 'AR(1)', 'CS', or 'Independence'. Only positive correlations are allowed for
+Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
+Only positive correlations are allowed for
 AR(1) and CS.}
 
 \item{df}{Starting value for the degrees of freedom. If fixed = TRUE, then this is required and not updated. By default, set to 10.}

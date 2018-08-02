@@ -383,7 +383,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       if (row.variance == "I") rho.row = 0
       if (rho.row > .9) rho.row <- .9
       if (rho.row < 0) rho.row = 0
-      # if (row.variance == "cor") U = cov2cor(U) else
+      # if (row.variance == "cor") U = stats::cov2cor(U) else
         U <- varmatgenerate(dims[1],rho.row,row.variance)
     }
   }
@@ -429,7 +429,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "cor") {
         vartmp = exp(mean(log(diag(new.V)))) # matrix should be pos definite, so not a prob
-        new.V = vartmp * cov2cor(new.V)
+        new.V = vartmp * stats::cov2cor(new.V)
       }
     }
     if (row.variance == "I") {
@@ -459,7 +459,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       inter.U <- xatx(swept.data, new.V)
       new.U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       new.U <- new.U/(new.U[1, 1])
-      if (row.variance == "cor") new.U = cov2cor(new.U)
+      if (row.variance == "cor") new.U = stats::cov2cor(new.U)
     }
     # only identifiable up to a constant, so have to fix something at 1
     # should perhaps change - makes doing other restrictions on variance

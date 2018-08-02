@@ -238,7 +238,7 @@ Smatrix = array(0,c(p,p,n))
     } else {
 
       new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-      if (col.variance == "cor") new.V = cov2cor(new.V) else
+      if (col.variance == "cor") new.V = stats::cov2cor(new.V) else
         new.V = new.V/new.V[1,1]
     }
     # Fix V to have unit variance on first component
@@ -272,7 +272,7 @@ Smatrix = array(0,c(p,p,n))
     new.U = solve(newUinv)
     if (row.variance == "cor") {
       vartmp = exp(mean(log(diag(new.U)))) # should be pos def so no problems
-      new.U = vartmp * cov2cor(new.U)
+      new.U = vartmp * stats::cov2cor(new.U)
       }
     }
 
