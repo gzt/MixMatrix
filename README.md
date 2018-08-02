@@ -11,7 +11,7 @@ parameters. This also has EM for parameter estimation for matrix variate *t*-dis
 
 See the [vignette](../vignettes/matrixnormal.html) for more.
 
-I plan to expand this to include introduce some further possible restrictions on variance matrices. The $t$-distributions do not, at the moment, have any such restrictions implemented.
+It is currently possible to constrain the mean matrices for normal and *t*-distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both. 
 
 
 There isn't much R software out there for working with these distributions. The 
