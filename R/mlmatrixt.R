@@ -136,6 +136,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   swept.data <- sweep(data, c(1, 2), mu)
   iter <- 0
   error.term <- 1e+40
+
   if (col.set.var) {
     if (V[1,2] > 0) {
       rho.col <- V[1,2]
@@ -296,8 +297,10 @@ Smatrix = array(0,c(p,p,n))
     detSS = determinant(SS, logarithm = TRUE)$modulus[1]
     nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
                              CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
-                            (SSDtmp/n - (detSS - p*log(n*(nu + p - 1)/(nu + p + q - 1)))))
+                             (SSDtmp/n - (detSS - p*log(n*(nu + p - 1)/(nu + p + q - 1)))))
                           # this latest ECME-ish one gives SLIGHTLY different results but is faster
+                            #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
+
     }
     if (!isTRUE(sign(nuLL(p - 1)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
@@ -309,13 +312,13 @@ Smatrix = array(0,c(p,p,n))
     #print(new.df)
     } else new.df = df
     ### CHECK CONVERGENCE
-    error.term <- sum((new.V - V)^2)/(q*q) + sum((new.U - U)^2)/(p*p) + sum((new.Mu - mu)^2/(p*q) + 1/(n*p*q) * (df - new.df)^2)
+    error.term <- sum((new.V - V)^2)/(q*q) + sum((new.U - U)^2)/(p*p) + sum((new.Mu - mu)^2)/(p*q) + (df - new.df)^2/(n*p*q)
     V <- new.V
     U <- new.U
     mu <- new.Mu
     df <- new.df
 
-
+    # cat(error.term, df, (sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))),"\n")
     iter <- iter + 1
   }
   if (iter >= max.iter || error.term > tol || varflag)
