@@ -16,6 +16,7 @@ trace of a matrix
 Trace of a matrix
 }
 \examples{
-A <- diag(6:1)
-matrixtrace(A)
+\dontrun{A <- diag(6:1)
+matrixtrace(A)}
 }
+\keyword{internal}

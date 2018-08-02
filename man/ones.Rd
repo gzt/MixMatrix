@@ -18,6 +18,7 @@ Matrix of ones
 Matrix of ones
 }
 \examples{
-A <- ones(5,3)
-print(A)
+\dontrun{A <- ones(5,3)
+print(A)}
 }
+\keyword{internal}

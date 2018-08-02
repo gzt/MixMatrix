@@ -302,7 +302,7 @@ posmatsqrt <- function(A) {
   A <- as.matrix(A)
   if (!(dim(A)[1] == dim(A)[2]))
     stop("Matrix must be square. Dimensions: ", dim(A))
-  if(!symm.check(A))
+  if (!symm.check(A))
     stop("Matrix must be symmetric")
 
   return(posdefsqrt(A))
@@ -400,11 +400,11 @@ derivCS <- function(n, rho){
 #' @param A square numeric matrix
 #'
 #' @return trace of a matrix
-#' @export
+#' @keywords internal
 #'
 #' @examples
-#' A <- diag(6:1)
-#' matrixtrace(A)
+#' \dontrun{A <- diag(6:1)
+#' matrixtrace(A)}
 matrixtrace = function(A){
   b = dim(A)
   if (b[1] != b[2]) warning("non-conformable dimensions")
@@ -416,13 +416,13 @@ matrixtrace = function(A){
 #'
 #' @param nrow Number of rows
 #' @param ncol Number of columns
+#' @keywords internal
 #'
 #' @return Matrix of ones
-#' @export
 #'
 #' @examples
-#' A <- ones(5,3)
-#' print(A)
+#' \dontrun{A <- ones(5,3)
+#' print(A)}
 ones = function(nrow, ncol){
  matrix(1,nrow = nrow, ncol = ncol)
 }
