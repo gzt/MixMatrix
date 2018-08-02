@@ -238,8 +238,13 @@ Smatrix = array(0,c(p,p,n))
     } else {
 
       new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-      if (col.variance == "cor") new.V = stats::cov2cor(new.V) else
-        new.V = new.V/new.V[1,1]
+      if (col.variance == "cor") {
+        new.V = stats::cov2cor(new.V)
+        if (!all(is.finite(new.V))) {
+          varflag = TRUE
+          new.V = diag(q)
+          }
+        } else new.V = new.V/new.V[1,1]
     }
     # Fix V to have unit variance on first component
 
@@ -272,7 +277,13 @@ Smatrix = array(0,c(p,p,n))
     new.U = solve(newUinv)
     if (row.variance == "cor") {
       vartmp = exp(mean(log(diag(new.U)))) # should be pos def so no problems
+      if (!is.finite(vartmp)) {
+        vartmp = 1
+        varflag = TRUE
+        warning("Variance estimate for correlation matrix not positive definite.")
+      }
       new.U = vartmp * stats::cov2cor(new.U)
+      # this cute trick preserves the determinant of the matrix
       }
     }
 
