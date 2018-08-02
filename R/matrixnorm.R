@@ -429,6 +429,11 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "cor") {
         vartmp = exp(mean(log(diag(new.V)))) # matrix should be pos definite, so not a prob
+        if (!is.finite(vartmp)) {
+          vartmp = 1
+          varflag = TRUE
+          warning("Variance estimate for correlation matrix not positive definite.")
+        }
         new.V = vartmp * stats::cov2cor(new.V)
       }
     }
