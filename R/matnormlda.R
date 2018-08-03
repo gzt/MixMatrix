@@ -274,23 +274,26 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
+    if (object$method == "t") df = object$nu
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
     solveV = matrix(solve(object$V * object$scaling),q,q)
     solveU = matrix(solve(object$U),p,p)
-    VMUM = numeric(ng)
-    VMU = array(0, dim = c(q, p, ng))
+    VMUM = vector("list", ng)
+    VMU = vector("list", ng)
     for (j in seq(ng)) {
-      VMU[, , j] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
-      VMUM[j] = mattrace((-.5) * VMU[, , j] %*% object$means[, , j])
+      VMU[[j]] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
+      VMUM[[j]] =  VMU[[j]] %*% object$means[, , j]
     }
 
     for (i in seq(n)) {
       Xi = matrix(x[, , i],p,q)
+      if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
       for (j in seq(ng)) {
         if (object$method == "t") {
-          dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
-        } else dist[i, j] = mattrace(VMU[, , j] %*% Xi) +  VMUM[j] + log(prior[j])
+          dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
+                                                log(prior[j])
+        } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
       }
     }
 
@@ -545,7 +548,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
-
+    df <- object$nu
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
@@ -567,12 +570,12 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       solveV[[j]] = chol2inv(cholV[[j]])
       solveU[[j]] = chol2inv(cholU[[j]])
     }
-    VMUM = numeric(ng)
+    VMUM = vector("list",ng)
     detfactor =  numeric(ng)
     VMU = vector("list",ng)
     for (j in seq(ng)) {
       VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
-      VMUM[j] = mattrace((-.5) * VMU[[j]] %*% matrix(object$means[, , j], p, q))
+      VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
       logdetU = 2*sum(log(diag(cholU[[j]])))
       logdetV = 2*sum(log(diag(cholV[[j]])))
       detfactor[j] = .5 * (q * logdetU + p * logdetV)
@@ -581,9 +584,14 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     for (i in seq(n)) {
       Xi = matrix(x[, , i], p, q)
       for (j in seq(ng)) {
+        if (object$method == "t"){
+          dist[i, j] = -.5* (df + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) -
+            detfactor[j]
+        } else {
         dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
-          mattrace(VMU[[j]] %*% Xi) +  VMUM[j] + log(prior[j]) +
+          mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
           detfactor[j]
+        }
       }
     }
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
