@@ -297,7 +297,7 @@ Smatrix = array(0,c(p,p,n))
     detSS = determinant(SS, logarithm = TRUE)$modulus[1]
     nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
                              CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
-                             (SSDtmp/n - (detSS - p*log(n*(nu + p - 1)/(nu + p + q - 1)))))
+                             (SSDtmp/n - (detSS - p*log(n*(nu + p - 1))+p*log(nu + p + q - 1))))
                           # this latest ECME-ish one gives SLIGHTLY different results but is faster
                             #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
 
