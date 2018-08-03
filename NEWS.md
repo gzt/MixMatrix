@@ -2,6 +2,7 @@
 
 * include EM algorithm (actually an ECME) for estimation of parameters of matrix-variate *t*-distributions
 * include variance specifications for EM for t distribution
+* include the possibility of restricting covariance matrices to a correlation structure.
 
 # matrixdist 0.0.0.9926
 
