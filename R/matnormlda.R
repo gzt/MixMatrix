@@ -125,7 +125,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     varresult = 1
     error = 1e6
     itercount = 0
-    while (error > sqrt(tol) && itercount < 1e4) {
+    while (error > 1e-7 && itercount < 1e4) {
       # this loop is somewhat inelegant
       newUresult = matrix(0,p,p)
       newVresult = matrix(0,q,q)
@@ -146,6 +146,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
       Vresult = newVresult
       varresult = newvarresult
       itercount = itercount + 1
+
     }
 
   } else {
