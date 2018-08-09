@@ -134,9 +134,9 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
         varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu, fixed = TRUE,
                             U = Uresult, V = Vresult,...)
         group.means[, , i] <- varfit$mean
-        newUresult = newUresult + proportions[i] * varfit$U
-        newVresult = newVresult + proportions[i] * varfit$V
-        newvarresult = newvarresult + proportions[i] * varfit$var
+        newUresult = newUresult + prior[i] * varfit$U
+        newVresult = newVresult + prior[i] * varfit$V
+        newvarresult = newvarresult + prior[i] * varfit$var
         if (varfit$convergence == FALSE)
           warning("ML fit failed for group ", i)
       }
@@ -289,7 +289,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 
     for (i in seq(n)) {
       Xi = matrix(x[, , i],p,q)
-      if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
+      # if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
       for (j in seq(ng)) {
         if (object$method == "t") {
           dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
