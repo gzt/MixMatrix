@@ -2,7 +2,7 @@ Package: matrixdist
 Type: Package
 Title: Functions for Matrix Distributions
 Version: 0.0.0.9927
-Date: 2018-07-26
+Date: 2018-08-03
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre")))
 Description: Sampling and density for matrix variate normal, t, and inverted 
@@ -25,4 +25,5 @@ URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
 License: GPL-3
 RoxygenNote: 6.1.0
+Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
