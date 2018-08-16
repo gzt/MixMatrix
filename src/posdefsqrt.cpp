@@ -59,8 +59,8 @@ arma::colvec dmatnorm_calc(arma::cube & x, arma::mat & mean,
   arma::colvec logresult(x.n_slices);
   for (int i = 0; i < numslices; i++) {
     arma::mat XM = x.slice(i) - mean;
-    logresult(i) = -0.5 * n * p * log(2 * PI) - 0.5 * n * logdetU -
-      0.5 * p * logdetV - 0.5 * trace( Vinv * trans(XM) * Uinv * XM);
+    logresult(i) = -0.5 * n * p * log(2 * PI) - 0.5 * p * logdetU -
+      0.5 * n * logdetV - 0.5 * trace( Vinv * trans(XM) * Uinv * XM);
   }
   return logresult;
 }
@@ -183,7 +183,7 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
       logresult[i] = R_NaN;
       Rcpp::warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
     } else{
-    logresult[i] = -.5 * p * logdetU - .5 * n * logdetV - .5 * (df - 2) * mval;
+    logresult[i] = -.5 * n * logdetU - .5 * p * logdetV - .5 * (df - 2) * mval;
     }
   }
   return logresult;
