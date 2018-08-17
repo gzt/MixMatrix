@@ -118,7 +118,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
   }
 
 
-  if(method == "t"){
+  if (method == "t"){
     # for method t with df specified
     Uresult = diag(p)
     Vresult = diag(q)
@@ -131,7 +131,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
       newVresult = matrix(0,q,q)
       newvarresult = 0
       for (i in seq(ng)) {
-        varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu, fixed = TRUE,
+        varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu,
                             U = Uresult, V = Vresult,...)
         group.means[, , i] <- varfit$mean
         newUresult = newUresult + prior[i] * varfit$U
@@ -404,8 +404,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   groupV = array(0, dim = c(q, q, ng))
   for (i in seq(ng)) {
     # hiding this htere: , ...
-    if(method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu, fixed = TRUE,...)
+    if (method == "t"){
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu,...)
     } else{
       mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
     }
