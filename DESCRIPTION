@@ -1,8 +1,8 @@
 Package: matrixdist
 Type: Package
 Title: Functions for Matrix Distributions
-Version: 0.0.0.9927
-Date: 2018-08-03
+Version: 0.0.0.9928
+Date: 2018-08-17
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre")))
 Description: Sampling and density for matrix variate normal, t, and inverted 
