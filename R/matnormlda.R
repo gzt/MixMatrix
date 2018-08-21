@@ -397,15 +397,17 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   proportions <- counts / n
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
-
-
+  if(method == "t"){
+    df = rep_len(nu, ng) # if you mismatch lengths, you will not have a good time
+  }
   group.means = array(0, dim = c(p, q, ng))
   groupU = array(0, dim = c(p, p, ng))
   groupV = array(0, dim = c(q, q, ng))
   for (i in seq(ng)) {
-    # hiding this htere: , ...
+    # hiding this there: , ...
     if (method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = nu,...)
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
+      df[i] = mlfit$nu
     } else{
       mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
     }
@@ -449,7 +451,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
       lev = lev,
       N = n,
       method = method,
-      nu = nu,
+      nu = df,
       call = cl
     ) ,
     class = "matrixqda"
@@ -586,7 +588,8 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       Xi = matrix(x[, , i], p, q)
       for (j in seq(ng)) {
         if (object$method == "t"){
-          dist[i, j] = -.5* (df + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) -
+
+          dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) -
             detfactor[j]
         } else {
         dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
