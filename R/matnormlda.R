@@ -153,12 +153,12 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     Uresult = matrix(0,p,p)
     Vresult = matrix(0,q,q)
     varresult = 0
-    for (i in seq(ng)) {
-      varfit <- MLmatrixnorm(swept.group[, , g == levels(g)[i], drop = FALSE],...)
-      Uresult = Uresult + prior[i] * varfit$U
-      Vresult = Vresult + prior[i] * varfit$V
-      varresult = varresult + prior[i] * varfit$var
-    }
+    #for (i in seq(ng)) {
+      varfit <- MLmatrixnorm(swept.group,...)
+      Uresult =  varfit$U
+      Vresult =  varfit$V
+      varresult =  varfit$var
+    #}
   }
   cl <- match.call()
   cl[[1L]] <- as.name("matrixlda")

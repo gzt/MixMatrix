@@ -24,6 +24,6 @@ LazyData: true
 URL: http://github.com/gzt/matrixdist/
 BugReports: http://github.com/gzt/matrixdist/issues
 License: GPL-3
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
