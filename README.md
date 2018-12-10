@@ -25,4 +25,5 @@ The software can be installed by running:
 
 Please let me know if you have any issues or suggestions here: https://github.com/gzt/matrixdist/issues
 
+Please note that the 'matrixdist' project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
