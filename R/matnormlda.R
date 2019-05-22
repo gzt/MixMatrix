@@ -77,7 +77,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     if (length(prior) != nlevels(g))
       stop("'prior' is of incorrect length")
     prior <- prior[counts > 0L]
-  }
+ }
   if (any(counts == 0L)) {
     empty <- lev[counts == 0L]
     warning(sprintf(
@@ -555,23 +555,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    # cholU = array(dim = c(p, p, ng))
-    # cholV = array(dim = c(q, q, ng))
-    # solveU = array(dim = c(p, p, ng))
-    # solveV = array(dim = c(q, q, ng))
     cholU = vector("list", ng)
     cholV = vector("list", ng)
     solveU = vector("list", ng)
     solveV = vector("list", ng)
     for (j in seq(ng)) {
-      # cholV[, , j] = chol(object$V[, , j])
-      # cholU[, , j] = chol(object$U[, , j])
-      # solveV[, , j] = chol2inv(cholV[, , j])
-      # solveU[, , j] = chol2inv(cholU[, , j])
-      cholV[[j]] = chol(object$V[, , j])
-      cholU[[j]] = chol(object$U[, , j])
-      solveV[[j]] = chol2inv(cholV[[j]])
-      solveU[[j]] = chol2inv(cholU[[j]])
+        cholV[[j]] = chol(object$V[, , j])
+        cholU[[j]] = chol(object$U[, , j])
+        solveV[[j]] = chol2inv(cholV[[j]])
+        solveU[[j]] = chol2inv(cholU[[j]])
     }
     VMUM = vector("list",ng)
     detfactor =  numeric(ng)
@@ -581,7 +573,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
       VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
       logdetU = 2*sum(log(diag(cholU[[j]])))
       logdetV = 2*sum(log(diag(cholV[[j]])))
-      detfactor[j] = .5 * (q * logdetU + p * logdetV)
+      detfactor[j] = -.5 * (q * logdetU + p * logdetV)
     }
 
     for (i in seq(n)) {
