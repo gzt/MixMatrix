@@ -61,6 +61,8 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     stop("'x' is not an array")
   if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
+  if (nu == 0 || is.infinite(nu)) method = "normal"
+
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -364,6 +366,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
     stop("'x' is not an array")
   if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
+  if (nu == 0 || is.infinite(nu)) method = "normal"
+
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -398,7 +402,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
   if(method == "t"){
-    df = rep_len(nu, ng) # if you mismatch lengths, you will not have a good time
+    if(length(nu) != ng)
+      df = rep_len(nu, ng) # if you mismatch lengths, you will not have a good time
   }
   group.means = array(0, dim = c(p, q, ng))
   groupU = array(0, dim = c(p, p, ng))
