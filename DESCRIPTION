@@ -4,7 +4,7 @@ Title: Functions for Matrix Distributions
 Version: 0.0.0.9929
 Date: 2018-08-17
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
-          role = c("aut", "cre"), comment = c(orcid = '0000-0003-2436-8822')))
+          role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')))
 Description: Sampling and density for matrix variate normal, t, and inverted 
           t-distributions. Fitting for matrix variate normal and t-distributions
           including some restrictions on the parameters.
