@@ -313,8 +313,12 @@ Smatrix = array(0,c(p,p,n))
     } else new.df = df
     ### CHECK CONVERGENCE
     error.term <- sum((new.V - V)^2)/(q*q) + sum((new.U - U)^2)/(p*p) + sum((new.Mu - mu)^2)/(p*q) + (df - new.df)^2/(n*p*q)
-    V <- new.V
-    U <- new.U
+    ### check, force symmetry
+    if (max(abs(new.V - t(new.V)) > tol)) warning("V matrix may not be symmetric")
+        
+    if (max(abs(new.U - t(new.U)) > tol)) warning("U matrix may not be symmetric")
+    V <- .5*(new.V + t(new.V))
+    U <- .5*(new.U + t(new.U))
     mu <- new.Mu
     df <- new.df
 
