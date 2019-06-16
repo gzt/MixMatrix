@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // posdefsqrt
 arma::mat posdefsqrt(arma::mat& x);
-RcppExport SEXP _matrixdist_posdefsqrt(SEXP xSEXP) {
+RcppExport SEXP _MixMatrix_posdefsqrt(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // posdefinvsqrt
 arma::mat posdefinvsqrt(arma::mat& x);
-RcppExport SEXP _matrixdist_posdefinvsqrt(SEXP xSEXP) {
+RcppExport SEXP _MixMatrix_posdefinvsqrt(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -30,7 +30,7 @@ END_RCPP
 }
 // testsymmetric
 bool testsymmetric(arma::mat x, double tol);
-RcppExport SEXP _matrixdist_testsymmetric(SEXP xSEXP, SEXP tolSEXP) {
+RcppExport SEXP _MixMatrix_testsymmetric(SEXP xSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,7 +42,7 @@ END_RCPP
 }
 // dmatnorm_calc
 arma::colvec dmatnorm_calc(arma::cube& x, arma::mat& mean, arma::mat& U, arma::mat& V);
-RcppExport SEXP _matrixdist_dmatnorm_calc(SEXP xSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+RcppExport SEXP _MixMatrix_dmatnorm_calc(SEXP xSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -56,7 +56,7 @@ END_RCPP
 }
 // dmat_t_calc
 arma::colvec dmat_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
-RcppExport SEXP _matrixdist_dmat_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+RcppExport SEXP _MixMatrix_dmat_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -71,7 +71,7 @@ END_RCPP
 }
 // xatx
 arma::cube xatx(arma::cube& x, arma::mat& U);
-RcppExport SEXP _matrixdist_xatx(SEXP xSEXP, SEXP USEXP) {
+RcppExport SEXP _MixMatrix_xatx(SEXP xSEXP, SEXP USEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -83,7 +83,7 @@ END_RCPP
 }
 // txax
 arma::cube txax(arma::cube& x, arma::mat& U);
-RcppExport SEXP _matrixdist_txax(SEXP xSEXP, SEXP USEXP) {
+RcppExport SEXP _MixMatrix_txax(SEXP xSEXP, SEXP USEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,7 +95,7 @@ END_RCPP
 }
 // rmat_inv_t_calc
 arma::cube rmat_inv_t_calc(arma::cube& S, arma::cube& mat, arma::mat& U, arma::mat& V, arma::mat& mean);
-RcppExport SEXP _matrixdist_rmat_inv_t_calc(SEXP SSEXP, SEXP matSEXP, SEXP USEXP, SEXP VSEXP, SEXP meanSEXP) {
+RcppExport SEXP _MixMatrix_rmat_inv_t_calc(SEXP SSEXP, SEXP matSEXP, SEXP USEXP, SEXP VSEXP, SEXP meanSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -110,7 +110,7 @@ END_RCPP
 }
 // dmat_inv_t_calc
 arma::colvec dmat_inv_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
-RcppExport SEXP _matrixdist_dmat_inv_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+RcppExport SEXP _MixMatrix_dmat_inv_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -125,7 +125,7 @@ END_RCPP
 }
 // cubeinv
 arma::cube cubeinv(arma::cube& x);
-RcppExport SEXP _matrixdist_cubeinv(SEXP xSEXP) {
+RcppExport SEXP _MixMatrix_cubeinv(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -136,7 +136,7 @@ END_RCPP
 }
 // cubemult
 arma::cube cubemult(arma::cube& x, arma::cube& y);
-RcppExport SEXP _matrixdist_cubemult(SEXP xSEXP, SEXP ySEXP) {
+RcppExport SEXP _MixMatrix_cubemult(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -148,7 +148,7 @@ END_RCPP
 }
 // detsum
 double detsum(arma::cube& x);
-RcppExport SEXP _matrixdist_detsum(SEXP xSEXP) {
+RcppExport SEXP _MixMatrix_detsum(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -159,7 +159,7 @@ END_RCPP
 }
 // axbt
 arma::cube axbt(arma::cube& a, arma::mat& x, arma::cube& b);
-RcppExport SEXP _matrixdist_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
+RcppExport SEXP _MixMatrix_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -172,23 +172,23 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_matrixdist_posdefsqrt", (DL_FUNC) &_matrixdist_posdefsqrt, 1},
-    {"_matrixdist_posdefinvsqrt", (DL_FUNC) &_matrixdist_posdefinvsqrt, 1},
-    {"_matrixdist_testsymmetric", (DL_FUNC) &_matrixdist_testsymmetric, 2},
-    {"_matrixdist_dmatnorm_calc", (DL_FUNC) &_matrixdist_dmatnorm_calc, 4},
-    {"_matrixdist_dmat_t_calc", (DL_FUNC) &_matrixdist_dmat_t_calc, 5},
-    {"_matrixdist_xatx", (DL_FUNC) &_matrixdist_xatx, 2},
-    {"_matrixdist_txax", (DL_FUNC) &_matrixdist_txax, 2},
-    {"_matrixdist_rmat_inv_t_calc", (DL_FUNC) &_matrixdist_rmat_inv_t_calc, 5},
-    {"_matrixdist_dmat_inv_t_calc", (DL_FUNC) &_matrixdist_dmat_inv_t_calc, 5},
-    {"_matrixdist_cubeinv", (DL_FUNC) &_matrixdist_cubeinv, 1},
-    {"_matrixdist_cubemult", (DL_FUNC) &_matrixdist_cubemult, 2},
-    {"_matrixdist_detsum", (DL_FUNC) &_matrixdist_detsum, 1},
-    {"_matrixdist_axbt", (DL_FUNC) &_matrixdist_axbt, 3},
+    {"_MixMatrix_posdefsqrt", (DL_FUNC) &_MixMatrix_posdefsqrt, 1},
+    {"_MixMatrix_posdefinvsqrt", (DL_FUNC) &_MixMatrix_posdefinvsqrt, 1},
+    {"_MixMatrix_testsymmetric", (DL_FUNC) &_MixMatrix_testsymmetric, 2},
+    {"_MixMatrix_dmatnorm_calc", (DL_FUNC) &_MixMatrix_dmatnorm_calc, 4},
+    {"_MixMatrix_dmat_t_calc", (DL_FUNC) &_MixMatrix_dmat_t_calc, 5},
+    {"_MixMatrix_xatx", (DL_FUNC) &_MixMatrix_xatx, 2},
+    {"_MixMatrix_txax", (DL_FUNC) &_MixMatrix_txax, 2},
+    {"_MixMatrix_rmat_inv_t_calc", (DL_FUNC) &_MixMatrix_rmat_inv_t_calc, 5},
+    {"_MixMatrix_dmat_inv_t_calc", (DL_FUNC) &_MixMatrix_dmat_inv_t_calc, 5},
+    {"_MixMatrix_cubeinv", (DL_FUNC) &_MixMatrix_cubeinv, 1},
+    {"_MixMatrix_cubemult", (DL_FUNC) &_MixMatrix_cubemult, 2},
+    {"_MixMatrix_detsum", (DL_FUNC) &_MixMatrix_detsum, 1},
+    {"_MixMatrix_axbt", (DL_FUNC) &_MixMatrix_axbt, 3},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_matrixdist(DllInfo *dll) {
+RcppExport void R_init_MixMatrix(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -2,54 +2,54 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 posdefsqrt <- function(x) {
-    .Call('_matrixdist_posdefsqrt', PACKAGE = 'matrixdist', x)
+    .Call('_MixMatrix_posdefsqrt', PACKAGE = 'MixMatrix', x)
 }
 
 posdefinvsqrt <- function(x) {
-    .Call('_matrixdist_posdefinvsqrt', PACKAGE = 'matrixdist', x)
+    .Call('_MixMatrix_posdefinvsqrt', PACKAGE = 'MixMatrix', x)
 }
 
 testsymmetric <- function(x, tol) {
-    .Call('_matrixdist_testsymmetric', PACKAGE = 'matrixdist', x, tol)
+    .Call('_MixMatrix_testsymmetric', PACKAGE = 'MixMatrix', x, tol)
 }
 
 dmatnorm_calc <- function(x, mean, U, V) {
-    .Call('_matrixdist_dmatnorm_calc', PACKAGE = 'matrixdist', x, mean, U, V)
+    .Call('_MixMatrix_dmatnorm_calc', PACKAGE = 'MixMatrix', x, mean, U, V)
 }
 
 dmat_t_calc <- function(x, df, mean, U, V) {
-    .Call('_matrixdist_dmat_t_calc', PACKAGE = 'matrixdist', x, df, mean, U, V)
+    .Call('_MixMatrix_dmat_t_calc', PACKAGE = 'MixMatrix', x, df, mean, U, V)
 }
 
 xatx <- function(x, U) {
-    .Call('_matrixdist_xatx', PACKAGE = 'matrixdist', x, U)
+    .Call('_MixMatrix_xatx', PACKAGE = 'MixMatrix', x, U)
 }
 
 txax <- function(x, U) {
-    .Call('_matrixdist_txax', PACKAGE = 'matrixdist', x, U)
+    .Call('_MixMatrix_txax', PACKAGE = 'MixMatrix', x, U)
 }
 
 rmat_inv_t_calc <- function(S, mat, U, V, mean) {
-    .Call('_matrixdist_rmat_inv_t_calc', PACKAGE = 'matrixdist', S, mat, U, V, mean)
+    .Call('_MixMatrix_rmat_inv_t_calc', PACKAGE = 'MixMatrix', S, mat, U, V, mean)
 }
 
 dmat_inv_t_calc <- function(x, df, mean, U, V) {
-    .Call('_matrixdist_dmat_inv_t_calc', PACKAGE = 'matrixdist', x, df, mean, U, V)
+    .Call('_MixMatrix_dmat_inv_t_calc', PACKAGE = 'MixMatrix', x, df, mean, U, V)
 }
 
 cubeinv <- function(x) {
-    .Call('_matrixdist_cubeinv', PACKAGE = 'matrixdist', x)
+    .Call('_MixMatrix_cubeinv', PACKAGE = 'MixMatrix', x)
 }
 
 cubemult <- function(x, y) {
-    .Call('_matrixdist_cubemult', PACKAGE = 'matrixdist', x, y)
+    .Call('_MixMatrix_cubemult', PACKAGE = 'MixMatrix', x, y)
 }
 
 detsum <- function(x) {
-    .Call('_matrixdist_detsum', PACKAGE = 'matrixdist', x)
+    .Call('_MixMatrix_detsum', PACKAGE = 'MixMatrix', x)
 }
 
 axbt <- function(a, x, b) {
-    .Call('_matrixdist_axbt', PACKAGE = 'matrixdist', a, x, b)
+    .Call('_MixMatrix_axbt', PACKAGE = 'MixMatrix', a, x, b)
 }
 
