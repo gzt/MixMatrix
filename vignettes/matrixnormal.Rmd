@@ -13,7 +13,7 @@ bibliography: matrixnormal.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE,comment="")
-library(matrixdist)
+library(MixMatrix)
 ```
 
 ## Matrix Variate Distributions
