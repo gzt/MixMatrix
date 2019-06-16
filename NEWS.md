@@ -1,3 +1,7 @@
+# MixMatrix 0.0.0.9949
+
+* changing name to MixMatrix
+
 # matrixdist 0.0.0.9927
 
 * include EM algorithm (actually an ECME) for estimation of parameters of matrix-variate *t*-distributions
