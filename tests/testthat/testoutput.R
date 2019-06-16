@@ -1,4 +1,4 @@
-library(matrixdist)
+library(MixMatrix)
 
 context("Checking outputs match")
 
