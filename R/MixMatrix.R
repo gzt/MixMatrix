@@ -7,5 +7,5 @@
 #' and density computation.
 #'
 #' @docType package
-#' @name matrixdist
+#' @name MixMatrix
 NULL
