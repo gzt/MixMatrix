@@ -1,4 +1,4 @@
 library(testthat)
-library(matrixdist)
+library(MixMatrix)
 
-test_check("matrixdist")
+test_check("MixMatrix")
