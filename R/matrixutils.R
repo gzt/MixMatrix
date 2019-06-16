@@ -284,7 +284,7 @@ invCS <- function(n, rho, deriv = FALSE){
 #'    \eqn{B \%*\% B = A}.
 #' @keywords internal
 #' @seealso \code{\link{posmatsqrtinv}}
-#' @useDynLib matrixdist
+#' @useDynLib MixMatrix
 #' @importFrom Rcpp sourceCpp
 #'
 #' @examples
