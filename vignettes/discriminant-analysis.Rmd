@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 
 
-In the `matrixdist` package, I now have some functions for training a linear or quadratic classifier.
+In the `MixMatrix` package, I now have some functions for training a linear or quadratic classifier.
 The usage is pretty similar to the function `MASS::lda()` or `MASS::qda()`, however it requires the input
 as an array or list of matrices and the group variable provided as a vector (that is, it cannot handle
 data frames or the formula interface directly, which is reasonable, as there is no immediately
@@ -27,7 +27,7 @@ solutions anyway).
 
 ```{r generatedata}
 set.seed(20180222)
-library('matrixdist')
+library('MixMatrix')
 A <- rmatrixnorm(30, mean = matrix(0, nrow=2, ncol=3))
 B <- rmatrixnorm(30, mean = matrix(c(1,0), nrow=2, ncol=3))
 C <- rmatrixnorm(30, mean = matrix(c(0,1), nrow=2, ncol=3))
