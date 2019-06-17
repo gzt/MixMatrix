@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-matrixdist.Rproj
+*.Rproj
 src/matrixdist.so
 src/rCholWishart.o
 src/init.o
@@ -13,3 +13,4 @@ fMRI-act-CT.rda
 installed_old.rda
 doc
 Meta
+inprogress
