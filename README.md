@@ -12,7 +12,7 @@ parameter estimation for matrix variate normals and *t* with some restrictions o
 parameters. In the future, this will have mixture modeling for matrix variate *t* distributions,
 hence the name of the package.
 
-See the [vignette](../vignettes/matrixnormal.html) for more.
+See the vignettes for and example of how it works.
 
 It is currently possible to constrain the mean matrices for normal and *t*-distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both. 
 
