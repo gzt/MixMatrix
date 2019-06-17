@@ -15,3 +15,5 @@
 ^installed_old.rda
 ^appveyor\.yml$
 ^codecov\.yml$
+^doc$
+^Meta$
