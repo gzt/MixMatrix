@@ -2,54 +2,54 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 posdefsqrt <- function(x) {
-    .Call('_MixMatrix_posdefsqrt', PACKAGE = 'MixMatrix', x)
+    .Call(`_MixMatrix_posdefsqrt`, x)
 }
 
 posdefinvsqrt <- function(x) {
-    .Call('_MixMatrix_posdefinvsqrt', PACKAGE = 'MixMatrix', x)
+    .Call(`_MixMatrix_posdefinvsqrt`, x)
 }
 
 testsymmetric <- function(x, tol) {
-    .Call('_MixMatrix_testsymmetric', PACKAGE = 'MixMatrix', x, tol)
+    .Call(`_MixMatrix_testsymmetric`, x, tol)
 }
 
 dmatnorm_calc <- function(x, mean, U, V) {
-    .Call('_MixMatrix_dmatnorm_calc', PACKAGE = 'MixMatrix', x, mean, U, V)
+    .Call(`_MixMatrix_dmatnorm_calc`, x, mean, U, V)
 }
 
 dmat_t_calc <- function(x, df, mean, U, V) {
-    .Call('_MixMatrix_dmat_t_calc', PACKAGE = 'MixMatrix', x, df, mean, U, V)
+    .Call(`_MixMatrix_dmat_t_calc`, x, df, mean, U, V)
 }
 
 xatx <- function(x, U) {
-    .Call('_MixMatrix_xatx', PACKAGE = 'MixMatrix', x, U)
+    .Call(`_MixMatrix_xatx`, x, U)
 }
 
 txax <- function(x, U) {
-    .Call('_MixMatrix_txax', PACKAGE = 'MixMatrix', x, U)
+    .Call(`_MixMatrix_txax`, x, U)
 }
 
 rmat_inv_t_calc <- function(S, mat, U, V, mean) {
-    .Call('_MixMatrix_rmat_inv_t_calc', PACKAGE = 'MixMatrix', S, mat, U, V, mean)
+    .Call(`_MixMatrix_rmat_inv_t_calc`, S, mat, U, V, mean)
 }
 
 dmat_inv_t_calc <- function(x, df, mean, U, V) {
-    .Call('_MixMatrix_dmat_inv_t_calc', PACKAGE = 'MixMatrix', x, df, mean, U, V)
+    .Call(`_MixMatrix_dmat_inv_t_calc`, x, df, mean, U, V)
 }
 
 cubeinv <- function(x) {
-    .Call('_MixMatrix_cubeinv', PACKAGE = 'MixMatrix', x)
+    .Call(`_MixMatrix_cubeinv`, x)
 }
 
 cubemult <- function(x, y) {
-    .Call('_MixMatrix_cubemult', PACKAGE = 'MixMatrix', x, y)
+    .Call(`_MixMatrix_cubemult`, x, y)
 }
 
 detsum <- function(x) {
-    .Call('_MixMatrix_detsum', PACKAGE = 'MixMatrix', x)
+    .Call(`_MixMatrix_detsum`, x)
 }
 
 axbt <- function(a, x, b) {
-    .Call('_MixMatrix_axbt', PACKAGE = 'MixMatrix', a, x, b)
+    .Call(`_MixMatrix_axbt`, a, x, b)
 }
 

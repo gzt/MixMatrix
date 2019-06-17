@@ -240,7 +240,7 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(C$V[1,4],0)
 })
 
-
+context("Testing LDA/QDA output")
 test_that("Output of LDA/QDA/Predict", {
   A <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
   B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
