@@ -21,7 +21,7 @@ There isn't much R software out there for working with these distributions. The
 excellent [matrixsampling](https://cran.r-project.org/package=matrixsampling) package 
 has sampling and distribution functions for these and many other matrix distributions,
 as does [LaplacesDemon](https://cran.r-project.org/package=LaplacesDemon). The
-[MatrixLDA](https://cran.r-project.org/package=MatrixLDA) performs LDA for 
+[MatrixLDA](https://cran.r-project.org/package=MatrixLDA) package performs LDA for 
 normal distributions with penalized likelihood.
 
 The software can be installed by running:
