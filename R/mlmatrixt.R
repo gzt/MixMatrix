@@ -142,7 +142,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       rho.col <- V[1,2]
     } else {
 
-      inter.V <- txax(swept.data, U)
+      inter.V <- txax(swept.data, 0.5*(U+t(U)))
       V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
       if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
@@ -158,7 +158,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       rho.row <- U[1,2]
     } else {
 
-      inter.U <- xatx(swept.data, V)
+      inter.U <- xatx(swept.data, 0.5*(V+t(V)))
       U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
       if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
@@ -181,7 +181,7 @@ Smatrix = array(0,c(p,p,n))
 
     ### E step
 
-    Stmp = xatx(swept.data,V)
+    Stmp = xatx(swept.data,0.5*(V+t(V)))
     for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U
     Smatrix = cubeinv(Stmp)
 

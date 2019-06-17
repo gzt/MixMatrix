@@ -360,7 +360,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       rho.col <- V[1,2]/max(V[1,1],1)
     } else {
 
-      inter.V <- txax(swept.data, U)
+      inter.V <- txax(swept.data, .5* (U + t(U)))
       V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
       if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
@@ -376,7 +376,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       rho.row <- U[1,2]/max(U[1,1],1)
     } else {
 
-      inter.U <- xatx(swept.data, V)
+      inter.U <- xatx(swept.data, 0.5*(V+t(V)))
       U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
       if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
@@ -403,7 +403,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                                               invV %x% invU) %*% x)) / (prod(dims))
       if (col.variance != "I") {
 
-        tmp <- txax(swept.data, U)
+        tmp <- txax(swept.data, 0.5*(U+t(U)))
         tmpsummary <- matrix(rowSums(tmp,FALSE,dims = 2), nrow = dims[2])
         nLL <- function(theta) {
           Vmat <- varinv(dims[2],theta,TRUE, col.variance)/var # try it
@@ -425,7 +425,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.V <- var * varmatgenerate(dims[2], rho.col,col.variance)
     } else {
 
-      inter.V <- txax(swept.data, U)
+      inter.V <- txax(swept.data, 0.5*(U+t(U)))
       new.V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
       if (col.variance == "cor") {
         vartmp = exp(mean(log(diag(new.V)))) # matrix should be pos definite, so not a prob
@@ -441,7 +441,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.U = diag(dims[1])
     } else if (row.set.var) {
 
-      tmp <- xatx(swept.data, V)
+      tmp <- xatx(swept.data, 0.5*(V+t(V)))
       tmpsummary <- matrix(rowSums(tmp, dims = 2), nrow = dims[1])
       nLL <- function(theta) {
         Umat <- varinv(dims[1],theta,TRUE, row.variance)
@@ -461,7 +461,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.U <- varmatgenerate(dims[1], rho.row,row.variance)
     } else {
 
-      inter.U <- xatx(swept.data, new.V)
+      inter.U <- xatx(swept.data, 0.5*(new.V+t(new.V)))
       new.U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
       new.U <- new.U/(new.U[1, 1])
       if (row.variance == "cor") new.U = stats::cov2cor(new.U)

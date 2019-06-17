@@ -9,3 +9,9 @@
 #' @docType package
 #' @name MixMatrix
 NULL
+## usethis namespace: start
+#' @useDynLib MixMatrix, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
+NULL
+
