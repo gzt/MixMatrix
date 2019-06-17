@@ -20,7 +20,7 @@
 #'    for 0 variance.
 #' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
 #'    By default, normal.
-#' @param nu If using the t-distribution, the degrees of freedom paramter. By default, 10.
+#' @param nu If using the t-distribution, the degrees of freedom parameter. By default, 10.
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
@@ -327,7 +327,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'    for 0 variance.
 #' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
 #'    By default, normal.
-#' @param nu If using the t-distribution, the degrees of freedom paramter. By default, 10.
+#' @param nu If using the t-distribution, the degrees of freedom parameter. By default, 10.
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})

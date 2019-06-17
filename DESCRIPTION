@@ -1,7 +1,7 @@
 Package: MixMatrix
 Type: Package
 Title: Functions for Matrix Distributions
-Version: 0.0.0.9949
+Version: 0.1.0
 Date: 2019-06-16
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')))
@@ -9,7 +9,7 @@ Description: LDA and QDA for variate normal and T.
           Sampling and density for matrix variate normal, t, and inverted 
           t-distributions. ML fitting for matrix variate normal and t-distributions
           including some restrictions on the parameters.
-Depends: R (>= 3.3.0)
+Depends: R (>= 3.5.0)
 Imports:
     stats, 
     CholWishart,
@@ -24,6 +24,7 @@ VignetteBuilder: knitr
 LazyData: true
 URL: http://github.com/gzt/MixMatrix/
 BugReports: http://github.com/gzt/MixMatrix/issues
+Language: en-us
 License: GPL-3
 RoxygenNote: 6.1.1
 Encoding: UTF-8
