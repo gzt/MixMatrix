@@ -5,11 +5,16 @@ r_packages:
   - covr
   - CholWishart
 sudo: false
-os:
-  - linux
-#  - osx
-cache: packages
 warnings_are_errors: true
+cache: packages
+os:
+- linux
+matrix:
+  include:
+  - r: devel
+  - r: release
+    after_success: Rscript -e 'covr::codecov()'
+  - r: oldrel
 notifications:
   email:
     - gzthompson@gmail.com
