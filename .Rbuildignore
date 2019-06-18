@@ -9,6 +9,7 @@
 ^.*\.tar.gz$
 ^inprogress$
 ^MixMatrix\.Rproj$
+^matrixdist\.Rproj$
 ^\.travis\.yml$
 ^LICENSE
 ^fMRI-act-CT.rda
