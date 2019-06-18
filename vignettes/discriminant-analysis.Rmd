@@ -57,7 +57,7 @@ predict(matlda, ABC[,,c(1,31,61)])
 predict(matqda,  ABC[,,c(1,31,61)])
 
 ```
-In this example, points from classes A, B, and C were selected and they ended up being classifed as B, B, and A. The QDA and LDA rules had only minor disagreements, which is to be expected when they do truly have the same covariances.
+In this example, points from classes A, B, and C were selected and they ended up being classified as B, B, and A. The QDA and LDA rules had only minor disagreements, which is to be expected when they do truly have the same covariances.
 
 ## Details of the modeling choices
 

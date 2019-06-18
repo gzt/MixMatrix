@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 *.Rproj
-src/matrixdist.so
+src/MixMatrix.so
 src/rCholWishart.o
 src/init.o
 *.o

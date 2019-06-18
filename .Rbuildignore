@@ -8,7 +8,7 @@
 ^\.travis\.yml$     # Used for continuous integration testing with travis
 ^.*\.tar.gz$
 ^inprogress$
-^matrixdist\.Rproj$
+^MixMatrix\.Rproj$
 ^\.travis\.yml$
 ^LICENSE
 ^fMRI-act-CT.rda
@@ -17,3 +17,6 @@
 ^codecov\.yml$
 ^doc$
 ^Meta$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
