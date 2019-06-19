@@ -102,12 +102,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/gzt/MixMatrix">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -121,7 +116,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>dmatrixnorm.unroll</h1>
-    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matrixnorm.R'><code>R/matrixnorm.R</code></a></small>
+    
     <div class="hidden name"><code>dmatrixnorm.unroll.Rd</code></div>
     </div>
 
@@ -192,9 +187,10 @@ from the variance matrices, so they must be specified.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>20180202</span>)
 <span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='kw'>n</span><span class='kw'>=</span><span class='fl'>1</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>,<span class='fl'>0</span>,-<span class='fl'>100</span>,<span class='fl'>0</span>,<span class='fl'>25</span>,-<span class='fl'>1000</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>),
-    <span class='kw'>L</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>.1</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>))
+    <span class='kw'>L</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>.1</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>))</div><span class='co'># NOT RUN {</span>
 <span class='fu'>dmatrixnorm.unroll</span> (<span class='no'>A</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>,<span class='fl'>0</span>,-<span class='fl'>100</span>,<span class='fl'>0</span>,<span class='fl'>25</span>,-<span class='fl'>1000</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>),
-    <span class='kw'>L</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>.1</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>),<span class='kw'>log</span><span class='kw'>=</span><span class='fl'>TRUE</span> )</div><div class='output co'>#&gt; [1] -4.36614</div></pre>
+    <span class='kw'>L</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>0</span>,<span class='fl'>.1</span>),<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>2</span>),<span class='kw'>log</span><span class='kw'>=</span><span class='fl'>TRUE</span> )
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
