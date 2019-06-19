@@ -13,8 +13,7 @@ Depends: R (>= 3.5.0)
 Imports:
     stats, 
     CholWishart,
-    Rcpp,
-    RcppArmadillo
+    Rcpp
 Suggests:
     knitr, 
     rmarkdown,
@@ -22,7 +21,7 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LazyData: true
-URL: http://github.com/gzt/MixMatrix/
+URL: https://gzt.github.io/MixMatrix/
 BugReports: http://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
