@@ -28,15 +28,68 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// testsymmetric
-bool testsymmetric(arma::mat x, double tol);
-RcppExport SEXP _MixMatrix_testsymmetric(SEXP xSEXP, SEXP tolSEXP) {
+// rmat_inv_t_calc
+arma::cube rmat_inv_t_calc(arma::cube& S, arma::cube& mat, arma::mat& U, arma::mat& V, arma::mat& mean);
+RcppExport SEXP _MixMatrix_rmat_inv_t_calc(SEXP SSEXP, SEXP matSEXP, SEXP USEXP, SEXP VSEXP, SEXP meanSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(testsymmetric(x, tol));
+    Rcpp::traits::input_parameter< arma::cube& >::type S(SSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
+    rcpp_result_gen = Rcpp::wrap(rmat_inv_t_calc(S, mat, U, V, mean));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cubeinv
+arma::cube cubeinv(arma::cube& x);
+RcppExport SEXP _MixMatrix_cubeinv(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cubeinv(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// xatx
+arma::cube xatx(arma::cube& x, arma::mat& U);
+RcppExport SEXP _MixMatrix_xatx(SEXP xSEXP, SEXP USEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    rcpp_result_gen = Rcpp::wrap(xatx(x, U));
+    return rcpp_result_gen;
+END_RCPP
+}
+// txax
+arma::cube txax(arma::cube& x, arma::mat& U);
+RcppExport SEXP _MixMatrix_txax(SEXP xSEXP, SEXP USEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    rcpp_result_gen = Rcpp::wrap(txax(x, U));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dmat_inv_t_calc
+arma::colvec dmat_inv_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
+RcppExport SEXP _MixMatrix_dmat_inv_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    rcpp_result_gen = Rcpp::wrap(dmat_inv_t_calc(x, df, mean, U, V));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -69,68 +122,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// xatx
-arma::cube xatx(arma::cube& x, arma::mat& U);
-RcppExport SEXP _MixMatrix_xatx(SEXP xSEXP, SEXP USEXP) {
+// testsymmetric
+bool testsymmetric(arma::mat x, double tol);
+RcppExport SEXP _MixMatrix_testsymmetric(SEXP xSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
-    rcpp_result_gen = Rcpp::wrap(xatx(x, U));
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(testsymmetric(x, tol));
     return rcpp_result_gen;
 END_RCPP
 }
-// txax
-arma::cube txax(arma::cube& x, arma::mat& U);
-RcppExport SEXP _MixMatrix_txax(SEXP xSEXP, SEXP USEXP) {
+// axbt
+arma::cube axbt(arma::cube& a, arma::mat& x, arma::cube& b);
+RcppExport SEXP _MixMatrix_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
-    rcpp_result_gen = Rcpp::wrap(txax(x, U));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rmat_inv_t_calc
-arma::cube rmat_inv_t_calc(arma::cube& S, arma::cube& mat, arma::mat& U, arma::mat& V, arma::mat& mean);
-RcppExport SEXP _MixMatrix_rmat_inv_t_calc(SEXP SSEXP, SEXP matSEXP, SEXP USEXP, SEXP VSEXP, SEXP meanSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type S(SSEXP);
-    Rcpp::traits::input_parameter< arma::cube& >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
-    rcpp_result_gen = Rcpp::wrap(rmat_inv_t_calc(S, mat, U, V, mean));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dmat_inv_t_calc
-arma::colvec dmat_inv_t_calc(arma::cube& x, double df, arma::mat& mean, arma::mat& U, arma::mat& V);
-RcppExport SEXP _MixMatrix_dmat_inv_t_calc(SEXP xSEXP, SEXP dfSEXP, SEXP meanSEXP, SEXP USEXP, SEXP VSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type mean(meanSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
-    rcpp_result_gen = Rcpp::wrap(dmat_inv_t_calc(x, df, mean, U, V));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cubeinv
-arma::cube cubeinv(arma::cube& x);
-RcppExport SEXP _MixMatrix_cubeinv(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(cubeinv(x));
+    Rcpp::traits::input_parameter< arma::cube& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::cube& >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(axbt(a, x, b));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -157,34 +170,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// axbt
-arma::cube axbt(arma::cube& a, arma::mat& x, arma::cube& b);
-RcppExport SEXP _MixMatrix_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::cube& >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(axbt(a, x, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_MixMatrix_posdefsqrt", (DL_FUNC) &_MixMatrix_posdefsqrt, 1},
     {"_MixMatrix_posdefinvsqrt", (DL_FUNC) &_MixMatrix_posdefinvsqrt, 1},
-    {"_MixMatrix_testsymmetric", (DL_FUNC) &_MixMatrix_testsymmetric, 2},
-    {"_MixMatrix_dmatnorm_calc", (DL_FUNC) &_MixMatrix_dmatnorm_calc, 4},
-    {"_MixMatrix_dmat_t_calc", (DL_FUNC) &_MixMatrix_dmat_t_calc, 5},
+    {"_MixMatrix_rmat_inv_t_calc", (DL_FUNC) &_MixMatrix_rmat_inv_t_calc, 5},
+    {"_MixMatrix_cubeinv", (DL_FUNC) &_MixMatrix_cubeinv, 1},
     {"_MixMatrix_xatx", (DL_FUNC) &_MixMatrix_xatx, 2},
     {"_MixMatrix_txax", (DL_FUNC) &_MixMatrix_txax, 2},
-    {"_MixMatrix_rmat_inv_t_calc", (DL_FUNC) &_MixMatrix_rmat_inv_t_calc, 5},
     {"_MixMatrix_dmat_inv_t_calc", (DL_FUNC) &_MixMatrix_dmat_inv_t_calc, 5},
-    {"_MixMatrix_cubeinv", (DL_FUNC) &_MixMatrix_cubeinv, 1},
+    {"_MixMatrix_dmatnorm_calc", (DL_FUNC) &_MixMatrix_dmatnorm_calc, 4},
+    {"_MixMatrix_dmat_t_calc", (DL_FUNC) &_MixMatrix_dmat_t_calc, 5},
+    {"_MixMatrix_testsymmetric", (DL_FUNC) &_MixMatrix_testsymmetric, 2},
+    {"_MixMatrix_axbt", (DL_FUNC) &_MixMatrix_axbt, 3},
     {"_MixMatrix_cubemult", (DL_FUNC) &_MixMatrix_cubemult, 2},
     {"_MixMatrix_detsum", (DL_FUNC) &_MixMatrix_detsum, 1},
-    {"_MixMatrix_axbt", (DL_FUNC) &_MixMatrix_axbt, 3},
     {NULL, NULL, 0}
 };
 

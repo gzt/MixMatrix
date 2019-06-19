@@ -14,9 +14,9 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
   arma::colvec eigvalV;
   arma::mat eigvecV;
   arma::eig_sym(eigvalU, eigvecU, U);
-  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalU) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   arma::eig_sym(eigvalV, eigvecV, V);
-  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalV) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   int n = x.n_rows;
   int p = x.n_cols;
   int numslices = x.n_slices;
@@ -33,7 +33,7 @@ arma::colvec dmat_inv_t_calc(arma::cube & x, double df, arma::mat & mean,
     log_det(mval, sign, m);
     if(sign <= 0){
       logresult[i] = R_NaN;
-      Rcpp::warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
+      // Rcpp::warning("warning: probability distribution undefined when det < 0. observation: %d ", i+1);
     } else{
     logresult[i] = -.5 * n * logdetU - .5 * p * logdetV - .5 * (df - 2) * mval;
     }
@@ -51,9 +51,9 @@ arma::colvec dmatnorm_calc(arma::cube & x, arma::mat & mean,
   arma::colvec eigvalV;
   arma::mat eigvecV;
   arma::eig_sym(eigvalU, eigvecU, U);
-  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalU) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   arma::eig_sym(eigvalV, eigvecV, V);
-  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalV) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   int n = x.n_rows;
   int p = x.n_cols;
   int numslices = x.n_slices;
@@ -80,9 +80,9 @@ arma::colvec dmat_t_calc(arma::cube & x, double df, arma::mat & mean,
   arma::colvec eigvalV;
   arma::mat eigvecV;
   arma::eig_sym(eigvalU, eigvecU, U);
-  if ((min(eigvalU) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalU) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   arma::eig_sym(eigvalV, eigvecV, V);
-  if ((min(eigvalV) < 1e-7)) Rcpp::stop("error: possibly singular input");
+  if ((min(eigvalV) < 1e-7)) throw Rcpp::exception("error: possibly singular input");
   int n = x.n_rows;
   int p = x.n_cols;
   int numslices = x.n_slices;

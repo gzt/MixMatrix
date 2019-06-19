@@ -9,16 +9,12 @@ posdefinvsqrt <- function(x) {
     .Call(`_MixMatrix_posdefinvsqrt`, x)
 }
 
-testsymmetric <- function(x, tol) {
-    .Call(`_MixMatrix_testsymmetric`, x, tol)
+rmat_inv_t_calc <- function(S, mat, U, V, mean) {
+    .Call(`_MixMatrix_rmat_inv_t_calc`, S, mat, U, V, mean)
 }
 
-dmatnorm_calc <- function(x, mean, U, V) {
-    .Call(`_MixMatrix_dmatnorm_calc`, x, mean, U, V)
-}
-
-dmat_t_calc <- function(x, df, mean, U, V) {
-    .Call(`_MixMatrix_dmat_t_calc`, x, df, mean, U, V)
+cubeinv <- function(x) {
+    .Call(`_MixMatrix_cubeinv`, x)
 }
 
 xatx <- function(x, U) {
@@ -29,16 +25,24 @@ txax <- function(x, U) {
     .Call(`_MixMatrix_txax`, x, U)
 }
 
-rmat_inv_t_calc <- function(S, mat, U, V, mean) {
-    .Call(`_MixMatrix_rmat_inv_t_calc`, S, mat, U, V, mean)
-}
-
 dmat_inv_t_calc <- function(x, df, mean, U, V) {
     .Call(`_MixMatrix_dmat_inv_t_calc`, x, df, mean, U, V)
 }
 
-cubeinv <- function(x) {
-    .Call(`_MixMatrix_cubeinv`, x)
+dmatnorm_calc <- function(x, mean, U, V) {
+    .Call(`_MixMatrix_dmatnorm_calc`, x, mean, U, V)
+}
+
+dmat_t_calc <- function(x, df, mean, U, V) {
+    .Call(`_MixMatrix_dmat_t_calc`, x, df, mean, U, V)
+}
+
+testsymmetric <- function(x, tol) {
+    .Call(`_MixMatrix_testsymmetric`, x, tol)
+}
+
+axbt <- function(a, x, b) {
+    .Call(`_MixMatrix_axbt`, a, x, b)
 }
 
 cubemult <- function(x, y) {
@@ -47,9 +51,5 @@ cubemult <- function(x, y) {
 
 detsum <- function(x) {
     .Call(`_MixMatrix_detsum`, x)
-}
-
-axbt <- function(a, x, b) {
-    .Call(`_MixMatrix_axbt`, a, x, b)
 }
 
