@@ -63,6 +63,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
     stop("infinite, NA or NaN values in 'x'")
   if (nu == 0 || is.infinite(nu)) method = "normal"
 
+  if (method == "normal") nu = NULL
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
