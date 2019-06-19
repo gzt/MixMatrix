@@ -1,6 +1,7 @@
 
 #' MLmatrixt:
 #'
+#' @family matrix variate
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are

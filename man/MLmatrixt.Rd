@@ -81,4 +81,9 @@ print(results)
 }
 \seealso{
 \code{\link{rmatrixnorm}}
+
+Other matrix variate: \code{\link{matrixlda}},
+  \code{\link{matrixqda}}, \code{\link{rmatrixinvt}},
+  \code{\link{rmatrixnorm}}
 }
+\concept{matrix variate}

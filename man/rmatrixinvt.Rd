@@ -65,4 +65,9 @@ Generate random draws from the inverted matrix
 A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }
-\concept{matrixt}
+\seealso{
+Other matrix variate: \code{\link{MLmatrixt}},
+  \code{\link{matrixlda}}, \code{\link{matrixqda}},
+  \code{\link{rmatrixnorm}}
+}
+\concept{matrix variate}

@@ -5,6 +5,7 @@
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
 #' @family matrixnorm
+#' @family matrix variate
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -165,15 +166,17 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
 #'
-#' @export
+#' @keywords internal
 #'
 #'
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2))
+#' \dontrun{
 #' dmatrixnorm.unroll (A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'     L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
+#' }
 
 dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
                                L = diag(dim(mean)[1]), R = diag(dim(mean)[2]),
@@ -472,26 +475,6 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     error.term <- sum((new.V - V)^2) + sum((new.U - U)^2)
     V <- new.V
     U <- new.U
-
-    # reset mu to account for mean estimation *if* restricted means
-    # unsure about this - I think only an issue if *known* covar matrix
-    # in which case estimation is biased unless you correct for it
-    #
-    # if (col.mean || row.mean)
-    #   mu <- rowMeans(data, dims = 2)
-    # if (row.mean) {
-    #   invV <- chol2inv(chol.default(V))
-    #   sumV <- sum(invV)
-    #   mu <- matrix(mu %*% (rowSums(invV))/sumV, nrow = dims[1], ncol = dims[2])
-    #   }
-    # if (col.mean){
-    #   invU <- chol2inv(chol.default(U))
-    #   sumU <- sum(invU)
-    #   mu <- matrix(colSums(invU) %*% mu / sumU, nrow = dims[1], ncol = dims[2], byrow = T)
-    # }
-    # if (col.mean || row.mean)
-    #   swept.data <- sweep(data, c(1, 2), mu)
-    ### No, this should not be done - only if variance structures known in advance
 
     iter <- iter + 1
   }

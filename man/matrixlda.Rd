@@ -68,5 +68,10 @@ matrixlda(C, groups, prior)
 Other matrixlda: \code{\link{matrixqda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
+
+Other matrix variate: \code{\link{MLmatrixt}},
+  \code{\link{matrixqda}}, \code{\link{rmatrixinvt}},
+  \code{\link{rmatrixnorm}}
 }
+\concept{matrix variate}
 \concept{matrixlda}

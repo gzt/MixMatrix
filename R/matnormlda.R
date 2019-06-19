@@ -11,7 +11,7 @@
 #' The function does not take the formula interface.
 #'
 #' @family matrixlda
-#'
+#' @family matrix variate
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
@@ -318,7 +318,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' This uses \code{MLmatrixnorm} to find the means and variances.
 #'
 #' @family matrixlda
-#'
+#' @family matrix variate
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
