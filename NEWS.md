@@ -1,3 +1,11 @@
+# MixMatrix 0.1.0
+
+* Preparing for CRAN submission
+* Add pkgdown (https://gzt.github.io/MixMatrix/)
+* Add ORCID
+* Minor documentation changes
+* Fix `nu` bug for `matrixlda` and `matrixqda` when using normal distribution
+
 # MixMatrix 0.0.0.9949
 
 * changing name to MixMatrix

@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Matrix Normal Distributions}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-bibliography: matrixnormal.bib  
+bibliography: matrixnormal.bib
 ---
 ---
 
