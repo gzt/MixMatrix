@@ -103,6 +103,13 @@ MLmatrixt(X, fixed = FALSE) # fixed = FALSE indicates to estimate the DF paramet
 <pre><code><a href="reference/ARgenerate.html">ARgenerate(5, .5)
 CSgenerate(5, .5)</a></code></pre>
 <p>The package also presents linear discriminant analysis and quadratic discriminant analysis for matrix variate distributions in the case of the normal and the <em>t</em>-distribution. In the case of the <em>t</em>, linear and quadratic refer whether the covariance matrices are constrained to be the same between classes rather than the form of the classifier.</p>
+<pre><code> A &lt;- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+ B &lt;- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
+ C &lt;- array(c(A,B), dim=c(3,4,60))
+ groups &lt;- c(rep(1,30),rep(2,30))
+ prior &lt;- c(.5,.5)
+ D &lt;- matrixqda(C, groups, prior)
+ predict(D)$posterior[1:10,]</code></pre>
 <p>In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of <a href="https://cran.r-project.org/package=mclust">Mclust</a>, <a href="https://cran.r-project.org/package=Mclust">t-Eigen</a>, and other similar work.</p>
 </div>
 <div id="contribution-and-contact-information" class="section level2">
