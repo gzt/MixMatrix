@@ -35,7 +35,8 @@ Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 Only positive correlations are allowed for
 AR(1) and CS.}
 
-\item{df}{Starting value for the degrees of freedom. If fixed = TRUE, then this is required and not updated. By default, set to 10.}
+\item{df}{Starting value for the degrees of freedom. If fixed = TRUE, then this is
+required and not updated. By default, set to 10.}
 
 \item{fixed}{Whether nu is estimated or fixed. By default, TRUE.}
 
@@ -72,9 +73,9 @@ a warning.
 }
 \examples{
 set.seed(20180202)
-A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-results=MLmatrixnorm(A, tol = 1e-5)
+A <- rmatrixt(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE, df = 5)
+results=MLmatrixt(A, tol = 1e-5, df = 5)
 print(results)
 
 
@@ -82,8 +83,8 @@ print(results)
 \seealso{
 \code{\link{rmatrixnorm}}
 
-Other matrix variate: \code{\link{matrixlda}},
-  \code{\link{matrixqda}}, \code{\link{rmatrixinvt}},
-  \code{\link{rmatrixnorm}}
+Other matrix-variate: \code{\link{MLmatrixnorm}},
+  \code{\link{matrixlda}}, \code{\link{predict.matrixlda}},
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
-\concept{matrix variate}
+\concept{matrix-variate}

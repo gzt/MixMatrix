@@ -27,6 +27,37 @@ normal distributions with penalized likelihood.
 The software can be installed by running:
 
     devtools::install_github("gzt/MixMatrix")
+	
+## Usage
+
+The various `r*` and `d*` functions return or take as input an array indexed by the third dimension.
+
+```
+meanmatrix = matrix(1:12, nrow = 3)
+A = rmatrixnorm(n = 10, mean = meanmatrix, U = diag(3), V = diag(4))
+A[,,1:2]
+dmatrixnorm(A, mean = meanmatrix, U = diag(3), V = diag(4), log = TRUE)
+```
+
+The package presents a method of maximum likelihood estimation of the parameters of the matrix variate *t* distribution using ECME.
+
+```
+X = rmatrixt(n = 100, mean = meanmatrix, U = diag(3), V = diag(4), df = 10)
+MLmatrixt(X, fixed = FALSE) # fixed = FALSE indicates to estimate the DF parameter
+```
+
+Because it might be useful in conjunction with the `r*` and `d*` functions, the package also includes some convenience functions for generating AR(1) and compound symmetry correlation matrices.
+
+```
+ARgenerate(5, .5)
+CSgenerate(5, .5)
+```
+
+The package also presents linear discriminant analysis and quadratic discriminant analysis for matrix variate distributions in the case of the normal and the *t*-distribution. In the case of the *t*, linear and quadratic refer whether the covariance matrices are constrained to be the same between classes rather than the form of the classifier.
+
+In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of [Mclust](https://cran.r-project.org/package=mclust), [t-Eigen](https://cran.r-project.org/package=Mclust), and other similar work.
+
+## Contribution and contact information	
 
 Please let me know if you have any issues or suggestions here: https://github.com/gzt/MixMatrix/issues
 

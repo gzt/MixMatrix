@@ -1,7 +1,7 @@
 
 #' MLmatrixt:
 #'
-#' @family matrix variate
+#' @family matrix-variate
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
@@ -31,7 +31,8 @@
 #'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 #'     Only positive correlations are allowed for
 #'     AR(1) and CS.
-#' @param df Starting value for the degrees of freedom. If fixed = TRUE, then this is required and not updated. By default, set to 10.
+#' @param df Starting value for the degrees of freedom. If fixed = TRUE, then this is
+#'     required and not updated. By default, set to 10.
 #' @param fixed Whether nu is estimated or fixed. By default, TRUE.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
@@ -53,9 +54,9 @@
 #'
 #' @examples
 #' set.seed(20180202)
-#' A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
-#' results=MLmatrixnorm(A, tol = 1e-5)
+#' A <- rmatrixt(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
+#'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE, df = 5)
+#' results=MLmatrixt(A, tol = 1e-5, df = 5)
 #' print(results)
 #'
 #'
@@ -81,9 +82,9 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     row.set.var = TRUE
     row.variance = "I"
   }
-  # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
+ 
   if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
-    # row.set.var = TRUE
+ 
     row.variance = "cor"
   }
   if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
@@ -101,7 +102,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     col.variance = "I"
   }
   if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
-    # col.set.var = TRUE
+  
     col.variance = "cor"
   }
   if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
@@ -193,11 +194,7 @@ Smatrix = array(0,c(p,p,n))
 
     SSXXtmp = cubemult(data,SSXtmp)
     SSXX = rowSums(SSXXtmp,FALSE, 2)
-    #print(SS)
-    #print(SSX)
-    #print(SSXX)
-    #print(iter)
-
+ 
     ### CM STEP
 
       if (row.mean && col.mean) {
@@ -215,8 +212,7 @@ Smatrix = array(0,c(p,p,n))
           } else {
     new.Mu =  solve( SS) %*% SSX
       }
-    #new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% solve(SS) %*% (SSX))
-
+    
     if (col.variance == "I") {
       new.V = diag(dims[2])
     } else if (col.set.var) {
@@ -323,8 +319,7 @@ Smatrix = array(0,c(p,p,n))
     mu <- new.Mu
     df <- new.df
 
-    # cat(error.term, df, (sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))),"\n")
-    iter <- iter + 1
+        iter <- iter + 1
   }
   if (iter >= max.iter || error.term > tol || varflag)
     warning("Failed to converge")

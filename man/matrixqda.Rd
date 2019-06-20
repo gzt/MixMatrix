@@ -63,10 +63,6 @@ D <- matrixqda(C, groups, prior)
 Other matrixlda: \code{\link{matrixlda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
-
-Other matrix variate: \code{\link{MLmatrixt}},
-  \code{\link{matrixlda}}, \code{\link{rmatrixinvt}},
-  \code{\link{rmatrixnorm}}
 }
 \concept{matrix variate}
 \concept{matrixlda}

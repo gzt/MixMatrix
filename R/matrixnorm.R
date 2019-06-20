@@ -5,7 +5,7 @@
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
 #' @family matrixnorm
-#' @family matrix variate
+#' @family matrix-variate
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -272,6 +272,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}
+#' @family matrixnorm
+#' @family matrix-variate
 #'
 #' @examples
 #' set.seed(20180202)

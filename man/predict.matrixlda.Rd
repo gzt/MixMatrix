@@ -50,5 +50,10 @@ predict(D)$posterior[1:10,]
 \seealso{
 Other matrixlda: \code{\link{matrixlda}},
   \code{\link{matrixqda}}, \code{\link{predict.matrixqda}}
+
+Other matrix-variate: \code{\link{MLmatrixnorm}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
+\concept{matrix-variate}
 \concept{matrixlda}

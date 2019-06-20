@@ -11,7 +11,7 @@
 #' The function does not take the formula interface.
 #'
 #' @family matrixlda
-#' @family matrix variate
+#' @family matrix-variate
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
@@ -194,6 +194,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
 #' \code{x} of the appropriate class.
 #'
 #' @family matrixlda
+#' @family matrix-variate
 #'
 #' @param object object of class "matrixlda"
 #' @param newdata array or list of new observations to be classified.
@@ -476,6 +477,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' \code{x} of the appropriate class.
 #'
 #' @family matrixlda
+#' 
 #'
 #' @param object object of class "matrixqda"
 #' @param newdata array or list of new observations to be classified.

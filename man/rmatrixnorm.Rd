@@ -78,9 +78,12 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 \seealso{
 \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 
-Other matrix variate: \code{\link{MLmatrixt}},
-  \code{\link{matrixlda}}, \code{\link{matrixqda}},
+Other matrixnorm: \code{\link{MLmatrixnorm}}
+
+Other matrix-variate: \code{\link{MLmatrixnorm}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
+  \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}
 }
-\concept{matrix variate}
+\concept{matrix-variate}
 \concept{matrixnorm}
