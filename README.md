@@ -55,6 +55,16 @@ CSgenerate(5, .5)
 
 The package also presents linear discriminant analysis and quadratic discriminant analysis for matrix variate distributions in the case of the normal and the *t*-distribution. In the case of the *t*, linear and quadratic refer whether the covariance matrices are constrained to be the same between classes rather than the form of the classifier.
 
+```
+ A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+ B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
+ C <- array(c(A,B), dim=c(3,4,60))
+ groups <- c(rep(1,30),rep(2,30))
+ prior <- c(.5,.5)
+ D <- matrixqda(C, groups, prior)
+ predict(D)$posterior[1:10,]
+```
+
 In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of [Mclust](https://cran.r-project.org/package=mclust), [t-Eigen](https://cran.r-project.org/package=Mclust), and other similar work.
 
 ## Contribution and contact information	
