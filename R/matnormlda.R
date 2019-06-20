@@ -369,7 +369,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
     stop("infinite, NA or NaN values in 'x'")
   if (nu == 0 || is.infinite(nu)) method = "normal"
 
-  if (method == "normal") nu = NULL
+  if (method == "normal") df = NULL
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -413,7 +413,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], nu = df[i], ...)
       df[i] = mlfit$nu
     } else{
       mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
