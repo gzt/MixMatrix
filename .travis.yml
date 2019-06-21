@@ -26,5 +26,4 @@ matrix:
 notifications:
   email:
     - gzthompson@gmail.com
-after_success:
-  - Rscript -e 'covr::codecov()'
+
