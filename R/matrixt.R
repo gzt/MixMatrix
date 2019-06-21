@@ -1,7 +1,7 @@
-#' Distribution functions for the matrix variate t-distribution.
+#' Distribution functions for the matrix variate t distribution.
 #' @family matrix-variate
 #'
-#' Density and random generation for the matrix variate t-distribution.
+#' Density and random generation for the matrix variate t distribution.
 #'
 #' @param n number of observations for generation
 #' @param x quantile for density
@@ -12,26 +12,28 @@
 #'    \eqn{df > 2}
 #' @param L \eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 #'     By default, an identity matrix.
-#' @param R \eqn{q \times q}{q * q}  matrix specifying relations among the columns.
-#'     By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for rows,
-#'    computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for columns,
-#'    computed from \eqn{R}  if not specified.
+#' @param R \eqn{q \times q}{q * q}  matrix specifying relations among the
+#'     columns. By default, an identity matrix.
+#' @param U \eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for
+#'    rows, computed from \eqn{L} if not specified.
+#' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for
+#'    columns, computed from \eqn{R}  if not specified.
 #' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 #'    output will be a list of matrices.
 #' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
 #'    \code{FALSE} , the function will return a matrix containing the one
 #'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 #'    If \code{list}  is \code{TRUE} , this will be ignored.
-#' @param force In \code{rmatrix}: if TRUE, will take the input of \code{R}
-#'    directly - otherwise uses \code{V} and uses Cholesky
+#' @param force In \code{rmatrix}: if \code{TRUE}, will take the input of
+#'    \code{R} directly - otherwise uses \code{V} and uses Cholesky
 #'    decompositions. Useful for generating degenerate t-distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
-#' @param log logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).
-#' @return \code{rmatrixt} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
-#'    a \eqn{p \times q \times n}{p * q * n}  array.
+#' @param log logical; in \code{dmatrixt}, if \code{TRUE}, probabilities
+#'    \code{p} are given as \code{log(p)}.
+#' @return \code{rmatrixt} returns either a list of \eqn{n}
+#'    \eqn{p \times q}{p * q}  matrices ora \eqn{p \times q \times n}{p * q * n}
+#'    array.
 #'
 #'    \code{dmatrixt} returns the density at quantile \code{x}.
 #' @details
@@ -125,7 +127,7 @@ rmatrixt <- function(n, df, mean,
   return(result)
 }
 
-#' @describeIn rmatrixt Density function for matrix variate t-distribution
+#' @describeIn rmatrixt Density function for matrix variate t distribution
 #' @export
 dmatrixt <- function(x, df, mean = matrix(0, p, n),
            L = diag(p),
@@ -174,13 +176,14 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 }
 
 
-#' Distribution functions for matrix variate inverted t-distributions
+#' Distribution functions for matrix variate inverted t distributions
 #'
 #' Generate random draws from the inverted matrix
-#'    variate t-distribution
+#'    variate t distribution
 #' @family matrix-variate
 #' @inheritParams rmatrixt
-#' @return \code{rmatrixinvt} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+#' @return \code{rmatrixinvt} returns either a list of \eqn{n}
+#'    \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
 #'    \code{dmatrixinvt} returns the density at quantile \code{x}.
