@@ -32,10 +32,11 @@
 
 <meta property="og:title" content="MLmatrixt: — MLmatrixt" />
 
-<meta property="og:description" content="Maximum likelihood estimation for matrix normal distributions
-Maximum likelihood estimates exist for \(N &amp;gt; max(p/q,q/p)+1\) and are
-unique for \(N &amp;gt; max(p,q)\). This finds the estimate for the mean and then alternates
-between estimates for the \(U\) and \(V\) matrices until convergence.
+<meta property="og:description" content="Maximum likelihood estimation for matrix variate t distributions
+For the matrix variate normal distribution, maximum likelihood estimates exist for
+\(N &amp;gt; max(p/q,q/p)+1\) and are unique for \(N &amp;gt; max(p,q)\). The number necessary for the
+matrix variate t has not been worked out but this is a lower bound. This implements
+and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning." />
@@ -125,10 +126,11 @@ a warning." />
 
     <div class="ref-description">
     
-    <p>Maximum likelihood estimation for matrix normal distributions</p>
-<p>Maximum likelihood estimates exist for \(N &gt; max(p/q,q/p)+1\) and are
-unique for \(N &gt; max(p,q)\). This finds the estimate for the mean and then alternates
-between estimates for the \(U\) and \(V\) matrices until convergence.
+    <p>Maximum likelihood estimation for matrix variate t distributions</p>
+<p>For the matrix variate normal distribution, maximum likelihood estimates exist for
+\(N &gt; max(p/q,q/p)+1\) and are unique for \(N &gt; max(p,q)\). The number necessary for the
+matrix variate t has not been worked out but this is a lower bound. This implements
+and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.</p>
@@ -185,7 +187,7 @@ required and not updated. By default, set to 10.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
-      <td><p>Whether nu is estimated or fixed. By default, TRUE.</p></td>
+      <td><p>Whether <code>df</code> is estimated or fixed. By default, TRUE.</p></td>
     </tr>
     <tr>
       <th>tol</th>
@@ -225,7 +227,8 @@ if using restrictions on the variance.</p></td>
 
     <div class='dont-index'><p><code><a href='rmatrixnorm.html'>rmatrixnorm</a></code></p>
 <p>Other matrix-variate: <code><a href='MLmatrixnorm.html'>MLmatrixnorm</a></code>,
-  <code><a href='matrixlda.html'>matrixlda</a></code>, <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
+  <code><a href='matrixlda.html'>matrixlda</a></code>, <code><a href='matrixqda.html'>matrixqda</a></code>,
+  <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
   <code><a href='rmatrixinvt.html'>rmatrixinvt</a></code>, <code><a href='rmatrixnorm.html'>rmatrixnorm</a></code></p></div>
     
 

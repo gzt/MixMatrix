@@ -36,11 +36,13 @@
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution.
+the data are from a matrix variate normal distribution. 
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
-The function does not take the formula interface." />
+The function does not take the formula interface. It method = 't'
+is selected, this performs discrimination using the matrix variate t
+distribution, presuming equal covariances between classes." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -131,11 +133,13 @@ The function does not take the formula interface." />
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution.
+the data are from a matrix variate normal distribution. 
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
-The function does not take the formula interface.</p>
+The function does not take the formula interface. It <code>method = 't'</code>
+is selected, this performs discrimination using the matrix variate t
+distribution, presuming equal covariances between classes.</p>
     
     </div>
 
@@ -200,11 +204,13 @@ as additional parameters to pass to <code>MLmatrixnorm</code> (e.g.,
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other matrixlda: <code><a href='matrixqda.html'>matrixqda</a></code>,
+    <div class='dont-index'><p>[MLmatrixnorm()] and [MLmatrixt()]</p>
+<p>Other matrixlda: <code><a href='matrixqda.html'>matrixqda</a></code>,
   <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
   <code><a href='predict.matrixqda.html'>predict.matrixqda</a></code></p>
 <p>Other matrix-variate: <code><a href='MLmatrixnorm.html'>MLmatrixnorm</a></code>,
-  <code><a href='MLmatrixt.html'>MLmatrixt</a></code>, <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
+  <code><a href='MLmatrixt.html'>MLmatrixt</a></code>, <code><a href='matrixqda.html'>matrixqda</a></code>,
+  <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
   <code><a href='rmatrixinvt.html'>rmatrixinvt</a></code>, <code><a href='rmatrixnorm.html'>rmatrixnorm</a></code></p></div>
     
 
