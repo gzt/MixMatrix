@@ -82,7 +82,7 @@ Other matrixnorm: \code{\link{MLmatrixnorm}}
 
 Other matrix-variate: \code{\link{MLmatrixnorm}},
   \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{predict.matrixlda}},
+  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}
 }
 \concept{matrix-variate}

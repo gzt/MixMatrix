@@ -49,11 +49,13 @@ Performs linear discriminant analysis on matrix variate data.
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution.
+the data are from a matrix variate normal distribution. 
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
-The function does not take the formula interface.
+The function does not take the formula interface. It \code{method = 't'}
+is selected, this performs discrimination using the matrix variate t
+distribution, presuming equal covariances between classes.
 }
 \examples{
 set.seed(20180221)
@@ -65,12 +67,15 @@ prior <- c(.5,.5)
 matrixlda(C, groups, prior)
 }
 \seealso{
+[MLmatrixnorm()] and [MLmatrixt()]
+
 Other matrixlda: \code{\link{matrixqda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
 
 Other matrix-variate: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{predict.matrixlda}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixqda}},
+  \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
 \concept{matrix-variate}

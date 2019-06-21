@@ -42,13 +42,16 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
       \item{\code{call}}{The (matched) function call.}
    }
+
+ @seealso [MLmatrixnorm()] and [MLmatrixt()]
 }
 \description{
 See \code{matrixlda}: quadratic discriminant analysis for matrix
 variate observations.
 }
 \details{
-This uses \code{MLmatrixnorm} to find the means and variances.
+This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
+variances for the case when different groups have different variances.
 }
 \examples{
 #' set.seed(20180221)
@@ -63,6 +66,11 @@ D <- matrixqda(C, groups, prior)
 Other matrixlda: \code{\link{matrixlda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
+
+Other matrix-variate: \code{\link{MLmatrixnorm}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
+  \code{\link{predict.matrixlda}},
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
-\concept{matrix variate}
+\concept{matrix-variate}
 \concept{matrixlda}

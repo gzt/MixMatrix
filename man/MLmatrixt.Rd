@@ -38,7 +38,7 @@ AR(1) and CS.}
 \item{df}{Starting value for the degrees of freedom. If fixed = TRUE, then this is
 required and not updated. By default, set to 10.}
 
-\item{fixed}{Whether nu is estimated or fixed. By default, TRUE.}
+\item{fixed}{Whether \code{df} is estimated or fixed. By default, TRUE.}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}
@@ -62,11 +62,12 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
    and a convergence code.
 }
 \description{
-Maximum likelihood estimation for matrix normal distributions
+Maximum likelihood estimation for matrix variate t distributions
 
-Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
-unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
-between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
+For the matrix variate normal distribution, maximum likelihood estimates exist for
+\eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
+matrix variate t has not been worked out but this is a lower bound. This implements
+and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.
@@ -84,7 +85,8 @@ print(results)
 \code{\link{rmatrixnorm}}
 
 Other matrix-variate: \code{\link{MLmatrixnorm}},
-  \code{\link{matrixlda}}, \code{\link{predict.matrixlda}},
+  \code{\link{matrixlda}}, \code{\link{matrixqda}},
+  \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
 \concept{matrix-variate}

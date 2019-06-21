@@ -80,7 +80,8 @@ print(results)
 Other matrixnorm: \code{\link{rmatrixnorm}}
 
 Other matrix-variate: \code{\link{MLmatrixt}},
-  \code{\link{matrixlda}}, \code{\link{predict.matrixlda}},
+  \code{\link{matrixlda}}, \code{\link{matrixqda}},
+  \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
 \concept{matrix-variate}

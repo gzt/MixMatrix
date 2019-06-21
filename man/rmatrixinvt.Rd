@@ -68,7 +68,7 @@ dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 \seealso{
 Other matrix-variate: \code{\link{MLmatrixnorm}},
   \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{predict.matrixlda}},
+  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
   \code{\link{rmatrixnorm}}
 }
 \concept{matrix-variate}
