@@ -146,22 +146,10 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
 #'     to a vector. Alternatively, it can work on a matrix that has
 #'     already been unrolled in the default R method (using
 #'     \code{as.vector}), as data may be stored in that fashion.
-#' @param x \eqn{p \times q}{p * q} input matrix
-#' @param mean \eqn{p \times q}{p * q} matrix of means. By default, a matrix of \eqn{0}s
-#'     with size taken from \code{x}
-#' @param L \eqn{p \times p}{p * p} matrix specifying relations among the rows. By default,
-#'     an identity matrix.
-#' @param R \eqn{q \times q}{q * q} matrix specifying relations among the columns. By
-#'    default, an identity matrix.
-#' @param U \eqn{LL^T} - \eqn{p \times p}{p * p} positive definite variance-covariance
-#'    matrix for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R} - \eqn{q \times q}{q * q} positive definite variance-covariance
-#'    matrix for columns, computed from \eqn{R} if not specified.
-#' @param unrolled logical, \code{FALSE} by default. If \code{x}
-#'    is already unrolled, select \code{TRUE}. This will take the dimensions
-#'    from the variance matrices, so they must be specified.
-#' @param log logical - whether to return the density on the log scale.
 #'
+#'
+#' @inheritParams rmatrixnorm
+##'
 #' @return Returns the density at the provided observation. This is an
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
@@ -229,11 +217,11 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @description Maximum likelihood estimation for matrix normal distributions
 #'
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
-#' unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
-#' between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
-#' An AR(1), compound symmetry, or independence restriction can be proposed for either or both
-#' variance matrices. However, if they are inappropriate for the data, they may fail with
-#' a warning.
+#' unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then
+#' alternates between estimates for the \eqn{U} and \eqn{V} matrices until
+#' convergence. An AR(1), compound symmetry, correlation matrix, or independence
+#' restriction can be proposed for either or both variance matrices. However, if
+#' they are inappropriate for the data, they may fail with a warning.
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 1 and 2, indexed by dimension 3.
@@ -267,11 +255,11 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 #' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
 #'    matrix, the variance parameter (the first entry of the variance matrices
-#'    are constrained to be 1 for uniqueness), the number of iterations, the squared difference
-#'    between iterations of the variance matrices at the time of stopping, the log likelihood,
-#'    and a convergence code.
+#'    are constrained to be 1 for uniqueness), the number of iterations, the
+#'    squared difference between iterations of the variance matrices at the
+#'    time of stopping, the log likelihood, and a convergence code.
 #' @export
-#' @seealso \code{\link{rmatrixnorm}}
+#' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 #' @family matrixnorm
 #' @family matrix-variate
 #'
@@ -419,7 +407,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
         }
         if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
-          warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+          warning("Endpoints of derivative of likelihood do not have opposite sign.
+                   Check variance specification.")
           rho.col = 0
           varflag = TRUE
         } else {
@@ -456,7 +445,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           (.5 ) * sum(diag(B)) # problem was wrong constant
       }
       if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
-        warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+        warning("Endpoints of derivative of likelihood do not have opposite sign.
+                 Check variance specification.")
         rho.row = 0
         varflag = TRUE
       } else {

@@ -206,14 +206,13 @@ mattrace <- function(x)
 #' Classify matrix variate observations in conjunction with \code{matrixlda}.
 #'
 #' This function is a method for the generic function \code{predict()} for
-#' class "\code{matrixlda}". It can be invoked by calling predict(x) for
-#' an object
-#' \code{x} of the appropriate class.
+#' class "\code{matrixlda}". It can be invoked by calling \code{predict(x)} for
+#' an object \code{x} of the appropriate class.
 #'
 #' @family matrixlda
 #' @family matrix-variate
 #'
-#' @param object object of class "matrixlda"
+#' @param object object of class \code{matrixlda}
 #' @param newdata array or list of new observations to be classified.
 #'     If newdata is missing, an attempt will be made to retrieve the
 #'     data used to fit the \code{matrixlda} object.
@@ -488,14 +487,13 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' Classify matrix variate observations in conjunction with \code{matrixqda}.
 #'
 #' This function is a method for the generic function \code{predict()} for
-#' class "\code{matrixqda}". It can be invoked by calling predict(x) for
-#' an object
-#' \code{x} of the appropriate class.
+#' class "\code{matrixqda}". It can be invoked by calling \code{predict(x)} for
+#' an object \code{x} of the appropriate class.
 #'
 #' @family matrixlda
 #' 
 #'
-#' @param object object of class "matrixqda"
+#' @param object object of class \code{matrixqda}
 #' @param newdata array or list of new observations to be classified.
 #'     If newdata is missing, an attempt will be made to retrieve the
 #'     data used to fit the \code{matrixqda} object.

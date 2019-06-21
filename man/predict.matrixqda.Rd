@@ -7,7 +7,7 @@
 \method{predict}{matrixqda}(object, newdata, prior = object$prior, ...)
 }
 \arguments{
-\item{object}{object of class "matrixqda"}
+\item{object}{object of class \code{matrixqda}}
 
 \item{newdata}{array or list of new observations to be classified.
 If newdata is missing, an attempt will be made to retrieve the
@@ -32,9 +32,8 @@ Classify matrix variate observations in conjunction with \code{matrixqda}.
 }
 \details{
 This function is a method for the generic function \code{predict()} for
-class "\code{matrixqda}". It can be invoked by calling predict(x) for
-an object
-\code{x} of the appropriate class.
+class "\code{matrixqda}". It can be invoked by calling \code{predict(x)} for
+an object \code{x} of the appropriate class.
 }
 \examples{
 set.seed(20180221)

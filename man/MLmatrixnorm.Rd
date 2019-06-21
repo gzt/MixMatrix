@@ -51,19 +51,19 @@ if using restrictions on the variance.}
 \value{
 Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
    matrix, the variance parameter (the first entry of the variance matrices
-   are constrained to be 1 for uniqueness), the number of iterations, the squared difference
-   between iterations of the variance matrices at the time of stopping, the log likelihood,
-   and a convergence code.
+   are constrained to be 1 for uniqueness), the number of iterations, the
+   squared difference between iterations of the variance matrices at the
+   time of stopping, the log likelihood, and a convergence code.
 }
 \description{
 Maximum likelihood estimation for matrix normal distributions
 
 Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
-unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then alternates
-between estimates for the \eqn{U} and \eqn{V} matrices until convergence.
-An AR(1), compound symmetry, or independence restriction can be proposed for either or both
-variance matrices. However, if they are inappropriate for the data, they may fail with
-a warning.
+unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then
+alternates between estimates for the \eqn{U} and \eqn{V} matrices until
+convergence. An AR(1), compound symmetry, correlation matrix, or independence
+restriction can be proposed for either or both variance matrices. However, if
+they are inappropriate for the data, they may fail with a warning.
 }
 \examples{
 set.seed(20180202)
@@ -75,7 +75,7 @@ print(results)
 
 }
 \seealso{
-\code{\link{rmatrixnorm}}
+\code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 
 Other matrixnorm: \code{\link{rmatrixnorm}}
 

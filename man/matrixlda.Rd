@@ -69,7 +69,7 @@ prior <- c(.5,.5)
 matrixlda(C, groups, prior)
 }
 \seealso{
-[MLmatrixnorm()] and [MLmatrixt()]
+[MASS::lda()], [MLmatrixnorm()] and [MLmatrixt()]
 
 Other matrixlda: \code{\link{matrixqda}},
   \code{\link{predict.matrixlda}},
