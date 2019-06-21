@@ -23,6 +23,10 @@ matrix:
   - r: release
     after_success: Rscript -e 'covr::codecov()'
   - r: oldrel
+jobs:
+  include:
+    - stage: deploy
+      r: release
 notifications:
   email:
     - gzthompson@gmail.com
