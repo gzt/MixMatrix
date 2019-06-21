@@ -109,7 +109,12 @@ distribution, presuming equal covariances between classes." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/gzt/MixMatrix">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -123,7 +128,7 @@ distribution, presuming equal covariances between classes." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>LDA for matrix variate distributions</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matnormlda.R'><code>R/matnormlda.R</code></a></small>
     <div class="hidden name"><code>matrixlda.Rd</code></div>
     </div>
 
@@ -169,12 +174,13 @@ for 0 variance.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>whether to use the normal distribution (<code>normal</code>) or the t-distribution (<code>t</code>).
-By default, normal.</p></td>
+      <td><p>whether to use the normal distribution (<code>normal</code>) or the
+t distribution (<code>t</code>). By default, normal.</p></td>
     </tr>
     <tr>
       <th>nu</th>
-      <td><p>If using the t-distribution, the degrees of freedom parameter. By default, 10.</p></td>
+      <td><p>If using the t-distribution, the degrees of freedom parameter. By
+default, 10.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -197,7 +203,8 @@ as additional parameters to pass to <code>MLmatrixnorm</code> (e.g.,
       <dt><code>lev</code></dt><dd><p>levels of the grouping factor</p></dd>
       <dt><code>N</code></dt><dd><p>The number of observations used.</p></dd>
       <dt><code>method</code></dt><dd><p>The method used.</p></dd>
-      <dt><code>nu</code></dt><dd><p>The degrees of freedom parameter if the t-distribution was used.</p></dd>
+      <dt><code>nu</code></dt><dd><p>The degrees of freedom parameter if the t distribution
+           was used.</p></dd>
       <dt><code>call</code></dt><dd><p>The (matched) function call.</p></dd>
    </dl>
 

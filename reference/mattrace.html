@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Determinant for an AR(1) covariance matrix. — ARdet • MixMatrix</title>
+<title>Matrix trace — mattrace • MixMatrix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Determinant for an AR(1) covariance matrix. — ARdet" />
+<meta property="og:title" content="Matrix trace — mattrace" />
 
-<meta property="og:description" content="Determinant for an AR(1) covariance matrix." />
+<meta property="og:description" content="Matrix trace" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,58 +117,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Determinant for an AR(1) covariance matrix.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matrixutils.R'><code>R/matrixutils.R</code></a></small>
-    <div class="hidden name"><code>ARdet.Rd</code></div>
+    <h1>Matrix trace</h1>
+    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matnormlda.R'><code>R/matnormlda.R</code></a></small>
+    <div class="hidden name"><code>mattrace.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Determinant for an AR(1) covariance matrix.</p>
+    <p>Matrix trace</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>ARdet</span>(<span class='no'>n</span>, <span class='no'>rho</span>, <span class='kw'>deriv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>n</th>
-      <td><p>dimensions</p></td>
-    </tr>
-    <tr>
-      <th>rho</th>
-      <td><p>off-diagonal parameter</p></td>
-    </tr>
-    <tr>
-      <th>deriv</th>
-      <td><p>logical whether to return the determinant or the derivative of
-the log of the determinant</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>mattrace</span>(<span class='no'>x</span>)</pre>
+        
 
-    <p>determinant of an AR(1) covariance matrix. If <code>deriv</code> is specified,
-    will return the derivative of \(\log |\Sigma^{-1}|\).</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>ARdet</span>(<span class='fu'><a href='ARgenerate.html'>ARgenerate</a></span>(<span class='fl'>5</span>,<span class='fl'>.4</span>,<span class='kw'>deriv</span><span class='kw'>=</span><span class='fl'>TRUE</span>))
-<span class='co'># }</span><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

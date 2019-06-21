@@ -67,7 +67,14 @@
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/gzt/MixMatrix">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -82,9 +89,9 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#mixmatrix" class="anchor"></a>MixMatrix</h1></div>
 
-<p>A package for matrix variate distributions, including the normal, <em>t</em>, and inverted <em>t</em>. Currently LDA and QDA for matrix variate <em>t</em> distributions and normal distributions, EM for parameter estimation for matrix variate <em>t</em>-distributions, with sampling and density functions for those distributions as well as methods for parameter estimation for matrix variate normals and <em>t</em> with some restrictions on mean and variance parameters. In the future, this will have mixture modeling for matrix variate <em>t</em> distributions, hence the name of the package.</p>
+<p>A package for matrix variate distributions, including the normal, <em>t</em>, and inverted <em>t</em>. Currently LDA and QDA for matrix variate <em>t</em> distributions and normal distributions, EM for parameter estimation for matrix variate <em>t</em> distributions, with sampling and density functions for those distributions as well as methods for parameter estimation for matrix variate normals and <em>t</em> with some restrictions on mean and variance parameters. In the future, this will have mixture modeling for matrix variate <em>t</em> distributions, hence the name of the package.</p>
 <p>See the vignettes for an example of how it works.</p>
-<p>It is currently possible to constrain the mean matrices for normal and <em>t</em>-distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both.</p>
+<p>It is currently possible to constrain the mean matrices for normal and <em>t</em> distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both.</p>
 <p>There isn’t much R software out there for working with these distributions. The excellent <a href="https://cran.r-project.org/package=matrixsampling">matrixsampling</a> package has sampling and distribution functions for these and many other matrix distributions, as does <a href="https://cran.r-project.org/package=LaplacesDemon">LaplacesDemon</a>. The <a href="https://cran.r-project.org/package=MatrixLDA">MatrixLDA</a> package performs LDA for normal distributions with penalized likelihood.</p>
 <p>The software can be installed by running:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"gzt/MixMatrix"</span>)</a></code></pre></div>
@@ -110,13 +117,13 @@ CSgenerate(5, .5)</a></code></pre>
  prior &lt;- c(.5,.5)
  D &lt;- matrixqda(C, groups, prior)
  predict(D)$posterior[1:10,]</code></pre>
-<p>In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of <a href="https://cran.r-project.org/package=mclust">Mclust</a>, <a href="https://cran.r-project.org/package=Mclust">t-Eigen</a>, and other similar work.</p>
+<p>In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of <a href="https://cran.r-project.org/package=mclust">Mclust</a>, <a href="https://cran.r-project.org/package=mclust">t-Eigen</a>, and other similar work.</p>
 </div>
 <div id="contribution-and-contact-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#contribution-and-contact-information" class="anchor"></a>Contribution and contact information</h2>
 <p>Please let me know if you have any issues or suggestions here: <a href="https://github.com/gzt/MixMatrix/issues" class="uri">https://github.com/gzt/MixMatrix/issues</a></p>
-<p>Please note that the ‘MixMatrix’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the ‘MixMatrix’ project is released with a <a href="https://gzt.github.io/MixMatrix/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
   </div>
@@ -125,6 +132,8 @@ CSgenerate(5, .5)</a></code></pre>
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/gzt/MixMatrix">https://​github.com/​gzt/​MixMatrix</a>
+</li>
 <li>Report a bug at <br><a href="http://github.com/gzt/MixMatrix/issues">http://​github.com/​gzt/​MixMatrix/​issues</a>
 </li>
 </ul>
