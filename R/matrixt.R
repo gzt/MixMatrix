@@ -7,8 +7,8 @@
 #' @param x quantile for density
 #' @param df  degrees of freedom (\eqn{>0}, may be non-integer),
 #'    \code{df = 0, Inf} is allowed and will return a normal distribution.
-#' @param mean \eqn{p \times q}{p * q} This is really a 'shift' rather than a mean,
-#'    though the expected value will be equal to this if
+#' @param mean \eqn{p \times q}{p * q} This is really a 'shift' rather than a
+#'    mean, though the expected value will be equal to this if
 #'    \eqn{df > 2}
 #' @param L \eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 #'     By default, an identity matrix.
