@@ -80,7 +80,8 @@ classes rather than the form of the classifier.
 
 In the future, this will include mixture modeling and, later, complete 
 specification of covariance matrices in mixture modeling after the style of 
-[Mclust](https://cran.r-project.org/package=mclust), [t-Eigen](https://cran.r-project.org/package=teigen), 
+[Mclust](https://cran.r-project.org/package=mclust), 
+[t-Eigen](https://cran.r-project.org/package=teigen), 
 and other similar work.
 
 ## Contribution and contact information	
