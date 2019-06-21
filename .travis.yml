@@ -9,6 +9,8 @@ sudo: false
 warnings_are_errors: true
 cache: packages
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
+git:
+   depth: 9999999
 deploy:
   provider: script
   script: Rscript -e 'pkgdown::deploy_site_github()'
