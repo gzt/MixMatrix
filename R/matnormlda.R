@@ -21,9 +21,10 @@
 #'    as the number of classes
 #' @param tol by default, \code{1e-4}. Tolerance parameter checks
 #'    for 0 variance.
-#' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
-#'    By default, normal.
-#' @param nu If using the t-distribution, the degrees of freedom parameter. By default, 10.
+#' @param method whether to use the normal distribution (\code{normal}) or the
+#'    t distribution (\code{t}). By default, normal.
+#' @param nu If using the t-distribution, the degrees of freedom parameter. By
+#'    default, 10.
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
@@ -41,11 +42,12 @@
 #'       \item{\code{lev}}{levels of the grouping factor}
 #'       \item{\code{N}}{The number of observations used.}
 #'       \item{\code{method}}{The method used.}
-#'       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
+#'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
+#'            was used.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#' @seealso [MLmatrixnorm()] and [MLmatrixt()]
+#' @seealso [MASS::lda()], [MLmatrixnorm()] and [MLmatrixt()]
 #' 
 #' @export
 #'
@@ -57,7 +59,8 @@
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' matrixlda(C, groups, prior)
-matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 10,...)  {
+matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
+                       nu = 10,...)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -189,6 +192,15 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
 }
 
 
+
+#' Matrix trace
+#' @keywords internal
+mattrace <- function(x)       
+    sum(diag(x))
+
+
+
+
 #' Classify Matrix Variate Observations by Linear Discrimination
 #'
 #' Classify matrix variate observations in conjunction with \code{matrixlda}.
@@ -234,10 +246,6 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu =
 predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     if (!inherits(object, "matrixlda"))
       stop("object not of class \"matrixlda\"")
-
-    # want this function to ony be internal to this function as it's not "hardened"
-    mattrace <- function(x)
-      sum(diag(x))
 
     if (missing(newdata)) {
       if (!is.null(sub <- object$call$subset))
@@ -355,7 +363,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#'  @seealso [MLmatrixnorm()] and [MLmatrixt()]
+#'  @seealso [MASS::qda()], [MLmatrixnorm()] and [MLmatrixt()]
 #' 
 #' @export
 #'
@@ -519,10 +527,6 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     if (!inherits(object, "matrixqda"))
       stop("object not of class \"matrixqda\"")
-
-    # want this function to ony be internal to this function as it's not "hardened"
-    mattrace <- function(x)
-      sum(diag(x))
 
     if (missing(newdata)) {
       if (!is.null(sub <- object$call$subset))

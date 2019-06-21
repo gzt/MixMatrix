@@ -4,25 +4,30 @@
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
 
-A package for matrix variate distributions, including the normal, *t*, and inverted *t*. 
-Currently LDA and QDA for matrix variate *t* distributions and normal distributions, 
-EM for parameter estimation for matrix variate *t*-distributions, 
-with sampling and density functions for those distributions as well as methods for 
-parameter estimation for matrix variate normals and *t* with some restrictions on mean and variance
-parameters. In the future, this will have mixture modeling for matrix variate *t* distributions,
+A package for matrix variate distributions, including the normal, *t*, and 
+inverted *t*. Currently LDA and QDA for matrix variate *t* distributions and 
+normal distributions, EM for parameter estimation for matrix variate *t* 
+distributions,  with sampling and density functions for those distributions 
+as well as methods for parameter estimation for matrix variate normals and 
+*t* with some restrictions on mean and variance parameters. In the future, 
+this will have mixture modeling for matrix variate *t* distributions,
 hence the name of the package.
 
 See the vignettes for an example of how it works.
 
-It is currently possible to constrain the mean matrices for normal and *t*-distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both. 
+It is currently possible to constrain the mean matrices for normal and *t* 
+distributed matrices to have a common mean across rows, columns, or both, as 
+well as AR(1), compound symmetric, on identity covariance matrices across rows, 
+columns, or both. 
 
 
 There isn't much R software out there for working with these distributions. The 
-excellent [matrixsampling](https://cran.r-project.org/package=matrixsampling) package 
-has sampling and distribution functions for these and many other matrix distributions,
+excellent [matrixsampling](https://cran.r-project.org/package=matrixsampling) 
+package has sampling and distribution functions for these and many other matrix 
+distributions,
 as does [LaplacesDemon](https://cran.r-project.org/package=LaplacesDemon). The
-[MatrixLDA](https://cran.r-project.org/package=MatrixLDA) package performs LDA for 
-normal distributions with penalized likelihood.
+[MatrixLDA](https://cran.r-project.org/package=MatrixLDA) package performs LDA 
+for normal distributions with penalized likelihood.
 
 The software can be installed by running:
 
@@ -30,7 +35,8 @@ The software can be installed by running:
 	
 ## Usage
 
-The various `r*` and `d*` functions return or take as input an array indexed by the third dimension.
+The various `r*` and `d*` functions return or take as input an array indexed by 
+the third dimension.
 
 ```
 meanmatrix = matrix(1:12, nrow = 3)
@@ -39,21 +45,28 @@ A[,,1:2]
 dmatrixnorm(A, mean = meanmatrix, U = diag(3), V = diag(4), log = TRUE)
 ```
 
-The package presents a method of maximum likelihood estimation of the parameters of the matrix variate *t* distribution using ECME.
+The package presents a method of maximum likelihood estimation of the parameters 
+of the matrix variate *t* distribution using ECME.
 
 ```
 X = rmatrixt(n = 100, mean = meanmatrix, U = diag(3), V = diag(4), df = 10)
 MLmatrixt(X, fixed = FALSE) # fixed = FALSE indicates to estimate the DF parameter
 ```
 
-Because it might be useful in conjunction with the `r*` and `d*` functions, the package also includes some convenience functions for generating AR(1) and compound symmetry correlation matrices.
+Because it might be useful in conjunction with the `r*` and `d*` functions, the 
+package also includes some convenience functions for generating AR(1) and 
+compound symmetry correlation matrices.
 
 ```
 ARgenerate(5, .5)
 CSgenerate(5, .5)
 ```
 
-The package also presents linear discriminant analysis and quadratic discriminant analysis for matrix variate distributions in the case of the normal and the *t*-distribution. In the case of the *t*, linear and quadratic refer whether the covariance matrices are constrained to be the same between classes rather than the form of the classifier.
+The package also presents linear discriminant analysis and quadratic 
+discriminant analysis for matrix variate distributions in the case of the 
+normal and the *t*-distribution. In the case of the *t*, linear and quadratic 
+refer whether the covariance matrices are constrained to be the same between 
+classes rather than the form of the classifier.
 
 ```
  A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
@@ -65,11 +78,17 @@ The package also presents linear discriminant analysis and quadratic discriminan
  predict(D)$posterior[1:10,]
 ```
 
-In the future, this will include mixture modeling and, later, complete specification of covariance matrices in mixture modeling after the style of [Mclust](https://cran.r-project.org/package=mclust), [t-Eigen](https://cran.r-project.org/package=Mclust), and other similar work.
+In the future, this will include mixture modeling and, later, complete 
+specification of covariance matrices in mixture modeling after the style of 
+[Mclust](https://cran.r-project.org/package=mclust), [t-Eigen](https://cran.r-project.org/package=mclust), 
+and other similar work.
 
 ## Contribution and contact information	
 
-Please let me know if you have any issues or suggestions here: https://github.com/gzt/MixMatrix/issues
+Please let me know if you have any issues or suggestions here: 
+https://github.com/gzt/MixMatrix/issues
 
-Please note that the 'MixMatrix' project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project, you agree to abide by its terms.
+Please note that the 'MixMatrix' project is released with a 
+[Contributor Code of Conduct](https://gzt.github.io/MixMatrix/CODE_OF_CONDUCT.html). 
+By contributing to this project, you agree to abide by its terms.
 

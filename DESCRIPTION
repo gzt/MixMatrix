@@ -21,7 +21,7 @@ Suggests:
     covr
 VignetteBuilder: knitr
 LazyData: true
-URL: https://gzt.github.io/MixMatrix/
+URL: https://gzt.github.io/MixMatrix/, https://github.com/gzt/MixMatrix
 BugReports: http://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
