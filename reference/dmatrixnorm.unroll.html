@@ -143,42 +143,35 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>\(p \times q\) input matrix</p></td>
+      <td><p>quantile for density</p></td>
     </tr>
     <tr>
       <th>mean</th>
-      <td><p>\(p \times q\) matrix of means. By default, a matrix of \(0\)s
-with size taken from <code>x</code></p></td>
+      <td><p>\(p \times q\)  matrix of means</p></td>
     </tr>
     <tr>
       <th>L</th>
-      <td><p>\(p \times p\) matrix specifying relations among the rows. By default,
-an identity matrix.</p></td>
+      <td><p>\(p \times p\)  matrix specifying relations among the rows.
+By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>R</th>
-      <td><p>\(q \times q\) matrix specifying relations among the columns. By
-default, an identity matrix.</p></td>
+      <td><p>\(q \times q\)  matrix specifying relations among the columns.
+By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>\(LL^T\) - \(p \times p\) positive definite variance-covariance
+      <td><p>\(LL^T\)  - \(p \times p\)  positive definite variance-covariance
 matrix for rows, computed from \(L\) if not specified.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>\(R^T R\) - \(q \times q\) positive definite variance-covariance
-matrix for columns, computed from \(R\) if not specified.</p></td>
+      <td><p>\(R^T R\)  - \(q \times q\)  positive definite variance-covariance
+matrix for columns, computed from \(R\)  if not specified.</p></td>
     </tr>
     <tr>
       <th>log</th>
-      <td><p>logical - whether to return the density on the log scale.</p></td>
-    </tr>
-    <tr>
-      <th>unrolled</th>
-      <td><p>logical, <code>FALSE</code> by default. If <code>x</code>
-is already unrolled, select <code>TRUE</code>. This will take the dimensions
-from the variance matrices, so they must be specified.</p></td>
+      <td><p>logical; if TRUE, probabilities p are given as log(p).</p></td>
     </tr>
     </table>
     
