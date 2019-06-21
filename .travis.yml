@@ -21,12 +21,13 @@ matrix:
   include:
   - r: devel
   - r: release
+    name: "release"
     after_success: Rscript -e 'covr::codecov()'
   - r: oldrel
-jobs:
-  include:
-    - stage: deploy
-      r: release
+
+stages:
+    - name: deploy
+      if: name = "release"
 notifications:
   email:
     - gzthompson@gmail.com
