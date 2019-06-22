@@ -11,6 +11,7 @@ r_packages:
   - rmarkdown
   - roxygen2
   - devtools
+  - magrittr
 sudo: false
 warnings_are_errors: true
 cache: packages
