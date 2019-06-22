@@ -1,16 +1,15 @@
 Package: MixMatrix
 Type: Package
 Title: Classification with Matrix Variate Normal and t distributions
-Version: 0.2.0
-Date: 2019-06-22
+Version: 0.1.0
+Date: 2019-06-21
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')))
 Description: Provides sampling and density functions for matrix
     variate normal, t, and inverted t distributions;  ML fitting for matrix
     variate normal and t distributions including some restrictions on the
     parameters; and linear and quadratic discriminant analysis for matrix
-    variate normal and t distributions. Provides mixture modeling for
-    matrix variate distributions.
+    variate normal and t distributions. 
 Depends: R (>= 3.5.0)
 Imports:
     stats, 
