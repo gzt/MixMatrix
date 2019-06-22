@@ -3,7 +3,7 @@
 \name{rmatrixt}
 \alias{rmatrixt}
 \alias{dmatrixt}
-\title{Distribution functions for the matrix variate t-distribution.}
+\title{Distribution functions for the matrix variate t distribution.}
 \usage{
 rmatrixt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
@@ -18,21 +18,21 @@ dmatrixt(x, df, mean = matrix(0, p, n), L = diag(p), R = diag(n),
 \item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
 \code{df = 0, Inf} is allowed and will return a normal distribution.}
 
-\item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a mean,
-though the expected value will be equal to this if
+\item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a
+mean, though the expected value will be equal to this if
 \eqn{df > 2}}
 
 \item{L}{\eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
 
-\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the columns.
-By default, an identity matrix.}
+\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the
+columns. By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for rows,
-computed from \eqn{L} if not specified.}
+\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for
+rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for columns,
-computed from \eqn{R}  if not specified.}
+\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for
+columns, computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -42,39 +42,41 @@ output will be a list of matrices.}
 observation. If \eqn{n > 1} , should be the opposite of \code{list} .
 If \code{list}  is \code{TRUE} , this will be ignored.}
 
-\item{force}{In \code{rmatrix}: if TRUE, will take the input of \code{R}
-directly - otherwise uses \code{V} and uses Cholesky
+\item{force}{In \code{rmatrix}: if \code{TRUE}, will take the input of
+\code{R} directly - otherwise uses \code{V} and uses Cholesky
 decompositions. Useful for generating degenerate t-distributions.
 Will also override concerns about potentially singular matrices
 unless they are not, in fact, invertible.}
 
 \item{x}{quantile for density}
 
-\item{log}{logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).}
+\item{log}{logical; in \code{dmatrixt}, if \code{TRUE}, probabilities
+\code{p} are given as \code{log(p)}.}
 }
 \value{
-\code{rmatrixt} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
-   a \eqn{p \times q \times n}{p * q * n}  array.
+\code{rmatrixt} returns either a list of \eqn{n}
+   \eqn{p \times q}{p * q}  matrices ora \eqn{p \times q \times n}{p * q * n}
+   array.
 
    \code{dmatrixt} returns the density at quantile \code{x}.
 }
 \description{
-Distribution functions for the matrix variate t-distribution.
+Distribution functions for the matrix variate t distribution.
 }
 \details{
 The matrix \eqn{t}-distribution is parameterized slightly
  differently from the univariate and multivariate \eqn{t}-distributions
  - the variance is scaled by a factor of \code{1/df}.
- In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix variate
- \eqn{t}-distributed random variable with identity variance matrices is
- \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
+ In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix
+ variate \eqn{t}-distributed random variable with identity variance matrices
+ is \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
  for the matrix variate \eqn{T} is then that as \code{df} goes to
  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
  \eqn{MVN(0,I_p,I_q)}.
 }
 \section{Functions}{
 \itemize{
-\item \code{dmatrixt}: Density function for matrix variate t-distribution
+\item \code{dmatrixt}: Density function for matrix variate t distribution
 }}
 
 \examples{
@@ -94,4 +96,4 @@ dmatrixt(x,df=1)
 }
 \concept{matrix-variate
 
-Density and random generation for the matrix variate t-distribution.}
+Density and random generation for the matrix variate t distribution.}

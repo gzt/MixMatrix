@@ -35,10 +35,10 @@ Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 Only positive correlations are allowed for
 AR(1) and CS.}
 
-\item{df}{Starting value for the degrees of freedom. If fixed = TRUE, then this is
+\item{df}{Starting value for the degrees of freedom. If \code{fixed = TRUE}, then this is
 required and not updated. By default, set to 10.}
 
-\item{fixed}{Whether \code{df} is estimated or fixed. By default, TRUE.}
+\item{fixed}{Whether \code{df} is estimated or fixed. By default, \code{TRUE}.}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}
@@ -67,7 +67,7 @@ Maximum likelihood estimation for matrix variate t distributions
 For the matrix variate normal distribution, maximum likelihood estimates exist for
 \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
-and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
+an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.

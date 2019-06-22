@@ -3,7 +3,7 @@
 \name{rmatrixinvt}
 \alias{rmatrixinvt}
 \alias{dmatrixinvt}
-\title{Distribution functions for matrix variate inverted t-distributions}
+\title{Distribution functions for matrix variate inverted t distributions}
 \usage{
 rmatrixinvt(n, df, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
@@ -18,21 +18,21 @@ dmatrixinvt(x, df, mean = matrix(0, p, n), L = diag(p), R = diag(n),
 \item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
 \code{df = 0, Inf} is allowed and will return a normal distribution.}
 
-\item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a mean,
-though the expected value will be equal to this if
+\item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a
+mean, though the expected value will be equal to this if
 \eqn{df > 2}}
 
 \item{L}{\eqn{p \times p}{p * p}  matrix specifying relations among the rows.
 By default, an identity matrix.}
 
-\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the columns.
-By default, an identity matrix.}
+\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the
+columns. By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for rows,
-computed from \eqn{L} if not specified.}
+\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}   positive definite matrix for
+rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for columns,
-computed from \eqn{R}  if not specified.}
+\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for
+columns, computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -44,17 +44,19 @@ If \code{list}  is \code{TRUE} , this will be ignored.}
 
 \item{x}{quantile for density}
 
-\item{log}{logical; in \code{dmatrixt}, if TRUE, probabilities p are given as log(p).}
+\item{log}{logical; in \code{dmatrixt}, if \code{TRUE}, probabilities
+\code{p} are given as \code{log(p)}.}
 }
 \value{
-\code{rmatrixinvt} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+\code{rmatrixinvt} returns either a list of \eqn{n}
+   \eqn{p \times q}{p * q}  matrices or
    a \eqn{p \times q \times n}{p * q * n}  array.
 
    \code{dmatrixinvt} returns the density at quantile \code{x}.
 }
 \description{
 Generate random draws from the inverted matrix
-   variate t-distribution
+   variate t distribution
 }
 \section{Functions}{
 \itemize{
