@@ -3,3 +3,4 @@ wishart_cache
 discriminant-analysis_cache
 *.html
 *.R
+*~
