@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MLmatrixt: — MLmatrixt • MixMatrix</title>
+<title>Maximum likelihood estimation for matrix variate t distributions — MLmatrixt • MixMatrix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="MLmatrixt: — MLmatrixt" />
+<meta property="og:title" content="Maximum likelihood estimation for matrix variate t distributions — MLmatrixt" />
 
-<meta property="og:description" content="Maximum likelihood estimation for matrix variate t distributions
-For the matrix variate normal distribution, maximum likelihood estimates exist for
+<meta property="og:description" content="For the matrix variate normal distribution, maximum likelihood estimates exist for
 \(N &amp;gt; max(p/q,q/p)+1\) and are unique for \(N &amp;gt; max(p,q)\). The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
 an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
@@ -96,6 +95,9 @@ a warning." />
       <a href="../articles/discriminant-analysis.html">Discriminant Analysis for Matrix Variate Distributions</a>
     </li>
     <li>
+      <a href="../articles/matrix-t-estimation.html">ML estimation of the Matrix Variate t Distribution</a>
+    </li>
+    <li>
       <a href="../articles/matrixnormal.html">Matrix Variate Normal Distributions with MixMatrix</a>
     </li>
   </ul>
@@ -124,15 +126,14 @@ a warning." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>MLmatrixt:</h1>
+    <h1>Maximum likelihood estimation for matrix variate t distributions</h1>
     <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/mlmatrixt.R'><code>R/mlmatrixt.R</code></a></small>
     <div class="hidden name"><code>MLmatrixt.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Maximum likelihood estimation for matrix variate t distributions</p>
-<p>For the matrix variate normal distribution, maximum likelihood estimates exist for
+    <p>For the matrix variate normal distribution, maximum likelihood estimates exist for
 \(N &gt; max(p/q,q/p)+1\) and are unique for \(N &gt; max(p,q)\). The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
 an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.

@@ -56,6 +56,9 @@
       <a href="../articles/discriminant-analysis.html">Discriminant Analysis for Matrix Variate Distributions</a>
     </li>
     <li>
+      <a href="../articles/matrix-t-estimation.html">ML estimation of the Matrix Variate t Distribution</a>
+    </li>
+    <li>
       <a href="../articles/matrixnormal.html">Matrix Variate Normal Distributions with MixMatrix</a>
     </li>
   </ul>
@@ -207,7 +210,7 @@ $convergence
 
 $call
 MLmatrixnorm(data = A)</code></pre>
-<p>There are two restrictions possible for the mean matrices: <code>row.mean</code> will force a common mean within a row and <code>col.mean</code> will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are possible with <code>row.variance</code> and <code>col.variance</code> commands.</p>
+<p>There are two restrictions possible for the mean matrices: <code>row.mean = TRUE</code> will force a common mean within a row and <code>col.mean = TRUE</code> will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span> are possible with <code>row.variance</code> and <code>col.variance</code> commands.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">results.fixrows =<span class="st"> </span><span class="kw"><a href="../reference/MLmatrixnorm.html">MLmatrixnorm</a></span>(A, <span class="dt">row.mean =</span> <span class="ot">TRUE</span>, <span class="dt">max.iter =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code>Warning in MLmatrixnorm(A, row.mean = TRUE, max.iter = 5): Failed to
 converge</code></pre>
@@ -247,7 +250,7 @@ $call
 MLmatrixnorm(data = A, row.mean = TRUE, max.iter = 5)</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># this failure is expected with misspecification! The number of iterations is also </span></a>
 <a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co"># fixed to be low so the vignette compiles quickly.</span></a></code></pre></div>
-<p>Currently the only options for variance restrictions are to impose an AR(1) structure by providing the <code>AR(1)</code> option or a compound symmetry structure by providing the <code>CS</code> option or to impose an identical and independent structure by specifying <code>Independent</code> or <code>I</code>. This works by using <code>uniroot</code> to find the appropriate <span class="math inline">\(\rho\)</span> which sets the derivative of the log-likelihood to zero - it is not fast but if this is the true structure it will be better in some sense than an unstructured variance matrix. The <span class="math inline">\(\rho\)</span> parameter should be <span class="math inline">\(&gt;0\)</span> and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.</p>
+<p>Currently the options for variance restrictions are to impose an AR(1) structure by providing the <code>AR(1)</code> option, a compound symmetry structure by providing the <code>CS</code> option, to impose a correlation matrix structure by specifying <code>correlation</code> or <code>corr</code>, or to impose an identical and independent structure by specifying <code>Independent</code> or <code>I</code>. This works by using <code>uniroot</code> to find the appropriate <span class="math inline">\(\rho\)</span> which sets the derivative of the log-likelihood to zero for the <code>AR</code> and <code>CS</code> options - it is not fast but if this is the true structure it will be better in some sense than an unstructured variance matrix. The <span class="math inline">\(\rho\)</span> parameter should be <span class="math inline">\(&gt;0\)</span> and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># tolerance and maximum iterations are limited here to make the vignette compile faster</span></a>
 <a class="sourceLine" id="cb24-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb24-3" data-line-number="3">B =<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>,<span class="dt">nrow =</span> <span class="dv">5</span>), </a>
