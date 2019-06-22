@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Distribution functions for matrix variate inverted t-distributions — rmatrixinvt • MixMatrix</title>
+<title>Distribution functions for matrix variate inverted t distributions — rmatrixinvt • MixMatrix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,10 @@
 
 
 
-<meta property="og:title" content="Distribution functions for matrix variate inverted t-distributions — rmatrixinvt" />
+<meta property="og:title" content="Distribution functions for matrix variate inverted t distributions — rmatrixinvt" />
 
 <meta property="og:description" content="Generate random draws from the inverted matrix
-   variate t-distribution" />
+   variate t distribution" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,7 +118,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Distribution functions for matrix variate inverted t-distributions</h1>
+    <h1>Distribution functions for matrix variate inverted t distributions</h1>
     <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matrixt.R'><code>R/matrixt.R</code></a></small>
     <div class="hidden name"><code>rmatrixinvt.Rd</code></div>
     </div>
@@ -126,7 +126,7 @@
     <div class="ref-description">
     
     <p>Generate random draws from the inverted matrix
-   variate t-distribution</p>
+   variate t distribution</p>
     
     </div>
 
@@ -151,8 +151,8 @@
     </tr>
     <tr>
       <th>mean</th>
-      <td><p>\(p \times q\) This is really a 'shift' rather than a mean,
-though the expected value will be equal to this if
+      <td><p>\(p \times q\) This is really a 'shift' rather than a
+mean, though the expected value will be equal to this if
 \(df &gt; 2\)</p></td>
     </tr>
     <tr>
@@ -162,18 +162,18 @@ By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>R</th>
-      <td><p>\(q \times q\)  matrix specifying relations among the columns.
-By default, an identity matrix.</p></td>
+      <td><p>\(q \times q\)  matrix specifying relations among the
+columns. By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>\(LL^T\)  - \(p \times p\)   positive definite matrix for rows,
-computed from \(L\) if not specified.</p></td>
+      <td><p>\(LL^T\)  - \(p \times p\)   positive definite matrix for
+rows, computed from \(L\) if not specified.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>\(R^T R\)  - \(q \times q\)  positive definite matrix for columns,
-computed from \(R\)  if not specified.</p></td>
+      <td><p>\(R^T R\)  - \(q \times q\)  positive definite matrix for
+columns, computed from \(R\)  if not specified.</p></td>
     </tr>
     <tr>
       <th>list</th>
@@ -193,13 +193,15 @@ If <code>list</code>  is <code>TRUE</code> , this will be ignored.</p></td>
     </tr>
     <tr>
       <th>log</th>
-      <td><p>logical; in <code>dmatrixt</code>, if TRUE, probabilities p are given as log(p).</p></td>
+      <td><p>logical; in <code>dmatrixt</code>, if <code>TRUE</code>, probabilities
+<code>p</code> are given as <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log(p)</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>rmatrixinvt</code> returns either a list of \(n\)  \(p \times q\)  matrices or
+    <p><code>rmatrixinvt</code> returns either a list of \(n\)
+   \(p \times q\)  matrices or
    a \(p \times q \times n\)  array.</p>
 <p><code>dmatrixinvt</code> returns the density at quantile <code>x</code>.</p>
     

@@ -36,7 +36,7 @@
 For the matrix variate normal distribution, maximum likelihood estimates exist for
 \(N &amp;gt; max(p/q,q/p)+1\) and are unique for \(N &amp;gt; max(p,q)\). The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
-and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
+an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning." />
@@ -135,7 +135,7 @@ a warning." />
 <p>For the matrix variate normal distribution, maximum likelihood estimates exist for
 \(N &gt; max(p/q,q/p)+1\) and are unique for \(N &gt; max(p,q)\). The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
-and ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
+an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.</p>
@@ -187,12 +187,12 @@ AR(1) and CS.</p></td>
     </tr>
     <tr>
       <th>df</th>
-      <td><p>Starting value for the degrees of freedom. If fixed = TRUE, then this is
+      <td><p>Starting value for the degrees of freedom. If <code>fixed = TRUE</code>, then this is
 required and not updated. By default, set to 10.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
-      <td><p>Whether <code>df</code> is estimated or fixed. By default, TRUE.</p></td>
+      <td><p>Whether <code>df</code> is estimated or fixed. By default, <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>tol</th>

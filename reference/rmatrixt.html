@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Distribution functions for the matrix variate t-distribution. — rmatrixt • MixMatrix</title>
+<title>Distribution functions for the matrix variate t distribution. — rmatrixt • MixMatrix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Distribution functions for the matrix variate t-distribution. — rmatrixt" />
+<meta property="og:title" content="Distribution functions for the matrix variate t distribution. — rmatrixt" />
 
-<meta property="og:description" content="Distribution functions for the matrix variate t-distribution." />
+<meta property="og:description" content="Distribution functions for the matrix variate t distribution." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,14 +117,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Distribution functions for the matrix variate t-distribution.</h1>
+    <h1>Distribution functions for the matrix variate t distribution.</h1>
     <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matrixt.R'><code>R/matrixt.R</code></a></small>
     <div class="hidden name"><code>rmatrixt.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Distribution functions for the matrix variate t-distribution.</p>
+    <p>Distribution functions for the matrix variate t distribution.</p>
     
     </div>
 
@@ -149,8 +149,8 @@
     </tr>
     <tr>
       <th>mean</th>
-      <td><p>\(p \times q\) This is really a 'shift' rather than a mean,
-though the expected value will be equal to this if
+      <td><p>\(p \times q\) This is really a 'shift' rather than a
+mean, though the expected value will be equal to this if
 \(df &gt; 2\)</p></td>
     </tr>
     <tr>
@@ -160,18 +160,18 @@ By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>R</th>
-      <td><p>\(q \times q\)  matrix specifying relations among the columns.
-By default, an identity matrix.</p></td>
+      <td><p>\(q \times q\)  matrix specifying relations among the
+columns. By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>\(LL^T\)  - \(p \times p\)   positive definite matrix for rows,
-computed from \(L\) if not specified.</p></td>
+      <td><p>\(LL^T\)  - \(p \times p\)   positive definite matrix for
+rows, computed from \(L\) if not specified.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>\(R^T R\)  - \(q \times q\)  positive definite matrix for columns,
-computed from \(R\)  if not specified.</p></td>
+      <td><p>\(R^T R\)  - \(q \times q\)  positive definite matrix for
+columns, computed from \(R\)  if not specified.</p></td>
     </tr>
     <tr>
       <th>list</th>
@@ -187,8 +187,8 @@ If <code>list</code>  is <code>TRUE</code> , this will be ignored.</p></td>
     </tr>
     <tr>
       <th>force</th>
-      <td><p>In <code>rmatrix</code>: if TRUE, will take the input of <code>R</code>
-directly - otherwise uses <code>V</code> and uses Cholesky
+      <td><p>In <code>rmatrix</code>: if <code>TRUE</code>, will take the input of
+<code>R</code> directly - otherwise uses <code>V</code> and uses Cholesky
 decompositions. Useful for generating degenerate t-distributions.
 Will also override concerns about potentially singular matrices
 unless they are not, in fact, invertible.</p></td>
@@ -199,14 +199,16 @@ unless they are not, in fact, invertible.</p></td>
     </tr>
     <tr>
       <th>log</th>
-      <td><p>logical; in <code>dmatrixt</code>, if TRUE, probabilities p are given as log(p).</p></td>
+      <td><p>logical; in <code>dmatrixt</code>, if <code>TRUE</code>, probabilities
+<code>p</code> are given as <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log(p)</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>rmatrixt</code> returns either a list of \(n\)  \(p \times q\)  matrices or
-   a \(p \times q \times n\)  array.</p>
+    <p><code>rmatrixt</code> returns either a list of \(n\)
+   \(p \times q\)  matrices ora \(p \times q \times n\)
+   array.</p>
 <p><code>dmatrixt</code> returns the density at quantile <code>x</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -214,9 +216,9 @@ unless they are not, in fact, invertible.</p></td>
     <p>The matrix \(t\)-distribution is parameterized slightly
  differently from the univariate and multivariate \(t\)-distributions
  - the variance is scaled by a factor of <code>1/df</code>.
- In this parameterization, the variance for a \(1 \times 1\) matrix variate
- \(t\)-distributed random variable with identity variance matrices is
- \(1/(df-2)\) instead of \(df/(df-2)\). A Central Limit Theorem
+ In this parameterization, the variance for a \(1 \times 1\) matrix
+ variate \(t\)-distributed random variable with identity variance matrices
+ is \(1/(df-2)\) instead of \(df/(df-2)\). A Central Limit Theorem
  for the matrix variate \(T\) is then that as <code>df</code> goes to
  infinity, \(MVT(0, df, I_p, df*I_q)\) converges to
  \(MVN(0,I_p,I_q)\).</p>
@@ -224,7 +226,7 @@ unless they are not, in fact, invertible.</p></td>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     <ul>
-<li><p><code>dmatrixt</code>: Density function for matrix variate t-distribution</p></li>
+<li><p><code>dmatrixt</code>: Density function for matrix variate t distribution</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
