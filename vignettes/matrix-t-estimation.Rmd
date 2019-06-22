@@ -182,9 +182,9 @@ df1050 <-  rep(0,50)
 df10100 <-  rep(0,50)
 
 for(i in 1:50){
-   df10[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 35), fixed = FALSE, df = 5, max.iter = 10)$nu
-   df1050[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50), fixed = FALSE, df = 5, max.iter = 10)$nu
-   df10100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100), fixed = FALSE, df = 5, max.iter = 10)$nu
+   df10[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 35), fixed = FALSE, df = 5, max.iter = 50)$nu
+   df1050[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50), fixed = FALSE, df = 5, max.iter = 50)$nu
+   df10100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100), fixed = FALSE, df = 5, max.iter = 50)$nu
 }
 
 
