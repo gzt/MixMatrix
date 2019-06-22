@@ -19,7 +19,10 @@ Suggests:
     knitr, 
     rmarkdown,
     testthat,
-    covr
+    covr,
+    ggplot2,
+    dplyr,
+    magrittr
 VignetteBuilder: knitr
 LazyData: true
 URL:  http://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
