@@ -47,7 +47,7 @@ $\Gamma_p()$ the multivariate gamma function, which is implemented in the
 For details of the ECME algorithm used for estimation, there is a forthcoming 
 paper.
 
-## With $\nu$ known
+### With $\nu$ known
 
 If the degrees of freedom parameter, $\nu$ known, the estimation is fairly 
 straightforward. The procedure is similar to the multivariate $t$ or the matrix 
@@ -82,7 +82,7 @@ The $\rho$ parameter should be $>0$ and is forced to be non-negative. If the
 data behaves incompatibly with those restrictions, the function will provide 
 a warning and exit with the current model fit.
 
-## With $\nu$ unknown
+### With $\nu$ unknown
 
 Estimation of $\nu$, the degrees of freedom parameter, is slow and the 
 principal mathematical difficulty of the matrix-variate $t$ distribution.
@@ -93,12 +93,14 @@ for a few choices of the parameter and sample sizes. Because of the relative
 slowness of running a longer simulation, this only includes one set of examples.
 I give code for a longer and larger simulation that what is plotted 
 if you're really interested. What is plotted below is only the `df = 10`
-example with 75 trials and a maximum number of iterations `max.iter = 10`.
+example with 75 trials and a maximum number of iterations `max.iter =  50`.
 The full simulation may take several minutes.
 
-```
+```{r dontrun, eval=FALSE}
 library(ggplot2)
+
 set.seed(20181102)
+
 df = c(5, 10, 20)
 df5 <- rep(0,200)
 df10 <- rep(0,200)
@@ -113,6 +115,7 @@ df20100 <- rep(0,200)
 meanmat = matrix(0,5,3)
 U = diag(5)
 V = diag(3)
+
 for(i in 1:200){
 	df5[i] = MLmatrixt(rmatrixt(mean = meanmat,
 		df = 5, n = 35, U =U, V =V), fixed = FALSE)$nu
@@ -182,7 +185,7 @@ df1050 <-  rep(0,50)
 df10100 <-  rep(0,50)
 
 for(i in 1:50){
-   df10[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 35), fixed = FALSE, df = 5, max.iter = 50)$nu
+   df10[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 25), fixed = FALSE, df = 5, max.iter = 50)$nu
    df1050[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50), fixed = FALSE, df = 5, max.iter = 50)$nu
    df10100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100), fixed = FALSE, df = 5, max.iter = 50)$nu
 }
@@ -190,7 +193,7 @@ for(i in 1:50){
 
 dfdataframe = data.frame(label = c('10 df'),
                          estdf = c(df10, df1050, df10100),
-                         samplesize = factor(rep(c(35,50,100), each = 50)))
+                         samplesize = factor(rep(c(25,50,100), each = 50)))
 library(ggplot2)
 library(dplyr)
 library(magrittr)
@@ -220,7 +223,9 @@ knitr::kable(dfdataframe %>% group_by(samplesize) %>%
 
 ```
 
-As expected, increased sample size leads to better results in recovering the parameter.
+As expected, increased sample size leads to better results in recovering the 
+parameter. The results for smaller sample sizes would be more divergent if left 
+to run until convergence.
 
 ## Use for classification
 
