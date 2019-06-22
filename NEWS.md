@@ -1,3 +1,7 @@
+# MixMatrix 0.2.0
+
+* Start to add mixture modeling
+
 # MixMatrix 0.1.0
 
 * Preparing for CRAN submission
