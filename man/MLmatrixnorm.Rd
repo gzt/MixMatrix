@@ -2,7 +2,7 @@
 % Please edit documentation in R/matrixnorm.R
 \name{MLmatrixnorm}
 \alias{MLmatrixnorm}
-\title{MLmatrixnorm:}
+\title{Maximum likelihood estimation for matrix normal distributions}
 \usage{
 MLmatrixnorm(data, row.mean = FALSE, col.mean = FALSE,
   row.variance = "none", col.variance = "none", tol = 10 *
@@ -56,8 +56,6 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
    time of stopping, the log likelihood, and a convergence code.
 }
 \description{
-Maximum likelihood estimation for matrix normal distributions
-
 Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
 unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then
 alternates between estimates for the \eqn{U} and \eqn{V} matrices until

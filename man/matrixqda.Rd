@@ -43,7 +43,7 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{call}}{The (matched) function call.}
    }
 
- @seealso [MASS::qda()], [MLmatrixnorm()] and [MLmatrixt()]
+ @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
 }
 \description{
 See \code{matrixlda}: quadratic discriminant analysis for matrix

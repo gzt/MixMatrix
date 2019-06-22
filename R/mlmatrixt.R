@@ -18,10 +18,7 @@
 
 
 
-#' MLmatrixt:
-#'
-#' @family matrix-variate
-#' @description Maximum likelihood estimation for matrix variate t distributions
+#' Maximum likelihood estimation for matrix variate t distributions
 #'
 #' For the matrix variate normal distribution, maximum likelihood estimates exist for
 #' \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
@@ -71,6 +68,7 @@
 #'    and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}
+#' @family matrix-variate
 #'
 #' @examples
 #' set.seed(20180202)

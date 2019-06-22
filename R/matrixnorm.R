@@ -229,10 +229,9 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
   }
 }
 
-#' MLmatrixnorm:
+#'  Maximum likelihood estimation for matrix normal distributions
 #'
-#' @description Maximum likelihood estimation for matrix normal distributions
-#'
+#' @description
 #' Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
 #' unique for \eqn{N > max(p,q)}. This finds the estimate for the mean and then
 #' alternates between estimates for the \eqn{U} and \eqn{V} matrices until

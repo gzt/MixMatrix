@@ -2,7 +2,7 @@
 % Please edit documentation in R/mlmatrixt.R
 \name{MLmatrixt}
 \alias{MLmatrixt}
-\title{MLmatrixt:}
+\title{Maximum likelihood estimation for matrix variate t distributions}
 \usage{
 MLmatrixt(data, row.mean = FALSE, col.mean = FALSE,
   row.variance = "none", col.variance = "none", df = 10,
@@ -62,8 +62,6 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
    and a convergence code.
 }
 \description{
-Maximum likelihood estimation for matrix variate t distributions
-
 For the matrix variate normal distribution, maximum likelihood estimates exist for
 \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
