@@ -5,6 +5,7 @@
 * Add ORCID
 * Minor documentation changes
 * Fix `nu` bug for `matrixlda` and `matrixqda` when using normal distribution
+* Add vignette for *t* distribution
 
 # MixMatrix 0.0.0.9949
 
