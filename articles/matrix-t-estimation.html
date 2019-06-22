@@ -102,7 +102,7 @@
 <h2 class="hasAnchor">
 <a href="#estimation-of-the-matrix-variate-t-distribution" class="anchor"></a>Estimation of the Matrix Variate <em>t</em> Distribution</h2>
 <p>The parameters of the multivariate <em>t</em> distribution can be estimated using the EM algorithm. An EM algorithm for the multivariate <span class="math inline">\(t\)</span>-distribution with no missing data was provided by <span class="citation">Rubin (1983)</span>. This was variously extended and refined, as the EM algorithm can be quite slow to converge. One set of refinements split the M-step into a series of conditional maximization (CM) steps <span class="citation">(Meng and Rubin 1993)</span>, and then a later refinement (called ECME) allowed for either conditional maximization steps or maximizing the constrained actual likelihood <span class="citation">(Liu and Rubin 1994)</span>, which leads to dramatically faster convergence. The matrix variate <span class="math inline">\(t\)</span> is an extension of the multivariate version <span class="citation">(Dickey 1967)</span>, however, unlike the normal distribution, it cannot be treated as a rearrangement of the multivariate case, so the addition of the extra dimension poses a non-trivial problem for extending the results.</p>
-<p>An <span class="math inline">\(n \times p\)</span> random matrix <span class="math inline">\(\mathbf{X}\)</span> is distributed as a matrix variate <span class="math inline">\(t\)</span> random variable if it has probability density function as follows: <span class="math display">\[{\frac  {\Gamma _{p}\left({\frac  {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac  {np}{2}}}\Gamma _{p}\left({\frac  {\nu +p-1}{2}}\right)}}|{\boldsymbol  \Omega }|^{{-{\frac  {n}{2}}}}|{\boldsymbol  \Sigma }|^{{-{\frac  {p}{2}}}}\]</span></p>
+<p>An <span class="math inline">\(n \times p\)</span> random matrix <span class="math inline">\(\mathbf{X}\)</span> is distributed as a matrix variate <span class="math inline">\(t\)</span> random variable if it has probability density function as follows: <span class="math display">\[{\frac  {\Gamma _{p}\left({\frac  {\nu +n+p-1}{2}}\right)}{(\pi )^{{\frac  {np}{2}}}\Gamma _{p}\left({\frac  {\nu +p-1}{2}}\right)}}|{\boldsymbol  \Omega }|^{{-{\frac  {n}{2}}}}|{\boldsymbol  \Sigma }|^{{-{\frac  {p}{2}}}}\times \left|{\mathbf  {I}}_{n}+{\boldsymbol  \Sigma }^{{-1}}({\mathbf  {X}}-{\mathbf  {M}}){\boldsymbol  \Omega }^{{-1}}({\mathbf  {X}}-{\mathbf  {M}})^{{{\rm {T}}}}\right|^{{-{\frac  {\nu +n+p-1}{2}}}}\]</span></p>
 <p>With <span class="math inline">\(\Omega\)</span> and <span class="math inline">\(\Sigma\)</span> covariance matrices of appropriate dimension, <span class="math inline">\(\mathbf{M}\)</span> a mean matrix, <span class="math inline">\(\nu\)</span> the degrees of freedom parameter, and <span class="math inline">\(\Gamma_p()\)</span> the multivariate gamma function, which is implemented in the <a href="http://gzt.github.io/CholWishart"><code>CholWishart</code></a> package available on CRAN.</p>
 <p>For details of the ECME algorithm used for estimation, there is a forthcoming paper.</p>
 </div>
@@ -172,42 +172,57 @@ df5100 &lt;-  rep(0,200)
 df10100 &lt;-  rep(0,200)
 df20100 &lt;- rep(0,200)
 
-
+meanmat = matrix(0,5,3)
+U = diag(5)
+V = diag(3)
 for(i in 1:200){
-  df5[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 5, n = 35, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df10[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 35, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 20, n = 35, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-    df550[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 5, n = 50, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df1050[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df2050[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 20, n = 50, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-    df5100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 5, n = 100, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df10100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
-  df20100[i] = MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 20, n = 100, U =diag(5), V =diag(3)), fixed = FALSE, df = 5)$nu
+    df5[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 5, n = 35, U =U, V =V), fixed = FALSE)$nu
+    df10[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 10, n = 35, U =U, V =V), fixed = FALSE)$nu
+    df100[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 20, n = 35, U =U, V =V), fixed = FALSE)$nu
+    df550[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 5, n = 50, U =U, V =V), fixed = FALSE)$nu
+    df1050[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 10, n = 50, U =U, V =V), fixed = FALSE)$nu
+    df2050[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 20, n = 50, U =U, V =V), fixed = FALSE)$nu
+    df5100[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 5, n = 100, U =U, V =V), fixed = FALSE)$nu
+    df10100[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 10, n = 100, U =U, V =V), fixed = FALSE)$nu
+    df20100[i] = MLmatrixt(rmatrixt(mean = meanmat,
+        df = 20, n = 100, U =U, V =V), fixed = FALSE)$nu
 }
 
-truedataframe = data.frame(truedf = factor(c(5,10,20), label = c('5 df', '10 df', '20 df')), estdf = c(5,10,20))
+truedataframe = data.frame(truedf = factor(c(5,10,20), 
+                                           label = c('5 df', '10 df', '20 df')), 
+                           estdf = c(5,10,20))
 
-dfdataframe = data.frame(truedf = factor(rep(rep(c(5,10,20), each = 200),3), label = c('5 df', '10 df', '20 df')),
+dfdataframe = data.frame(truedf = factor(rep(rep(c(5,10,20), each = 200),3), 
+                                         label = c('5 df', '10 df', '20 df')),
                          estdf = c(df5, df10, df100, df550, df1050, df2050, df5100, df10100, df20100),
                          samplesize = factor(rep(c(35,50,100), each = 600)))
 library(tidyverse)
 
-denseplot &lt;- ggplot(data = subset(dfdataframe, estdf &lt; 200),aes(x=estdf, fill=samplesize)) +
-    #geom_histogram() +
-    #geom_freqpoly(fill = samplesize, alpha = .5) +
+denseplot &lt;- ggplot(data = subset(dfdataframe, estdf &lt; 200),
+                    aes(x=estdf, fill=samplesize)) +
     geom_density(alpha = .5) +
     geom_vline(data = truedataframe,
                mapping = aes(xintercept = estdf),
                size = .5) +
     theme_bw() +
-    theme(axis.ticks.y=element_blank(), axis.text.y=element_blank(), strip.text = element_text(size = 8), 
+    theme(axis.ticks.y=element_blank(), axis.text.y=element_blank(), 
+          strip.text = element_text(size = 8), 
           legend.justification=c(1,0), legend.position=c(.95,.4),
           legend.background = element_blank(),
           legend.text =element_text(size = 8), legend.title = element_text(size = 8)) +
     ggtitle("Density plot of estimated degrees of freedom compared to actual") +
     xlab(NULL) +
     ylab(NULL) +     
-    scale_fill_manual(values = c("#050505", "#E69F00", "#56B4E9"), name = "Sample Size") +
+    scale_fill_manual(values = c("#050505", "#E69F00", "#56B4E9"), 
+        name = "Sample Size") +
     facet_wrap(factor(truedf)~.,  scales="free") +
     NULL
 denseplot
@@ -219,314 +234,6 @@ knitr::kable(dfdataframe %&gt;% group_by(truedf, samplesize) %&gt;%
     mean=mean(estdf),
     sd = sd(estdf)))
 </a></code></pre>
-<pre><code>#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 35, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 50, U =
-#&gt; diag(5), : Failed to converge
-#&gt; Warning in MLmatrixt(rmatrixt(mean = matrix(0, 5, 3), df = 10, n = 100, :
-#&gt; Failed to converge
-#&gt; 
-#&gt; Attaching package: 'dplyr'
-#&gt; The following objects are masked from 'package:stats':
-#&gt; 
-#&gt;     filter, lag
-#&gt; The following objects are masked from 'package:base':
-#&gt; 
-#&gt;     intersect, setdiff, setequal, union</code></pre>
 <p><img src="matrix-t-estimation_files/figure-html/dftenexample-1.png" width="700"></p>
 <table class="table">
 <thead><tr class="header">
@@ -540,27 +247,27 @@ knitr::kable(dfdataframe %&gt;% group_by(truedf, samplesize) %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">35</td>
-<td align="right">8.137380</td>
-<td align="right">13.48535</td>
-<td align="right">10.328672</td>
-<td align="right">10.494229</td>
-<td align="right">1.3426509</td>
+<td align="right">7.364960</td>
+<td align="right">16.65060</td>
+<td align="right">10.90990</td>
+<td align="right">11.34810</td>
+<td align="right">2.282116</td>
 </tr>
 <tr class="even">
 <td align="left">50</td>
-<td align="right">7.143011</td>
-<td align="right">12.47284</td>
-<td align="right">9.975127</td>
-<td align="right">10.017150</td>
-<td align="right">1.1420905</td>
+<td align="right">6.813944</td>
+<td align="right">15.18832</td>
+<td align="right">10.28752</td>
+<td align="right">10.57721</td>
+<td align="right">1.800544</td>
 </tr>
 <tr class="odd">
 <td align="left">100</td>
-<td align="right">8.650302</td>
-<td align="right">11.67719</td>
-<td align="right">9.888218</td>
-<td align="right">9.906214</td>
-<td align="right">0.7178291</td>
+<td align="right">8.179932</td>
+<td align="right">13.88459</td>
+<td align="right">10.55738</td>
+<td align="right">10.49105</td>
+<td align="right">1.251420</td>
 </tr>
 </tbody>
 </table>
@@ -570,68 +277,68 @@ knitr::kable(dfdataframe %&gt;% group_by(truedf, samplesize) %&gt;%
 <h2 class="hasAnchor">
 <a href="#use-for-classification" class="anchor"></a>Use for classification</h2>
 <p>Using the <span class="math inline">\(t\)</span> distribution works in both <code><a href="../reference/matrixlda.html">matrixlda()</a></code> and <code><a href="../reference/matrixqda.html">matrixqda()</a></code> as expected by specifying <code>method = "t"</code> and providing either a single parameter (for <code>lda</code> or <code>qda</code>) for the degrees of freedom or a vector as long as the number of classes (for <code>qda</code>). Additional parameters for fitting can be passed through the <code>...</code> to <code><a href="../reference/MLmatrixt.html">MLmatrixt()</a></code> just as for the normal case, including estimating the degrees of freedom parameter. The <code>qda</code> will only estimate <code>nu</code> with it varying between groups, it will not estimate a common <code>nu</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>)))</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior,</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">                    <span class="dt">method =</span> <span class="st">'t'</span>, <span class="dt">nu =</span> <span class="dv">10</span>, <span class="dt">fixed =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, <span class="dt">newdata =</span> ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; $class</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [1] A B A</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Levels: A B C</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; $posterior</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;              [,1]        [,2]         [,3]</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; [1,] 9.971549e-01 0.002764948 8.019449e-05</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; [2,] 2.462478e-05 0.999975269 1.058075e-07</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; [3,] 9.546356e-01 0.003977114 4.138732e-02</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>))</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>)))</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">                    <span class="dt">method =</span> <span class="st">'t'</span>, <span class="dt">nu =</span> <span class="dv">10</span>, <span class="dt">fixed =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, <span class="dt">newdata =</span> ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; [1] A B A</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; Levels: A B C</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; $posterior</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;              [,1]        [,2]         [,3]</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; [1,] 9.971549e-01 0.002764948 8.019449e-05</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; [2,] 2.462478e-05 0.999975269 1.058075e-07</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; [3,] 9.546356e-01 0.003977114 4.138732e-02</span></a></code></pre></div>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h2>
 <p>This vignette was built using <code>rmarkdown</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; R version 3.6.0 (2017-01-27)</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 14.04.5 LTS</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] magrittr_1.5    dplyr_0.8.1     ggplot2_3.2.0   MixMatrix_0.1.0</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.1        highr_0.8         compiler_3.6.0   </span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt;  [4] pillar_1.4.1      tools_3.6.0       digest_0.6.19    </span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt;  [7] evaluate_0.14     memoise_1.1.0     tibble_2.1.3     </span></a>
-<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; [10] gtable_0.3.0      pkgconfig_2.0.2   rlang_0.3.4      </span></a>
-<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co">#&gt; [13] commonmark_1.7    yaml_2.2.0        pkgdown_1.3.0    </span></a>
-<a class="sourceLine" id="cb6-30" data-line-number="30"><span class="co">#&gt; [16] xfun_0.7          withr_2.1.2       stringr_1.4.0    </span></a>
-<a class="sourceLine" id="cb6-31" data-line-number="31"><span class="co">#&gt; [19] roxygen2_6.1.1    xml2_1.2.0        knitr_1.23       </span></a>
-<a class="sourceLine" id="cb6-32" data-line-number="32"><span class="co">#&gt; [22] desc_1.2.0        fs_1.3.1          rprojroot_1.3-2  </span></a>
-<a class="sourceLine" id="cb6-33" data-line-number="33"><span class="co">#&gt; [25] grid_3.6.0        tidyselect_0.2.5  glue_1.3.1       </span></a>
-<a class="sourceLine" id="cb6-34" data-line-number="34"><span class="co">#&gt; [28] R6_2.4.0          rmarkdown_1.13    purrr_0.3.2      </span></a>
-<a class="sourceLine" id="cb6-35" data-line-number="35"><span class="co">#&gt; [31] backports_1.1.4   scales_1.0.0      codetools_0.2-16 </span></a>
-<a class="sourceLine" id="cb6-36" data-line-number="36"><span class="co">#&gt; [34] htmltools_0.3.6   MASS_7.3-51.4     assertthat_0.2.1 </span></a>
-<a class="sourceLine" id="cb6-37" data-line-number="37"><span class="co">#&gt; [37] CholWishart_1.0.1 colorspace_1.4-1  labeling_0.3     </span></a>
-<a class="sourceLine" id="cb6-38" data-line-number="38"><span class="co">#&gt; [40] stringi_1.4.3     lazyeval_0.2.2    munsell_0.5.0    </span></a>
-<a class="sourceLine" id="cb6-39" data-line-number="39"><span class="co">#&gt; [43] crayon_1.3.4</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; R version 3.6.0 (2017-01-27)</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 14.04.5 LTS</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; [1] magrittr_1.5    dplyr_0.8.1     ggplot2_3.2.0   MixMatrix_0.1.0</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.1        highr_0.8         compiler_3.6.0   </span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt;  [4] pillar_1.4.1      tools_3.6.0       digest_0.6.19    </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt;  [7] evaluate_0.14     memoise_1.1.0     tibble_2.1.3     </span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; [10] gtable_0.3.0      pkgconfig_2.0.2   rlang_0.3.4      </span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; [13] commonmark_1.7    yaml_2.2.0        pkgdown_1.3.0    </span></a>
+<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="co">#&gt; [16] xfun_0.7          withr_2.1.2       stringr_1.4.0    </span></a>
+<a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt; [19] roxygen2_6.1.1    xml2_1.2.0        knitr_1.23       </span></a>
+<a class="sourceLine" id="cb5-32" data-line-number="32"><span class="co">#&gt; [22] desc_1.2.0        fs_1.3.1          rprojroot_1.3-2  </span></a>
+<a class="sourceLine" id="cb5-33" data-line-number="33"><span class="co">#&gt; [25] grid_3.6.0        tidyselect_0.2.5  glue_1.3.1       </span></a>
+<a class="sourceLine" id="cb5-34" data-line-number="34"><span class="co">#&gt; [28] R6_2.4.0          rmarkdown_1.13    purrr_0.3.2      </span></a>
+<a class="sourceLine" id="cb5-35" data-line-number="35"><span class="co">#&gt; [31] backports_1.1.4   scales_1.0.0      codetools_0.2-16 </span></a>
+<a class="sourceLine" id="cb5-36" data-line-number="36"><span class="co">#&gt; [34] htmltools_0.3.6   MASS_7.3-51.4     assertthat_0.2.1 </span></a>
+<a class="sourceLine" id="cb5-37" data-line-number="37"><span class="co">#&gt; [37] CholWishart_1.0.1 colorspace_1.4-1  labeling_0.3     </span></a>
+<a class="sourceLine" id="cb5-38" data-line-number="38"><span class="co">#&gt; [40] stringi_1.4.3     lazyeval_0.2.2    munsell_0.5.0    </span></a>
+<a class="sourceLine" id="cb5-39" data-line-number="39"><span class="co">#&gt; [43] crayon_1.3.4</span></a></code></pre></div>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
