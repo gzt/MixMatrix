@@ -139,3 +139,13 @@ matlda
 matqda
 
 ```
+
+
+
+## Session info
+
+This vignette was built using `rmarkdown`.
+
+```{r sessioninfo}
+sessionInfo()
+```
