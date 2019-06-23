@@ -99,7 +99,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
-    if (verbose) print("Dims: ",dims)
+    if (verbose) cat("Dims: ",dims)
     if (!missing(prior)) {
         if((length(prior) == 1) && (round(prior) == prior))
             prior = rep(1,prior)/prior
@@ -134,8 +134,8 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     newposterior = posterior
     eps = 1e40
     i = 0
-    while(i < iter && eps > tolerance){
-        if(verbose) print("Entering iteration:", i)
+    while(i < iter && ( (eps > tolerance) || (i < 2))){
+        if(verbose) cat("\nEntering iteration:", i)
         newcenters = centers
         newU = U
         newV = V
@@ -171,18 +171,18 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                          U = U[,,j], V = V[,,j], log = TRUE, ...)
             }
         }
-        if(verbose) print("Log likelihood:", logLik)
+        if(verbose) cat("\nLog likelihood:", logLik)
         #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik - 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
         i = i + 1
-        if(verbose) print("Aitken, l_infinity, epsilon:", aitken, linf, eps)
+        if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
     }
-    if (i == iter || eps > tolerance){
+    if ((i == iter || eps > tolerance) && i > 1 ){
         warning('failed to converge')
     } else convergeflag <- TRUE
-    if(verbose) print("Done at interation ", i)
+    if(verbose) cat("\nDone at interation ", i,"\n")
     U = newU
     V = newV
     centers = newcenters
