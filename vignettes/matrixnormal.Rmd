@@ -111,6 +111,11 @@ In order to fit parameters for an $n \times p$ matrix variate normal distributio
 The function expects data in a format produced by the `rmatrixnorm` function.
 The results are only the parameter estimates and do not include measures of uncertainty.
 
+## Session Information
 
+This vignette was compiled with `rmarkdown`.
+```{r sessioninfo}
+sessionInfo()
+```
 
 ## References
