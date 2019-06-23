@@ -31,7 +31,8 @@
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     Currently, only the normal distribution is allowed.
 ##' @param method what method to use to fit the distribution. Currently no options.
-##' @param tolerance convergence criterion
+##' @param tolerance convergence criterion, using Aitken acceleration of the
+##'     log-likelihood.
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @return A list of class \code{MixMatrixModel} containing the following
@@ -72,8 +73,10 @@
 ##' 
 matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                           model = "normal", method,
-                          tolerance = 1e-6, nu=NULL, ...){
-    logLik = 0
+                          tolerance = 1e-1, nu=NULL, ...){
+    logLik = -1e20
+    oldlogLik = -1e30
+    olderlogLik = -1e31
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -102,6 +105,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         if (any(prior < 0) || round(sum(prior), 5) != 1)
             stop("invalid 'prior'")
         prior <- prior[prior > 0L]
+        K = length(prior)
     } else {
         if (missing(K)) stop("No prior and no K")
 
@@ -124,8 +128,9 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         V = array(rep(diag(q),nclass),c(q,q,nclass))
     }
     posterior = matrix(rep(prior, n),byrow = TRUE, nrow = n)
+    newposterior = posterior
     eps = 1e40
-    
+    i = 0
     while(i < iter && eps > tolerance){
         newcenters = centers
         newU = U
@@ -135,10 +140,10 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         ## update expectations of sufficient statistics
         
         ## update pi_i weights
-        for(i in 1:n){
+        for(obs in 1:n){
             for(j in 1:K){
-                newposterior[i,j] = log(pi[j]) +
-                    dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
+                newposterior[obs,j] = log(pi[j]) +
+                    dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE, ...)
             }
         }
@@ -147,17 +152,30 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
         
-####### M STEP
+####### CM STEPS
         ## max for centers, U, V
         
         
 ####### Eval convergence
-        eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
-        
+        olderlogLik = oldlogLik
+        oldlogLik = logLik
+        logLik = 0
+        for(obs in 1:n){
+            for(j in 1:K){
+                logLik = logLik + log(pi[j]) +
+                dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
+                         U = U[,,j], V = V[,,j], log = TRUE, ...)
+            }
+        }
+        #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
+        aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
+        linf = oldlogLik - 1/(1-aitken) * (logLik - oldlogLik)
+        eps = linf - logLik
+        i = i + 1
     }
     if (i == iter || eps > tolerance){
         warning('failed to converge')
-    }
+    } else convergeflag <- TRUE
     
     U = newU
     V = newV
@@ -187,6 +205,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         posterior = posterior,
         pi = pi,
         convergence = convergeflag,
+        iter = i, 
         logLik = logLik,
         method = method,
         call = cl
@@ -201,7 +220,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
 ##' and it will select centers and variance matrices to initialize or
 ##' provide initial values and it will format them as expected for the function.
 ##' 
-##' @param data 
+##' @param data array of data
 ##' @param prior prior probability. One of \code{prior} and \code{K} must be
 ##'      provided. They must be consistent if both provided.
 ##' @param K number of groups
@@ -225,6 +244,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
 ##' @param ... Additional arguments to pass to $k$-means.
 ##' @return a list suitable to use as the \code{init} argument in
 ##'      \code{matrixmixture}
+##' @importFrom stats kmeans
 init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "random",
                               varmethod = "identity", model = "normal",...){
@@ -240,12 +260,18 @@ init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
     if(centermethod == "kmeans" || centermethod == "k-means"){
         res = kmeans(matrix(data, nrow = n), centers = K, ...)
         centers = res$centers
-        }
-    if(varmethod == "identity"){
-    U = array(c(rep(diag(p),K)), dim = c(p,p,K))
-    V = array(c(rep(diag(q),K)), dim = c(q,q,K))
     }
-    
+    if(!missing(U) && !missing(V)){
+        
+        if(length(dim(U) == 2)) U = array(rep(U,K), dim = c(p,p,K))
+        if(length(dim(V) == 2)) V = array(rep(V,K), dim = c(q,q,K))
+        
+    } else {
+        if(varmethod == "identity"){
+            U = array(c(rep(diag(p),K)), dim = c(p,p,K))
+            V = array(c(rep(diag(q),K)), dim = c(q,q,K))
+        }
+    }
     list(
         centers = centers,
         U = U,
