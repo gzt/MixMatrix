@@ -2,11 +2,6 @@
 #   MixMatrix: Classification with Matrix Variate Normal and t distributions
 #   Copyright (C) 2018-9  GZ Thompson <gzthompson@gmail.com>
 #
-#   These functions are based on modifications of the source for 
-#   MASS::lda() and MASS::qda(),
-#   copyright (C) 1994-2013 W. N. Venables and B. D. Ripley
-#   released under GPL 2 or greater. This software is released under GPL-3.
-#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 3 of the License, or
@@ -23,15 +18,15 @@
 
 ##' Fit a matrix variate mixture model
 ##'
-##' @title 
 ##' @param x data, \code{p x q x n} array
 ##' @param prior prior for the \code{K} classes, a vector that adds to unity
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
 ##'     and optionally \code{p x p} and \code{q x q} positive definite variance
 ##'     matrices. By default, those are presumed to be identity if not provided.
 ##' @param iter maximum number of iterations.
-##' @param method whether to use the \code{normal} or \code{t} distribution.
+##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     Currently, only the normal distribution is allowed.
+##' @param method what method to use to fit the distribution. Currently no options.
 ##' @param tol convergence criterion
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
@@ -71,7 +66,8 @@
 ##'matrixmixture(C, prior, init)
 ##'
 ##' 
-matrixmixture <- function(x, prior, init, iter=1000, method = "normal", tol = 1e-6, nu=NULL, ...){
+matrixmixture <- function(x, prior, init, iter=1000, model = "normal", method,
+                          tol = 1e-6, nu=NULL, ...){
 
     if (class(x) == "list")
         x <- array(unlist(x),
@@ -164,4 +160,58 @@ if (method == "normal") nu = NULL
         call = cl
     ),
     class = "MixMatrixModel")
+}
+
+##' Initializing settings for Matrix Mixture Models
+##'
+##' Providing this will generate a list suitable for use as the \code{init}
+##' argument in the \code{matrixmixture} function. Either provide data
+##' and it will select centers and variance matrices to initialize or
+##' provide initial values and it will format them as expected for the function.
+##' 
+##' @param data 
+##' @param prior prior probability. One of \code{prior} and \code{K} must be
+##'      provided. They must be consistent if both provided.
+##' @param K number of groups
+##' @param centers either a matrix or an array of matrices for use as the
+##'      \code{centers} argument (optional)
+##' @param U either a matrix or an array of matrices for use as the \code{U}
+##'      argument (optional)
+##' @param V either a matrix or an array of matrices for use as the \code{V}
+##'      argument (optional)
+##' @param centermethod what method to use to generate initial centers.
+##'      Current support random start or performing $k$-means on the vectorized
+##'      version for a small number of iterations and then converting back.
+##'      By default, if centers are provided, nothing will be done.
+##' @param varmethod what method to use to choose initial variance matrices.
+##'      Currently either identity matrices or the empirical covariance matrix
+##'      determined by hard assignment to the nearest centers.
+##'      By default, if \code{U} and \code{V} matrices are provided, nothing
+##'      will be done.
+##' @param model whether to use a normal distribution or a t-distribution, not
+##'      relevant for more initialization methods.
+##' @param ... Additional arguments to pass to $k$-means.
+##' @return a list suitable to use as the \code{init} argument in
+##'      \code{matrixmixture}
+init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
+                              U = NULL, V = NULL,  centermethod = "random",
+                              varmethod = "identity", model = "normal",...){
+    dims = dim(data)
+    dims[1] = p
+    dims[2] = q
+    dims[3] = n
+    if(centermethod == "random"){
+    select = sample(n,K, replace = FALSE)
+    centers = data[,,select]
+    }
+    if(varmethod == "identity"){
+    U = array(c(rep(diag(p),K)), dim = c(p,p,K))
+    V = array(c(rep(diag(q),K)), dim = c(q,q,K))
+    }
+    
+    list(
+        centers = centers,
+        U = U,
+        V = V
+        )
 }
