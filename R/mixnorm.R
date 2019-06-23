@@ -110,7 +110,7 @@ if (method == "normal") nu = NULL
         U = array(rep(diag(p),nclass),c(p,p,nclass))
     }
     if( !is.null(init$V)){
-        U = init$V
+        V = init$V
     } else {
         V = array(rep(diag(q),nclass),c(q,q,nclass))
     }
@@ -207,6 +207,10 @@ init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
     select = sample(n,K, replace = FALSE)
     centers = data[,,select]
     }
+    if(centermethod == "kmeans" || centermethod == "k-means"){
+        res = kmeans(matrix(data, nrow = n), centers = K, ...)
+        centers = res$centers
+        }
     if(varmethod == "identity"){
     U = array(c(rep(diag(p),K)), dim = c(p,p,K))
     V = array(c(rep(diag(q),K)), dim = c(q,q,K))
