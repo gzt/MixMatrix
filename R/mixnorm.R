@@ -25,11 +25,13 @@
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
 ##'     and optionally \code{p x p} and \code{q x q} positive definite variance
 ##'     matrices. By default, those are presumed to be identity if not provided.
+##'     If \code{init} is missing, it will be provided using the prior or K by
+##'     \code{init_matrixmix}.
 ##' @param iter maximum number of iterations.
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     Currently, only the normal distribution is allowed.
 ##' @param method what method to use to fit the distribution. Currently no options.
-##' @param tol convergence criterion
+##' @param tolerance convergence criterion
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @return A list of class \code{MixMatrixModel} containing the following
@@ -68,8 +70,9 @@
 ##'matrixmixture(C, prior, init)
 ##'
 ##' 
-matrixmixture <- function(x, prior, init, iter=1000, model = "normal", method,
-                          tol = 1e-6, nu=NULL, ...){
+matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
+                          model = "normal", method,
+                          tolerance = 1e-6, nu=NULL, ...){
     logLik = 0
     if (class(x) == "list")
         x <- array(unlist(x),
@@ -77,30 +80,36 @@ matrixmixture <- function(x, prior, init, iter=1000, model = "normal", method,
                            ncol(x[[1]]), length(x)))
     if (is.null(dim(x)))
         stop("'x' is not an array")
-if (any(!is.finite(x)))
-    stop("infinite, NA or NaN values in 'x'")
+    if (any(!is.finite(x)))
+        stop("infinite, NA or NaN values in 'x'")
     if (is.null(nu) || nu == 0 || is.infinite(nu)) method = "normal"
-    
-if (method == "normal") nu = NULL
+        
+    if (method == "normal") nu = 0
     if (method != "normal") {
         method = "normal"
         warning("t not implemented yet, using normal")
     }
-
+    
     dims = dim(x)
-    # x is a p x q x n array
+    ## x is a p x q x n array
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
     if (!missing(prior)) {
+        if((length(prior) == 1) && (round(prior) == prior))
+            prior = rep(1,prior)/prior
+        
         if (any(prior < 0) || round(sum(prior), 5) != 1)
             stop("invalid 'prior'")
         prior <- prior[prior > 0L]
+    } else {
+        if (missing(K)) stop("No prior and no K")
+
+        prior = rep(1,K)/K
     }
-    
-### take in data
-    convergeflag = FALSE
-    dims = dim(data)
+    if(missing(init))
+        init = init_matrixmixture(x, prior = prior,...)
+
 ### extract initialization state
     nclass = length(prior)
     centers = init$centers
@@ -117,33 +126,54 @@ if (method == "normal") nu = NULL
     posterior = matrix(rep(prior, n),byrow = TRUE, nrow = n)
     eps = 1e40
     
-    while(i < iter && eps > tol){
+    while(i < iter && eps > tolerance){
         newcenters = centers
         newU = U
         newV = V
-        newposterior = posterior
+        pi = colMeans(posterior)
 ####### E STEP
         ## update expectations of sufficient statistics
         
         ## update pi_i weights
-
+        for(i in 1:n){
+            for(j in 1:K){
+                newposterior[i,j] = log(pi[j]) +
+                    dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
+                             U = U[,,j], V = V[,,j], log = TRUE, ...)
+            }
+        }
+        newposterior <- ((newposterior - apply(newposterior, 1L, max, na.rm = TRUE)))
+        newposterior = exp(newposterior)
+        totalpost = rowSums(newposterior)
+        newposterior = newposterior / totalpost
+        
 ####### M STEP
         ## max for centers, U, V
-
-
+        
+        
 ####### Eval convergence
         eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
-        U = newU
-        V = newV
-        centers = newcenters
-        posterior = newposterior
+        
     }
-    if (i == iter || eps > tol){
+    if (i == iter || eps > tolerance){
         warning('failed to converge')
+    }
+    
+    U = newU
+    V = newV
+    centers = newcenters
+    posterior = newposterior
+    pi = colMeans(posterior)
+    logLik = 0
+    for(i in 1:n){
+        for(j in 1:K){
+            logLik = logLik + log(pi[j]) +
+                dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
+                         U = U[,,j], V = V[,,j], log = TRUE, ...)
         }
-
-
-      cl <- match.call()
+    }
+    
+    cl <- match.call()
     cl[[1L]] <- as.name("matrixmixture")
 
     structure(
@@ -155,7 +185,7 @@ if (method == "normal") nu = NULL
         U = U,
         V = V,
         posterior = posterior,
-        pi = colMeans(posterior),
+        pi = pi,
         convergence = convergeflag,
         logLik = logLik,
         method = method,
