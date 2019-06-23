@@ -70,7 +70,7 @@
 ##' 
 matrixmixture <- function(x, prior, init, iter=1000, model = "normal", method,
                           tol = 1e-6, nu=NULL, ...){
-
+    logLik = 0
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
