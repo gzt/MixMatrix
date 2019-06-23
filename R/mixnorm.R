@@ -20,6 +20,8 @@
 ##'
 ##' @param x data, \code{p x q x n} array
 ##' @param prior prior for the \code{K} classes, a vector that adds to unity
+##' @param K number of classes - provide either this or the prior. If this is
+##'     provided, the prior will be of equal distribution.
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
 ##'     and optionally \code{p x p} and \code{q x q} positive definite variance
 ##'     matrices. By default, those are presumed to be identity if not provided.
@@ -77,7 +79,7 @@ matrixmixture <- function(x, prior, init, iter=1000, model = "normal", method,
         stop("'x' is not an array")
 if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
-    if (nu == 0 || is.infinite(nu)) method = "normal"
+    if (is.null(nu) || nu == 0 || is.infinite(nu)) method = "normal"
     
 if (method == "normal") nu = NULL
     if (method != "normal") {
@@ -197,9 +199,10 @@ init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "random",
                               varmethod = "identity", model = "normal",...){
     dims = dim(data)
-    dims[1] = p
-    dims[2] = q
-    dims[3] = n
+    p = dims[1]
+    q = dims[2]
+    n = dims[3]
+
     if(centermethod == "random"){
     select = sample(n,K, replace = FALSE)
     centers = data[,,select]
