@@ -5,7 +5,8 @@
 \title{Fit a matrix variate mixture model}
 \usage{
 matrixmixture(x, prior, K = length(prior), init, iter = 1000,
-  model = "normal", method, tolerance = 0.1, nu = NULL, ...)
+  model = "normal", method, tolerance = 0.1, nu = NULL, ...,
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{data, \code{p x q x n} array}
@@ -34,6 +35,8 @@ log-likelihood.}
 \item{nu}{degrees of freedom parameter}
 
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
+
+\item{verbose}{whether to print diagnostic output, by default \code{FALSE}}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following

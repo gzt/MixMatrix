@@ -35,6 +35,7 @@
 ##'     log-likelihood.
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
+##' @param verbose whether to print diagnostic output, by default \code{FALSE}
 ##' @return A list of class \code{MixMatrixModel} containing the following
 ##'     components:
 ##' \describe{
@@ -73,7 +74,7 @@
 ##' 
 matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                           model = "normal", method,
-                          tolerance = 1e-1, nu=NULL, ...){
+                          tolerance = 1e-1, nu=NULL, ..., verbose = FALSE){
     logLik = -1e20
     oldlogLik = -1e30
     olderlogLik = -1e31
@@ -98,6 +99,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
+    if (verbose) print("Dims: ",dims)
     if (!missing(prior)) {
         if((length(prior) == 1) && (round(prior) == prior))
             prior = rep(1,prior)/prior
@@ -115,6 +117,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         init = init_matrixmixture(x, prior = prior,...)
 
 ### extract initialization state
+    ### should perhaps handle this by passing to init
     nclass = length(prior)
     centers = init$centers
     if( !is.null(init$U)){
@@ -132,6 +135,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     eps = 1e40
     i = 0
     while(i < iter && eps > tolerance){
+        if(verbose) print("Entering iteration:", i)
         newcenters = centers
         newU = U
         newV = V
@@ -167,16 +171,18 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                          U = U[,,j], V = V[,,j], log = TRUE, ...)
             }
         }
+        if(verbose) print("Log likelihood:", logLik)
         #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik - 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
         i = i + 1
+        if(verbose) print("Aitken, l_infinity, epsilon:", aitken, linf, eps)
     }
     if (i == iter || eps > tolerance){
         warning('failed to converge')
     } else convergeflag <- TRUE
-    
+    if(verbose) print("Done at interation ", i)
     U = newU
     V = newV
     centers = newcenters
