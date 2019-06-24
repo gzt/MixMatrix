@@ -50,7 +50,8 @@
 #'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
 #'            was used.}
 #'       \item{\code{convergence }}{whether the model converged}
-#'       \item{\code{logLik }}{the final log-likelihood of the model}
+#'       \item{\code{logLik }}{a vector of the log-likelihoods of each iteration ending in
+#'               the final log-likelihood of the model}
 #'       \item{\code{method }}{the method used}
 #'       \item{\code{call}}{The (matched) function call.}
 ##'    }
@@ -74,10 +75,11 @@
 ##' 
 matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                           model = "normal", method,
-                          tolerance = 1e-1, nu=NULL, ..., verbose = FALSE){
-    logLik = -1e20
-    oldlogLik = -1e30
-    olderlogLik = -1e31
+                          tolerance = 1e-1, nu=NULL, ..., verbose = FALSE, miniter = 3){
+    logLik = 0
+    oldlogLik = 0
+    olderlogLik = 0
+    logLikvec = numeric(0)
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -135,7 +137,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     eps = 1e40
     i = 0
     pi = prior
-    while(i < iter && ( (eps > tolerance) || (i < 3))){
+    while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
         newcenters = array(0, dim = c(p,q,K))
         newU = U
@@ -149,7 +151,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
             for(j in 1:K){
                 newposterior[obs,j] = log(pi[j]) +
                     dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
-                             U = U[,,j], V = V[,,j], log = TRUE, ...)
+                             U = U[,,j], V = V[,,j], log = TRUE)
             }
         }
         newposterior <- ((newposterior - apply(newposterior, 1L, max, na.rm = TRUE)))
@@ -163,6 +165,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         
 ####### CM STEPS
         pi = colMeans(newposterior)
+        if (verbose) cat("\nNew pi: ", pi,"\n")
         ## max for centers, U, V
         ### max for centers
         ## if normal
@@ -173,6 +176,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                 }
             }
             sumzig = colSums(newposterior)
+            if(verbose) cat("\n Column sums of posterior", sumzig)
             for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
         } else {
             warning("We don't have other methods yet")
@@ -194,21 +198,27 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
             for(j in 1:K){
                 logLik = logLik + log(pi[j]) +
                 dmatrixt(x = x[,,obs], df = nu, mean = newcenters[,,j],
-                         U = newU[,,j], V = newV[,,j], log = TRUE, ...)
+                         U = newU[,,j], V = newV[,,j], log = TRUE)
             }
         }
         if(verbose) cat("\nLog likelihood:", logLik)
+        if(i == 0) {
+            ## initialize to some not-so-bad values so that doesn't immediately "converge"
+            oldlogLik = logLik - .2*abs(logLik)
+            olderlogLik = oldlogLik - .3*abs(oldlogLik)
+            }
         #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik + 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
         i = i + 1
         if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
+        logLikvec = c(logLikvec, logLik)
     }
     if ((i == iter || eps > tolerance) ){
         warning('failed to converge')
     } else convergeflag <- TRUE
-    if(verbose) cat("\nDone at iteration ", i,"\n")
+    if(verbose) cat("\nDone at iteration ", i-1,"\n")
     U = newU
     V = newV
     centers = newcenters
@@ -219,7 +229,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         for(j in 1:K){
             logLik = logLik + log(pi[j]) +
                 dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
-                         U = U[,,j], V = V[,,j], log = TRUE, ...)
+                         U = U[,,j], V = V[,,j], log = TRUE)
         }
     }
     
@@ -238,7 +248,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         pi = pi,
         convergence = convergeflag,
         iter = i, 
-        logLik = logLik,
+        logLik = logLikvec,
         method = method,
         call = cl
     ),
@@ -285,13 +295,15 @@ init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
     q = dims[2]
     n = dims[3]
 
+    if(length(prior) == 1) K = prior
+    
     if(centermethod == "random"){
     select = sample(n,K, replace = FALSE)
     centers = data[,,select]
     }
     if(centermethod == "kmeans" || centermethod == "k-means"){
         res = kmeans(matrix(data, nrow = n), centers = K, ...)
-        centers = res$centers
+        centers = array(res$centers, dim = c(p,q,K))
     }
     if(!missing(U) && !missing(V)){
         
