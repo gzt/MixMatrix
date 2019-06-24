@@ -4,23 +4,23 @@
 \alias{matrixmixture}
 \title{Fit a matrix variate mixture model}
 \usage{
-matrixmixture(x, prior, K = length(prior), init, iter = 1000,
-  model = "normal", method, tolerance = 0.1, nu = NULL, ...,
-  verbose = FALSE, miniter = 3)
+matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
+  iter = 1000, model = "normal", method, tolerance = 0.1,
+  nu = NULL, ..., verbose = FALSE, miniter = 3)
 }
 \arguments{
 \item{x}{data, \code{p x q x n} array}
-
-\item{prior}{prior for the \code{K} classes, a vector that adds to unity}
-
-\item{K}{number of classes - provide either this or the prior. If this is
-provided, the prior will be of equal distribution.}
 
 \item{init}{a list containing an array of \code{K} of \code{p x q} means,
 and optionally \code{p x p} and \code{q x q} positive definite variance
 matrices. By default, those are presumed to be identity if not provided.
 If \code{init} is missing, it will be provided using the prior or K by
 \code{init_matrixmix}.}
+
+\item{prior}{prior for the \code{K} classes, a vector that adds to unity}
+
+\item{K}{number of classes - provide either this or the prior. If this is
+provided, the prior will be of equal distribution.}
 
 \item{iter}{maximum number of iterations.}
 
@@ -75,7 +75,7 @@ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
              )
-matrixmixture(C, prior, init)
+matrixmixture(C, init = init, prior = prior)
 
 
 }

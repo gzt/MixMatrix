@@ -19,14 +19,14 @@
 ##' Fit a matrix variate mixture model
 ##'
 ##' @param x data, \code{p x q x n} array
-##' @param prior prior for the \code{K} classes, a vector that adds to unity
-##' @param K number of classes - provide either this or the prior. If this is
-##'     provided, the prior will be of equal distribution.
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
 ##'     and optionally \code{p x p} and \code{q x q} positive definite variance
 ##'     matrices. By default, those are presumed to be identity if not provided.
 ##'     If \code{init} is missing, it will be provided using the prior or K by
 ##'     \code{init_matrixmix}.
+##' @param prior prior for the \code{K} classes, a vector that adds to unity
+##' @param K number of classes - provide either this or the prior. If this is
+##'     provided, the prior will be of equal distribution.
 ##' @param iter maximum number of iterations.
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     Currently, only the normal distribution is allowed.
@@ -35,7 +35,8 @@
 ##'     log-likelihood.
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
-##' @param verbose whether to print diagnostic output, by default \code{FALSE}
+##' @param verbose whether to print diagnostic output, by default \code{0}. Higher
+##'     numbers output more results.
 ##' @param miniter minimum number of iterations
 ##' @return A list of class \code{MixMatrixModel} containing the following
 ##'     components:
@@ -71,12 +72,12 @@
 #'              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
 #'              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 #'              )
-##'matrixmixture(C, prior, init)
+##'matrixmixture(C, init = init, prior = prior)
 ##'
 ##' 
-matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
+matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method,
-                          tolerance = 1e-1, nu=NULL, ..., verbose = FALSE, miniter = 3){
+                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){
     logLik = 0
     oldlogLik = 0
     olderlogLik = 0
@@ -102,8 +103,8 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
-    if (verbose) cat("Dims: ",dims)
-    if (!missing(prior)) {
+    if (verbose>0) cat("Dims: ",dims,"\n")
+    if (!is.null(prior)) {
         if((length(prior) == 1) && (round(prior) == prior))
             prior = rep(1,prior)/prior
         
@@ -116,7 +117,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
 
         prior = rep(1,K)/K
     }
-    if(missing(init))
+    if(is.null(init))
         init = init_matrixmixture(x, prior = prior,...)
 
 ### extract initialization state
@@ -138,8 +139,18 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     eps = 1e40
     i = 0
     pi = prior
+    if (verbose>1) {
+        cat("\nInit centers: \n\n")
+        print(init$centers)
+        }
+    if (verbose>2){
+        print("Initial U and V")
+        print(U)
+        print(V)
+    }
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
+        if(verbose>1) print(pi)
         newcenters = array(0, dim = c(p,q,K))
         newU = U
         newV = V
@@ -151,7 +162,8 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         for(obs in 1:n){
             for(j in 1:K){
                 newposterior[obs,j] = log(pi[j]) +
-                    dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
+                    dmatrixt(x = x[,,obs],
+                             df = nu, mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE)
             }
         }
@@ -159,7 +171,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         newposterior = exp(newposterior)
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
-        
+        if(verbose>1) print(newposterior[1:3,])
         ## update S_ig
 
         ### leave blank for now
@@ -177,7 +189,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                 }
             }
             sumzig = colSums(newposterior)
-            if(verbose) cat("\n Column sums of posterior", sumzig)
+            if(verbose>1) cat("\n Column sums of posterior", sumzig)
             for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
         } else {
             warning("We don't have other methods yet")
@@ -192,6 +204,10 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         }
         
 ####### Eval convergence
+        if(verbose > 1){
+            print("New centers:")
+            print(newcenters)
+            }
         olderlogLik = oldlogLik
         oldlogLik = logLik
         logLik = 0
@@ -233,7 +249,11 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
                          U = U[,,j], V = V[,,j], log = TRUE)
         }
     }
-    
+    if(verbose>1) {
+        print("Final centers:")
+        print(centers)
+        }
+    if(verbose) cat("\nLog Likelihood Trace: \n", logLikvec, "\n")
     cl <- match.call()
     cl[[1L]] <- as.name("matrixmixture")
 
@@ -289,7 +309,7 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
 ##'      \code{matrixmixture}
 ##' @importFrom stats kmeans
 init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
-                              U = NULL, V = NULL,  centermethod = "random",
+                              U = NULL, V = NULL,  centermethod = "kmeans",
                               varmethod = "identity", model = "normal",...){
     dims = dim(data)
     p = dims[1]
@@ -306,7 +326,7 @@ init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
         res = kmeans(matrix(data, nrow = n), centers = K, ...)
         centers = array(res$centers, dim = c(p,q,K))
     }
-    if(!missing(U) && !missing(V)){
+    if(!is.null(U) && !is.null(V)){
         
         if(length(dim(U) == 2)) U = array(rep(U,K), dim = c(p,p,K))
         if(length(dim(V) == 2)) V = array(rep(V,K), dim = c(q,q,K))
