@@ -36,6 +36,7 @@
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @param verbose whether to print diagnostic output, by default \code{FALSE}
+##' @param miniter minimum number of iterations
 ##' @return A list of class \code{MixMatrixModel} containing the following
 ##'     components:
 ##' \describe{

@@ -6,7 +6,7 @@
 \usage{
 matrixmixture(x, prior, K = length(prior), init, iter = 1000,
   model = "normal", method, tolerance = 0.1, nu = NULL, ...,
-  verbose = FALSE)
+  verbose = FALSE, miniter = 3)
 }
 \arguments{
 \item{x}{data, \code{p x q x n} array}
@@ -37,6 +37,8 @@ log-likelihood.}
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
 \item{verbose}{whether to print diagnostic output, by default \code{FALSE}}
+
+\item{miniter}{minimum number of iterations}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following
@@ -53,7 +55,8 @@ A list of class \code{MixMatrixModel} containing the following
       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
            was used.}
       \item{\code{convergence }}{whether the model converged}
-      \item{\code{logLik }}{the final log-likelihood of the model}
+      \item{\code{logLik }}{a vector of the log-likelihoods of each iteration ending in
+              the final log-likelihood of the model}
       \item{\code{method }}{the method used}
       \item{\code{call}}{The (matched) function call.}
    }
