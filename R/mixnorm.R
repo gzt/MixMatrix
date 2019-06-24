@@ -134,16 +134,17 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
     newposterior = posterior
     eps = 1e40
     i = 0
-    while(i < iter && ( (eps > tolerance) || (i < 2))){
+    pi = prior
+    while(i < iter && ( (eps > tolerance) || (i < 3))){
         if(verbose) cat("\nEntering iteration:", i)
-        newcenters = centers
+        newcenters = array(0, dim = c(p,q,K))
         newU = U
         newV = V
-        pi = colMeans(posterior)
+        # pi = colMeans(posterior) this belongs in CM step
 ####### E STEP
         ## update expectations of sufficient statistics
         
-        ## update pi_i weights
+        ## update z_ig weights
         for(obs in 1:n){
             for(j in 1:K){
                 newposterior[obs,j] = log(pi[j]) +
@@ -156,9 +157,34 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
         
-####### CM STEPS
-        ## max for centers, U, V
+        ## update S_ig
+
+        ### leave blank for now
         
+####### CM STEPS
+        pi = colMeans(newposterior)
+        ## max for centers, U, V
+        ### max for centers
+        ## if normal
+        if(method == "normal"){
+            for(obs in 1:n){
+                for(j in 1:K){
+                    newcenters[,,j] = newcenters[,,j] + x[,,obs] * newposterior[obs,j]
+                }
+            }
+            sumzig = colSums(newposterior)
+            for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
+        } else {
+            warning("We don't have other methods yet")
+        }
+        ### max for U, V
+        ## if normal
+        if(method == "normal"){
+            
+            
+        } else {
+            warning("We don't have other methods yet")
+        }
         
 ####### Eval convergence
         olderlogLik = oldlogLik
@@ -167,22 +193,22 @@ matrixmixture <- function(x, prior, K = length(prior), init, iter=1000,
         for(obs in 1:n){
             for(j in 1:K){
                 logLik = logLik + log(pi[j]) +
-                dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
-                         U = U[,,j], V = V[,,j], log = TRUE, ...)
+                dmatrixt(x = x[,,obs], df = nu, mean = newcenters[,,j],
+                         U = newU[,,j], V = newV[,,j], log = TRUE, ...)
             }
         }
         if(verbose) cat("\nLog likelihood:", logLik)
         #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
-        linf = oldlogLik - 1/(1-aitken) * (logLik - oldlogLik)
+        linf = oldlogLik + 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
         i = i + 1
         if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
     }
-    if ((i == iter || eps > tolerance) && i > 1 ){
+    if ((i == iter || eps > tolerance) ){
         warning('failed to converge')
     } else convergeflag <- TRUE
-    if(verbose) cat("\nDone at interation ", i,"\n")
+    if(verbose) cat("\nDone at iteration ", i,"\n")
     U = newU
     V = newV
     centers = newcenters
