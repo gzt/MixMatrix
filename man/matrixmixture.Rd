@@ -6,7 +6,7 @@
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   iter = 1000, model = "normal", method, tolerance = 0.1,
-  nu = NULL, ..., verbose = FALSE, miniter = 3)
+  nu = NULL, ..., verbose = 0, miniter = 3)
 }
 \arguments{
 \item{x}{data, \code{p x q x n} array}
@@ -36,7 +36,8 @@ log-likelihood.}
 
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
-\item{verbose}{whether to print diagnostic output, by default \code{FALSE}}
+\item{verbose}{whether to print diagnostic output, by default \code{0}. Higher
+numbers output more results.}
 
 \item{miniter}{minimum number of iterations}
 }

@@ -5,7 +5,7 @@
 \title{Initializing settings for Matrix Mixture Models}
 \usage{
 init_matrixmixture(data, prior, K = length(prior), centers = NULL,
-  U = NULL, V = NULL, centermethod = "random",
+  U = NULL, V = NULL, centermethod = "kmeans",
   varmethod = "identity", model = "normal", ...)
 }
 \arguments{
