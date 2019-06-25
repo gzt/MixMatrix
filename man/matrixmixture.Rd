@@ -5,7 +5,7 @@
 \title{Fit a matrix variate mixture model}
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
-  iter = 1000, model = "normal", method, tolerance = 0.1,
+  iter = 1000, model = "normal", method = NULL, tolerance = 0.1,
   nu = NULL, ..., verbose = 0, miniter = 3)
 }
 \arguments{
@@ -76,7 +76,7 @@ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
              )
-matrixmixture(C, init = init, prior = prior)
-
+res<-matrixmixture(C, init = init, prior = prior)
+print(res) # note: prints head of posterior, not full list
 
 }

@@ -642,3 +642,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     cl <- factor(nm[max.col(posterior)], levels = object$lev)
     list(class = cl, posterior = posterior)
   }
+
+
+#' @importFrom utils head
+print.matrixlda <- function(model){
+    model[["posterior"]] = head(model[["posterior"]])             
+    print.default(model)
+}
+
+print.matrixqda <- function(model){
+    model[["posterior"]] = head(model[["posterior"]])             
+    print.default(model)
+}

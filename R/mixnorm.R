@@ -72,11 +72,11 @@
 #'              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
 #'              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 #'              )
-##'matrixmixture(C, init = init, prior = prior)
-##'
+##'res<-matrixmixture(C, init = init, prior = prior)
+##'print(res) # note: prints head of posterior, not full list
 ##' 
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
-                          model = "normal", method,
+                          model = "normal", method = NULL,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){
     logLik = 0
     oldlogLik = 0
@@ -90,11 +90,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         stop("'x' is not an array")
     if (any(!is.finite(x)))
         stop("infinite, NA or NaN values in 'x'")
-    if (is.null(nu) || nu == 0 || is.infinite(nu)) method = "normal"
+    if (is.null(nu) || nu == 0 || is.infinite(nu)) model = "normal"
         
-    if (method == "normal") nu = 0
-    if (method != "normal") {
-        method = "normal"
+    if (model == "normal") nu = 0
+    if (model != "normal") {
+        model = "normal"
         warning("t not implemented yet, using normal")
     }
     
@@ -182,7 +182,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         ## max for centers, U, V
         ### max for centers
         ## if normal
-        if(method == "normal"){
+        if(model == "normal"){
             for(obs in 1:n){
                 for(j in 1:K){
                     newcenters[,,j] = newcenters[,,j] + x[,,obs] * newposterior[obs,j]
@@ -196,11 +196,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         }
         ### max for U, V
         ## if normal
-        if(method == "normal"){
+        if(model == "normal"){
             
             
         } else {
-            warning("We don't have other methods yet")
+            warning("We don't have other models yet")
         }
         
 ####### Eval convergence
@@ -270,10 +270,17 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         convergence = convergeflag,
         iter = i, 
         logLik = logLikvec,
+        model = model,
         method = method,
         call = cl
     ),
     class = "MixMatrixModel")
+}
+
+
+print.MixMatrixModel <- function(model){
+    model[["posterior"]] = head(model[["posterior"]])             
+    print.default(model)
 }
 
 ##' Initializing settings for Matrix Mixture Models
