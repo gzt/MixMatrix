@@ -148,6 +148,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         print(U)
         print(V)
     }
+    convergeflag = FALSE
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
         if(verbose>1) print(pi)
@@ -159,15 +160,16 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         ## update expectations of sufficient statistics
         
         ## update z_ig weights
-        for(obs in 1:n){
+       # for(obs in 1:n){
             for(j in 1:K){
-                newposterior[obs,j] = log(pi[j]) +
-                    dmatrixt(x = x[,,obs],
+                newposterior[,j] = log(pi[j]) +
+                    dmatrixt(x = x[,,],
                              df = nu, mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE)
+                if(verbose > 50) print(newposterior[,j])
             }
-        }
-        newposterior <- ((newposterior - apply(newposterior, 1L, max, na.rm = TRUE)))
+        #}
+        newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
         newposterior = exp(newposterior)
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
@@ -186,6 +188,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             for(obs in 1:n){
                 for(j in 1:K){
                     newcenters[,,j] = newcenters[,,j] + x[,,obs] * newposterior[obs,j]
+                    if(verbose > 50) print(newcenters[,,j])
                 }
             }
             sumzig = colSums(newposterior)
