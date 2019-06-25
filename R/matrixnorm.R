@@ -342,7 +342,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
-
+  
   if (max(dims[1]/dims[2], dims[2]/dims[1]) > (dims[3] - 1))
     warning("Need more observations to estimate parameters.")
   # don't have initial starting point for U and V, start with diag.
@@ -398,6 +398,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
 
   varflag = FALSE
+  logLikvec = numeric(0)
   while (iter < max.iter && error.term > tol && (!varflag)) {
 
     # make intermediate matrix, then collapse to final version
@@ -483,7 +484,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     error.term <- sum((new.V - V)^2) + sum((new.U - U)^2)
     V <- new.V
     U <- new.U
-
+      logLik = sum(dmatrixnorm(data, mu, U = U, V = V, log = TRUE))
+      logLikvec = c(logLikvec, logLik)
     iter <- iter + 1
   }
   if (iter >= max.iter || error.term > tol || varflag)
@@ -501,7 +503,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
               var = V[1,1],
               iter = iter,
               tol = error.term,
-              logLik = logLik,
+              logLik = logLikvec,
               convergence = converged,
               call = match.call()))
 }

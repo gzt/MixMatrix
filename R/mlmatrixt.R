@@ -190,6 +190,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
 
   varflag = FALSE
+  logLikvec = numeric(0)
 p = dims[1]
 q = dims[2]
 n = dims[3]
@@ -337,15 +338,17 @@ Smatrix = array(0,c(p,p,n))
     mu <- new.Mu
     df <- new.df
 
-        iter <- iter + 1
+    iter <- iter + 1
+    logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
+    logLikvec = c(logLikvec, logLik)
   }
   if (iter >= max.iter || error.term > tol || varflag)
     warning("Failed to converge")
 
   converged = !(iter >= max.iter || error.term > tol || varflag)
-  logLik = 0
+  
 
-  logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
+  
   return(list(mean = mu,
               U = U/U[1,1],
               V = V,
@@ -353,7 +356,7 @@ Smatrix = array(0,c(p,p,n))
               nu = df,
               iter = iter,
               tol = error.term,
-              logLik = logLik,
+              logLik = logLikvec,
               convergence = converged,
               call = match.call()))
 }
