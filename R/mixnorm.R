@@ -94,10 +94,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
     if (model == "normal") nu = 0
     if (model != "normal") {
-        model = "normal"
         warning("t not implemented yet, using normal")
+        df = nu
     }
-    
+        
     dims = dim(x)
     ## x is a p x q x n array
     n <- dims[3]
@@ -149,6 +149,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         print(V)
     }
     convergeflag = FALSE
+    Smatrix = array(0,c(p,p,n))
+    SS = array(0,c(p,p,K))
+    SSX = array(0,c(p,q,K))
+    SSXX = array(0,c(q,q,K))
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
         if(verbose>1) print(pi)
@@ -174,16 +178,42 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
         if(verbose>1) print(newposterior[1:3,])
-        ## update S_ig
+        
+        ## update S_ig - conditional weights, only if non-normal
+        
+        if(model != "normal"){
+            dfmult = df + p + q - 1
+            for(j in 1:K){
+                ##### these don't work
+                zigmult = rep(newposterior[,j], each = p*p)
+                swept.data <- sweep(x, c(1, 2), centers[,,j])
 
+           
+                
+                Stmp = xatx(swept.data,V[,,j])
+                for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U[,,j]
+                Smatrix = cubeinv(Stmp) * zigmult
+                
+                SS[,,j] = rowSums(Smatrix ,FALSE, 2)
+                
+                SSXtmp = cubemult(Smatrix, x)
+                SSX[,,j] = rowSums(SSXtmp, FALSE, 2)
+                
+                SSXXtmp = cubemult(x,SSXtmp)
+                SSXX[,,j] = rowSums(SSXXtmp,FALSE, 2)
+                
+            }
+        }
         ### leave blank for now
         
 ####### CM STEPS
         pi = colMeans(newposterior)
         if (verbose) cat("\nNew pi: ", pi,"\n")
         ## max for centers, U, V
-        ### max for centers
+### max for centers
         ## if normal
+        sumzig = colSums(newposterior)
+        if(verbose>1) cat("\n Column sums of posterior", sumzig)
         if(model == "normal"){
             for(obs in 1:n){
                 for(j in 1:K){
@@ -191,21 +221,44 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                     if(verbose > 50) print(newcenters[,,j])
                 }
             }
-            sumzig = colSums(newposterior)
-            if(verbose>1) cat("\n Column sums of posterior", sumzig)
             for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
         } else {
             warning("We don't have other methods yet")
-        }
-        ### max for U, V
-        ## if normal
-        if(model == "normal"){
+                                        #for(obs in 1:n){
+            newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
             
             
-        } else {
-            warning("We don't have other models yet")
+            if(verbose > 50) print(newcenters[,,j])
         }
+                                        
         
+    
+### max for U, V
+    ## if normal
+    if(model == "normal"){
+        for(j in 1:K){
+            zigmult = rep(newposterior[,j], each = q*q)
+            swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
+            inter.V <- txax(swept.data, U[,,j]) * zigmult
+            newV[,,j] <- rowSums(inter.V, dims = 2)/(sumzig[j] * p)
+            if(verbose >50) print(newV[,,j])
+               
+            zigmult = rep(newposterior[,j], each = p*p)
+            inter.U <- xatx(swept.data, V[,,j]) * zigmult
+            new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
+            newU[,,j] <- new.U/(new.U[1, 1])
+            if(verbose >50) print(newU[,,j])
+        }
+    } else {
+        for(j in 1:K){
+        warning("We don't have other models yet")
+        newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] - t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
+        
+        newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
+        newU[,,j] = solve(newUinv)
+        }
+    }
+    
 ####### Eval convergence
         if(verbose > 1){
             print("New centers:")
