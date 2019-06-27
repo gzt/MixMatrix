@@ -132,7 +132,6 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     posterior = matrix(rep(prior, n),byrow = TRUE, nrow = n)
     newposterior = posterior
     eps = 1e40
-    i = 0
     pi = prior
     if (verbose>1) {
         cat("\nInit centers: \n\n")
@@ -172,7 +171,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         U = newU
         V = newV
         posterior = newposterior
-        # pi = colMeans(posterior) this belongs in CM step
+  
 ####### E STEP
         ## update expectations of sufficient statistics
         
@@ -183,8 +182,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                     dmatrixt(x = x[,,],
                              df = nu, mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE)
-                if(verbose > 50) print(newposterior[,j])
-            }
+              }
         #}
         newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
         newposterior = exp(newposterior)
@@ -194,7 +192,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
         ## update S_ig - conditional weights, only if non-normal
         
-        if(model != "normal"){
+        if(model == "t"){
             dfmult = df + p + q - 1
             for(j in 1:K){
                 ##### these don't work
@@ -231,7 +229,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             for(obs in 1:n){
                 for(j in 1:K){
                     newcenters[,,j] = newcenters[,,j] + x[,,obs] * newposterior[obs,j]
-                    if(verbose > 50) print(newcenters[,,j])
+                    if(verbose > 2) print(newcenters[,,j])
                 }
             }
             for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
@@ -239,7 +237,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 
             for(j in 1:K){
             newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
-            if(verbose > 50) print(newcenters[,,j])
+            if(verbose > 2) print(newcenters[,,j])
             }
         }
                                         
@@ -253,13 +251,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
             inter.V <- txax(swept.data, U[,,j]) * zigmult
             newV[,,j] <- rowSums(inter.V, dims = 2)/(sumzig[j] * p)
-            if(verbose >50) print(newV[,,j])
+            if(verbose >2) print(newV[,,j])
                
             zigmult = rep(newposterior[,j], each = p*p)
             inter.U <- xatx(swept.data, V[,,j]) * zigmult
             new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
             newU[,,j] <- new.U/(new.U[1, 1])
-            if(verbose >50) print(newU[,,j])
+            if(verbose >2) print(newU[,,j])
         }
     } else {
         for(j in 1:K){
