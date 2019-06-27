@@ -42,6 +42,7 @@
 ##'     components:
 ##' \describe{
 ##'      \item{\code{prior}}{the prior probabilities used.}
+##'      \item{\code{init}}{the initialization used.}
 #'       \item{\code{K}}{the number of groups} 
 #'       \item{\code{n}}{the number of observations} 
 #'       \item{\code{centers}}{the group means.}
@@ -74,6 +75,7 @@
 #'              )
 ##'res<-matrixmixture(C, init = init, prior = prior)
 ##'print(res) # note: prints head of posterior, not full list
+##'\skip{plot(res)}
 ##'res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
@@ -239,7 +241,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         for(j in 1:K){
             zigmult = rep(newposterior[,j], each = q*q)
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
-            inter.V <- txax(swept.data, U[,,j]) * zigmult
+            inter.V <- txax(swept.data, newU[,,j]) * zigmult
             newV[,,j] <- rowSums(inter.V, dims = 2)/(sumzig[j] * p)
             if(verbose >2) print(newV[,,j])
                
@@ -321,6 +323,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     structure(
     list(
         prior = prior,
+        init = init,
         K = nclass,
         n = n,
         centers = centers,
@@ -342,6 +345,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 print.MixMatrixModel <- function(model){
     model[["posterior"]] = head(model[["posterior"]])             
     print.default(model)
+}
+
+plot.MixMatrixModel <- function(model){
+    plot(model$logLik, ylab="Log Likelihood",xlab="iteration")
 }
 
 ##' Initializing settings for Matrix Mixture Models
