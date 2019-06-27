@@ -78,10 +78,6 @@
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){
-    logLik = 0
-    oldlogLik = 0
-    olderlogLik = 0
-    logLikvec = numeric(0)
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -94,7 +90,6 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
     if (model == "normal") nu = 0
     if (model != "normal") {
-        warning("t not implemented yet, using normal")
         df = nu
     }
         
@@ -153,12 +148,30 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     SS = array(0,c(p,p,K))
     SSX = array(0,c(p,q,K))
     SSXX = array(0,c(q,q,K))
+    newU = U
+    newV = V
+    newcenters = centers
+    logLik = 0
+    oldlogLik = 0
+    olderlogLik = 0
+    for(obs in 1:n){
+        for(j in 1:K){
+            logLik = logLik + log(pi[j]) +
+                dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
+                         U = U[,,j], V = V[,,j], log = TRUE)
+        }
+    }
+    logLikvec = logLik
+    
+    i = 0
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
         if(verbose>1) print(pi)
+        centers = newcenters
         newcenters = array(0, dim = c(p,q,K))
-        newU = U
-        newV = V
+        U = newU
+        V = newV
+        posterior = newposterior
         # pi = colMeans(posterior) this belongs in CM step
 ####### E STEP
         ## update expectations of sufficient statistics
@@ -191,7 +204,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
            
                 
                 Stmp = xatx(swept.data,V[,,j])
-                for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U[,,j]
+                for (obs in 1:n) Stmp[,,obs] = Stmp[,,obs] + U[,,j]
                 Smatrix = cubeinv(Stmp) * zigmult
                 
                 SS[,,j] = rowSums(Smatrix ,FALSE, 2)
@@ -223,12 +236,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             }
             for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
         } else {
-            warning("We don't have other methods yet")
-                                        #for(obs in 1:n){
+
+            for(j in 1:K){
             newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
-            
-            
             if(verbose > 50) print(newcenters[,,j])
+            }
         }
                                         
         
@@ -251,19 +263,25 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         }
     } else {
         for(j in 1:K){
-        warning("We don't have other models yet")
-        newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] - t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
-        
-        newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
-        newU[,,j] = solve(newUinv)
+
+            newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] - t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
+            newV[,,j] = newV[,,j]/newV[1,1,j]
+            
+            newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
+            newU[,,j] = solve(newUinv)
         }
     }
-    
+        
 ####### Eval convergence
         if(verbose > 1){
             print("New centers:")
             print(newcenters)
+            print("New U:")
+            print(U)
+            print("New V:")
+            print(V)
             }
+
         olderlogLik = oldlogLik
         oldlogLik = logLik
         logLik = 0
@@ -277,8 +295,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if(verbose) cat("\nLog likelihood:", logLik)
         if(i == 0) {
             ## initialize to some not-so-bad values so that doesn't immediately "converge"
-            oldlogLik = logLik - .2*abs(logLik)
-            olderlogLik = oldlogLik - .3*abs(oldlogLik)
+            olderlogLik = oldlogLik - .2*abs(oldlogLik)
             }
         #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
