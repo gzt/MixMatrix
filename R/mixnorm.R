@@ -65,10 +65,10 @@
 ##'
 ##' set.seed(20180221)
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-#' B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
+#' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
 #' C <- array(c(A,B), dim=c(3,4,60))
 #' prior <- c(.5,.5)
-#' init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
+#' init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
 #'              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
 #'              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 #'              )
@@ -154,15 +154,6 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     logLik = 0
     oldlogLik = 0
     olderlogLik = 0
-    for(obs in 1:n){
-        for(j in 1:K){
-            logLik = logLik + log(pi[j]) +
-                dmatrixt(x = x[,,obs], df = nu, mean = centers[,,j],
-                         U = U[,,j], V = V[,,j], log = TRUE)
-        }
-    }
-    logLikvec = c(logLikvec,logLik)
-    
     i = 0
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
@@ -199,8 +190,6 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                 ##### these don't work
                 zigmult = rep(newposterior[,j], each = p*p)
                 swept.data <- sweep(x, c(1, 2), centers[,,j])
-
-           
                 
                 Stmp = xatx(swept.data,V[,,j])
                 for (obs in 1:n) Stmp[,,obs] = Stmp[,,obs] + U[,,j]
@@ -255,7 +244,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             if(verbose >2) print(newV[,,j])
                
             zigmult = rep(newposterior[,j], each = p*p)
-            inter.U <- xatx(swept.data, V[,,j]) * zigmult
+            inter.U <- xatx(swept.data, newV[,,j]) * zigmult
             new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
             newU[,,j] <- new.U/(new.U[1, 1])
             if(verbose >2) print(newU[,,j])
@@ -276,9 +265,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             print("New centers:")
             print(newcenters)
             print("New U:")
-            print(U)
+            print(newU)
             print("New V:")
-            print(V)
+            print(newV)
             }
 
         olderlogLik = oldlogLik
