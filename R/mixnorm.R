@@ -65,16 +65,16 @@
 ##'
 ##' set.seed(20180221)
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-#' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
+#' B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
 #' C <- array(c(A,B), dim=c(3,4,60))
 #' prior <- c(.5,.5)
-#' init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
+#' init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
 #'              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
 #'              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 #'              )
 ##'res<-matrixmixture(C, init = init, prior = prior)
 ##'print(res) # note: prints head of posterior, not full list
-##' 
+##'res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){
@@ -133,6 +133,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     newposterior = posterior
     eps = 1e40
     pi = prior
+    logLikvec = numeric(0)
     if (verbose>1) {
         cat("\nInit centers: \n\n")
         print(init$centers)
@@ -160,7 +161,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                          U = U[,,j], V = V[,,j], log = TRUE)
         }
     }
-    logLikvec = logLik
+    logLikvec = c(logLikvec,logLik)
     
     i = 0
     while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
