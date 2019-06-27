@@ -46,6 +46,7 @@ A list of class \code{MixMatrixModel} containing the following
     components:
 \describe{
      \item{\code{prior}}{the prior probabilities used.}
+     \item{\code{init}}{the initialization used.}
       \item{\code{K}}{the number of groups} 
       \item{\code{n}}{the number of observations} 
       \item{\code{centers}}{the group means.}
@@ -78,5 +79,6 @@ init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
              )
 res<-matrixmixture(C, init = init, prior = prior)
 print(res) # note: prints head of posterior, not full list
+# plot(res)
 res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 }

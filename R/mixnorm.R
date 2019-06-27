@@ -75,7 +75,7 @@
 #'              )
 ##'res<-matrixmixture(C, init = init, prior = prior)
 ##'print(res) # note: prints head of posterior, not full list
-##'\skip{plot(res)}
+##' # plot(res)
 ##'res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
@@ -189,7 +189,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if(model == "t"){
             dfmult = df + p + q - 1
             for(j in 1:K){
-                ##### these don't work
+                
                 zigmult = rep(newposterior[,j], each = p*p)
                 swept.data <- sweep(x, c(1, 2), centers[,,j])
                 
@@ -207,7 +207,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                 
             }
         }
-        ### leave blank for now
+ 
+### leave blank for now
         
 ####### CM STEPS
         pi = colMeans(newposterior)
@@ -239,9 +240,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     ## if normal
     if(model == "normal"){
         for(j in 1:K){
+            for (iterations in 1:20){
             zigmult = rep(newposterior[,j], each = q*q)
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
-            inter.V <- txax(swept.data, newU[,,j]) * zigmult
+            inter.V <- txax(swept.data, U[,,j]) * zigmult
             newV[,,j] <- rowSums(inter.V, dims = 2)/(sumzig[j] * p)
             if(verbose >2) print(newV[,,j])
                
@@ -250,6 +252,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
             newU[,,j] <- new.U/(new.U[1, 1])
             if(verbose >2) print(newU[,,j])
+            }
         }
     } else {
         for(j in 1:K){
@@ -347,6 +350,7 @@ print.MixMatrixModel <- function(model){
     print.default(model)
 }
 
+#' @importFrom graphics plot
 plot.MixMatrixModel <- function(model){
     plot(model$logLik, ylab="Log Likelihood",xlab="iteration")
 }

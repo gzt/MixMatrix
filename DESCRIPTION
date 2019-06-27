@@ -17,16 +17,17 @@ Imports:
     CholWishart,
     Rcpp
 Suggests:
-    knitr, 
+    knitr,
     rmarkdown,
     testthat,
     covr,
     ggplot2,
     dplyr,
-    magrittr
+    magrittr,
+    spelling
 VignetteBuilder: knitr
 LazyData: true
-URL:  http://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
+URL: http://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
 BugReports: http://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
