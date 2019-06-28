@@ -264,11 +264,14 @@ test_that("Output of LDA/QDA/Predict", {
 
 
   expect_equal(sum(predict(ldamodel, newdata = matrix(
-    0, nrow = 2, ncol = 2))$posterior), 1)
+                                         0, nrow = 2, ncol = 2))$posterior), 1)
+   expect_equal(sum(predict(ldamodel, prior = c(.7,.3))$posterior[1,]), 1)
 
-  expect_equal(sum(predict(qdamodel, newdata = matrix(
-    0, nrow = 2, ncol = 2))$posterior), 1)
+  expect_equal(sum(predict(qdamodel, prior=c(.7,.3),newdata = matrix(
+                                         0, nrow = 2, ncol = 2))$posterior), 1)
+  expect_equal(sum(predict(qdamodel)$posterior[1,]), 1)
 
+  
   newlda <- ldamodel
   newqda <- qdamodel
   newprior <- c(-1,2)
