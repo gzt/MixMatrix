@@ -225,6 +225,7 @@ test_that("Equivalent outputs for different functions:", {
 
   D <- MLmatrixt(A, row.mean = TRUE)
   expect_true(D$convergence)
+  expect_warning(MLmatrixt(A, fixed = FALSE, max.iter = 2))
   expect_equal(D$U[1, 1], 1)
   expect_equal(D$V[1, 1], 1)
   expect_equal(D$mean[1, 1], D$mean[1, 2])
