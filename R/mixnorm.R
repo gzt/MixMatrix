@@ -124,6 +124,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     centers = init$centers
     if( !is.null(init$U)){
         U = init$U
+        
     } else {
         U = array(rep(diag(p),nclass),c(p,p,nclass))
     }
@@ -387,6 +388,7 @@ plot.MixMatrixModel <- function(model){
 ##' @param ... Additional arguments to pass to $k$-means.
 ##' @return a list suitable to use as the \code{init} argument in
 ##'      \code{matrixmixture}
+##' @export
 ##' @importFrom stats kmeans
 init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "kmeans",

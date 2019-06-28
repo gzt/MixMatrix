@@ -7,277 +7,74 @@ test_that("Testing bad matrix dimension input", {
   A <- diag(3)
   B <- diag(4)
 
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    L = B,
-    R = A,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    L = A,
-    R = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    U = B,
-    R = A,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    L = A,
-    V = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    U = A,
-    V = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixnorm(
-    n = 1,
-    mean = A,
-    U = A,
-    R = B,
-    list = FALSE),
-    "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,    mean = A,    L = B,    R = A,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,   mean = A,    L = A,    R = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,    mean = A,    U = B,    R = A,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,    mean = A,    L = A,    V = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,    mean = A,    U = A,    V = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixnorm(    n = 1,    mean = A,    U = A,    R = B,    list = FALSE),
+               "Non-conforming")
 
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = B,
-    R = A,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = A,
-    R = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = B,
-    R = A,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = A,
-    V = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = A,
-    V = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = A,
-    R = B,
-    list = FALSE),
-    "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    L = B,    R = A,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    L = A,    R = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    U = B,    R = A,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    L = A,    V = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    U = A,    V = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixt(    n = 1,    df = 1,    mean = A,    U = A,    R = B,    list = FALSE),
+               "Non-conforming")
+  
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    L = B,    R = A,    list = FALSE),
+               "Non-conforming")
 
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = B,
-    R = A,
-    list = FALSE),
-    "Non-conforming")
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    L = A,    R = B,    list = FALSE),
+               "Non-conforming")
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    U = B,    R = A,    list = FALSE  ),
+               "Non-conforming")
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    L = A,    V = B,    list = FALSE  ),
+               "Non-conforming")
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    U = A,    V = B,    list = FALSE  ),
+               "Non-conforming")
+  expect_error(rmatrixinvt(    n = 1,    df = 1,    mean = A,    U = A,    R = B,    list = FALSE  ),
+               "Non-conforming")
 
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = A,
-    R = B,
-    list = FALSE),
-    "Non-conforming")
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = B,
-    R = A,
-    list = FALSE
-  ),
-  "Non-conforming")
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    L = A,
-    V = B,
-    list = FALSE
-  ),
-  "Non-conforming")
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = A,
-    V = B,
-    list = FALSE
-  ),
-  "Non-conforming")
-  expect_error(rmatrixinvt(
-    n = 1,
-    df = 1,
-    mean = A,
-    U = A,
-    R = B,
-    list = FALSE
-  ),
-  "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    L = B,    R = A  ),
+               "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    L = A,    R = B  ),
+               "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    U = B,    R = A  ),
+               "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    L = A,    V = B  ),
+               "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    U = A,    V = B  ),
+               "Non-conforming")
+  expect_error(dmatrixnorm(    x = A,    mean = A,    U = A,    R = B  ),
+               "Non-conforming")
 
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    L = B,
-    R = A
-  ),
-  "Non-conforming")
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    L = A,
-    R = B
-  ),
-  "Non-conforming")
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    U = B,
-    R = A
-  ),
-  "Non-conforming")
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    L = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    U = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixnorm(
-    x = A,
-    mean = A,
-    U = A,
-    R = B
-  ), "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    L = B,    R = A  ),
+               "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    L = A,    R = B  ),
+               "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    U = B,    R = A  ), "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    L = A,    V = B  ), "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    U = A,    V = B  ), "Non-conforming")
+  expect_error(dmatrixt(    x = A,    df = 1,    mean = A,    U = A,    R = B  ), "Non-conforming")
 
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = B,
-    R = A
-  ), "Non-conforming")
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = A,
-    R = B
-  ), "Non-conforming")
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = B,
-    R = A
-  ), "Non-conforming")
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = A,
-    R = B
-  ), "Non-conforming")
-
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = B,
-    R = A
-  ), "Non-conforming")
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = A,
-    R = B
-  ), "Non-conforming")
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = B,
-    R = A
-  ), "Non-conforming")
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    L = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = A,
-    V = B
-  ), "Non-conforming")
-  expect_error(dmatrixinvt(
-    x = A,
-    df = 1,
-    mean = A,
-    U = A,
-    R = B
-  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    L = B,    R = A  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    L = A,    R = B  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    U = B,    R = A  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    L = A,    V = B  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    U = A,    V = B  ), "Non-conforming")
+  expect_error(dmatrixinvt(    x = A,    df = 1,    mean = A,    U = A,    R = B  ), "Non-conforming")
 
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = B, V = A))
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = A), U = A, V = B))
@@ -399,205 +196,54 @@ context("Out of bounds")
 test_that("Out of bounds numeric input: ", {
   A <- diag(5)
   A[5, 5] <- 0
-  expect_error(rmatrixt(
-    0,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixt(
-    1,
-    -1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixt(
-    1,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixt(
-    1,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
+  expect_error(rmatrixt(0, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), V = diag(5)))
+  expect_error(rmatrixt(    1,    -1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)))
+  expect_error(rmatrixt(    1,    1,    matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)))
+  expect_error(rmatrixt(    1,    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = -diag(5)))
   expect_error(rmatrixt(1, 1, matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
   expect_error(rmatrixt(1, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), R = A))
   expect_error(rmatrixt(1, 1, matrix(0, nrow = 5, ncol = 5), U = A, V = diag(5)))
   expect_error(rmatrixt(1, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), V = A))
 
-  expect_error(rmatrixinvt(
-    0,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixinvt(
-    1,
-    -1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixinvt(
-    1,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixinvt(
-    1,
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
+  expect_error(rmatrixinvt(    0,    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)))
+  expect_error(rmatrixinvt(    1,    -1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)))
+  expect_error(rmatrixinvt(    1,    1,    matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)))
+  expect_error(rmatrixinvt(    1,    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = -diag(5)))
   expect_error(rmatrixinvt(1, 1, matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
   expect_error(rmatrixinvt(1, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), R = A))
   expect_error(rmatrixinvt(1, 1, matrix(0, nrow = 5, ncol = 5), U = A, V = diag(5)))
   expect_error(rmatrixinvt(1, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), V = A))
 
-  expect_error(rmatrixnorm(
-    0,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixnorm(
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(rmatrixnorm(
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
+  expect_error(rmatrixnorm(    0,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)  ))
+  expect_error(rmatrixnorm(    1,    matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)  ))
+  expect_error(rmatrixnorm(    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = -diag(5)  ))
   expect_error(rmatrixnorm(1, matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
   expect_error(rmatrixnorm(1, matrix(0, nrow = 5, ncol = 5), U = diag(5), R = A))
   expect_error(rmatrixnorm(1, 1, matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
   expect_error(rmatrixnorm(1, 1, matrix(0, nrow = 5, ncol = 5), U = diag(5), V = A))
 
-  expect_error(dmatrixt(
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
+  expect_error(dmatrixt(    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)  ))
 
-  expect_error(dmatrixinvt(
-    1,
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
+  expect_error(dmatrixinvt(    1,    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)  ))
 
-  expect_error(dmatrixt(
-    df = -1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    L = A,
-    V = diag(5)
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    R = A
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = A,
-    V = diag(5)
-  ))
-  expect_error(dmatrixt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = A
-  ))
+  expect_error(dmatrixt(    df = -1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)  ))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)  ))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = -diag(5)))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    L = A,    V = diag(5)  ))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    R = A  ))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = A,    V = diag(5)  ))
+  expect_error(dmatrixt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = A  ))
 
-  expect_error(dmatrixinvt(
-    df = -1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = diag(5)
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    L = A,
-    V = diag(5)
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    R = A
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = A,
-    V = diag(5)
-  ))
-  expect_error(dmatrixinvt(
-    df = 1,
-    x = matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = A
-  ))
+  expect_error(dmatrixinvt(    df = -1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = diag(5)  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),   U = diag(5),    V = -diag(5)  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    L = A,    V = diag(5)  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    R = A  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = A,    V = diag(5)  ))
+  expect_error(dmatrixinvt(    df = 1,    x = matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = A  ))
 
-  expect_error(dmatrixnorm(
-    matrix(0, nrow = 5, ncol = 5),
-    U = -diag(5),
-    V = diag(5)
-  ))
-  expect_error(dmatrixnorm(
-    matrix(0, nrow = 5, ncol = 5),
-    U = diag(5),
-    V = -diag(5)
-  ))
+  expect_error(dmatrixnorm(    matrix(0, nrow = 5, ncol = 5),    U = -diag(5),    V = diag(5)  ))
+  expect_error(dmatrixnorm(    matrix(0, nrow = 5, ncol = 5),    U = diag(5),    V = -diag(5)  ))
   expect_error(dmatrixnorm(matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
   expect_error(dmatrixnorm(matrix(0, nrow = 5, ncol = 5), U = diag(5), R = A))
   expect_error(dmatrixnorm(1, matrix(0, nrow = 5, ncol = 5), L = A, V = diag(5)))
