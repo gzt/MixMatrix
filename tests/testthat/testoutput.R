@@ -272,8 +272,8 @@ test_that("Output of LDA/QDA/Predict", {
   expect_equal(sum(predict(qdamodel)$posterior[1,]), 1)
 
   
-  newlda <- ldamodel
-  newqda <- qdamodel
+  newlda <- matrixlda(C, groups, priors, method = "t")
+  newqda <- matrixqda(C, groups, priors, method = "t")
   newprior <- c(-1,2)
 
   expect_error(predict(newlda, prior = newprior),
