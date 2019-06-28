@@ -4,9 +4,9 @@
 \alias{init_matrixmixture}
 \title{Initializing settings for Matrix Mixture Models}
 \usage{
-init_matrixmixture(data, prior, K = length(prior), centers = NULL,
-  U = NULL, V = NULL, centermethod = "kmeans",
-  varmethod = "identity", model = "normal", ...)
+init_matrixmixture(data, prior = NULL, K = length(prior),
+  centers = NULL, U = NULL, V = NULL, centermethod = "kmeans",
+  varmethod = "identity", model = "normal", init = NULL, ...)
 }
 \arguments{
 \item{data}{array of data}
@@ -38,6 +38,10 @@ will be done.}
 
 \item{model}{whether to use a normal distribution or a t-distribution, not
 relevant for more initialization methods.}
+
+\item{init}{(optional) a (possibly partially-formed) list with some of the components
+\code{centers}, \code{U}, and \code{V}. The function will complete the
+list and fill out missing entries.}
 
 \item{...}{Additional arguments to pass to $k$-means.}
 }

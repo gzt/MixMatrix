@@ -1,0 +1,90 @@
+---
+title: "Matrix Variate Mixture Models with the t distribution"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MixMatrix}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MixMatrix)
+```
+The matrix variate *t* distribution was introduced in a previous vignette along 
+with an EM algorithm for maximum likelihood fitting of the parameters. This can
+be extended rather easily to the case of mixture models for model-based 
+clustering.
+
+As in the case of mixture modeling in general, the difference is the EM algorithm
+is that one is now including estimates of $ \pi_j $ for $j$ in  $1,2, \ldots, g$, 
+the estimated probabilities of group membership for the $g$ groups in each step
+and weights $\tau_{ig}$, weights for each observation $i$ and group $g$, where
+
+$\pi_j = \sum_{i = 1}^n \tau_{ij}$ and 
+\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]
+
+The updates on the parameters $\Theta$ are weighted by $\tau_{ij}$. 
+
+The `matrixmixture()` function fits unrestricted covariance matrices currently,
+but future features will implement a `t-eigen` type of covariance restriction
+capability. 
+
+```{r demo}
+library(MixMatrix)
+ set.seed(20180221)
+ A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
+ B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
+ C <- array(c(A,B), dim=c(3,4,60))
+ prior <- c(.5,.5)
+ init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
+              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
+              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
+              )
+ res<-matrixmixture(C, init = init, prior = prior, nu = 20,
+                    model = "t", tolerance = 1e-1)
+print(res) # note: prints head of posterior, not full list
+
+plot(res)
+
+```
+
+The function takes data array `x`, either an argument `K` for how many groups
+there are or an initialization of a vector of probabilities `prior`, an optional
+initialization of centers and covariance matrices `init` (if the covariances are
+left blank, they will be initialized to identity matrices), and optional 
+arguments controlling the other parameters of function, such as number of 
+iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
+of freedom `nu` must be provided, but in the future it can be estimated.
+
+The packages also provides a helper function `init_matrixmixture()` to provide 
+the `init` object for you. At present, it can either use the `kmeans()` 
+function on the vectorization of the input data to provide starting centers or 
+select random points. The `...` arguments are passed to `kmeans()` (so `nstart`
+of other similar arguments can be  passed in). If a 
+partially formed `init` object is sent to the initializer, it will complete it.
+However, it will not validate that, for instance, the covariance matrices are 
+valid. Partial supply of initial centers is also supported - that is, if 
+fewer centers than groups are provided, the remainder will be chosen by 
+whatever method selected.
+
+```{r initializer}
+
+init_matrixmixture(C, prior = c(.5,.5), centermethod = 'kmeans')
+
+init_matrixmixture(C, K = 2, centermethod = 'random')
+
+```
+The method for determining convergence is based on Aitken acceleration of the
+log-likelihood. 
+
+```{r final}
+sessionInfo()
+
+```

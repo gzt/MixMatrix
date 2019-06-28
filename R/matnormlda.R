@@ -657,14 +657,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     list(class = cl, posterior = posterior)
   }
 
-
+#' @export
 #' @importFrom utils head
-print.matrixlda <- function(model){
-    model[["posterior"]] = head(model[["posterior"]])             
-    print.default(model)
+print.matrixlda <- function(x,...){
+    x[["posterior"]] = head(x[["posterior"]])             
+    print.default(x,...)
 }
 
-print.matrixqda <- function(model){
-    model[["posterior"]] = head(model[["posterior"]])             
-    print.default(model)
+#' @export
+print.matrixqda <- function(x,...){
+    x[["posterior"]] = head(x[["posterior"]])             
+    print.default(x,...)
 }

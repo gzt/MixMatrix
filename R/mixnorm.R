@@ -346,15 +346,19 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     class = "MixMatrixModel")
 }
 
-
-print.MixMatrixModel <- function(model){
-    model[["posterior"]] = head(model[["posterior"]])             
-    print.default(model)
+#' @export
+print.MixMatrixModel <- function(x, ...){
+    x[["posterior"]] = head(x[["posterior"]])
+    x[["init"]] = NULL
+    print.default(x,...)
+    
 }
 
+#' @export
 #' @importFrom graphics plot
-plot.MixMatrixModel <- function(model){
-    plot(model$logLik, ylab="Log Likelihood",xlab="iteration")
+plot.MixMatrixModel <- function(x, ...){
+    plot(x = 1:length(x$logLik), y = x$logLik,
+         ylab="Log Likelihood",xlab="iteration",...)
 }
 
 ##' Initializing settings for Matrix Mixture Models
@@ -385,40 +389,57 @@ plot.MixMatrixModel <- function(model){
 ##'      will be done.
 ##' @param model whether to use a normal distribution or a t-distribution, not
 ##'      relevant for more initialization methods.
+##' @param init (optional) a (possibly partially-formed) list with some of the components
+##'     \code{centers}, \code{U}, and \code{V}. The function will complete the
+##'     list and fill out missing entries.
 ##' @param ... Additional arguments to pass to $k$-means.
 ##' @return a list suitable to use as the \code{init} argument in
 ##'      \code{matrixmixture}
 ##' @export
 ##' @importFrom stats kmeans
-init_matrixmixture<- function(data, prior, K = length(prior), centers = NULL,
+init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "kmeans",
-                              varmethod = "identity", model = "normal",...){
+                              varmethod = "identity", model = "normal", init = NULL,...){
     dims = dim(data)
     p = dims[1]
     q = dims[2]
     n = dims[3]
-
+    remains = K
+    cenflag = FALSE
     if(length(prior) == 1) K = prior
-    
-    if(centermethod == "random"){
-    select = sample(n,K, replace = FALSE)
-    centers = data[,,select]
-    }
-    if(centermethod == "kmeans" || centermethod == "k-means"){
-        res = kmeans(matrix(data, nrow = n), centers = K, ...)
-        centers = array(res$centers, dim = c(p,q,K))
-    }
-    if(!is.null(U) && !is.null(V)){
-        
-        if(length(dim(U) == 2)) U = array(rep(U,K), dim = c(p,p,K))
-        if(length(dim(V) == 2)) V = array(rep(V,K), dim = c(q,q,K))
-        
-    } else {
-        if(varmethod == "identity"){
-            U = array(c(rep(diag(p),K)), dim = c(p,p,K))
-            V = array(c(rep(diag(q),K)), dim = c(q,q,K))
+    if(!is.null(K)) prior = rep(1,K)/K
+    if(!is.null(init)){
+        if(!is.null(init$centers)){
+            cenflag = TRUE
+            initcenters = init$centers
+            dimcen = dim(centers)
+            if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
+            remains = K - dimcen[3]
         }
+        U = init$U
+        V = init$V
+        }
+    if(centermethod == "random" && (remains > 0)){
+    select = sample(n,remains, replace = FALSE)
+    centers = data[,,select]
+    if(cenflag) centers[,,(remains+1):K] = initcenters
     }
+    if((remains > 0) && (centermethod == "kmeans" || centermethod == "k-means")){
+        res = kmeans(matrix(data, nrow = n), centers = remains, ...)
+        centers = array(res$centers, dim = c(p,q,remains))
+        if(cenflag) centers = array(c(centers, initcenters), dim = c(p,q,K))
+    }
+    if(!is.null(U)){
+        if(length(dim(U) == 2)) U = array(rep(U,K), dim = c(p,p,K))
+    }
+    if(!is.null(V)){        
+        if(length(dim(V) == 2)) V = array(rep(V,K), dim = c(q,q,K))
+    } 
+    if(varmethod == "identity"){
+        if(is.null(U)) U = array(c(rep(diag(p),K)), dim = c(p,p,K))
+        if(is.null(V)) V = array(c(rep(diag(q),K)), dim = c(q,q,K))
+    }
+   
     list(
         centers = centers,
         U = U,
