@@ -54,7 +54,9 @@
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
-#'
+#' @param subset An index vector specifying the cases to be used in the
+#'          training sample.  (NOTE: If given, this argument must be
+#'          named.)
 #'
 #' @return Returns a list of class \code{matrixlda} containing
 #'    the following components:
@@ -98,6 +100,11 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   if (nu == 0 || is.infinite(nu)) method = "normal"
 
   if (method == "normal") nu = NULL
+  if(!missing(subset)) {
+      x <- x[, ,subset, drop = FALSE]
+      grouping <- grouping[subset]
+  }
+  
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -298,7 +305,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
-
+    
 
     if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
       stop("wrong column dimension of matrices")
@@ -372,6 +379,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
+#' @param subset An index vector specifying the cases to be used in the
+#'          training sample.  (NOTE: If given, this argument must be
+#'          named.)
 #'
 #' @return Returns a list of class \code{matrixqda} containing
 #'    the following components:
@@ -410,8 +420,12 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
   if (nu == 0 || is.infinite(nu)) method = "normal"
-
   if (method == "normal") df = NULL
+  if(!missing(subset)) {
+      x <- x[, ,subset, drop = FALSE]
+      grouping <- grouping[subset]
+  }
+    
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
