@@ -88,7 +88,7 @@
 #' prior <- c(.5,.5)
 #' matrixlda(C, groups, prior)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
-                       nu = 10,...)  {
+                       nu = 10,..., subset)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -285,9 +285,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
           eval.parent(parse(text = paste(
             deparse(object$call$x,
                     backtick = TRUE),
-            "[",
+            "[,,",
             deparse(sub, backtick = TRUE),
-            ",]"
+            ",drop = FALSE]"
           )))
       else
         newdata <- eval.parent(object$call$x)
@@ -410,7 +410,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' D <- matrixqda(C, groups, prior)
-matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...)  {
+matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -572,9 +572,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
           eval.parent(parse(text = paste(
             deparse(object$call$x,
                     backtick = TRUE),
-            "[",
+            "[,,",
             deparse(sub, backtick = TRUE),
-            ",]"
+            ",drop = FALSE]"
           )))
       else
         newdata <- eval.parent(object$call$x)
