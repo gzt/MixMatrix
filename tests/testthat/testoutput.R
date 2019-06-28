@@ -37,6 +37,11 @@ test_that("Equivalent outputs for different options:", {
                   list = FALSE)
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
+  expect_equal(dmatrixnorm(A,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
+               dmatrixnorm(B[[1]],  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+  expect_equal(dmatrixnorm(A,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
+               dmatrixnorm(C,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2))[1])
+  
   set.seed(2018020202)
   A <-    rmatrixt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
                    L = matrix(c(2, 1, 0, .1), nrow = 2),
@@ -49,8 +54,14 @@ test_that("Equivalent outputs for different options:", {
   C <-    rmatrixt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
       L = matrix(c(2, 1, 0, .1), nrow = 2),
       array = TRUE    )
+  
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
+  expect_equal(dmatrixt(A, df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000),  nrow = 2)),
+               dmatrixt(B[[1]],df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+    expect_equal(dmatrixt(A, df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000),  nrow = 2)),
+                 dmatrixt(C,df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+  
   set.seed(2018020203)
   A <-    rmatrixinvt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
                       L = matrix(c(2, 1, 0, .1), nrow = 2),
@@ -149,7 +160,7 @@ test_that("Equivalent outputs for different functions:", {
 
   set.seed(20180219)
   A <- rmatrixnorm(40, mean = array(1, dim = c(4, 5)),
-                U = CSgenerate(4,.2), V = ARgenerate(5, .8))
+                U = CSgenerate(4,.2), V = ARgenerate(5, .8), list = TRUE)
   B <- MLmatrixnorm(A, row.mean = TRUE)
   expect_equal(B$U[1, 1], 1)
   expect_equal(B$V[1, 1], 1)
@@ -157,16 +168,20 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(B$mean[1, 1], B$mean[1, 2])
   C <- MLmatrixnorm(A, col.mean = T)
   expect_equal(C$mean[1, 1], C$mean[2, 1])
-  C <- MLmatrixnorm(A, col.variance = "CS")
-  expect_equal(C$V[1,2],C$V[1,5])
-  C <- MLmatrixnorm(A, row.variance = "AR(1)")
-  expect_equal(C$U[2,1],C$U[3,2])
+  C <- MLmatrixnorm(A, row.variance = "CS")
+  expect_equal(C$U[1,2],C$U[1,4])
+  C <- MLmatrixnorm(A, col.variance = "AR(1)")
+  expect_equal(C$V[2,1],C$V[3,2])
+  C <- MLmatrixnorm(A, row.variance = "corr")
+  expect_equal(C$U[2,2],C$U[1,1])
+  C <- MLmatrixnorm(A, col.variance = "corr")
+  expect_equal(C$V[2,2],C$V[3,3])
   C <- MLmatrixnorm(A, row.variance = "I")
   expect_equal(C$U[1,2],0)
   C <- MLmatrixnorm(A, col.variance = "I")
   expect_equal(C$V[1,4],0)
 
-  D <- MLmatrixt(A, row.mean = TRUE)
+  D <- MLmatrixt(A, row.mean = TRUE, list = TRUE)
   expect_true(D$convergence)
   expect_warning(MLmatrixt(A, fixed = FALSE, max.iter = 2))
   expect_equal(D$U[1, 1], 1)
@@ -174,10 +189,15 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(D$mean[1, 1], D$mean[1, 2])
   C <- MLmatrixt(A, col.mean = T)
   expect_equal(C$mean[1, 1], C$mean[2, 1])
+  
   C <- MLmatrixt(A, col.variance = "CS")
   expect_equal(C$V[1,2],C$V[1,5])
+  C <- MLmatrixt(A, col.variance = "corr")
+  expect_equal(C$V[1,1],C$V[2,2])
   C <- MLmatrixt(A, row.variance = "AR(1)")
   expect_equal(C$U[2,1],C$U[3,2])
+  C <- MLmatrixt(A, row.variance = "corr")
+  expect_equal(C$U[1,1],C$U[2,2])
   C <- MLmatrixt(A, row.variance = "I")
   expect_equal(C$U[1,2],0)
   C <- MLmatrixt(A, col.variance = "I")
