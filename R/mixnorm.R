@@ -381,7 +381,7 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param V either a matrix or an array of matrices for use as the \code{V}
 ##'      argument (optional)
 ##' @param centermethod what method to use to generate initial centers.
-##'      Current support random start or performing $k$-means on the vectorized
+##'      Current support random start or performing k-means on the vectorized
 ##'      version for a small number of iterations and then converting back.
 ##'      By default, if centers are provided, nothing will be done.
 ##' @param varmethod what method to use to choose initial variance matrices.
@@ -394,7 +394,7 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param init (optional) a (possibly partially-formed) list with some of the components
 ##'     \code{centers}, \code{U}, and \code{V}. The function will complete the
 ##'     list and fill out missing entries.
-##' @param ... Additional arguments to pass to $k$-means.
+##' @param ... Additional arguments to pass to \code{kmeans()}.
 ##' @return a list suitable to use as the \code{init} argument in
 ##'      \code{matrixmixture}
 ##' @export
