@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Returns the inverse of an AR(1) covariance matrix or its derivative — invAR • MixMatrix</title>
+<title>Initializing settings for Matrix Mixture Models — init_matrixmixture • MixMatrix</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Returns the inverse of an AR(1) covariance matrix or its derivative — invAR" />
+<meta property="og:title" content="Initializing settings for Matrix Mixture Models — init_matrixmixture" />
 
-<meta property="og:description" content="Returns the inverse of an AR(1) covariance matrix or its derivative" />
+<meta property="og:description" content="Providing this will generate a list suitable for use as the init
+argument in the matrixmixture function. Either provide data
+and it will select centers and variance matrices to initialize or
+provide initial values and it will format them as expected for the function." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,45 +126,93 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Returns the inverse of an AR(1) covariance matrix or its derivative</h1>
-    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/matrixutils.R'><code>R/matrixutils.R</code></a></small>
-    <div class="hidden name"><code>invAR.Rd</code></div>
+    <h1>Initializing settings for Matrix Mixture Models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/gzt/MixMatrix/blob/master/R/mixnorm.R'><code>R/mixnorm.R</code></a></small>
+    <div class="hidden name"><code>init_matrixmixture.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the inverse of an AR(1) covariance matrix or its derivative</p>
+    <p>Providing this will generate a list suitable for use as the <code>init</code>
+argument in the <code>matrixmixture</code> function. Either provide data
+and it will select centers and variance matrices to initialize or
+provide initial values and it will format them as expected for the function.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>invAR</span>(<span class='no'>n</span>, <span class='no'>rho</span>, <span class='kw'>deriv</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>init_matrixmixture</span>(<span class='no'>data</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>prior</span>),
+  <span class='kw'>centers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>U</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centermethod</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>,
+  <span class='kw'>varmethod</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>dimensions of matrix</p></td>
+      <th>data</th>
+      <td><p>array of data</p></td>
     </tr>
     <tr>
-      <th>rho</th>
-      <td><p>correlation parameter</p></td>
+      <th>prior</th>
+      <td><p>prior probability. One of <code>prior</code> and <code>K</code> must be
+provided. They must be consistent if both provided.</p></td>
     </tr>
     <tr>
-      <th>deriv</th>
-      <td><p>logical. if TRUE will output the derivative of the inverse matrix.</p></td>
+      <th>K</th>
+      <td><p>number of groups</p></td>
+    </tr>
+    <tr>
+      <th>centers</th>
+      <td><p>either a matrix or an array of matrices for use as the
+<code>centers</code> argument (optional)</p></td>
+    </tr>
+    <tr>
+      <th>U</th>
+      <td><p>either a matrix or an array of matrices for use as the <code>U</code>
+argument (optional)</p></td>
+    </tr>
+    <tr>
+      <th>V</th>
+      <td><p>either a matrix or an array of matrices for use as the <code>V</code>
+argument (optional)</p></td>
+    </tr>
+    <tr>
+      <th>centermethod</th>
+      <td><p>what method to use to generate initial centers.
+Current support random start or performing $k$-means on the vectorized
+version for a small number of iterations and then converting back.
+By default, if centers are provided, nothing will be done.</p></td>
+    </tr>
+    <tr>
+      <th>varmethod</th>
+      <td><p>what method to use to choose initial variance matrices.
+Currently either identity matrices or the empirical covariance matrix
+determined by hard assignment to the nearest centers.
+By default, if <code>U</code> and <code>V</code> matrices are provided, nothing
+will be done.</p></td>
+    </tr>
+    <tr>
+      <th>model</th>
+      <td><p>whether to use a normal distribution or a t-distribution, not
+relevant for more initialization methods.</p></td>
+    </tr>
+    <tr>
+      <th>init</th>
+      <td><p>(optional) a (possibly partially-formed) list with some of the components
+<code>centers</code>, <code>U</code>, and <code>V</code>. The function will complete the
+list and fill out missing entries.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments to pass to $k$-means.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Matrix of the inverse of the AR(1) covariance matrix (or its inverse)</p>
+    <p>a list suitable to use as the <code>init</code> argument in
+     <code>matrixmixture</code></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>invAR</span>(<span class='fl'>5</span>,<span class='fl'>.5</span>, <span class='fl'>TRUE</span>)
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -169,9 +220,7 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

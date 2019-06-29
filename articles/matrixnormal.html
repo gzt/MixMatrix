@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
     <li>
       <a href="../articles/matrixnormal.html">Matrix Variate Normal Distributions with MixMatrix</a>
     </li>
+    <li>
+      <a href="../articles/mixturemodel.html">Matrix Variate Mixture Models with the t distribution</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -89,7 +92,7 @@
       <h1>Matrix Variate Normal Distributions with MixMatrix</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2019-06-22</h4>
+            <h4 class="date">2019-06-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/gzt/MixMatrix/blob/master/vignettes/matrixnormal.Rmd"><code>vignettes/matrixnormal.Rmd</code></a></small>
       <div class="hidden name"><code>matrixnormal.Rmd</code></div>
@@ -203,7 +206,7 @@ $tol
 [1] 9.830401e-11
 
 $logLik
-[1] -376.4574
+[1] -415.1583 -376.4587 -376.4574 -376.4574 -376.4574
 
 $convergence
 [1] TRUE
@@ -241,7 +244,7 @@ $tol
 [1] 2.815079e+12
 
 $logLik
-[1] -2998.804
+[1] -3125.019 -3093.986 -3062.230 -3030.199 -2998.804
 
 $convergence
 [1] FALSE
@@ -288,7 +291,8 @@ $tol
 [1] 8.350665e-06
 
 $logLik
-[1] -1147.611
+ [1] -1156.190 -1149.695 -1148.326 -1147.869 -1147.711 -1147.650 -1147.627
+ [8] -1147.617 -1147.614 -1147.612 -1147.611 -1147.611
 
 $convergence
 [1] TRUE
@@ -328,7 +332,7 @@ $tol
 [1] 2.457002e-06
 
 $logLik
-[1] -1143.766
+[1] -1145.534 -1143.775 -1143.767 -1143.766
 
 $convergence
 [1] TRUE
@@ -337,6 +341,42 @@ $call
 MLmatrixnorm(data = B, tol = 1e-05)</code></pre>
 <p>In order to fit parameters for an <span class="math inline">\(n \times p\)</span> matrix variate normal distribution, at least <span class="math inline">\(\max (n/p,p/n) + 1\)</span> observations are needed. Maximum likelihood estimates are unique if there are more than <span class="math inline">\(\max(p,n)\)</span> observations.</p>
 <p>The function expects data in a format produced by the <code>rmatrixnorm</code> function. The results are only the parameter estimates and do not include measures of uncertainty.</p>
+</div>
+<div id="session-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#session-information" class="anchor"></a>Session Information</h2>
+<p>This vignette was compiled with <code>rmarkdown</code>.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+<pre><code>R version 3.6.0 (2017-01-27)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 14.04.5 LTS
+
+Matrix products: default
+BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so
+LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] MixMatrix_0.2.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.1       knitr_1.23       xml2_1.2.0       magrittr_1.5    
+ [5] roxygen2_6.1.1   MASS_7.3-51.4    R6_2.4.0         rlang_0.4.0     
+ [9] stringr_1.4.0    tools_3.6.0      xfun_0.8         htmltools_0.3.6 
+[13] commonmark_1.7   yaml_2.2.0       digest_0.6.19    assertthat_0.2.1
+[17] rprojroot_1.3-2  pkgdown_1.3.0    crayon_1.3.4     codetools_0.2-16
+[21] fs_1.3.1         memoise_1.1.0    evaluate_0.14    rmarkdown_1.13  
+[25] stringi_1.4.3    compiler_3.6.0   desc_1.2.0       backports_1.1.4 </code></pre>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
@@ -366,6 +406,7 @@ MLmatrixnorm(data = B, tol = 1e-05)</code></pre>
 <li><a href="#matrix-variate-distributions">Matrix Variate Distributions</a></li>
       <li><a href="#matrix-variate-normal-distributions">Matrix Variate Normal Distributions</a></li>
       <li><a href="#parameter-estimation-for-matrix-variate-normal-distributions">Parameter estimation for matrix variate normal distributions</a></li>
+      <li><a href="#session-information">Session Information</a></li>
       <li><a href="#references">References</a></li>
       </ul>
 </div>

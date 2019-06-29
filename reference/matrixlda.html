@@ -73,7 +73,7 @@ distribution, presuming equal covariances between classes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@ distribution, presuming equal covariances between classes." />
     </li>
     <li>
       <a href="../articles/matrixnormal.html">Matrix Variate Normal Distributions with MixMatrix</a>
+    </li>
+    <li>
+      <a href="../articles/mixturemodel.html">Matrix Variate Mixture Models with the t distribution</a>
     </li>
   </ul>
 </li>
@@ -152,7 +155,7 @@ distribution, presuming equal covariances between classes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>matrixlda</span>(<span class='no'>x</span>, <span class='no'>grouping</span>, <span class='no'>prior</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-04</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
-  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>, <span class='no'>subset</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,6 +193,12 @@ default, 10.</p></td>
       <td><p>Arguments passed to or from other methods, such
 as additional parameters to pass to <code>MLmatrixnorm</code> (e.g.,
 <code>row.mean</code>)</p></td>
+    </tr>
+    <tr>
+      <th>subset</th>
+      <td><p>An index vector specifying the cases to be used in the
+training sample.  (NOTE: If given, this argument must be
+named.)</p></td>
     </tr>
     </table>
     
