@@ -18,6 +18,10 @@
 
 ##' Fit a matrix variate mixture model
 ##'
+##' Fit a mixture model using EM with \code{K} groups and unconstrained
+##' covariance matrices for a matrix variate normal or matrix variate
+##' t distribution (with specified degrees of freedom \code{nu}). 
+##'
 ##' @param x data, \code{p x q x n} array
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
 ##'     and optionally \code{p x p} and \code{q x q} positive definite variance

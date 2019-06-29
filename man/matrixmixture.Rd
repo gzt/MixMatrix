@@ -82,3 +82,9 @@ if(interactive()) plot(res)
 res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 if(interactive()) plot(res)
 }
+\seealso{
+Other matrixvariate: \code{\link{MLmatrixnorm}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
+  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
+}
+\concept{matrixvariate}

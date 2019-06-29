@@ -71,10 +71,7 @@ Other matrixlda: \code{\link{matrixlda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
 
-Other matrix-variate: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{predict.matrixlda}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
+Other matrix-variate: \code{\link{predict.matrixlda}}
 }
 \concept{matrix-variate}
 \concept{matrixlda}
