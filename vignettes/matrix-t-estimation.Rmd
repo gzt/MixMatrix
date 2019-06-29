@@ -179,6 +179,8 @@ knitr::kable(dfdataframe %>% group_by(truedf, samplesize) %>%
 
 
 ```{r dftenexample, echo = FALSE, cache = TRUE, message = FALSE, warning = FALSE}
+##### Here is what is really run
+
 set.seed(20190621)
 df10 <- rep(0,50)
 df1050 <-  rep(0,50)
@@ -220,6 +222,8 @@ knitr::kable(dfdataframe %>% group_by(samplesize) %>%
 	median = median(estdf),
 	mean=mean(estdf),
 	sd = sd(estdf)))
+
+#### Here ends what is really run
 
 ```
 
