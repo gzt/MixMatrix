@@ -104,14 +104,18 @@
 <h2 class="hasAnchor">
 <a href="#matrix-variate-mixture-modeling" class="anchor"></a>Matrix Variate Mixture Modeling</h2>
 <p>The matrix variate <em>t</em> distribution was introduced in a previous vignette along with an EM algorithm for maximum likelihood fitting of the parameters. This can be extended rather easily to the case of mixture models for model-based clustering.</p>
-<p>As in the case of mixture modeling in general, the difference is the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ig}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(g\)</span>, where <span class="math display">\[\pi_j = \sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]</span></p>
-<p>The updates on the parameters <span class="math inline">\(\Theta\)</span> are weighted by <span class="math inline">\(\tau_{ij}\)</span>.</p>
+<p>As in the case of mixture modeling in general, the difference is the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ig}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>, where <span class="math display">\[\pi_j = \sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]</span></p>
+<p>The updates on the parameters <span class="math inline">\(\Theta\)</span> are weighted by <span class="math inline">\(\tau_{ij}\)</span> in an Expectation/Conditional Maximization algorithm.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The <code><a href="../reference/matrixmixture.html">matrixmixture()</a></code> function fits unrestricted covariance matrices currently, but future features will implement a <a href="https://cran.r-project.org/package=teigen"><code>teigen</code></a> type of covariance restriction capability for use with the <span class="math inline">\(t\)</span> distribution.</p>
 <p>Currently, this can perform model fitting with unrestricted covariance matrices and fixed degrees of freedom (<code>nu</code>) parameter or for the matrix normal distribution. It does not solve the identifiability problem.</p>
+<div id="matrixmixture-function" class="section level3">
+<h3 class="hasAnchor">
+<a href="#matrixmixture-function" class="anchor"></a><code>matrixmixture</code> function</h3>
+<p>The function takes data array <code>x</code>, either an argument <code>K</code> for how many groups there are or an initialization of a vector of probabilities <code>prior</code>, an optional initialization of centers and covariance matrices <code>init</code> (if the covariances are left blank, they will be initialized to identity matrices), and optional arguments controlling the other parameters of function, such as number of iterations and normal vs <em>t</em>. If the <code>model = "t"</code> is chosen, the degrees of freedom <code>nu</code> must be provided, but in the future it can be estimated.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(MixMatrix)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180221</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"> A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
@@ -228,7 +232,10 @@
 <a class="sourceLine" id="cb2-114" data-line-number="114"></a>
 <a class="sourceLine" id="cb2-115" data-line-number="115"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(res)</a></code></pre></div>
 <p><img src="mixturemodel_files/figure-html/demo-1.png" width="700"></p>
-<p>The function takes data array <code>x</code>, either an argument <code>K</code> for how many groups there are or an initialization of a vector of probabilities <code>prior</code>, an optional initialization of centers and covariance matrices <code>init</code> (if the covariances are left blank, they will be initialized to identity matrices), and optional arguments controlling the other parameters of function, such as number of iterations and normal vs <em>t</em>. If the <code>model = "t"</code> is chosen, the degrees of freedom <code>nu</code> must be provided, but in the future it can be estimated.</p>
+</div>
+<div id="initialization-function" class="section level3">
+<h3 class="hasAnchor">
+<a href="#initialization-function" class="anchor"></a>Initialization function</h3>
 <p>The packages also provides a helper function <code><a href="../reference/init_matrixmixture.html">init_matrixmixture()</a></code> to provide the <code>init</code> object for you. At present, it can either use the <code><a href="https://www.rdocumentation.org/packages/stats/topics/kmeans">kmeans()</a></code> function on the vectorization of the input data to provide starting centers or select random points. The <code>...</code> arguments are passed to <code><a href="https://www.rdocumentation.org/packages/stats/topics/kmeans">kmeans()</a></code> (so <code>nstart</code> of other similar arguments can be passed in). If a partially formed <code>init</code> object is sent to the initializer, it will complete it. However, it will not validate that, for instance, the covariance matrices are valid. Partial supply of initial centers is also supported - that is, if fewer centers than groups are provided, the remainder will be chosen by whatever method selected.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(C, <span class="dt">prior =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(.<span class="dv">5</span>,.<span class="dv">5</span>), <span class="dt">centermethod =</span> <span class="st">'kmeans'</span>)</a>
@@ -331,6 +338,7 @@
 <a class="sourceLine" id="cb3-99" data-line-number="99"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
 <a class="sourceLine" id="cb3-100" data-line-number="100"><span class="co">#&gt; [4,]    0    0    0    1</span></a></code></pre></div>
 <p>The method for determining convergence is based on Aitken acceleration of the log-likelihood.</p>
+</div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
