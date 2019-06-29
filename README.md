@@ -89,7 +89,7 @@ mixture modeling after the style of [Mclust](https://cran.r-project.org/package=
 Please let me know if you have any issues or suggestions here: 
 https://github.com/gzt/MixMatrix/issues
 
-Please note that the 'MixMatrix' project is released with a 
+Please note that the `MixMatrix` project is released with a 
 [Contributor Code of Conduct](https://gzt.github.io/MixMatrix/CODE_OF_CONDUCT.html). 
 By contributing to this project, you agree to abide by its terms.
 
