@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(MixMatrix)
 ```
+## Matrix Variate Mixture Modeling
+
 The matrix variate *t* distribution was introduced in a previous vignette along 
 with an EM algorithm for maximum likelihood fitting of the parameters. This can
 be extended rather easily to the case of mixture models for model-based 
@@ -26,15 +28,20 @@ As in the case of mixture modeling in general, the difference is the EM algorith
 is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
 and weights $\tau_{ig}$, weights for each observation $i$ and group $g$, where
-
-$\pi_j = \sum_{i = 1}^n \tau_{ij}$ and 
+\[\pi_j = \sum_{i = 1}^n \tau_{ij}\] and 
 \[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]
 
 The updates on the parameters $\Theta$ are weighted by $\tau_{ij}$. 
 
+## Usage
+
 The `matrixmixture()` function fits unrestricted covariance matrices currently,
-but future features will implement a `t-eigen` type of covariance restriction
-capability. 
+but future features will implement a [`teigen`](https://cran.r-project.org/package=teigen) 
+type of covariance restriction capability for use with the $t$ distribution.
+
+Currently, this can perform model fitting with unrestricted covariance matrices and 
+fixed degrees of freedom (`nu`) parameter or for the matrix normal distribution. 
+It does not solve the identifiability problem.
 
 ```{r demo}
 library(MixMatrix)
@@ -83,6 +90,8 @@ init_matrixmixture(C, K = 2, centermethod = 'random')
 ```
 The method for determining convergence is based on Aitken acceleration of the
 log-likelihood. 
+
+## Session Information
 
 ```{r final}
 sessionInfo()
