@@ -29,7 +29,7 @@
 ##'     provided, the prior will be of equal distribution.
 ##' @param iter maximum number of iterations.
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
-##'     Currently, only the normal distribution is allowed.
+##'     
 ##' @param method what method to use to fit the distribution. Currently no options.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood.
@@ -73,10 +73,10 @@
 #'              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
 #'              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 #'              )
-##'res<-matrixmixture(C, init = init, prior = prior)
-##'print(res) # note: prints head of posterior, not full list
+##' res<-matrixmixture(C, init = init, prior = prior)
+##' print(res) # note: prints head of posterior, not full list
 ##' if(interactive()) plot(res)
-##'res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
+##' res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 ##' if(interactive()) plot(res)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
@@ -170,16 +170,15 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
   
 ####### E STEP
         ## update expectations of sufficient statistics
-        
         ## update z_ig weights
-       # for(obs in 1:n){
+
             for(j in 1:K){
                 newposterior[,j] = log(pi[j]) +
                     dmatrixt(x = x[,,],
                              df = nu, mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE)
               }
-        #}
+
         newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
         newposterior = exp(newposterior)
         totalpost = rowSums(newposterior)
@@ -206,8 +205,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                 
                 SSXXtmp = cubemult(x,SSXtmp)
                 SSXX[,,j] = rowSums(SSXXtmp,FALSE, 2)
-                
-            }
+             }
         }
  
 ### leave blank for now

@@ -346,9 +346,7 @@ Smatrix = array(0,c(p,p,n))
     warning("Failed to converge")
 
   converged = !(iter >= max.iter || error.term > tol || varflag)
-  
-
-  
+    
   return(list(mean = mu,
               U = U/U[1,1],
               V = V,

@@ -24,8 +24,7 @@ provided, the prior will be of equal distribution.}
 
 \item{iter}{maximum number of iterations.}
 
-\item{model}{whether to use the \code{normal} or \code{t} distribution.
-Currently, only the normal distribution is allowed.}
+\item{model}{whether to use the \code{normal} or \code{t} distribution.}
 
 \item{method}{what method to use to fit the distribution. Currently no options.}
 
