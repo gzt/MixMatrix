@@ -21,87 +21,57 @@ test_that("Testing helper functions:", {
 
 test_that("Equivalent outputs for different options:", {
   set.seed(2018020201)
-  A <-
-    rmatrixnorm(
-      n = 1,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = FALSE
-    )
+  A <-    rmatrixnorm(      n = 1,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                L = matrix(c(2, 1, 0, .1), nrow = 2),
+                list = FALSE
+                )
   set.seed(2018020201)
-  B <-
-    rmatrixnorm(
-      n = 10,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = TRUE
-    )
+  B <-    rmatrixnorm(      n = 10,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                L = matrix(c(2, 1, 0, .1), nrow = 2),      list = TRUE    )
   set.seed(2018020201)
-  C <-
-    rmatrixnorm(
-      n = 10,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = FALSE
-    )
+  C <-      rmatrixnorm(      n = 10,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                  L = matrix(c(2, 1, 0, .1), nrow = 2),
+                  list = FALSE)
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
+  expect_equal(dmatrixnorm(A,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
+               dmatrixnorm(B[[1]],  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+  expect_equal(dmatrixnorm(A,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
+               dmatrixnorm(C,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2))[1])
+  
   set.seed(2018020202)
-  A <-
-    rmatrixt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = FALSE
-    )
+  A <-    rmatrixt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                   L = matrix(c(2, 1, 0, .1), nrow = 2),
+                   list = FALSE    )
   set.seed(2018020202)
-  B <-
-    rmatrixt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = TRUE
-    )
+  B <-    rmatrixt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                   L = matrix(c(2, 1, 0, .1), nrow = 2),
+                   list = TRUE    )
   set.seed(2018020202)
-  C <-
-    rmatrixt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  C <-    rmatrixt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
       L = matrix(c(2, 1, 0, .1), nrow = 2),
-      array = TRUE
-    )
+      array = TRUE    )
+  
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
+  expect_equal(dmatrixt(A, df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000),  nrow = 2)),
+               dmatrixt(B[[1]],df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+    expect_equal(dmatrixt(A, df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000),  nrow = 2)),
+                 dmatrixt(C,df = 2,  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)))
+  
   set.seed(2018020203)
-  A <-
-    rmatrixinvt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = FALSE
-    )
+  A <-    rmatrixinvt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                      L = matrix(c(2, 1, 0, .1), nrow = 2),
+                      list = FALSE    )
   set.seed(2018020203)
-  B <-
-    rmatrixinvt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  B <-    rmatrixinvt(      n = 1,      df = 2,      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
       L = matrix(c(2, 1, 0, .1), nrow = 2),
-      list = TRUE
-    )
+      list = TRUE    )
   set.seed(2018020203)
-  C <-
-    rmatrixinvt(
-      n = 1,
-      df = 2,
-      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
-      L = matrix(c(2, 1, 0, .1), nrow = 2),
-      array = TRUE
-    )
+  C <-    rmatrixinvt(      n = 1,      df = 2,
+                      mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+                      L = matrix(c(2, 1, 0, .1), nrow = 2),
+                      array = TRUE                      )
   expect_equal(A, B[[1]])
   expect_equal(A, C[, , 1])
 
@@ -150,13 +120,7 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(var(A), var(B), tolerance = .08)
   expect_equal(mean(A), mean(B), tolerance = .035)
   df = 10
-  A = as.vector(rmatrixt(
-    1e4,
-    df = df,
-    0,
-    V = df,
-    list = FALSE
-  ))
+  A = as.vector(rmatrixt(    1e4,    df = df,    0,    V = df,    list = FALSE  ))
   B = as.vector(rt(1e4, df = 10))
   expect_equal(var(A), var(B), tolerance = .08)
   expect_equal(mean(A), mean(B), tolerance = .035)
@@ -168,26 +132,13 @@ test_that("Equivalent outputs for different functions:", {
   df = 5
 
   #dmvt(x,sigma = U.two,df = 5)
-  expect_equal(
-    dmatrixt(
-      x,
-      df,
-      U = U.one,
-      V = df * V.one,
-      log = T
-    ),
-    dmatrixt(
-      t(x),
-      df,
-      U = U.two,
-      V = df * V.two,
-      log = T
-    ),
-    tolerance = .000001
-  )
+  expect_equal(    dmatrixt(      x,      df,      U = U.one,      V = df * V.one,      log = T    ),
+               dmatrixt(      t(x),      df,      U = U.two,      V = df * V.two,      log = T    ),
+               tolerance = .000001
+               )
   expect_equal(dmatrixt(x, df, U = U.one, V = df * V.one, log = T),
-  -4.663386,
-  tolerance = .000001)
+               -4.663386,
+               tolerance = .000001)
   expect_equal( dmatrixt(t(rep(1,5)),df = 5,U = 5,log = TRUE),
                 dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE))
   expect_equal(dmatrixt((rep(1,5)),df = 5,V = 5,log = TRUE),
@@ -206,34 +157,51 @@ test_that("Equivalent outputs for different functions:", {
 
   set.seed(20180219)
   A <- rmatrixnorm(40, mean = array(1, dim = c(4, 5)),
-                U = CSgenerate(4,.2), V = ARgenerate(5, .8))
+                U = CSgenerate(4,.2), V = ARgenerate(5, .8), list = TRUE)
   B <- MLmatrixnorm(A, row.mean = TRUE)
   expect_equal(B$U[1, 1], 1)
   expect_equal(B$V[1, 1], 1)
+
   expect_true(B$convergence)
   expect_equal(B$mean[1, 1], B$mean[1, 2])
-  C <- MLmatrixnorm(A, col.mean = T)
+ C <- MLmatrixnorm(A, col.mean = TRUE, row.mean = TRUE)
   expect_equal(C$mean[1, 1], C$mean[2, 1])
-  C <- MLmatrixnorm(A, col.variance = "CS")
-  expect_equal(C$V[1,2],C$V[1,5])
-  C <- MLmatrixnorm(A, row.variance = "AR(1)")
-  expect_equal(C$U[2,1],C$U[3,2])
+  expect_equal(C$mean[1, 1], C$mean[1, 2])
+ 
+
+  C <- MLmatrixnorm(A, col.mean = TRUE)
+  expect_equal(C$mean[1, 1], C$mean[2, 1])
+  C <- MLmatrixnorm(A, row.variance = "CS")
+  expect_equal(C$U[1,2],C$U[1,4])
+  C <- MLmatrixnorm(A, col.variance = "AR(1)")
+  expect_equal(C$V[2,1],C$V[3,2])
+  C <- MLmatrixnorm(A, row.variance = "corr")
+  expect_equal(C$U[2,2],C$U[1,1])
+  C <- MLmatrixnorm(A, col.variance = "corr")
+  expect_equal(C$V[2,2],C$V[3,3])
   C <- MLmatrixnorm(A, row.variance = "I")
   expect_equal(C$U[1,2],0)
   C <- MLmatrixnorm(A, col.variance = "I")
   expect_equal(C$V[1,4],0)
 
-  D <- MLmatrixt(A, row.mean = TRUE)
+  D <- MLmatrixt(A, col.mean = TRUE)
   expect_true(D$convergence)
+  expect_warning(MLmatrixt(A, fixed = FALSE, max.iter = 2))
   expect_equal(D$U[1, 1], 1)
   expect_equal(D$V[1, 1], 1)
-  expect_equal(D$mean[1, 1], D$mean[1, 2])
-  C <- MLmatrixt(A, col.mean = T)
+  expect_equal(D$mean[1, 1], D$mean[2, 1])
+  C <- MLmatrixt(A, col.mean = TRUE, row.mean = TRUE)
   expect_equal(C$mean[1, 1], C$mean[2, 1])
+  expect_equal(C$mean[1, 1], C$mean[1, 2])
+   
   C <- MLmatrixt(A, col.variance = "CS")
   expect_equal(C$V[1,2],C$V[1,5])
+  C <- MLmatrixt(A, col.variance = "corr")
+  expect_equal(C$V[1,1],C$V[2,2])
   C <- MLmatrixt(A, row.variance = "AR(1)")
   expect_equal(C$U[2,1],C$U[3,2])
+  C <- MLmatrixt(A, row.variance = "corr")
+  expect_equal(C$U[1,1],C$U[2,2])
   C <- MLmatrixt(A, row.variance = "I")
   expect_equal(C$U[1,2],0)
   C <- MLmatrixt(A, col.variance = "I")
@@ -242,34 +210,45 @@ test_that("Equivalent outputs for different functions:", {
 
 context("Testing LDA/QDA output")
 test_that("Output of LDA/QDA/Predict", {
-  A <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
-  B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
+    set.seed(20190628)
+    A <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
+    B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
+    set.seed(20190628)
+    Alist     <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2), list = TRUE)
+    Blist     <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2), list = TRUE)
+    Clist = c(Alist,Blist)
   C <- array(c(A,B), dim = c(2,2,8))
   D <- array(0, dim = c(2,2,4))
   E <- array(c(A,D), dim = c(2,2,8))
   groups <- c(rep(1,4),rep(2,4))
   groups.empty <- factor(rep("1",8), levels = c("1","2"))
   priors = c(.5,.5)
-  ldamodel <- matrixlda(C, groups, priors)
-  qdamodel <- matrixqda(C, groups, priors)
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
+    ldamodel <- matrixlda(C, groups, priors, subset = rep(TRUE,8))
+    ldalist <-  matrixlda(Clist, groups, priors, subset = rep(TRUE,8))
+    qdamodel <- matrixqda(C, groups, priors, subset = rep(TRUE,8))
+    qdalist <-  matrixqda(Clist, groups, priors, subset = rep(TRUE,8))
+    expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
+                 "dimension")
+    expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
                "dimension")
-  expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
-               "dimension")
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
-               "dimension")
-  expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
-               "dimension")
-
-
-  expect_equal(sum(predict(ldamodel, newdata = matrix(
-    0, nrow = 2, ncol = 2))$posterior), 1)
-
-  expect_equal(sum(predict(qdamodel, newdata = matrix(
-    0, nrow = 2, ncol = 2))$posterior), 1)
-
-  newlda <- ldamodel
-  newqda <- qdamodel
+    expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
+                 "dimension")
+    expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
+                 "dimension")
+    
+    expect_equal(sum(predict(ldamodel)$posterior[,1]), sum(predict(ldalist, newdata = C)$posterior[,1]))
+    expect_equal(sum(predict(qdamodel)$posterior[,1]), sum(predict(qdalist, newdata = C)$posterior[,1]))
+    expect_equal(sum(predict(ldamodel, newdata = matrix(
+                                           0, nrow = 2, ncol = 2))$posterior), 1)
+    expect_equal(sum(predict(ldamodel, prior = c(.7,.3))$posterior[1,]), 1)
+    
+    expect_equal(sum(predict(qdamodel, prior=c(.7,.3),newdata = matrix(
+                                                          0, nrow = 2, ncol = 2))$posterior), 1)
+    expect_equal(sum(predict(qdamodel)$posterior[1,]), 1)
+    
+  
+  newlda <- matrixlda(C, groups, priors, method = "t")
+  newqda <- matrixqda(C, groups, priors, method = "t")
   newprior <- c(-1,2)
 
   expect_error(predict(newlda, prior = newprior),

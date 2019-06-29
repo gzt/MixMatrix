@@ -5,7 +5,7 @@
 \title{Quadratic Discriminant Analysis for Matrix Variate Observations}
 \usage{
 matrixqda(x, grouping, prior, tol = 1e-04, method = "normal",
-  nu = 10, ...)
+  nu = 10, ..., subset)
 }
 \arguments{
 \item{x}{3-D array or list of matrix data.}
@@ -26,6 +26,10 @@ By default, normal.}
 \item{...}{Arguments passed to or from other methods, such
 as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 \code{row.mean})}
+
+\item{subset}{An index vector specifying the cases to be used in the
+training sample.  (NOTE: If given, this argument must be
+named.)}
 }
 \value{
 Returns a list of class \code{matrixqda} containing

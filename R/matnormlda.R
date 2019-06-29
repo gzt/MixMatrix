@@ -54,7 +54,9 @@
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
-#'
+#' @param subset An index vector specifying the cases to be used in the
+#'          training sample.  (NOTE: If given, this argument must be
+#'          named.)
 #'
 #' @return Returns a list of class \code{matrixlda} containing
 #'    the following components:
@@ -86,7 +88,7 @@
 #' prior <- c(.5,.5)
 #' matrixlda(C, groups, prior)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
-                       nu = 10,...)  {
+                       nu = 10,..., subset)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -98,6 +100,11 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   if (nu == 0 || is.infinite(nu)) method = "normal"
 
   if (method == "normal") nu = NULL
+  if(!missing(subset)) {
+      x <- x[, ,subset, drop = FALSE]
+      grouping <- grouping[subset]
+  }
+  
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -278,9 +285,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
           eval.parent(parse(text = paste(
             deparse(object$call$x,
                     backtick = TRUE),
-            "[",
+            "[,,",
             deparse(sub, backtick = TRUE),
-            ",]"
+            ",drop = FALSE]"
           )))
       else
         newdata <- eval.parent(object$call$x)
@@ -298,7 +305,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
                  dim = c(nrow(newdata[[1]]),
                          ncol(newdata[[1]]), length(newdata)))
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
-
+    
 
     if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
       stop("wrong column dimension of matrices")
@@ -372,6 +379,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' @param ... Arguments passed to or from other methods, such
 #'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
 #'    \code{row.mean})
+#' @param subset An index vector specifying the cases to be used in the
+#'          training sample.  (NOTE: If given, this argument must be
+#'          named.)
 #'
 #' @return Returns a list of class \code{matrixqda} containing
 #'    the following components:
@@ -400,7 +410,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' groups <- c(rep(1,30),rep(2,30))
 #' prior <- c(.5,.5)
 #' D <- matrixqda(C, groups, prior)
-matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...)  {
+matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
   if (class(x) == "list")
     x <- array(unlist(x),
                dim = c(nrow(x[[1]]),
@@ -410,8 +420,12 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
   if (nu == 0 || is.infinite(nu)) method = "normal"
-
   if (method == "normal") df = NULL
+  if(!missing(subset)) {
+      x <- x[, ,subset, drop = FALSE]
+      grouping <- grouping[subset]
+  }
+    
   dims = dim(x)
   # x is a p x q x n array
   n <- dims[3]
@@ -558,9 +572,9 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
           eval.parent(parse(text = paste(
             deparse(object$call$x,
                     backtick = TRUE),
-            "[",
+            "[,,",
             deparse(sub, backtick = TRUE),
-            ",]"
+            ",drop = FALSE]"
           )))
       else
         newdata <- eval.parent(object$call$x)
@@ -642,3 +656,16 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     cl <- factor(nm[max.col(posterior)], levels = object$lev)
     list(class = cl, posterior = posterior)
   }
+
+#' @export
+#' @importFrom utils head
+print.matrixlda <- function(x,...){
+    x[["posterior"]] = head(x[["posterior"]])             
+    print.default(x,...)
+}
+
+#' @export
+print.matrixqda <- function(x,...){
+    x[["posterior"]] = head(x[["posterior"]])             
+    print.default(x,...)
+}
