@@ -65,7 +65,7 @@ Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
 For the matrix variate normal distribution, maximum likelihood estimates exist for
 \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
 matrix variate t has not been worked out but this is a lower bound. This implements
-an ECME algorithm to estimate the mean, covariance, and degres of freedom parameters.
+an ECME algorithm to estimate the mean, covariance, and degrees of freedom parameters.
 An AR(1), compound symmetry, or independence restriction can be proposed for either or both
 variance matrices. However, if they are inappropriate for the data, they may fail with
 a warning.
