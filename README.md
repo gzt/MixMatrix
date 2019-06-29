@@ -3,7 +3,7 @@
  [![Travis-CI Build Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-ci.org/gzt/MixMatrix)
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.0%20-orange.svg?style=flat-square)](https://github.com/gzt/CholWishart/releases)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.0%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
 
 A package for matrix variate distributions, including the normal, *t*, and 
 inverted *t*. Currently LDA and QDA for matrix variate *t* distributions and 
