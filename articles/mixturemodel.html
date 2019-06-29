@@ -100,11 +100,18 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(MixMatrix)</a></code></pre></div>
+<div id="matrix-variate-mixture-modeling" class="section level2">
+<h2 class="hasAnchor">
+<a href="#matrix-variate-mixture-modeling" class="anchor"></a>Matrix Variate Mixture Modeling</h2>
 <p>The matrix variate <em>t</em> distribution was introduced in a previous vignette along with an EM algorithm for maximum likelihood fitting of the parameters. This can be extended rather easily to the case of mixture models for model-based clustering.</p>
-<p>As in the case of mixture modeling in general, the difference is the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ig}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(g\)</span>, where</p>
-<p><span class="math inline">\(\pi_j = \sum_{i = 1}^n \tau_{ij}\)</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]</span></p>
+<p>As in the case of mixture modeling in general, the difference is the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ig}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(g\)</span>, where <span class="math display">\[\pi_j = \sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]</span></p>
 <p>The updates on the parameters <span class="math inline">\(\Theta\)</span> are weighted by <span class="math inline">\(\tau_{ij}\)</span>.</p>
-<p>The <code><a href="../reference/matrixmixture.html">matrixmixture()</a></code> function fits unrestricted covariance matrices currently, but future features will implement a <code>t-eigen</code> type of covariance restriction capability.</p>
+</div>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>The <code><a href="../reference/matrixmixture.html">matrixmixture()</a></code> function fits unrestricted covariance matrices currently, but future features will implement a <a href="https://cran.r-project.org/package=teigen"><code>teigen</code></a> type of covariance restriction capability for use with the <span class="math inline">\(t\)</span> distribution.</p>
+<p>Currently, this can perform model fitting with unrestricted covariance matrices and fixed degrees of freedom (<code>nu</code>) parameter or for the matrix normal distribution. It does not solve the identifiability problem.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(MixMatrix)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180221</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"> A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>)</a>
@@ -324,6 +331,10 @@
 <a class="sourceLine" id="cb3-99" data-line-number="99"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
 <a class="sourceLine" id="cb3-100" data-line-number="100"><span class="co">#&gt; [4,]    0    0    0    1</span></a></code></pre></div>
 <p>The method for determining convergence is based on Aitken acceleration of the log-likelihood.</p>
+</div>
+<div id="session-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#session-information" class="anchor"></a>Session Information</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; R version 3.6.0 (2017-01-27)</span></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
@@ -358,6 +369,7 @@
 <a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">#&gt; [22] memoise_1.1.0     evaluate_0.14     rmarkdown_1.13   </span></a>
 <a class="sourceLine" id="cb4-33" data-line-number="33"><span class="co">#&gt; [25] stringi_1.4.3     compiler_3.6.0    desc_1.2.0       </span></a>
 <a class="sourceLine" id="cb4-34" data-line-number="34"><span class="co">#&gt; [28] backports_1.1.4</span></a></code></pre></div>
+</div>
 <div id="all-the-code-for-easy-copying" class="section level2">
 <h2 class="hasAnchor">
 <a href="#all-the-code-for-easy-copying" class="anchor"></a>All the code for easy copying</h2>
@@ -395,7 +407,10 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#all-the-code-for-easy-copying">All the code for easy copying</a></li>
+<li><a href="#matrix-variate-mixture-modeling">Matrix Variate Mixture Modeling</a></li>
+      <li><a href="#usage">Usage</a></li>
+      <li><a href="#session-information">Session Information</a></li>
+      <li><a href="#all-the-code-for-easy-copying">All the code for easy copying</a></li>
       </ul>
 </div>
       </div>
