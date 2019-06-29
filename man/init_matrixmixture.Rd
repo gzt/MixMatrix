@@ -26,7 +26,7 @@ argument (optional)}
 argument (optional)}
 
 \item{centermethod}{what method to use to generate initial centers.
-Current support random start or performing $k$-means on the vectorized
+Current support random start or performing k-means on the vectorized
 version for a small number of iterations and then converting back.
 By default, if centers are provided, nothing will be done.}
 
@@ -43,7 +43,7 @@ relevant for more initialization methods.}
 \code{centers}, \code{U}, and \code{V}. The function will complete the
 list and fill out missing entries.}
 
-\item{...}{Additional arguments to pass to $k$-means.}
+\item{...}{Additional arguments to pass to \code{kmeans()}.}
 }
 \value{
 a list suitable to use as the \code{init} argument in
