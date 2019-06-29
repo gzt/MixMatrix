@@ -8,7 +8,7 @@ matrixlda(x, grouping, prior, tol = 1e-04, method = "normal",
   nu = 10, ..., subset)
 }
 \arguments{
-\item{x}{3-D array or list of matrix data.}
+\item{x}{3-D array matrix data.}
 
 \item{grouping}{vector}
 

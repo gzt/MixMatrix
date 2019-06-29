@@ -202,12 +202,12 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(C$V[1,2],C$V[1,5])
   C <- MLmatrixt(A, row.variance = "CS")
   expect_equal(C$U[1,2],C$U[1,4])
-  C <- MLmatrixt(A, col.variance = "corr")
-  expect_equal(C$V[1,1],C$V[2,2])
   C <- MLmatrixt(A, row.variance = "AR(1)")
   expect_equal(C$U[2,1],C$U[3,2])
   C <- MLmatrixt(A, col.variance = "AR(1)")
   expect_equal(C$V[2,1],C$V[3,2])
+  C <- MLmatrixt(A, col.variance = "corr")
+  expect_equal(C$V[1,1],C$V[2,2])
   C <- MLmatrixt(A, row.variance = "corr")
   expect_equal(C$U[1,1],C$U[2,2])
   C <- MLmatrixt(A, row.variance = "I")
@@ -222,9 +222,7 @@ test_that("Output of LDA/QDA/Predict", {
     A <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
     B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
     set.seed(20190628)
-    Alist     <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2), list = TRUE)
-    Blist     <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2), list = TRUE)
-    Clist = c(Alist,Blist)
+
   C <- array(c(A,B), dim = c(2,2,8))
   D <- array(0, dim = c(2,2,4))
   E <- array(c(A,D), dim = c(2,2,8))
@@ -232,20 +230,16 @@ test_that("Output of LDA/QDA/Predict", {
   groups.empty <- factor(rep("1",8), levels = c("1","2"))
   priors = c(.5,.5)
     ldamodel <- matrixlda(C, groups, priors, subset = rep(TRUE,8))
-    ldalist <-  matrixlda(Clist, groups, priors, subset = rep(TRUE,8))
     qdamodel <- matrixqda(C, groups, priors, subset = rep(TRUE,8))
-    qdalist <-  matrixqda(Clist, groups, priors, subset = rep(TRUE,8))
     expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
                  "dimension")
-    expect_error(predict(ldamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
+    expect_error(predict(ldamodel, newdata = (matrix(0,nrow = 2, ncol = 3))),
                "dimension")
     expect_error(predict(qdamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
                  "dimension")
-    expect_error(predict(qdamodel, newdata = matrix(0,nrow = 2, ncol = 3)),
+    expect_error(predict(qdamodel, newdata = (matrix(0,nrow = 2, ncol = 3))),
                  "dimension")
     
-    expect_equal(sum(predict(ldamodel)$posterior[,1]), sum(predict(ldalist, newdata = C)$posterior[,1]))
-    expect_equal(sum(predict(qdamodel)$posterior[,1]), sum(predict(qdalist, newdata = C)$posterior[,1]))
     expect_equal(sum(predict(ldamodel, newdata = matrix(
                                            0, nrow = 2, ncol = 2))$posterior), 1)
     expect_equal(sum(predict(ldamodel, prior = c(.7,.3))$posterior[1,]), 1)
@@ -269,6 +263,14 @@ test_that("Output of LDA/QDA/Predict", {
   expect_error(predict(newqda, prior = newprior),
                "invalid 'prior'")
 
+    expect_equal(sum(predict(newlda, newdata = matrix(
+                                         0, nrow = 2, ncol = 2))$posterior), 1)
+    expect_equal(sum(predict(newlda, prior = c(.7,.3))$posterior[1,]), 1)
+    
+    expect_equal(sum(predict(newqda, prior=c(.7,.3),newdata = matrix(
+                                                        0, nrow = 2, ncol = 2))$posterior), 1)
+    expect_equal(sum(predict(newqda)$posterior[1,]), 1)
+    
 
 })
 

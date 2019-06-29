@@ -63,7 +63,9 @@ A list of class \code{MixMatrixModel} containing the following
    }
 }
 \description{
-Fit a matrix variate mixture model
+Fit a mixture model using EM with \code{K} groups and unconstrained
+covariance matrices for a matrix variate normal or matrix variate
+t distribution (with specified degrees of freedom \code{nu}).
 }
 \examples{
 
