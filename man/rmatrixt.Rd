@@ -55,7 +55,7 @@ unless they are not, in fact, invertible.}
 }
 \value{
 \code{rmatrixt} returns either a list of \eqn{n}
-   \eqn{p \times q}{p * q}  matrices ora \eqn{p \times q \times n}{p * q * n}
+   \eqn{p \times q}{p * q}  matrices or a \eqn{p \times q \times n}{p * q * n}
    array.
 
    \code{dmatrixt} returns the density at quantile \code{x}.
