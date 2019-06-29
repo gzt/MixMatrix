@@ -402,6 +402,31 @@ R_g(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_g^{-1}
 <a class="sourceLine" id="cb4-30" data-line-number="30">## [21] memoise_1.1.0    evaluate_0.14    rmarkdown_1.13   stringi_1.4.3   </a>
 <a class="sourceLine" id="cb4-31" data-line-number="31">## [25] compiler_3.6.0   desc_1.2.0       backports_1.1.4</a></code></pre></div>
 </div>
+<div id="all-the-code-for-easy-copying" class="section level2">
+<h2 class="hasAnchor">
+<a href="#all-the-code-for-easy-copying" class="anchor"></a>All the code for easy copying</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180222</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'MixMatrix'</span>)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>))</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>)))</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior)</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">matqda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixqda.html">matrixqda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior)</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matqda,  ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">matlda</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19">matqda</a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -418,6 +443,7 @@ R_g(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_g^{-1}
       <li><a href="#generalizing-to-multiple-classes">Generalizing to multiple classes</a></li>
       <li><a href="#structure-of-the-objects">Structure of the objects</a></li>
       <li><a href="#session-info">Session info</a></li>
+      <li><a href="#all-the-code-for-easy-copying">All the code for easy copying</a></li>
       </ul>
 </div>
       </div>
