@@ -40,7 +40,7 @@
 #'
 #'
 #' @family matrixlda
-#' @family matrix-variate
+#' @family matrixvariate
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length

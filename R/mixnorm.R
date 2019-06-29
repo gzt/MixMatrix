@@ -61,7 +61,7 @@
 ##'
 ##'
 ##' @export
-##'
+##' @family matrixvariate
 ##' @examples
 ##'
 ##' set.seed(20180221)
