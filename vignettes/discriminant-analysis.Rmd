@@ -149,3 +149,13 @@ This vignette was built using `rmarkdown`.
 ```{r sessioninfo}
 sessionInfo()
 ```
+
+## All the code for easy copying
+
+```{r getlabels, echo = FALSE} 
+labs = knitr::all_labels()
+labs = labs[!labs %in% c("setup", "toc", "getlabels", "allcode")]
+```
+```{r allcode, ref.label = labs, eval = FALSE} 
+
+```

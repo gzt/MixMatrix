@@ -23,7 +23,7 @@ be extended rather easily to the case of mixture models for model-based
 clustering.
 
 As in the case of mixture modeling in general, the difference is the EM algorithm
-is that one is now including estimates of $ \pi_j $ for $j$ in  $1,2, \ldots, g$, 
+is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
 and weights $\tau_{ig}$, weights for each observation $i$ and group $g$, where
 
@@ -86,5 +86,16 @@ log-likelihood.
 
 ```{r final}
 sessionInfo()
+
+```
+
+
+## All the code for easy copying
+
+```{r getlabels, echo = FALSE} 
+labs = knitr::all_labels()
+labs = labs[!labs %in% c("setup", "toc", "getlabels", "allcode")]
+```
+```{r allcode, ref.label = labs, eval = FALSE} 
 
 ```
