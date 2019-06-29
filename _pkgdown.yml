@@ -1,3 +1,29 @@
 destination: docs
 news:
 - one_page: false
+
+reference:
+- title: Package Introduction
+  contents:
+  - MixMatrix
+- title: Distributions
+  desc:  Sampling and density functions for matrix variate distributions
+  contents:
+  - starts_with("rm")
+- title: Maximum Likelikhood Esimation
+  desc: Maximum likelihood estimation for the normal and t distribution
+  contents:
+  - starts_with("ML")
+  - matrixmixture
+  - init_matrixmixture
+- title: Discriminant Analysis
+  desc: Linear and quadratic discriminant analysis
+  contents:
+  - matrixlda
+  - matrixqda
+  - starts_with("pred")
+- title: Accessory functions
+  contents:
+  - ARgenerate
+  - CSgenerate
+  - starts_with("deriv")
