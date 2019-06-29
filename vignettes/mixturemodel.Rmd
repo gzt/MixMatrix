@@ -44,6 +44,16 @@ Currently, this can perform model fitting with unrestricted covariance matrices 
 fixed degrees of freedom (`nu`) parameter or for the matrix normal distribution. 
 It does not solve the identifiability problem.
 
+### `matrixmixture` function
+
+The function takes data array `x`, either an argument `K` for how many groups
+there are or an initialization of a vector of probabilities `prior`, an optional
+initialization of centers and covariance matrices `init` (if the covariances are
+left blank, they will be initialized to identity matrices), and optional 
+arguments controlling the other parameters of function, such as number of 
+iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
+of freedom `nu` must be provided, but in the future it can be estimated.
+
 ```{r demo}
 library(MixMatrix)
  set.seed(20180221)
@@ -63,13 +73,7 @@ plot(res)
 
 ```
 
-The function takes data array `x`, either an argument `K` for how many groups
-there are or an initialization of a vector of probabilities `prior`, an optional
-initialization of centers and covariance matrices `init` (if the covariances are
-left blank, they will be initialized to identity matrices), and optional 
-arguments controlling the other parameters of function, such as number of 
-iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
-of freedom `nu` must be provided, but in the future it can be estimated.
+### Initialization function
 
 The packages also provides a helper function `init_matrixmixture()` to provide 
 the `init` object for you. At present, it can either use the `kmeans()` 
