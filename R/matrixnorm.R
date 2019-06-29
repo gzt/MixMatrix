@@ -17,12 +17,12 @@
 #   https://www.R-project.org/Licenses/
 
 
-#' matrixnorm: matrix variate Normal distribution functions
+#' Matrix variate Normal distribution functions
 #'
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
 #' @family matrixnorm
-#' @family matrix-variate
+#' @family matrixvariate
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -277,7 +277,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @export
 #' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 #' @family matrixnorm
-#' @family matrix-variate
+#' @family matrixvariate
 #'
 #' @examples
 #' set.seed(20180202)

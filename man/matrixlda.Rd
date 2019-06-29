@@ -8,7 +8,7 @@ matrixlda(x, grouping, prior, tol = 1e-04, method = "normal",
   nu = 10, ..., subset)
 }
 \arguments{
-\item{x}{3-D array or list of matrix data.}
+\item{x}{3-D array matrix data.}
 
 \item{grouping}{vector}
 
@@ -79,10 +79,9 @@ Other matrixlda: \code{\link{matrixqda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
 
-Other matrix-variate: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixqda}},
-  \code{\link{predict.matrixlda}},
+Other matrixvariate: \code{\link{MLmatrixnorm}},
+  \code{\link{MLmatrixt}}, \code{\link{matrixmixture}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
-\concept{matrix-variate}
 \concept{matrixlda}
+\concept{matrixvariate}

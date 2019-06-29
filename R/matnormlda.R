@@ -40,8 +40,8 @@
 #'
 #'
 #' @family matrixlda
-#' @family matrix-variate
-#' @param x 3-D array or list of matrix data.
+#' @family matrixvariate
+#' @param x 3-D array matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
 #'    as the number of classes
@@ -89,11 +89,7 @@
 #' matrixlda(C, groups, prior)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                        nu = 10,..., subset)  {
-  if (class(x) == "list")
-    x <- array(unlist(x),
-               dim = c(nrow(x[[1]]),
-                       ncol(x[[1]]), length(x)))
-  if (is.null(dim(x)))
+   if (is.null(dim(x)))
     stop("'x' is not an array")
   if (any(!is.finite(x)))
     stop("infinite, NA or NaN values in 'x'")
@@ -295,15 +291,14 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
         newdata <- eval(call(nas, newdata))
     }
 
-    if (is.null(dim(newdata)))
-      stop("'newdata' is not an array")
+   
     if (any(!is.finite(newdata)))
       stop("infinite, NA or NaN values in 'newdata'")
+
     x <- (newdata)
-    if (class(newdata) == "list")
-      x <- array(unlist(newdata),
-                 dim = c(nrow(newdata[[1]]),
-                         ncol(newdata[[1]]), length(newdata)))
+    if (is.null(dim(x)))
+        stop("'newdata' is not an array")
+    
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
     
 
@@ -411,10 +406,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' prior <- c(.5,.5)
 #' D <- matrixqda(C, groups, prior)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
-  if (class(x) == "list")
-    x <- array(unlist(x),
-               dim = c(nrow(x[[1]]),
-                       ncol(x[[1]]), length(x)))
+ 
   if (is.null(dim(x)))
     stop("'x' is not an array")
   if (any(!is.finite(x)))
@@ -587,10 +579,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     if (any(!is.finite(newdata)))
       stop("infinite, NA or NaN values in 'newdata'")
     x <- (newdata)
-    if (class(newdata) == "list")
-      x <- array(unlist(newdata),
-                 dim = c(nrow(newdata[[1]]),
-                         ncol(newdata[[1]]), length(newdata)))
+  
 
     if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
 

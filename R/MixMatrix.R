@@ -1,10 +1,11 @@
 #' Functions for Matrix Distributions
 #'
-#' The MixMatrix package current provides for generating
-#' matrix variate random variables, computing matrix variate densities,
-#' and fitting the MLEs for parameters of matrix variate normal distributions.
-#' Currently, normal, t, and inverted t distributions are supported for generation
-#' and density computation.
+#' Provides sampling and density functions for matrix
+#' variate normal, t, and inverted t distributions;  ML fitting for matrix
+#' variate normal and t distributions including some restrictions on the
+#' parameters; and linear and quadratic discriminant analysis for matrix
+#' variate normal and t distributions. Performs mixture modeling for matrix
+#' variate distributions.
 #'
 #' @docType package
 #' @name MixMatrix

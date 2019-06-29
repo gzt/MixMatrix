@@ -3,7 +3,7 @@
 \name{rmatrixnorm}
 \alias{rmatrixnorm}
 \alias{dmatrixnorm}
-\title{matrixnorm: matrix variate Normal distribution functions}
+\title{Matrix variate Normal distribution functions}
 \usage{
 rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
   R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
@@ -80,10 +80,9 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 Other matrixnorm: \code{\link{MLmatrixnorm}}
 
-Other matrix-variate: \code{\link{MLmatrixnorm}},
+Other matrixvariate: \code{\link{MLmatrixnorm}},
   \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
-  \code{\link{rmatrixinvt}}
+  \code{\link{matrixmixture}}, \code{\link{rmatrixinvt}}
 }
-\concept{matrix-variate}
 \concept{matrixnorm}
+\concept{matrixvariate}

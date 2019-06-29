@@ -77,10 +77,9 @@ print(results)
 
 Other matrixnorm: \code{\link{rmatrixnorm}}
 
-Other matrix-variate: \code{\link{MLmatrixt}},
-  \code{\link{matrixlda}}, \code{\link{matrixqda}},
-  \code{\link{predict.matrixlda}},
+Other matrixvariate: \code{\link{MLmatrixt}},
+  \code{\link{matrixlda}}, \code{\link{matrixmixture}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
-\concept{matrix-variate}
 \concept{matrixnorm}
+\concept{matrixvariate}

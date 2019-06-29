@@ -1,6 +1,9 @@
 # MixMatrix 0.2.0
 
-* Start to add mixture modeling
+* Start to add mixture modeling - currently support unconstrained variances only
+  and fixed `nu` parameters for the `model = "t"` option..
+* Remove list support for matrix LDA and QDA, since they were just a pain
+  to support for the `predict` methods. 
 
 # MixMatrix 0.1.0
 

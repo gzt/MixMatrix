@@ -27,11 +27,12 @@ clustering.
 As in the case of mixture modeling in general, the difference is the EM algorithm
 is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
-and weights $\tau_{ig}$, weights for each observation $i$ and group $g$, where
+and weights $\tau_{ig}$, weights for each observation $i$ and group $j$, where
 \[\pi_j = \sum_{i = 1}^n \tau_{ij}\] and 
-\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_l^g \pi_l f(x_i, \Theta_l)}\]
+\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]
 
-The updates on the parameters $\Theta$ are weighted by $\tau_{ij}$. 
+The updates on the parameters $\Theta$ are weighted by $\tau_{ij}$ in an 
+Expectation/Conditional Maximization algorithm.
 
 ## Usage
 
@@ -42,6 +43,16 @@ type of covariance restriction capability for use with the $t$ distribution.
 Currently, this can perform model fitting with unrestricted covariance matrices and 
 fixed degrees of freedom (`nu`) parameter or for the matrix normal distribution. 
 It does not solve the identifiability problem.
+
+### `matrixmixture` function
+
+The function takes data array `x`, either an argument `K` for how many groups
+there are or an initialization of a vector of probabilities `prior`, an optional
+initialization of centers and covariance matrices `init` (if the covariances are
+left blank, they will be initialized to identity matrices), and optional 
+arguments controlling the other parameters of function, such as number of 
+iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
+of freedom `nu` must be provided, but in the future it can be estimated.
 
 ```{r demo}
 library(MixMatrix)
@@ -62,13 +73,7 @@ plot(res)
 
 ```
 
-The function takes data array `x`, either an argument `K` for how many groups
-there are or an initialization of a vector of probabilities `prior`, an optional
-initialization of centers and covariance matrices `init` (if the covariances are
-left blank, they will be initialized to identity matrices), and optional 
-arguments controlling the other parameters of function, such as number of 
-iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
-of freedom `nu` must be provided, but in the future it can be estimated.
+### Initialization function
 
 The packages also provides a helper function `init_matrixmixture()` to provide 
 the `init` object for you. At present, it can either use the `kmeans()` 

@@ -9,16 +9,16 @@ inverted *t*. Currently LDA and QDA for matrix variate *t* distributions and
 normal distributions, EM for parameter estimation for matrix variate *t* 
 distributions,  with sampling and density functions for those distributions 
 as well as methods for parameter estimation for matrix variate normals and 
-*t* with some restrictions on mean and variance parameters. In the future, 
-this will have mixture modeling for matrix variate *t* distributions,
-hence the name of the package.
+*t* with some restrictions on mean and variance parameters and some mixture 
+modeling for matrix variate *t* distributions and normal distributions.
 
 See the vignettes for an example of how it works.
 
 It is currently possible to constrain the mean matrices for normal and *t* 
 distributed matrices to have a common mean across rows, columns, or both, as 
 well as AR(1), compound symmetric, on identity covariance matrices across rows, 
-columns, or both. 
+columns, or both in the maximum likelihood estimation functions and the LDA and
+QDA functions, but not in the mixture models.
 
 
 There isn't much R software out there for working with these distributions. The 
@@ -78,11 +78,10 @@ classes rather than the form of the classifier.
  predict(D)$posterior[1:10,]
 ```
 
-In the future, this will include mixture modeling and, later, complete 
-specification of covariance matrices in mixture modeling after the style of 
-[Mclust](https://cran.r-project.org/package=mclust), 
-[t-Eigen](https://cran.r-project.org/package=teigen), 
-and other similar work.
+In the future, this will include a more comprehensive treatment of matrix variate 
+mixture modeling, including complete specification of covariance matrices in 
+mixture modeling after the style of [Mclust](https://cran.r-project.org/package=mclust), 
+[t-Eigen](https://cran.r-project.org/package=teigen), and other similar work.
 
 ## Contribution and contact information	
 
