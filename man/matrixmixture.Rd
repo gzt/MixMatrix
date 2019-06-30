@@ -84,3 +84,6 @@ if(interactive()) plot(res)
 res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 if(interactive()) plot(res)
 }
+\seealso{
+\code{\link{init_matrixmixture}}
+}

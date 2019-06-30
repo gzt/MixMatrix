@@ -59,3 +59,6 @@ argument in the \code{matrixmixture} function. Either provide data
 and it will select centers and variance matrices to initialize or
 provide initial values and it will format them as expected for the function.
 }
+\seealso{
+\code{\link{matrixmixture}}
+}

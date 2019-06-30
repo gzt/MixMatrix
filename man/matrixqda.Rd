@@ -46,9 +46,6 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
       \item{\code{call}}{The (matched) function call.}
    }
-
- @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
-        #'          \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 }
 \description{
 See \code{matrixlda}: quadratic discriminant analysis for matrix
@@ -66,4 +63,8 @@ C <- array(c(A,B), dim=c(3,4,60))
 groups <- c(rep(1,30),rep(2,30))
 prior <- c(.5,.5)
 D <- matrixqda(C, groups, prior)
+}
+\seealso{
+\code{\link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
+           \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 }

@@ -76,7 +76,6 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 }
 \seealso{
-\code{\link{rnorm}} and \code{\link[stats]{Distributions}}
-         See also \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-         \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+\code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
+    \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 }

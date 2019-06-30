@@ -46,3 +46,6 @@ D <- matrixqda(C, groups, prior)
 predict(D)$posterior[1:10,]
 
 }
+\seealso{
+\code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+}

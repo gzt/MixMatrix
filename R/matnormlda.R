@@ -74,6 +74,8 @@
 #'    }
 #'
 #' @seealso  \code{\link[MASS]{lda}},  \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+#'            \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+
 #' 
 #' @export
 #'
@@ -245,8 +247,7 @@ mattrace <- function(x)
 #'     proportions in the training set or what was set in the call to
 #'     \code{matrixlda}.
 #' @param ... arguments based from or to other methods
-#' @seealso See also \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-#'          \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 
 #' @return
 #' Returns a list containing
@@ -389,8 +390,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#'  @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
-#'         #'          \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
+#'            \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 
 #' 
 #' @export
@@ -538,6 +539,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #'       \item{\code{class}}{The MAP classification (a factor)}
 #'       \item{\code{posterior}}{posterior probabilities for the classes}
 #'    }
+#'
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #' @export
 #'
 #' @examples

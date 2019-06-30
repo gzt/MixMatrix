@@ -53,8 +53,6 @@ If \code{list}  is \code{TRUE} , this will be ignored.}
    a \eqn{p \times q \times n}{p * q * n}  array.
 
    \code{dmatrixinvt} returns the density at quantile \code{x}.
-         @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-         \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }
 \description{
 Generate random draws from the inverted matrix
@@ -68,4 +66,8 @@ Generate random draws from the inverted matrix
 \examples{
 A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
+}
+\seealso{
+\code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
+   and \code{\link[stats]{Distributions}}.
 }

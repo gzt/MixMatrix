@@ -49,9 +49,9 @@
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #' @export
 #'
-#' @seealso \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
-#'          See also \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-#'          \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
+#'     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
+#'     
 #' @examples
 #' set.seed(20180202)
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),

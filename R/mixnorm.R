@@ -65,6 +65,8 @@
 ##'
 ##'
 ##' @export
+##' @seealso \code{\link{init_matrixmixture}}
+##' 
 ##' @examples
 ##'
 ##' set.seed(20180221)
@@ -403,6 +405,7 @@ plot.MixMatrixModel <- function(x, ...){
 ##'      \code{matrixmixture}
 ##' @export
 ##' @importFrom stats kmeans
+##' @seealso \code{\link{matrixmixture}} 
 init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "kmeans",
                               varmethod = "identity", model = "normal", init = NULL,...){

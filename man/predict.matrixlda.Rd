@@ -47,6 +47,5 @@ predict(D)$posterior[1:10,]
 
 }
 \seealso{
-See also \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-         \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+\code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }

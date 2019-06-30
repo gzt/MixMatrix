@@ -74,4 +74,5 @@ matrixlda(C, groups, prior)
 }
 \seealso{
 \code{\link[MASS]{lda}},  \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+           \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }

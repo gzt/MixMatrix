@@ -65,8 +65,8 @@
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
-#' @seealso \code{\link{rt}} and \code{\link[stats]{Distributions}}
-#'         See also \code{\link{rmatrixnorm}} and \code{\link{rmatrixinvt}},
+#' @seealso \code{\link{rmatrixnorm}},
+#'     \code{\link{rmatrixinvt}},\code{\link{rt}} and \code{\link[stats]{Distributions}}.
 #'
 #' @export
 #'
@@ -206,8 +206,10 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
 #'    \code{dmatrixinvt} returns the density at quantile \code{x}.
-#'          @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-#'          \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' 
+#' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
+#'    and \code{\link[stats]{Distributions}}.
+#'         
 
 #' @export
 #' @examples

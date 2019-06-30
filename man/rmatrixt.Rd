@@ -92,6 +92,6 @@ dmatrixt(x,df=1)
 
 }
 \seealso{
-\code{\link{rt}} and \code{\link[stats]{Distributions}}
-        See also \code{\link{rmatrixnorm}} and \code{\link{rmatrixinvt}},
+\code{\link{rmatrixnorm}},
+    \code{\link{rmatrixinvt}},\code{\link{rt}} and \code{\link[stats]{Distributions}}.
 }
