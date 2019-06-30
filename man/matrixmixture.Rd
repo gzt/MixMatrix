@@ -84,10 +84,3 @@ if(interactive()) plot(res)
 res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 if(interactive()) plot(res)
 }
-\seealso{
-Other matrix variate distributions: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
-}
-\concept{matrix variate distributions}

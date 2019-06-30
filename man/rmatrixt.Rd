@@ -61,7 +61,7 @@ unless they are not, in fact, invertible.}
    \code{dmatrixt} returns the density at quantile \code{x}.
 }
 \description{
-Distribution functions for the matrix variate t distribution.
+Density and random generation for the matrix variate t distribution.
 }
 \details{
 The matrix \eqn{t}-distribution is parameterized slightly
@@ -93,7 +93,5 @@ dmatrixt(x,df=1)
 }
 \seealso{
 \code{\link{rt}} and \code{\link[stats]{Distributions}}
+        See also \code{\link{rmatrixnorm}} and \code{\link{rmatrixinvt}},
 }
-\concept{matrix variate distributions
-
-Density and random generation for the matrix variate t distribution.}

@@ -68,8 +68,7 @@
 #'    squared difference between iterations of the variance matrices at the time
 #'    of stopping, the log likelihood, and a convergence code.
 #' @export
-#' @seealso \code{\link{rmatrixnorm}}
-#' @family matrix variate distributions
+#' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
 #'
 #' @examples
 #' set.seed(20180202)

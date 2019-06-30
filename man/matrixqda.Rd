@@ -47,7 +47,8 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{call}}{The (matched) function call.}
    }
 
- @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+ @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
+        #'          \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 }
 \description{
 See \code{matrixlda}: quadratic discriminant analysis for matrix
@@ -66,16 +67,3 @@ groups <- c(rep(1,30),rep(2,30))
 prior <- c(.5,.5)
 D <- matrixqda(C, groups, prior)
 }
-\seealso{
-Other matrixlda: \code{\link{matrixlda}},
-  \code{\link{predict.matrixlda}},
-  \code{\link{predict.matrixqda}}
-
-Other matrix variate distributions: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{matrixmixture}},
-  \code{\link{predict.matrixlda}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
-}
-\concept{matrix variate distributions}
-\concept{matrixlda}

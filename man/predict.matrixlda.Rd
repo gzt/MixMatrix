@@ -47,13 +47,6 @@ predict(D)$posterior[1:10,]
 
 }
 \seealso{
-Other matrixlda: \code{\link{matrixlda}},
-  \code{\link{matrixqda}}, \code{\link{predict.matrixqda}}
-
-Other matrix variate distributions: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{matrixmixture}}, \code{\link{matrixqda}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
+See also \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
+         \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }
-\concept{matrix variate distributions}
-\concept{matrixlda}

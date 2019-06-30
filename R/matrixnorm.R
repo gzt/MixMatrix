@@ -21,7 +21,7 @@
 #'
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
-#' @family matrix variate distributions
+#' 
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -50,6 +50,8 @@
 #' @export
 #'
 #' @seealso \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
+#'          See also \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
+#'          \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #' @examples
 #' set.seed(20180202)
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -275,8 +277,6 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    time of stopping, the log likelihood, and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
-#' @family matrixnormal
-#' @family matrix variate distributions
 #'
 #' @examples
 #' set.seed(20180202)

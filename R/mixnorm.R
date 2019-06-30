@@ -65,7 +65,6 @@
 ##'
 ##'
 ##' @export
-##' @family matrix variate distributions
 ##' @examples
 ##'
 ##' set.seed(20180221)
