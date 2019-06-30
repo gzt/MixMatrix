@@ -79,9 +79,10 @@ Other matrixlda: \code{\link{matrixqda}},
   \code{\link{predict.matrixlda}},
   \code{\link{predict.matrixqda}}
 
-Other matrixvariate: \code{\link{MLmatrixnorm}},
+Other matrix variate distributions: \code{\link{MLmatrixnorm}},
   \code{\link{MLmatrixt}}, \code{\link{matrixmixture}},
+  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
+\concept{matrix variate distributions}
 \concept{matrixlda}
-\concept{matrixvariate}

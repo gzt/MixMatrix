@@ -82,8 +82,9 @@ print(results)
 \seealso{
 \code{\link{rmatrixnorm}}
 
-Other matrixvariate: \code{\link{MLmatrixnorm}},
+Other matrix variate distributions: \code{\link{MLmatrixnorm}},
   \code{\link{matrixlda}}, \code{\link{matrixmixture}},
+  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}},
   \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
 }
-\concept{matrixvariate}
+\concept{matrix variate distributions}

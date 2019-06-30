@@ -94,6 +94,6 @@ dmatrixt(x,df=1)
 \seealso{
 \code{\link{rt}} and \code{\link[stats]{Distributions}}
 }
-\concept{matrixvariate
+\concept{matrix variate distributions
 
 Density and random generation for the matrix variate t distribution.}

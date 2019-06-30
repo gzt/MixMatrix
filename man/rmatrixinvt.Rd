@@ -68,8 +68,10 @@ A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }
 \seealso{
-Other matrixvariate: \code{\link{MLmatrixnorm}},
+Other matrix variate distributions: \code{\link{MLmatrixnorm}},
   \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{matrixmixture}}, \code{\link{rmatrixnorm}}
+  \code{\link{matrixmixture}}, \code{\link{matrixqda}},
+  \code{\link{predict.matrixlda}},
+  \code{\link{rmatrixnorm}}
 }
-\concept{matrixvariate}
+\concept{matrix variate distributions}
