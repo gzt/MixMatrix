@@ -21,8 +21,7 @@
 #'
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
-#' @family matrixnorm
-#' @family matrixvariate
+#' @family matrix variate distributions
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -276,8 +275,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    time of stopping, the log likelihood, and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
-#' @family matrixnorm
-#' @family matrixvariate
+#' @family matrixnormal
+#' @family matrix variate distributions
 #'
 #' @examples
 #' set.seed(20180202)
@@ -479,8 +478,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       if (row.variance == "cor") new.U = stats::cov2cor(new.U)
     }
     # only identifiable up to a constant, so have to fix something at 1
-    # should perhaps change - makes doing other restrictions on variance
-    # harder.  compute differences with prior iterations:
+
     error.term <- sum((new.V - V)^2) + sum((new.U - U)^2)
     V <- new.V
     U <- new.U
@@ -493,9 +491,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
 
   converged = !(iter >= max.iter || error.term > tol || varflag)
   logLik = 0
-  #for (i in seq(dims[3])) {
-  #  logLik = logLik + dmatrixnorm(data[,,i], mu, U = U, V = V, log = TRUE)
-  #}
+
   logLik = sum(dmatrixnorm(data, mu, U = U, V = V, log = TRUE))
   return(list(mean = mu,
               U = U,

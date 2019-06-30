@@ -40,7 +40,7 @@
 #'
 #'
 #' @family matrixlda
-#' @family matrixvariate
+#' @family matrix variate distributions
 #' @param x 3-D array matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
@@ -239,7 +239,7 @@ mattrace <- function(x)
 #' an object \code{x} of the appropriate class.
 #'
 #' @family matrixlda
-#' @family matrix-variate
+#' @family matrix variate distributions
 #'
 #' @param object object of class \code{matrixlda}
 #' @param newdata array or list of new observations to be classified.
@@ -361,7 +361,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' variances for the case when different groups have different variances.
 #'
 #' @family matrixlda
-#' @family matrix-variate
+#' @family matrix variate distributions
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length

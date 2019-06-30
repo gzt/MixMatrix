@@ -68,7 +68,7 @@
 #'    and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}
-#' @family matrixvariate
+#' @family matrix variate distributions
 #'
 #' @examples
 #' set.seed(20180202)

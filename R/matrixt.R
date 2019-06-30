@@ -18,7 +18,7 @@
 
 
 #' Distribution functions for the matrix variate t distribution.
-#' @family matrixvariate
+#' @family matrix variate distributions
 #'
 #' Density and random generation for the matrix variate t distribution.
 #'
@@ -199,7 +199,7 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #'
 #' Generate random draws from the inverted matrix
 #'    variate t distribution
-#' @family matrixvariate
+#' @family matrix variate distributions
 #' @inheritParams rmatrixt
 #' @return \code{rmatrixinvt} returns either a list of \eqn{n}
 #'    \eqn{p \times q}{p * q}  matrices or
