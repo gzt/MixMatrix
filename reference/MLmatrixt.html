@@ -32,13 +32,14 @@
 
 <meta property="og:title" content="Maximum likelihood estimation for matrix variate t distributions — MLmatrixt" />
 
-<meta property="og:description" content="For the matrix variate normal distribution, maximum likelihood estimates exist for
-\(N &amp;gt; max(p/q,q/p)+1\) and are unique for \(N &amp;gt; max(p,q)\). The number necessary for the
-matrix variate t has not been worked out but this is a lower bound. This implements
-an ECME algorithm to estimate the mean, covariance, and degrees of freedom parameters.
-An AR(1), compound symmetry, or independence restriction can be proposed for either or both
-variance matrices. However, if they are inappropriate for the data, they may fail with
-a warning." />
+<meta property="og:description" content="For the matrix variate normal distribution, maximum likelihood estimates
+exist for \(N &amp;gt; max(p/q,q/p)+1\) and are unique for \(N &amp;gt; max(p,q)\).
+The number necessary for the matrix variate t has not been worked out but
+this is a lower bound. This implements an ECME algorithm to estimate the
+mean, covariance, and degrees of freedom parameters. An AR(1), compound
+symmetry, or independence restriction can be proposed for either or both
+variance matrices. However, if they are inappropriate for the data, they may
+fail with a warning." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +70,7 @@ a warning." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -136,13 +137,14 @@ a warning." />
 
     <div class="ref-description">
     
-    <p>For the matrix variate normal distribution, maximum likelihood estimates exist for
-\(N &gt; max(p/q,q/p)+1\) and are unique for \(N &gt; max(p,q)\). The number necessary for the
-matrix variate t has not been worked out but this is a lower bound. This implements
-an ECME algorithm to estimate the mean, covariance, and degrees of freedom parameters.
-An AR(1), compound symmetry, or independence restriction can be proposed for either or both
-variance matrices. However, if they are inappropriate for the data, they may fail with
-a warning.</p>
+    <p>For the matrix variate normal distribution, maximum likelihood estimates
+exist for \(N &gt; max(p/q,q/p)+1\) and are unique for \(N &gt; max(p,q)\).
+The number necessary for the matrix variate t has not been worked out but
+this is a lower bound. This implements an ECME algorithm to estimate the
+mean, covariance, and degrees of freedom parameters. An AR(1), compound
+symmetry, or independence restriction can be proposed for either or both
+variance matrices. However, if they are inappropriate for the data, they may
+fail with a warning.</p>
     
     </div>
 
@@ -178,8 +180,8 @@ common mean within each row. If both this and <code>row.mean</code> are
 correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
 Only positive correlations are allowed for AR(1) and CS.
-Note that while maximum likelihood estimators are available (and used) for
-the unconstrained variance matrices, <code>optim</code> is used for any
+Note that while maximum likelihood estimators are available (and used)
+for the unconstrained variance matrices, <code>optim</code> is used for any
 constraints so it may be considerably slower.</p></td>
     </tr>
     <tr>
@@ -191,8 +193,8 @@ AR(1) and CS.</p></td>
     </tr>
     <tr>
       <th>df</th>
-      <td><p>Starting value for the degrees of freedom. If <code>fixed = TRUE</code>, then this is
-required and not updated. By default, set to 10.</p></td>
+      <td><p>Starting value for the degrees of freedom. If <code>fixed = TRUE</code>,
+then this is required and not updated. By default, set to 10.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
@@ -228,15 +230,16 @@ if using restrictions on the variance.</p></td>
 
     <p>Returns a list with a mean matrix, a \(U\) matrix, a \(V\)
    matrix, the variance parameter (the first entry of the variance matrices
-   are constrained to be 1 for uniqueness), the number of iterations, the squared difference
-   between iterations of the variance matrices at the time of stopping, the log likelihood,
-   and a convergence code.</p>
+   are constrained to be 1 for uniqueness), the number of iterations, the
+   squared difference between iterations of the variance matrices at the time
+   of stopping, the log likelihood, and a convergence code.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='rmatrixnorm.html'>rmatrixnorm</a></code></p>
-<p>Other matrixvariate: <code><a href='MLmatrixnorm.html'>MLmatrixnorm</a></code>,
+<p>Other matrix variate distributions: <code><a href='MLmatrixnorm.html'>MLmatrixnorm</a></code>,
   <code><a href='matrixlda.html'>matrixlda</a></code>, <code><a href='matrixmixture.html'>matrixmixture</a></code>,
+  <code><a href='matrixqda.html'>matrixqda</a></code>, <code><a href='predict.matrixlda.html'>predict.matrixlda</a></code>,
   <code><a href='rmatrixinvt.html'>rmatrixinvt</a></code>, <code><a href='rmatrixnorm.html'>rmatrixnorm</a></code></p></div>
     
 

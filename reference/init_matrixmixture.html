@@ -66,7 +66,7 @@ provide initial values and it will format them as expected for the function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -162,31 +162,34 @@ provided. They must be consistent if both provided.</p></td>
     </tr>
     <tr>
       <th>centers</th>
-      <td><p>either a matrix or an array of matrices for use as the
-<code>centers</code> argument (optional)</p></td>
+      <td><p>(optional) either a matrix or an array of matrices for use as the
+<code>centers</code> argument. If fewer than <code>K</code> are provided, the
+remainder are chosen by <code>centermethod</code>.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>either a matrix or an array of matrices for use as the <code>U</code>
-argument (optional)</p></td>
+      <td><p>(optional) either a matrix or an array of matrices for use as the <code>U</code>
+argument. If a matrix is provided, it is duplicated to provide an array.
+If an array is provided, is should have <code>K</code> slices.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>either a matrix or an array of matrices for use as the <code>V</code>
-argument (optional)</p></td>
+      <td><p>(optional) either a matrix or an array of matrices for use as the <code>U</code>
+argument. If a matrix is provided, it is duplicated to provide an array.
+If an array is provided, is should have <code>K</code> slices.</p></td>
     </tr>
     <tr>
       <th>centermethod</th>
       <td><p>what method to use to generate initial centers.
-Current support random start or performing k-means on the vectorized
-version for a small number of iterations and then converting back.
-By default, if centers are provided, nothing will be done.</p></td>
+Current support random start (<code>random</code>) or performing k-means
+(<code>kmeans</code>) on the vectorized version for a small number of
+iterations and then converting back.
+By default, if <code>K</code> centers are provided, nothing will be done.</p></td>
     </tr>
     <tr>
       <th>varmethod</th>
       <td><p>what method to use to choose initial variance matrices.
-Currently either identity matrices or the empirical covariance matrix
-determined by hard assignment to the nearest centers.
+Currently only identity matrices are created. 
 By default, if <code>U</code> and <code>V</code> matrices are provided, nothing
 will be done.</p></td>
     </tr>
@@ -203,7 +206,8 @@ list and fill out missing entries.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments to pass to <code><a href='https://www.rdocumentation.org/packages/stats/topics/kmeans'>kmeans()</a></code>.</p></td>
+      <td><p>Additional arguments to pass to <code><a href='https://www.rdocumentation.org/packages/stats/topics/kmeans'>kmeans()</a></code> if that is
+<code>centermethod</code>.</p></td>
     </tr>
     </table>
     
