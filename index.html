@@ -101,8 +101,10 @@
 <p>See the vignettes for an example of how it works.</p>
 <p>It is currently possible to constrain the mean matrices for normal and <em>t</em> distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both in the maximum likelihood estimation functions and the LDA and QDA functions, but not in the mixture models.</p>
 <p>There isn’t much R software out there for working with these distributions. The excellent <a href="https://cran.r-project.org/package=matrixsampling">matrixsampling</a> package has sampling and distribution functions for these and many other matrix distributions, as does <a href="https://cran.r-project.org/package=LaplacesDemon">LaplacesDemon</a>. The <a href="https://cran.r-project.org/package=MatrixLDA">MatrixLDA</a> package performs LDA for normal distributions with penalized likelihood.</p>
-<p>The software can be installed by running:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"gzt/MixMatrix"</span>)</a></code></pre></div>
+<p>Install from CRAN by running:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">'MixMatrix'</span>)</a></code></pre></div>
+<p>The development version of the software can be installed by running:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"gzt/MixMatrix"</span>)</a></code></pre></div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
@@ -165,7 +167,9 @@ CSgenerate(5, .5)</a></code></pre>
 <li><a href="https://travis-ci.org/gzt/MixMatrix"><img src="https://travis-ci.org/gzt/MixMatrix.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/gzt/MixMatrix"><img src="https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/github/gzt/MixMatrix?branch=master"><img src="https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg" alt="Coverage Status"></a></li>
-<li><a href="https://github.com/gzt/MixMatrix/releases"><img src="https://img.shields.io/badge/Package%20version-0.2.0%20-orange.svg?style=flat-square" alt="packageversion"></a></li>
+<li><a href="https://github.com/gzt/MixMatrix/releases"><img src="https://img.shields.io/badge/Package%20version-0.2.1%20-orange.svg?style=flat-square" alt="packageversion"></a></li>
+<li><a href="https://cran.r-project.org/package=MixMatrix"><img src="https://cranlogs.r-pkg.org/badges/month/MixMatrix"></a></li>
+<li><a href="https://cran.r-project.org/package=MixMatrix"><img src="http://www.r-pkg.org/badges/version/MixMatrix" alt="CRAN_Status_Badge"></a></li>
 </ul>
 </div>
 </div>
