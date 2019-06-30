@@ -65,6 +65,7 @@ prior <- c(.5,.5)
 D <- matrixqda(C, groups, prior)
 }
 \seealso{
-\code{\link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
-           \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+\code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
+    \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
+    \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 }

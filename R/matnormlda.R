@@ -73,8 +73,9 @@
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#' @seealso  \code{\link[MASS]{lda}},  \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
-#'            \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' @seealso  \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
+#'     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+#'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 
 #' 
 #' @export
@@ -390,8 +391,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#' @seealso \code{\link[MASS]{qda}}, \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}}
-#'            \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
+#'     \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
+#'     \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 
 #' 
 #' @export
