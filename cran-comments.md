@@ -4,8 +4,9 @@ This is a resubmission. In this version I have:
 
  * amended the \concept{} fields in the documentation. 
 
-To answer the question about a DOI for the methods, a paper is 
-being submitted in the near future.
+To answer the question about a DOI for the methods, a paper is being 
+submitted in the near future and a reference and DOI can be added to the 
+DESCRIPTION when available.
 
 
 ## Test environments (this resubmission)
