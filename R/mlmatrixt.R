@@ -20,13 +20,14 @@
 
 #' Maximum likelihood estimation for matrix variate t distributions
 #'
-#' For the matrix variate normal distribution, maximum likelihood estimates exist for
-#' \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}. The number necessary for the
-#' matrix variate t has not been worked out but this is a lower bound. This implements
-#' an ECME algorithm to estimate the mean, covariance, and degrees of freedom parameters.
-#' An AR(1), compound symmetry, or independence restriction can be proposed for either or both
-#' variance matrices. However, if they are inappropriate for the data, they may fail with
-#' a warning.
+#' For the matrix variate normal distribution, maximum likelihood estimates
+#' exist for \eqn{N > max(p/q,q/p)+1} and are unique for \eqn{N > max(p,q)}.
+#' The number necessary for the matrix variate t has not been worked out but
+#' this is a lower bound. This implements an ECME algorithm to estimate the
+#' mean, covariance, and degrees of freedom parameters. An AR(1), compound
+#' symmetry, or independence restriction can be proposed for either or both
+#' variance matrices. However, if they are inappropriate for the data, they may
+#' fail with a warning.
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 1 and 2, indexed by dimension 3.
@@ -41,15 +42,15 @@
 #'     correlation matrix, or 'Independence' for
 #'     independent and identical variance across the rows.
 #'     Only positive correlations are allowed for AR(1) and CS.
-#'     Note that while maximum likelihood estimators are available (and used) for
-#'     the unconstrained variance matrices, \code{optim} is used for any
+#'     Note that while maximum likelihood estimators are available (and used)
+#'     for the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
 #'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 #'     Only positive correlations are allowed for
 #'     AR(1) and CS.
-#' @param df Starting value for the degrees of freedom. If \code{fixed = TRUE}, then this is
-#'     required and not updated. By default, set to 10.
+#' @param df Starting value for the degrees of freedom. If \code{fixed = TRUE},
+#'     then this is required and not updated. By default, set to 10.
 #' @param fixed Whether \code{df} is estimated or fixed. By default, \code{TRUE}.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
@@ -63,9 +64,9 @@
 #'
 #' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
 #'    matrix, the variance parameter (the first entry of the variance matrices
-#'    are constrained to be 1 for uniqueness), the number of iterations, the squared difference
-#'    between iterations of the variance matrices at the time of stopping, the log likelihood,
-#'    and a convergence code.
+#'    are constrained to be 1 for uniqueness), the number of iterations, the
+#'    squared difference between iterations of the variance matrices at the time
+#'    of stopping, the log likelihood, and a convergence code.
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}
 #' @family matrix variate distributions
