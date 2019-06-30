@@ -6,11 +6,12 @@
 [![packageversion](https://img.shields.io/badge/Package%20version-0.2.0%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
 
 A package for matrix variate distributions, including the normal, *t*, and 
-inverted *t*. Currently LDA and QDA for matrix variate *t* distributions and 
-normal distributions, EM for parameter estimation for matrix variate *t* 
-distributions,  with sampling and density functions for those distributions 
-as well as methods for parameter estimation for matrix variate normals and 
-*t* with some restrictions on mean and variance parameters and some mixture 
+inverted *t*. Currently provides classification with LDA and QDA for matrix 
+variate *t* distributions and normal distributions, EM for parameter 
+estimation for matrix variate *t* distributions,  with sampling and density 
+functions for those distributions  as well as methods for parameter 
+estimation for matrix variate normals and *t* with some restrictions on mean 
+and variance parameters. Provides some clustering and classification by mixture 
 modeling for matrix variate *t* distributions and normal distributions.
 
 See the vignettes for an example of how it works.
@@ -89,7 +90,7 @@ mixture modeling after the style of [Mclust](https://cran.r-project.org/package=
 Please let me know if you have any issues or suggestions here: 
 https://github.com/gzt/MixMatrix/issues
 
-Please note that the 'MixMatrix' project is released with a 
+Please note that the `MixMatrix` project is released with a 
 [Contributor Code of Conduct](https://gzt.github.io/MixMatrix/CODE_OF_CONDUCT.html). 
 By contributing to this project, you agree to abide by its terms.
 
