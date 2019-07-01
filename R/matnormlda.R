@@ -39,8 +39,6 @@
 #' distribution, presuming equal covariances between classes. 
 #'
 #'
-#' @family matrixlda
-#' @family matrixvariate
 #' @param x 3-D array matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
@@ -75,7 +73,10 @@
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#' @seealso  \code{\link[MASS]{lda}},  \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+#' @seealso  \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
+#'     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+#'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+
 #' 
 #' @export
 #'
@@ -238,8 +239,6 @@ mattrace <- function(x)
 #' class "\code{matrixlda}". It can be invoked by calling \code{predict(x)} for
 #' an object \code{x} of the appropriate class.
 #'
-#' @family matrixlda
-#' @family matrix-variate
 #'
 #' @param object object of class \code{matrixlda}
 #' @param newdata array or list of new observations to be classified.
@@ -249,7 +248,8 @@ mattrace <- function(x)
 #'     proportions in the training set or what was set in the call to
 #'     \code{matrixlda}.
 #' @param ... arguments based from or to other methods
-#'
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+
 #' @return
 #' Returns a list containing
 #'    the following components:
@@ -360,8 +360,6 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
 #' variances for the case when different groups have different variances.
 #'
-#' @family matrixlda
-#' @family matrix-variate
 #' @param x 3-D array or list of matrix data.
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
@@ -393,7 +391,10 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#'  @seealso \code{link[MASS]{qda}}, \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+#' @seealso \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
+#'     \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
+#'     \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+
 #' 
 #' @export
 #'
@@ -522,7 +523,6 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' class "\code{matrixqda}". It can be invoked by calling \code{predict(x)} for
 #' an object \code{x} of the appropriate class.
 #'
-#' @family matrixlda
 #' 
 #'
 #' @param object object of class \code{matrixqda}
@@ -541,6 +541,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #'       \item{\code{class}}{The MAP classification (a factor)}
 #'       \item{\code{posterior}}{posterior probabilities for the classes}
 #'    }
+#'
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #' @export
 #'
 #' @examples

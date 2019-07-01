@@ -16,23 +16,26 @@ provided. They must be consistent if both provided.}
 
 \item{K}{number of groups}
 
-\item{centers}{either a matrix or an array of matrices for use as the
-\code{centers} argument (optional)}
+\item{centers}{(optional) either a matrix or an array of matrices for use as the
+\code{centers} argument. If fewer than \code{K} are provided, the
+remainder are chosen by \code{centermethod}.}
 
-\item{U}{either a matrix or an array of matrices for use as the \code{U}
-argument (optional)}
+\item{U}{(optional) either a matrix or an array of matrices for use as the \code{U}
+argument. If a matrix is provided, it is duplicated to provide an array.
+If an array is provided, is should have \code{K} slices.}
 
-\item{V}{either a matrix or an array of matrices for use as the \code{V}
-argument (optional)}
+\item{V}{(optional) either a matrix or an array of matrices for use as the \code{U}
+argument. If a matrix is provided, it is duplicated to provide an array.
+If an array is provided, is should have \code{K} slices.}
 
 \item{centermethod}{what method to use to generate initial centers.
-Current support random start or performing k-means on the vectorized
-version for a small number of iterations and then converting back.
-By default, if centers are provided, nothing will be done.}
+Current support random start (\code{random}) or performing k-means
+(\code{kmeans}) on the vectorized version for a small number of
+iterations and then converting back.
+By default, if \code{K} centers are provided, nothing will be done.}
 
 \item{varmethod}{what method to use to choose initial variance matrices.
-Currently either identity matrices or the empirical covariance matrix
-determined by hard assignment to the nearest centers.
+Currently only identity matrices are created. 
 By default, if \code{U} and \code{V} matrices are provided, nothing
 will be done.}
 
@@ -43,7 +46,8 @@ relevant for more initialization methods.}
 \code{centers}, \code{U}, and \code{V}. The function will complete the
 list and fill out missing entries.}
 
-\item{...}{Additional arguments to pass to \code{kmeans()}.}
+\item{...}{Additional arguments to pass to \code{kmeans()} if that is
+\code{centermethod}.}
 }
 \value{
 a list suitable to use as the \code{init} argument in
@@ -54,4 +58,7 @@ Providing this will generate a list suitable for use as the \code{init}
 argument in the \code{matrixmixture} function. Either provide data
 and it will select centers and variance matrices to initialize or
 provide initial values and it will format them as expected for the function.
+}
+\seealso{
+\code{\link{matrixmixture}}
 }

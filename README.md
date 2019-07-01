@@ -3,14 +3,17 @@
  [![Travis-CI Build Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-ci.org/gzt/MixMatrix)
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.0%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.1%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
+![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)
+
 
 A package for matrix variate distributions, including the normal, *t*, and 
-inverted *t*. Currently LDA and QDA for matrix variate *t* distributions and 
-normal distributions, EM for parameter estimation for matrix variate *t* 
-distributions,  with sampling and density functions for those distributions 
-as well as methods for parameter estimation for matrix variate normals and 
-*t* with some restrictions on mean and variance parameters and some mixture 
+inverted *t*. Currently provides classification with LDA and QDA for matrix 
+variate *t* distributions and normal distributions, EM for parameter 
+estimation for matrix variate *t* distributions,  with sampling and density 
+functions for those distributions  as well as methods for parameter 
+estimation for matrix variate normals and *t* with some restrictions on mean 
+and variance parameters. Provides some clustering and classification by mixture 
 modeling for matrix variate *t* distributions and normal distributions.
 
 See the vignettes for an example of how it works.
@@ -30,7 +33,11 @@ as does [LaplacesDemon](https://cran.r-project.org/package=LaplacesDemon). The
 [MatrixLDA](https://cran.r-project.org/package=MatrixLDA) package performs LDA 
 for normal distributions with penalized likelihood.
 
-The software can be installed by running:
+Install from CRAN by running:
+
+    install.packages('MixMatrix')
+
+The development version of the software can be installed by running:
 
     devtools::install_github("gzt/MixMatrix")
 	

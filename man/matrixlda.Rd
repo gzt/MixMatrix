@@ -73,15 +73,7 @@ prior <- c(.5,.5)
 matrixlda(C, groups, prior)
 }
 \seealso{
-\code{\link[MASS]{lda}},  \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
-
-Other matrixlda: \code{\link{matrixqda}},
-  \code{\link{predict.matrixlda}},
-  \code{\link{predict.matrixqda}}
-
-Other matrixvariate: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixmixture}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
+\code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
+    \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+    \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }
-\concept{matrixlda}
-\concept{matrixvariate}

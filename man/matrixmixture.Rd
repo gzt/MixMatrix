@@ -63,9 +63,9 @@ A list of class \code{MixMatrixModel} containing the following
    }
 }
 \description{
-Fit a mixture model using EM with \code{K} groups and unconstrained
-covariance matrices for a matrix variate normal or matrix variate
-t distribution (with specified degrees of freedom \code{nu}).
+Clustering by fitting a mixture model using EM with \code{K} groups
+and unconstrained covariance matrices for a matrix variate normal or
+matrix variate t distribution (with specified degrees of freedom \code{nu}).
 }
 \examples{
 
@@ -85,8 +85,5 @@ res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
 if(interactive()) plot(res)
 }
 \seealso{
-Other matrixvariate: \code{\link{MLmatrixnorm}},
-  \code{\link{MLmatrixt}}, \code{\link{matrixlda}},
-  \code{\link{rmatrixinvt}}, \code{\link{rmatrixnorm}}
+\code{\link{init_matrixmixture}}
 }
-\concept{matrixvariate}

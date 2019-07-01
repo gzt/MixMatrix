@@ -18,9 +18,9 @@
 
 ##' Fit a matrix variate mixture model
 ##'
-##' Fit a mixture model using EM with \code{K} groups and unconstrained
-##' covariance matrices for a matrix variate normal or matrix variate
-##' t distribution (with specified degrees of freedom \code{nu}). 
+##' Clustering by fitting a mixture model using EM with \code{K} groups
+##' and unconstrained covariance matrices for a matrix variate normal or
+##' matrix variate t distribution (with specified degrees of freedom \code{nu}). 
 ##'
 ##' @param x data, \code{p x q x n} array
 ##' @param init a list containing an array of \code{K} of \code{p x q} means,
@@ -65,7 +65,8 @@
 ##'
 ##'
 ##' @export
-##' @family matrixvariate
+##' @seealso \code{\link{init_matrixmixture}}
+##' 
 ##' @examples
 ##'
 ##' set.seed(20180221)
@@ -261,7 +262,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     } else {
         for(j in 1:K){
 
-            newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] - t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
+            newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
+                                                      t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
             newV[,,j] = newV[,,j]/newV[1,1,j]
             
             newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
@@ -374,19 +376,22 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param prior prior probability. One of \code{prior} and \code{K} must be
 ##'      provided. They must be consistent if both provided.
 ##' @param K number of groups
-##' @param centers either a matrix or an array of matrices for use as the
-##'      \code{centers} argument (optional)
-##' @param U either a matrix or an array of matrices for use as the \code{U}
-##'      argument (optional)
-##' @param V either a matrix or an array of matrices for use as the \code{V}
-##'      argument (optional)
+##' @param centers (optional) either a matrix or an array of matrices for use as the
+##'      \code{centers} argument. If fewer than \code{K} are provided, the
+##'      remainder are chosen by \code{centermethod}.
+##' @param U (optional) either a matrix or an array of matrices for use as the \code{U}
+##'      argument. If a matrix is provided, it is duplicated to provide an array.
+##'      If an array is provided, is should have \code{K} slices.
+##' @param V  (optional) either a matrix or an array of matrices for use as the \code{U}
+##'      argument. If a matrix is provided, it is duplicated to provide an array.
+##'      If an array is provided, is should have \code{K} slices.
 ##' @param centermethod what method to use to generate initial centers.
-##'      Current support random start or performing k-means on the vectorized
-##'      version for a small number of iterations and then converting back.
-##'      By default, if centers are provided, nothing will be done.
+##'      Current support random start (\code{random}) or performing k-means
+##'      (\code{kmeans}) on the vectorized version for a small number of
+##'      iterations and then converting back.
+##'      By default, if \code{K} centers are provided, nothing will be done.
 ##' @param varmethod what method to use to choose initial variance matrices.
-##'      Currently either identity matrices or the empirical covariance matrix
-##'      determined by hard assignment to the nearest centers.
+##'      Currently only identity matrices are created. 
 ##'      By default, if \code{U} and \code{V} matrices are provided, nothing
 ##'      will be done.
 ##' @param model whether to use a normal distribution or a t-distribution, not
@@ -394,11 +399,13 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param init (optional) a (possibly partially-formed) list with some of the components
 ##'     \code{centers}, \code{U}, and \code{V}. The function will complete the
 ##'     list and fill out missing entries.
-##' @param ... Additional arguments to pass to \code{kmeans()}.
+##' @param ... Additional arguments to pass to \code{kmeans()} if that is
+##'     \code{centermethod}.
 ##' @return a list suitable to use as the \code{init} argument in
 ##'      \code{matrixmixture}
 ##' @export
 ##' @importFrom stats kmeans
+##' @seealso \code{\link{matrixmixture}} 
 init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = NULL,
                               U = NULL, V = NULL,  centermethod = "kmeans",
                               varmethod = "identity", model = "normal", init = NULL,...){

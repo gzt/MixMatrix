@@ -18,7 +18,6 @@
 
 
 #' Distribution functions for the matrix variate t distribution.
-#' @family matrixvariate
 #'
 #' Density and random generation for the matrix variate t distribution.
 #'
@@ -66,7 +65,8 @@
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
-#' @seealso \code{\link{rt}} and \code{\link[stats]{Distributions}}
+#' @seealso \code{\link{rmatrixnorm}},
+#'     \code{\link{rmatrixinvt}},\code{\link{rt}} and \code{\link[stats]{Distributions}}.
 #'
 #' @export
 #'
@@ -199,13 +199,17 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #'
 #' Generate random draws from the inverted matrix
 #'    variate t distribution
-#' @family matrixvariate
+
 #' @inheritParams rmatrixt
 #' @return \code{rmatrixinvt} returns either a list of \eqn{n}
 #'    \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
 #'    \code{dmatrixinvt} returns the density at quantile \code{x}.
+#' 
+#' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
+#'    and \code{\link[stats]{Distributions}}.
+#'         
 
 #' @export
 #' @examples

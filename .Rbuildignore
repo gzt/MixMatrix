@@ -4,7 +4,6 @@
 ^\.Rproj\.user$     # used for temporary files.
 ^README\.Rmd$       # An Rmarkdown file used to generate README.md
 ^cran-comments\.md$ # Comments for CRAN submission
-		    #^NEWS\.md$          # A news file written in Markdown
 ^\.travis\.yml$     # Used for continuous integration testing with travis
 ^.*\.tar.gz$
 ^inprogress$
@@ -21,3 +20,5 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^cran-comments\.md$
+^CRAN-RELEASE$

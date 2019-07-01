@@ -47,7 +47,5 @@ predict(D)$posterior[1:10,]
 
 }
 \seealso{
-Other matrixlda: \code{\link{matrixlda}},
-  \code{\link{matrixqda}}, \code{\link{predict.matrixlda}}
+\code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }
-\concept{matrixlda}
