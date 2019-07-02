@@ -75,6 +75,10 @@ dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 
 }
+\references{
+Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+    Vol. 104. CRC Press. ISBN:978-1584880462
+}
 \seealso{
 \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}

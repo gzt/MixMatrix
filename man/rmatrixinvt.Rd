@@ -67,6 +67,10 @@ Generate random draws from the inverted matrix
 A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }
+\references{
+Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+    Vol. 104. CRC Press. ISBN:978-1584880462
+}
 \seealso{
 \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
    and \code{\link[stats]{Distributions}}.

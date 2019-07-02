@@ -77,7 +77,6 @@
 #'     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
 #'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 
-#' 
 #' @export
 #'
 #' @examples

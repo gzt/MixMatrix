@@ -48,7 +48,9 @@
 #' @return This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #' @export
-#'
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
+
 #' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
 #'     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 #'     
@@ -275,6 +277,11 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    are constrained to be 1 for uniqueness), the number of iterations, the
 #'    squared difference between iterations of the variance matrices at the
 #'    time of stopping, the log likelihood, and a convergence code.
+#' @references   Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#'     Journal  of  StatisticalComputation and Simulation, (64):105–123, 1999.
+#'
+#'     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
 #' @export
 #' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 #'

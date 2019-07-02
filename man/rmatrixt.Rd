@@ -91,6 +91,10 @@ dt(x,1)
 dmatrixt(x,df=1)
 
 }
+\references{
+Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+    Vol. 104. CRC Press. ISBN:978-1584880462
+}
 \seealso{
 \code{\link{rmatrixnorm}},
     \code{\link{rmatrixinvt}},\code{\link{rt}} and \code{\link[stats]{Distributions}}.

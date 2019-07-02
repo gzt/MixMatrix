@@ -72,6 +72,13 @@ print(results)
 
 
 }
+\references{
+Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+    Journal  of  StatisticalComputation and Simulation, (64):105–123, 1999.
+
+    Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+    Vol. 104. CRC Press. ISBN:978-1584880462
+}
 \seealso{
 \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 }

@@ -54,6 +54,8 @@
 #'    array.
 #'
 #'    \code{dmatrixt} returns the density at quantile \code{x}.
+#' @references  Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
 #' @details
 #' The matrix \eqn{t}-distribution is parameterized slightly
 #'  differently from the univariate and multivariate \eqn{t}-distributions
@@ -209,7 +211,9 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #' 
 #' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
 #'    and \code{\link[stats]{Distributions}}.
-#'         
+#'
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
 
 #' @export
 #' @examples
