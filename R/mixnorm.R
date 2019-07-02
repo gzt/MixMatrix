@@ -80,9 +80,9 @@
 #'              )
 ##' res<-matrixmixture(C, init = init, prior = prior)
 ##' print(res) # note: prints head of posterior, not full list
-##' if(interactive()) plot(res)
+##' plot(res)
 ##' res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
-##' if(interactive()) plot(res)
+##' plot(res)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){

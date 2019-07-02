@@ -80,9 +80,9 @@ init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
              )
 res<-matrixmixture(C, init = init, prior = prior)
 print(res) # note: prints head of posterior, not full list
-if(interactive()) plot(res)
+plot(res)
 res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
-if(interactive()) plot(res)
+plot(res)
 }
 \seealso{
 \code{\link{init_matrixmixture}}

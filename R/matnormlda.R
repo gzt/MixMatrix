@@ -2,8 +2,8 @@
 #   MixMatrix: Classification with Matrix Variate Normal and t distributions
 #   Copyright (C) 2018-9  GZ Thompson <gzthompson@gmail.com>
 #
-#   These functions are based on modifications of the source for 
-#   MASS::lda() and MASS::qda(),
+#   These functions are based on extensive modifications and reworkings
+#   of the source for MASS::lda() and MASS::qda(),
 #   copyright (C) 1994-2013 W. N. Venables and B. D. Ripley
 #   released under GPL 2 or greater. This software is released under GPL-3.
 #

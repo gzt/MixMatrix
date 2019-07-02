@@ -21,10 +21,4 @@ determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
 \description{
 Determinant for an AR(1) covariance matrix.
 }
-\examples{
-\dontrun{
-ARdet(ARgenerate(5,.4,deriv=TRUE))
-}
-
-}
 \keyword{internal}

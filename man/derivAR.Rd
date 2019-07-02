@@ -11,6 +11,10 @@ derivAR(n, rho)
 
 \item{rho}{off-diagonal parameter}
 }
+\value{
+matrix derivative of an AR(1) matrix
+}
 \description{
 Derivative of AR(1) covariance matrix
 }
+\keyword{internal}

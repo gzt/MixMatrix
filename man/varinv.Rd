@@ -22,7 +22,4 @@ The inverse or derivative of the inverse of the selected matrix structure.
 \description{
 Inverse selector for chosen covariance matrix.
 }
-\examples{
-\dontrun{varinv(5,.5,TRUE, "AR(1)"}
-}
 \keyword{internal}

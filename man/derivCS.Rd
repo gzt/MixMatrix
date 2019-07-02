@@ -11,6 +11,10 @@ derivCS(n, rho)
 
 \item{rho}{off-diagonal parameter}
 }
+\value{
+matrix derivative of a CS matrix with unit diagonal
+}
 \description{
 Derivative of compound symmetric covariance matrix
 }
+\keyword{internal}

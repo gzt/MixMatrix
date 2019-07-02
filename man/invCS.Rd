@@ -19,9 +19,4 @@ inverse matrix or derivative of the inverse matrix.
 \description{
 Inverse of Compound Symmetric Matrix.
 }
-\examples{
-\dontrun{
-invCS(3,.25,TRUE)
-}
-}
 \keyword{internal}

@@ -20,10 +20,4 @@ determinant of an CS covariance matrix
 \description{
 Determinant for an CS covariance matrix.
 }
-\examples{
-\dontrun{
-CSdet(ARgenerate(5,.4,deriv=TRUE))
-}
-
-}
 \keyword{internal}

@@ -15,8 +15,4 @@ trace of a matrix
 \description{
 Trace of a matrix
 }
-\examples{
-\dontrun{A <- diag(6:1)
-matrixtrace(A)}
-}
 \keyword{internal}

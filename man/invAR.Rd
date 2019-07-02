@@ -19,9 +19,4 @@ Matrix of the inverse of the AR(1) covariance matrix (or its inverse)
 \description{
 Returns the inverse of an AR(1) covariance matrix or its derivative
 }
-\examples{
-\dontrun{
-invAR(5,.5, TRUE)
-}
-}
 \keyword{internal}

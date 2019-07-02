@@ -19,7 +19,4 @@ The derivative of the selected matrix structure.
 \description{
 Derivative selector for chosen covariance matrix.
 }
-\examples{
-\dontrun{varderiv(5, .5, "AR(1)"}
-}
 \keyword{internal}
