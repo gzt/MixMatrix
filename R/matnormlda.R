@@ -34,12 +34,12 @@
 #' The estimated variance matrices are weighted by the prior. However,
 #' if there are not enough members of a class to estimate a variance,
 #' this may be a problem.
-#' The function does not take the formula interface. It \code{method = 't'}
+#' The function does not take the formula interface. If \code{method = 't'}
 #' is selected, this performs discrimination using the matrix variate t
 #' distribution, presuming equal covariances between classes. 
 #'
 #'
-#' @param x 3-D array matrix data.
+#' @param x 3-D array of matrix data indexed by the third dimension
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
 #'    as the number of classes
@@ -359,21 +359,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
 #' variances for the case when different groups have different variances.
 #'
-#' @param x 3-D array or list of matrix data.
-#' @param grouping vector
-#' @param prior a vector of prior probabilities of the same length
-#'    as the number of classes
-#' @param tol by default, \code{1e-4}. Tolerance parameter checks
-#'    for 0 variance.
-#' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
-#'    By default, normal.
-#' @param nu If using the t-distribution, the degrees of freedom parameter. By default, 10.
-#' @param ... Arguments passed to or from other methods, such
-#'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
-#'    \code{row.mean})
-#' @param subset An index vector specifying the cases to be used in the
-#'          training sample.  (NOTE: If given, this argument must be
-#'          named.)
+#' @inheritParams matrixlda
 #'
 #' @return Returns a list of class \code{matrixqda} containing
 #'    the following components:

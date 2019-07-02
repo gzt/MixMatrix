@@ -8,7 +8,7 @@ matrixlda(x, grouping, prior, tol = 1e-04, method = "normal",
   nu = 10, ..., subset)
 }
 \arguments{
-\item{x}{3-D array matrix data.}
+\item{x}{3-D array of matrix data indexed by the third dimension}
 
 \item{grouping}{vector}
 
@@ -59,7 +59,7 @@ the data are from a matrix variate normal distribution.
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
-The function does not take the formula interface. It \code{method = 't'}
+The function does not take the formula interface. If \code{method = 't'}
 is selected, this performs discrimination using the matrix variate t
 distribution, presuming equal covariances between classes.
 }
