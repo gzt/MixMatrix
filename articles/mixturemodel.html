@@ -106,7 +106,8 @@
 <h2 class="hasAnchor">
 <a href="#matrix-variate-mixture-modeling" class="anchor"></a>Matrix Variate Mixture Modeling</h2>
 <p>The matrix variate <em>t</em> distribution was introduced in a previous vignette along with an EM algorithm for maximum likelihood fitting of the parameters. This can be extended rather easily to the case of mixture models for model-based clustering.</p>
-<p>As in the case of mixture modeling in general <span class="citation">(Fraley and Raftery <a href="#ref-fraley2002model">2002</a>; <span class="citeproc-not-found" data-reference-id="viroli2011class"><strong>???</strong></span>; McLachlan, Lee, and Rathnayake <a href="#ref-mclachlan2019finite">2019</a>)</span>, the difference in the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ij}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>, where <span class="math display">\[\pi_j = \sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]</span></p>
+<p>As in the case of mixture modeling in general <span class="citation">(Fraley and Raftery <a href="#ref-fraley2002model">2002</a>; McLachlan, Lee, and Rathnayake <a href="#ref-mclachlan2019finite">2019</a>)</span>, the difference in the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ij}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>, where <span class="math display">\[\pi_j = \sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]</span></p>
+<p>The case of the matrix variate normal distribution can be seen in <span class="citation">Viroli (<a href="#ref-viroliclass2011">2011</a>)</span>, while the case of the multivariate <em>t</em> can be seen in <span class="citation">Andrews, McNicholas, and Subedi (<a href="#ref-ANDREWS2011520">2011</a>)</span>.</p>
 <p>The updates on the parameters <span class="math inline">\(\Theta\)</span> are weighted by <span class="math inline">\(\tau_{ij}\)</span> in an Expectation/Conditional Maximization algorithm.</p>
 </div>
 <div id="usage" class="section level2">
@@ -334,11 +335,17 @@
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
+<div id="ref-ANDREWS2011520">
+<p>Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011. “Model-Based Classification via Mixtures of Multivariate T-Distributions.” <em>Computational Statistics &amp; Data Analysis</em> 55 (1): 520–29. <a href="https://doi.org/https://doi.org/10.1016/j.csda.2010.05.019" class="uri">https://doi.org/https://doi.org/10.1016/j.csda.2010.05.019</a>.</p>
+</div>
 <div id="ref-fraley2002model">
 <p>Fraley, Chris, and Adrian E Raftery. 2002. “Model-Based Clustering, Discriminant Analysis, and Density Estimation.” <em>Journal of the American Statistical Association</em> 97 (458). Taylor &amp; Francis: 611–31.</p>
 </div>
 <div id="ref-mclachlan2019finite">
 <p>McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019. “Finite Mixture Models.” <em>Annual Review of Statistics and Its Application</em> 6. Annual Reviews: 355–78.</p>
+</div>
+<div id="ref-viroliclass2011">
+<p>Viroli, Cinzia. 2011. “Finite Mixtures of Matrix Normal Distributions for Classifying Three-Way Data.” <em>Statistics and Computing</em> 21 (4): 511–22. <a href="https://doi.org/10.1007/s11222-010-9188-x" class="uri">https://doi.org/10.1007/s11222-010-9188-x</a>.</p>
 </div>
 </div>
 </div>
