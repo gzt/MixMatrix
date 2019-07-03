@@ -26,7 +26,7 @@ with an EM algorithm for maximum likelihood fitting of the parameters. This can
 be extended rather easily to the case of mixture models for model-based 
 clustering.
 
-As in the case of mixture modeling in general [@fraley2002model, @viroli2011class, mclachlan2019finite], 
+As in the case of mixture modeling in general [@fraley2002model @viroli2011class; @mclachlan2019finite], 
 the difference is the EM algorithm
 is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
