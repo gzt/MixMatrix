@@ -45,13 +45,6 @@ $\Gamma_p()$ the multivariate gamma function, which is implemented in the
 [`CholWishart`](http://gzt.github.io/CholWishart) package available on CRAN.
 
 
-The random $p \times q$ matrix $t$ with parameters
-($\nu \geq 1$,$M$ ($p \times q$), $\Sigma >0$ ($p \times p$),
-$\Omega >0$ ($q \times q$)) is distributed as a matrix variate $t$
-distribution if it has the following p.d.f:
-
-\[f(\mathbf{X};\nu, \mathbf{M}, \mathbf{\Sigma}, \mathbf{\Omega}) = {\frac{\Gamma _{p}\left({\frac  {\nu +p+q-1}{2}}\right)}{(\pi )^{{\frac  {pq}{2}}}\Gamma _{p}\left({\frac  {\nu +p-1}{2}}\right)}}|{\boldsymbol  \Omega }|^{{-{\frac  {p}{2}}}}|{\boldsymbol  \Sigma }|^{{-{\frac  {q}{2}}}} \times \left|{\mathbf  {I}}_{p}+{\boldsymbol  \Sigma }^{{-1}}({\mathbf  {X}}-{\mathbf  {M}}){\boldsymbol  \Omega }^{{-1}}({\mathbf  {X}}-{\mathbf  {M}})^{{{\rm {T}}}}\right|^{{-{\frac  {\nu +p+q-1}{2}}}}\]
-
 For $p = 1$ and $\Sigma = \nu$ (or $q = 1$ and $\Omega = \nu$),
 this reduces to the familiar multivariate $t$ distribution. If the
 $p \times q$ dimensional random variable $X$ follows the matrix
@@ -94,7 +87,12 @@ S_{XSX}^{(t+1)} &= E(S_{XSX} | \Theta^{(t)}) =  \sum_{i=1}^NE(X_i^TS_iX_i|\Theta
 \end{align*}
 $$
 This last value only needs to be computed if $\nu$ is unknown:
-\[S_{|S|}^{(t+1)} &= E(S_{|S|} | \Theta^{(t)}) = E \left[\sum_{i = 1}^N \log| S_i|  \big| \Theta^{(t)} \right]=N\psi_{p}\left({\frac {\nu^{(t)} + p + q -1}{2}}\right) + Np \log 2 +\sum_{i=1}^N \log \left|\frac{S_{i,obs}^{(t+1)}}{\nu^{(t)} + p + q -1}\right|\]
+$$
+\begin{align*}
+S_{|S|}^{(t+1)} &= E(S_{|S|} | \Theta^{(t)}) = E \left[\sum_{i = 1}^N \log| S_i|  \big| \Theta^{(t)} \right]\\
+&=N\psi_{p}\left({\frac {\nu^{(t)} + p + q -1}{2}}\right) + Np \log 2 +\sum_{i=1}^N \log \left|\frac{S_{i,obs}^{(t+1)}}{\nu^{(t)} + p + q -1}\right|
+\end{align*}
+$$
 
 ### CM Steps
 
