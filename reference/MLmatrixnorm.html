@@ -174,7 +174,7 @@ common mean within each row. If both this and <code>row.mean</code> are
 'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
-Only positive correlations are allowed for AR(1) and CS.
+Only positive correlations are allowed for AR(1) and CS covariances.
 Note that while maximum likelihood estimators are available (and used) for
 the unconstrained variance matrices, <code>optim</code> is used for any
 constraints so it may be considerably slower.</p></td>
@@ -197,12 +197,12 @@ between iterations of the two variance-covariance matrices.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>(optional) Can provide a starting point for the U matrix.
+      <td><p>(optional) Can provide a starting point for the <code>U</code> matrix.
 By default, an identity matrix.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>(optional) Can provide a starting point for the V matrix.
+      <td><p>(optional) Can provide a starting point for the <code>V</code> matrix.
 By default, an identity matrix.</p></td>
     </tr>
     <tr>
@@ -223,7 +223,7 @@ if using restrictions on the variance.</p></td>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
-    Journal  of  StatisticalComputation and Simulation, (64):105–123, 1999.</p>
+    Journal of Statistical Computation and Simulation, (64):105–123, 1999.</p>
 <p>Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
     Vol. 104. CRC Press. ISBN:978-1584880462</p>
     
