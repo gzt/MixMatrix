@@ -22,11 +22,13 @@
 ##' and unconstrained covariance matrices for a matrix variate normal or
 ##' matrix variate t distribution (with specified degrees of freedom \code{nu}). 
 ##'
-##' @param x data, \eqn{p \times q \times n}{p x q x n} array
-##' @param init a list containing an array of \code{K} of \eqn{p \times q}{p x q} means,
-##'     and optionally \eqn{p \times p}{p x p} and \eqn{q \times q}{q x q} positive definite variance
-##'     matrices. By default, those are presumed to be identity if not provided.
-##'     If \code{init} is missing, it will be provided using the prior or K by
+##' @param x data, \eqn{p \times q \times n}{p * q * n} array
+##' @param init a list containing an array of \code{K} of \eqn{p \times q}{p * q} means labeled
+##'     \code{centers},
+##'     and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q} positive definite variance
+##'     matrices labeled \code{U} and \code{V}.
+##'     By default, those are presumed to be identity if not provided.
+##'     If \code{init} is missing, it will be provided using the \code{prior} or \code{K} by
 ##'     \code{init_matrixmix}.
 ##' @param prior prior for the \code{K} classes, a vector that adds to unity
 ##' @param K number of classes - provide either this or the prior. If this is
@@ -125,7 +127,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     }
         
     dims = dim(x)
-    ## x is a p x q x n array
+    ## x is a p * q * n array
     n <- dims[3]
     p <- dims[1]
     q <- dims[2]
@@ -395,14 +397,16 @@ plot.MixMatrixModel <- function(x, ...){
 ##' and it will select centers and variance matrices to initialize or
 ##' provide initial values and it will format them as expected for the function.
 ##' 
-##' @param data array of data
+##' @param data  data, \eqn{p \times q \times n}{p * q * n} array
 ##' @param prior prior probability. One of \code{prior} and \code{K} must be
 ##'      provided. They must be consistent if both provided.
 ##' @param K number of groups
-##' @param centers (optional) either a matrix or an array of matrices for use as the
-##'      \code{centers} argument. If fewer than \code{K} are provided, the
+##' @param centers (optional) either a matrix or an array of \eqn{p \times p}{p * p}
+##'      matrices for use as the \code{centers} argument.
+##'      If fewer than \code{K} are provided, the
 ##'      remainder are chosen by \code{centermethod}.
-##' @param U (optional) either a matrix or an array of matrices for use as the \code{U}
+##' @param U (optional) either a matrix or an array of  \eqn{q \times q}{q * q}
+##'      matrices for use as the \code{U}
 ##'      argument. If a matrix is provided, it is duplicated to provide an array.
 ##'      If an array is provided, is should have \code{K} slices.
 ##' @param V  (optional) either a matrix or an array of matrices for use as the \code{U}
@@ -425,11 +429,14 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param ... Additional arguments to pass to \code{kmeans()} if that is
 ##'     \code{centermethod}.
 ##' @return a list suitable to use as the \code{init} argument in
-##'      \code{matrixmixture}: a \eqn{p \times q \times K}{p x q x K}  array
-##'      \code{centers} of \code{K} matrices,
-##'      a \eqn{p \times p \times K}{p x p x K}  array \code{U} of initial covariance
-##'      matrices for the rows, and a \eqn{q \times q \times K}{q x q x K} array \code{U} of
-##'      covariance matrices for the columns.
+##'      \code{matrixmixture}:
+##' \describe{
+#'       \item{\code{centers}}{the group means,
+#'             a \eqn{p \times q \times K}{p * q * K} array.}
+#'       \item{\code{U}}{the between-row covariance matrices, a \eqn{p \times p \times K}{p * p * K}  array}
+#'       \item{\code{V}}{the between-column covariance matrix, a \eqn{q \times q \times K}{q * q * K} array}
+##'    }
+##'
 ##' @export
 ##' @importFrom stats kmeans
 ##' @seealso \code{\link{matrixmixture}}

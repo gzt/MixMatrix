@@ -9,18 +9,20 @@ init_matrixmixture(data, prior = NULL, K = length(prior),
   varmethod = "identity", model = "normal", init = NULL, ...)
 }
 \arguments{
-\item{data}{array of data}
+\item{data}{data, \eqn{p \times q \times n}{p * q * n} array}
 
 \item{prior}{prior probability. One of \code{prior} and \code{K} must be
 provided. They must be consistent if both provided.}
 
 \item{K}{number of groups}
 
-\item{centers}{(optional) either a matrix or an array of matrices for use as the
-\code{centers} argument. If fewer than \code{K} are provided, the
+\item{centers}{(optional) either a matrix or an array of \eqn{p \times p}{p * p}
+matrices for use as the \code{centers} argument.
+If fewer than \code{K} are provided, the
 remainder are chosen by \code{centermethod}.}
 
-\item{U}{(optional) either a matrix or an array of matrices for use as the \code{U}
+\item{U}{(optional) either a matrix or an array of  \eqn{q \times q}{q * q}
+matrices for use as the \code{U}
 argument. If a matrix is provided, it is duplicated to provide an array.
 If an array is provided, is should have \code{K} slices.}
 
@@ -51,11 +53,13 @@ list and fill out missing entries.}
 }
 \value{
 a list suitable to use as the \code{init} argument in
-     \code{matrixmixture}: a \eqn{p \times q \times K}{p x q x K}  array
-     \code{centers} of \code{K} matrices,
-     a \eqn{p \times p \times K}{p x p x K}  array \code{U} of initial covariance
-     matrices for the rows, and a \eqn{q \times q \times K}{q x q x K} array \code{U} of
-     covariance matrices for the columns.
+     \code{matrixmixture}:
+\describe{
+      \item{\code{centers}}{the group means,
+            a \eqn{p \times q \times K}{p * q * K} array.}
+      \item{\code{U}}{the between-row covariance matrices, a \eqn{p \times p \times K}{p * p * K}  array}
+      \item{\code{V}}{the between-column covariance matrix, a \eqn{q \times q \times K}{q * q * K} array}
+   }
 }
 \description{
 Providing this will generate a list suitable for use as the \code{init}

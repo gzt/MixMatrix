@@ -272,11 +272,21 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @param ... (optional) additional arguments can be passed to \code{optim}
 #'    if using restrictions on the variance.
 #'
-#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-#'    matrix, the variance parameter (the first entry of the variance matrices
-#'    are constrained to be 1 for uniqueness), the number of iterations, the
-#'    squared difference between iterations of the variance matrices at the
-#'    time of stopping, the log likelihood, and a convergence code.
+#' @return Returns a list with a the following elements:
+#' \describe{
+#'       \item{\code{mean}}{the mean matrix}
+#'       \item{\code{scaling}}{the scalar variance parameter
+#'            (the first entry of the covariances are restricted to unity)}
+#'       \item{\code{U}}{the between-row covariance matrix}
+#'       \item{\code{V}}{the between-column covariance matrix}
+#'       \item{\code{iter}}{the number of iterations}
+#'       \item{\code{tol}}{the squared difference between iterations of
+#'            the variance matrices at the time of stopping}
+#'       \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+#'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+#'       \item{\code{call}}{The (matched) function call.}
+#'    }
+#'
 #' @references   Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
 #'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #'
