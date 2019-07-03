@@ -22,9 +22,9 @@
 ##' and unconstrained covariance matrices for a matrix variate normal or
 ##' matrix variate t distribution (with specified degrees of freedom \code{nu}). 
 ##'
-##' @param x data, \code{p x q x n} array
-##' @param init a list containing an array of \code{K} of \code{p x q} means,
-##'     and optionally \code{p x p} and \code{q x q} positive definite variance
+##' @param x data, \eqn{p \times q \times n}{p x q x n} array
+##' @param init a list containing an array of \code{K} of \eqn{p \times q}{p x q} means,
+##'     and optionally \eqn{p \times p}{p x p} and \eqn{q \times q}{q x q} positive definite variance
 ##'     matrices. By default, those are presumed to be identity if not provided.
 ##'     If \code{init} is missing, it will be provided using the prior or K by
 ##'     \code{init_matrixmix}.
@@ -425,11 +425,16 @@ plot.MixMatrixModel <- function(x, ...){
 ##' @param ... Additional arguments to pass to \code{kmeans()} if that is
 ##'     \code{centermethod}.
 ##' @return a list suitable to use as the \code{init} argument in
-##'      \code{matrixmixture}
+##'      \code{matrixmixture}: a \eqn{p \times q \times K}{p x q x K}  array
+##'      \code{centers} of \code{K} matrices,
+##'      a \eqn{p \times p \times K}{p x p x K}  array \code{U} of initial covariance
+##'      matrices for the rows, and a \eqn{q \times q \times K}{q x q x K} array \code{U} of
+##'      covariance matrices for the columns.
 ##' @export
 ##' @importFrom stats kmeans
 ##' @seealso \code{\link{matrixmixture}}
 ##' 
+##' @examples 
 ##'  set.seed(20180221)
 ##' A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
 ##' # 3x4 matrices with mean 0
