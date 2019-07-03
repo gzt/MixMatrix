@@ -51,7 +51,11 @@ list and fill out missing entries.}
 }
 \value{
 a list suitable to use as the \code{init} argument in
-     \code{matrixmixture}
+     \code{matrixmixture}: a \eqn{p \times q \times K}{p x q x K}  array
+     \code{centers} of \code{K} matrices,
+     a \eqn{p \times p \times K}{p x p x K}  array \code{U} of initial covariance
+     matrices for the rows, and a \eqn{q \times q \times K}{q x q x K} array \code{U} of
+     covariance matrices for the columns.
 }
 \description{
 Providing this will generate a list suitable for use as the \code{init}
@@ -59,9 +63,7 @@ argument in the \code{matrixmixture} function. Either provide data
 and it will select centers and variance matrices to initialize or
 provide initial values and it will format them as expected for the function.
 }
-\seealso{
-\code{\link{matrixmixture}}
-
+\examples{
  set.seed(20180221)
 A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
 # 3x4 matrices with mean 0
@@ -71,4 +73,7 @@ C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
 prior <- c(.5,.5) # equal probability prior
 init = init_matrixmixture(C, prior = prior)
 # will find two centers using the "kmeans" method on the vectorized matrices
+}
+\seealso{
+\code{\link{matrixmixture}}
 }

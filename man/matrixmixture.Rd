@@ -9,10 +9,10 @@ matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   nu = NULL, ..., verbose = 0, miniter = 3)
 }
 \arguments{
-\item{x}{data, \code{p x q x n} array}
+\item{x}{data, \eqn{p \times q \times n}{p x q x n} array}
 
-\item{init}{a list containing an array of \code{K} of \code{p x q} means,
-and optionally \code{p x p} and \code{q x q} positive definite variance
+\item{init}{a list containing an array of \code{K} of \eqn{p \times q}{p x q} means,
+and optionally \eqn{p \times p}{p x p} and \eqn{q \times q}{q x q} positive definite variance
 matrices. By default, those are presumed to be identity if not provided.
 If \code{init} is missing, it will be provided using the prior or K by
 \code{init_matrixmix}.}
