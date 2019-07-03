@@ -1,6 +1,7 @@
 ---
 title: "ML estimation of the Matrix Variate t Distribution"
 author: "Geoffrey Thompson"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{matrix-t-estimation}
@@ -174,14 +175,15 @@ principal mathematical difficulty of the matrix-variate $t$ distribution.
 It is performed using ECME. Generally, a fair amount more data are needed
 in order to have good convergence properties for the estimator, but they have
 not been derived analytically. Here you can see the recovery of the parameter
-for a few choices of the parameter and sample sizes. Because of the relative 
+for a few  sample sizes. Because of the relative 
 slowness of running a longer simulation, this only includes one set of examples.
-I give code for a longer and larger simulation that what is plotted 
-if you're really interested. What is plotted below is only the `df = 10`
+I give code for a longer and larger simulation than what is plotted 
+if you're really interested below. What is plotted below is only the `df = 10`
 example with 75 trials and a maximum number of iterations `max.iter =  50`.
 The full simulation may take several minutes.
 
-```{r dontrun, eval=FALSE}
+```{r dontrun, eval=FALSE, echo = FALSE}
+### Here is the long simulation
 library(ggplot2)
 
 set.seed(20181102)
@@ -259,6 +261,7 @@ knitr::kable(dfdataframe %>% group_by(truedf, samplesize) %>%
 	median = median(estdf),
 	mean=mean(estdf),
 	sd = sd(estdf)))
+### Here ends the long simulation
 
 ```
 

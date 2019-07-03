@@ -5,9 +5,9 @@ Version: 0.2.1
 Date: 2019-07-02
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')),
-	  person(c("B. D.", "Ripley"),email = "ripley@stats.ox.ac.uk",
+	  person(c("B. D.", "Ripley", comment = "author of original lda and qda functions"),email = "ripley@stats.ox.ac.uk",
           role = c("ctb")),
-	  person(c("W. N.", "Venables"),
+	  person(c("W. N.", "Venables",  comment = "author of original lda and qda functions"),
           role = c("ctb")))
 Description: Provides sampling and density functions for matrix
     variate normal, t, and inverted t distributions;  ML fitting for matrix
