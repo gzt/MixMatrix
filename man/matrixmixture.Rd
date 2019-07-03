@@ -68,8 +68,7 @@ and unconstrained covariance matrices for a matrix variate normal or
 matrix variate t distribution (with specified degrees of freedom \code{nu}).
 }
 \examples{
-
- set.seed(20180221)
+set.seed(20180221)
 A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
 # 3x4 matrices with mean 0
 B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)

@@ -87,10 +87,8 @@
 ##'           for Classifying Three-Way Data." Statistics and Computing 21 (4):
 ##'           511–22. \doi{10.1007/s11222-010-9188-x}.
 ##' 
-##' 
 ##' @examples
-##'
-##'  set.seed(20180221)
+##' set.seed(20180221)
 ##' A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
 ##' # 3x4 matrices with mean 0
 ##' B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
