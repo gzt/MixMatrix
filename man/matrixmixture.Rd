@@ -56,9 +56,9 @@ A list of class \code{MixMatrixModel} containing the following
       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
            was used.}
       \item{\code{convergence }}{whether the model converged}
-      \item{\code{logLik }}{a vector of the log-likelihoods of each iteration ending in
+      \item{\code{logLik}}{a vector of the log-likelihoods of each iteration ending in
               the final log-likelihood of the model}
-      \item{\code{method }}{the method used}
+      \item{\code{method}}{the method used}
       \item{\code{call}}{The (matched) function call.}
    }
 }
