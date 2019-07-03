@@ -136,7 +136,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
   group.means = array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] = rowMeans(x[, , g == levels(g)[i], drop = FALSE], dim = 2)
+    group.means[, , i] = rowMeans(x[, , g == levels(g)[i], drop = FALSE], dims = 2)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
