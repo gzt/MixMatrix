@@ -91,12 +91,13 @@
 #'
 #' @examples
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
-#' matrixlda(C, groups, prior)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
+#' matrixlda(C, groups, prior) # fit model
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                        nu = 10,..., subset)  {
    if (is.null(dim(x)))
@@ -271,11 +272,12 @@ mattrace <- function(x)
 #'
 #' @examples
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
 #' D <- matrixlda(C, groups, prior)
 #' predict(D)$posterior[1:10,]
 #'
@@ -397,12 +399,13 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' @export
 #'
 #' @examples
-#' #' set.seed(20180221)
+#' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
 #' D <- matrixqda(C, groups, prior)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
  
@@ -547,13 +550,14 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' @examples
 #'
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
-#' D <- matrixqda(C, groups, prior)
-#' predict(D)$posterior[1:10,]
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
+#' D <- matrixqda(C, groups, prior) # fit model
+#' predict(D)$posterior[1:10,] # predict, show results of first 10
 #'
 ## S3 method for class "matrixqda"
 predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {

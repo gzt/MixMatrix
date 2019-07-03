@@ -69,20 +69,44 @@ matrix variate t distribution (with specified degrees of freedom \code{nu}).
 }
 \examples{
 
-set.seed(20180221)
-A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60))
-prior <- c(.5,.5)
+ set.seed(20180221)
+A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
+# 3x4 matrices with mean 0
+B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
+# 3x4 matrices with mean 2
+C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
+prior <- c(.5,.5) # equal probability prior
+# create an intialization object, starts at the true parameters
 init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
-             U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
-             V = array(c(diag(4), diag(4)), dim = c(4,4,2))
-             )
-res<-matrixmixture(C, init = init, prior = prior)
-print(res) # note: prints head of posterior, not full list
-plot(res)
-res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
-plot(res)
+              U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
+              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
+ )
+# fit model
+ res<-matrixmixture(C, init = init, prior = prior, nu = 20,
+                    model = "t", tolerance = 1e-1)
+print(res$centers) # the final centers
+print(res$pi) # the final mixing proportion
+plot(res) # the log likelihood by iteration
+}
+\references{
+Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
+      "Model-Based Classification via Mixtures of Multivariate
+      T-Distributions." Computational Statistics & Data Analysis 55 (1):
+      520–29. \doi{10.1016/j.csda.2010.05.019}.
+
+    Fraley, Chris, and Adrian E Raftery. 2002. "Model-Based Clustering,
+       Discriminant Analysis, and Density Estimation." Journal of the
+       American Statistical Association 97 (458). Taylor & Francis: 611–31.
+       \doi{10.1198/016214502760047131}.
+
+    McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019.
+          "Finite Mixture Models." Annual Review of Statistics and Its
+          Application 6. Annual Reviews: 355–78.
+          \doi{10.1146/annurev-statistics-031017-100325}.
+
+    Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
+          for Classifying Three-Way Data." Statistics and Computing 21 (4):
+          511–22. \doi{10.1007/s11222-010-9188-x}.
 }
 \seealso{
 \code{\link{init_matrixmixture}}

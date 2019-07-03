@@ -65,12 +65,13 @@ distribution, presuming equal covariances between classes.
 }
 \examples{
 set.seed(20180221)
+# construct two populations of 3x4 random matrices with different means
 A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60))
-groups <- c(rep(1,30),rep(2,30))
-prior <- c(.5,.5)
-matrixlda(C, groups, prior)
+C <- array(c(A,B), dim=c(3,4,60)) #combine together
+groups <- c(rep(1,30),rep(2,30)) # define groups
+prior <- c(.5,.5) # set prior
+matrixlda(C, groups, prior) # fit model
 }
 \references{
 Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant

@@ -61,4 +61,14 @@ provide initial values and it will format them as expected for the function.
 }
 \seealso{
 \code{\link{matrixmixture}}
+
+ set.seed(20180221)
+A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
+# 3x4 matrices with mean 0
+B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
+# 3x4 matrices with mean 2
+C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
+prior <- c(.5,.5) # equal probability prior
+init = init_matrixmixture(C, prior = prior)
+# will find two centers using the "kmeans" method on the vectorized matrices
 }
