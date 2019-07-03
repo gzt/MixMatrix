@@ -69,7 +69,7 @@ Briefly, we define a set of complete data sufficient statistics based on the $S_
 and update them with their expectations in the E-step. Then, the other parameters
 are maximized in the CM steps. 
 
-We can define the following sufficient statistics for the quantities to be estimated:
+The complete data sufficient statistics for the quantities to be estimated are:
 \[S_{SX} =\sum_{i = 1}^N S_i X_i; \quad S_S =  \sum_{i = 1}^N S_i; \quad S_{XSX} =  \sum_{i = 1}^N  X_i^T S_i X_i \quad S_{|S|} = \sum_{i = 1}^N \log |Si|\]
 
 ### E-step

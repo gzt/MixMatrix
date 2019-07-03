@@ -70,6 +70,22 @@
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
 #'
+#' @references
+#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#'        Distribution and the Inverted Multivariate t
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+#'
+#'     Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm: A Simple Extension of
+#'           EM and ECM with Faster Monotone Convergence.” Biometrika 81 (4): 633–48.
+#'           \doi{10.2307/2337067}
+#'
+#'    Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation via the ECM
+#'             Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
+#'             \doi{10.1093/biomet/80.2.267}
+#' 
+#'     Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed., 272–5. John Wiley.
+
+#' 
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixt(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),

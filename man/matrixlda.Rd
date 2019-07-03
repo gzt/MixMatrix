@@ -72,6 +72,16 @@ groups <- c(rep(1,30),rep(2,30))
 prior <- c(.5,.5)
 matrixlda(C, groups, prior)
 }
+\references{
+Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+      analysis for image matrix", Pattern Recognition Letters, Volume 26,
+      Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+
+    Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+       Method for Classification With Matrix-Valued Predictors", Journal of
+       Computational and Graphical Statistics, 28:1, 11-22,
+       \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
+}
 \seealso{
 \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}

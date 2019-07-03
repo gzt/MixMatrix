@@ -65,6 +65,10 @@ groups <- c(rep(1,30),rep(2,30))
 prior <- c(.5,.5)
 D <- matrixqda(C, groups, prior)
 }
+\references{
+Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+    Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+}
 \seealso{
 \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
     \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},

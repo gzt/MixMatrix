@@ -76,7 +76,17 @@
 #' @seealso  \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
 #'     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
 #'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
-
+#'
+#' @references
+#'     Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+#'       analysis for image matrix", Pattern Recognition Letters, Volume 26,
+#'       Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+#' 
+#'     Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+#'        Method for Classification With Matrix-Valued Predictors", Journal of
+#'        Computational and Graphical Statistics, 28:1, 11-22,
+#'        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
+#' 
 #' @export
 #'
 #' @examples
@@ -380,6 +390,9 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'     \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
 #'     \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 
+#'
+#' @references Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #' 
 #' @export
 #'
@@ -530,7 +543,9 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #' @export
 #'
+
 #' @examples
+#'
 #' set.seed(20180221)
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))

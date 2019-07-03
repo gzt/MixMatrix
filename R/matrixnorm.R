@@ -254,7 +254,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 #'     correlation matrix, or 'Independence' for
 #'     independent and identical variance across the rows.
-#'     Only positive correlations are allowed for AR(1) and CS.
+#'     Only positive correlations are allowed for AR(1) and CS covariances.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it may be considerably slower.
@@ -265,9 +265,9 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
-#' @param U (optional) Can provide a starting point for the U matrix.
+#' @param U (optional) Can provide a starting point for the \code{U} matrix.
 #'    By default, an identity matrix.
-#' @param V (optional) Can provide a starting point for the V matrix.
+#' @param V (optional) Can provide a starting point for the \code{V} matrix.
 #'    By default, an identity matrix.
 #' @param ... (optional) additional arguments can be passed to \code{optim}
 #'    if using restrictions on the variance.
@@ -278,7 +278,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    squared difference between iterations of the variance matrices at the
 #'    time of stopping, the log likelihood, and a convergence code.
 #' @references   Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
-#'     Journal  of  StatisticalComputation and Simulation, (64):105–123, 1999.
+#'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #'
 #'     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462

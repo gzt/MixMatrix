@@ -24,7 +24,7 @@ common mean within each row. If both this and \code{row.mean} are
 'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
-Only positive correlations are allowed for AR(1) and CS.
+Only positive correlations are allowed for AR(1) and CS covariances.
 Note that while maximum likelihood estimators are available (and used) for
 the unconstrained variance matrices, \code{optim} is used for any
 constraints so it may be considerably slower.}
@@ -39,10 +39,10 @@ between iterations of the two variance-covariance matrices.}
 
 \item{max.iter}{Maximum possible iterations of the algorithm.}
 
-\item{U}{(optional) Can provide a starting point for the U matrix.
+\item{U}{(optional) Can provide a starting point for the \code{U} matrix.
 By default, an identity matrix.}
 
-\item{V}{(optional) Can provide a starting point for the V matrix.
+\item{V}{(optional) Can provide a starting point for the \code{V} matrix.
 By default, an identity matrix.}
 
 \item{...}{(optional) additional arguments can be passed to \code{optim}
@@ -74,7 +74,7 @@ print(results)
 }
 \references{
 Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
-    Journal  of  StatisticalComputation and Simulation, (64):105–123, 1999.
+    Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 
     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
     Vol. 104. CRC Press. ISBN:978-1584880462

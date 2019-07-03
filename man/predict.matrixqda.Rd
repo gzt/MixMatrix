@@ -36,6 +36,7 @@ class "\code{matrixqda}". It can be invoked by calling \code{predict(x)} for
 an object \code{x} of the appropriate class.
 }
 \examples{
+
 set.seed(20180221)
 A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
