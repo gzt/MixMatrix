@@ -7,6 +7,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: matrixpaper.bib
+link-citations: yes
 ---
 
 ```{r, include = FALSE}

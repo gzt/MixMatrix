@@ -2,9 +2,11 @@
 title: "Matrix Variate Mixture Models with the t distribution"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{MixMatrix}
+  %\VignetteIndexEntry{Mixture Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: mixture.bib
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
@@ -24,7 +26,8 @@ with an EM algorithm for maximum likelihood fitting of the parameters. This can
 be extended rather easily to the case of mixture models for model-based 
 clustering.
 
-As in the case of mixture modeling in general, the difference is the EM algorithm
+As in the case of mixture modeling in general [@fraley2002model, @viroli2011class, mclachlan2019finite], 
+the difference is the EM algorithm
 is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
 and weights $\tau_{ij}$, weights for each observation $i$ and group $j$, where

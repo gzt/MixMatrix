@@ -94,6 +94,10 @@ dmatrixt(x,df=1)
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
     Vol. 104. CRC Press. ISBN:978-1584880462
+
+    Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+       Distribution and the Inverted Multivariate t
+       Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
 }
 \seealso{
 \code{\link{rmatrixnorm}},
