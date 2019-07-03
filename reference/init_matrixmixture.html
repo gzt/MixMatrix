@@ -214,22 +214,27 @@ list and fill out missing entries.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a list suitable to use as the <code>init</code> argument in
-     <code>matrixmixture</code></p>
+     <code>matrixmixture</code>: a \(p \times q \times K\)  array
+     <code>centers</code> of <code>K</code> matrices,
+     a \(p \times p \times K\)  array <code>U</code> of initial covariance
+     matrices for the rows, and a \(q \times q \times K\) array <code>U</code> of
+     covariance matrices for the columns.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='matrixmixture.html'>matrixmixture</a></code></p>
-<p>set.seed(20180221)
-A &lt;- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
-# 3x4 matrices with mean 0
-B &lt;- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
-# 3x4 matrices with mean 2
-C &lt;- array(c(A,B), dim=c(3,4,60)) # combine into one array
-prior &lt;- c(.5,.5) # equal probability prior
-init = init_matrixmixture(C, prior = prior)
-# will find two centers using the "kmeans" method on the vectorized matrices</p></div>
+    <div class='dont-index'><p><code><a href='matrixmixture.html'>matrixmixture</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>20180221</span>)
+<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='co'># 3x4 matrices with mean 0</span>
+<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>2</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='co'># 3x4 matrices with mean 2</span>
+<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'># combine into one array</span>
+<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
+<span class='no'>init</span> <span class='kw'>=</span> <span class='fu'>init_matrixmixture</span>(<span class='no'>C</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>)
+<span class='co'># will find two centers using the "kmeans" method on the vectorized matrices</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -239,7 +244,9 @@ init = init_matrixmixture(C, prior = prior)
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
