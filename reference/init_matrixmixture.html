@@ -149,7 +149,7 @@ provide initial values and it will format them as expected for the function.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>array of data</p></td>
+      <td><p>data, \(p \times q \times n\) array</p></td>
     </tr>
     <tr>
       <th>prior</th>
@@ -162,13 +162,15 @@ provided. They must be consistent if both provided.</p></td>
     </tr>
     <tr>
       <th>centers</th>
-      <td><p>(optional) either a matrix or an array of matrices for use as the
-<code>centers</code> argument. If fewer than <code>K</code> are provided, the
+      <td><p>(optional) either a matrix or an array of \(p \times p\)
+matrices for use as the <code>centers</code> argument.
+If fewer than <code>K</code> are provided, the
 remainder are chosen by <code>centermethod</code>.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>(optional) either a matrix or an array of matrices for use as the <code>U</code>
+      <td><p>(optional) either a matrix or an array of  \(q \times q\)
+matrices for use as the <code>U</code>
 argument. If a matrix is provided, it is duplicated to provide an array.
 If an array is provided, is should have <code>K</code> slices.</p></td>
     </tr>
@@ -214,11 +216,13 @@ list and fill out missing entries.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a list suitable to use as the <code>init</code> argument in
-     <code>matrixmixture</code>: a \(p \times q \times K\)  array
-     <code>centers</code> of <code>K</code> matrices,
-     a \(p \times p \times K\)  array <code>U</code> of initial covariance
-     matrices for the rows, and a \(q \times q \times K\) array <code>U</code> of
-     covariance matrices for the columns.</p>
+     <code>matrixmixture</code>:</p><dl class='dl-horizontal'>
+      <dt><code>centers</code></dt><dd><p>the group means,
+            a \(p \times q \times K\) array.</p></dd>
+      <dt><code>U</code></dt><dd><p>the between-row covariance matrices, a \(p \times p \times K\)  array</p></dd>
+      <dt><code>V</code></dt><dd><p>the between-column covariance matrix, a \(q \times q \times K\) array</p></dd>
+   </dl>
+
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

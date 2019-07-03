@@ -214,11 +214,20 @@ if using restrictions on the variance.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list with a mean matrix, a \(U\) matrix, a \(V\)
-   matrix, the variance parameter (the first entry of the variance matrices
-   are constrained to be 1 for uniqueness), the number of iterations, the
-   squared difference between iterations of the variance matrices at the
-   time of stopping, the log likelihood, and a convergence code.</p>
+    <p>Returns a list with a the following elements:</p><dl class='dl-horizontal'>
+      <dt><code>mean</code></dt><dd><p>the mean matrix</p></dd>
+      <dt><code>scaling</code></dt><dd><p>the scalar variance parameter
+           (the first entry of the covariances are restricted to unity)</p></dd>
+      <dt><code>U</code></dt><dd><p>the between-row covariance matrix</p></dd>
+      <dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
+      <dt><code>iter</code></dt><dd><p>the number of iterations</p></dd>
+      <dt><code>tol</code></dt><dd><p>the squared difference between iterations of
+           the variance matrices at the time of stopping</p></dd>
+      <dt><code>logLik</code></dt><dd><p>vector of log likelihoods at each iteration.</p></dd>
+      <dt><code>convergence</code></dt><dd><p>a convergence flag, <code>TRUE</code> if converged.</p></dd>
+      <dt><code>call</code></dt><dd><p>The (matched) function call.</p></dd>
+   </dl>
+
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

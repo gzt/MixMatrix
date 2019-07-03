@@ -151,10 +151,12 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
     </tr>
     <tr>
       <th>init</th>
-      <td><p>a list containing an array of <code>K</code> of \(p \times q\) means,
+      <td><p>a list containing an array of <code>K</code> of \(p \times q\) means labeled
+<code>centers</code>,
 and optionally \(p \times p\) and \(q \times q\) positive definite variance
-matrices. By default, those are presumed to be identity if not provided.
-If <code>init</code> is missing, it will be provided using the prior or K by
+matrices labeled <code>U</code> and <code>V</code>.
+By default, those are presumed to be identity if not provided.
+If <code>init</code> is missing, it will be provided using the <code>prior</code> or <code>K</code> by
 <code>init_matrixmix</code>.</p></td>
     </tr>
     <tr>
