@@ -59,8 +59,10 @@
 #'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
 #'            was used.}
 #'       \item{\code{convergence }}{whether the model converged}
-#'       \item{\code{logLik}}{a vector of the log-likelihoods of each iteration ending in
+#'       \item{\code{logLik}}{a vector of the log-likelihoods
+#'               of each iteration ending in
 #'               the final log-likelihood of the model}
+#'       \item{\code{model}}{the model used}
 #'       \item{\code{method}}{the method used}
 #'       \item{\code{call}}{The (matched) function call.}
 ##'    }
@@ -365,6 +367,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         V = V,
         posterior = posterior,
         pi = pi,
+        nu = nu,
         convergence = convergeflag,
         iter = i, 
         logLik = logLikvec,
