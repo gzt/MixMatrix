@@ -140,7 +140,7 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
 
     <pre class="usage"><span class='fu'>matrixmixture</span>(<span class='no'>x</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>prior</span>),
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
-  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
+  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -266,7 +266,7 @@ numbers output more results.</p></td>
 <span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
 <span class='co'># create an intialization object, starts at the true parameters</span>
 <span class='no'>init</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>centers</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>12</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>2</span>,<span class='fl'>12</span>)), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>2</span>)),
-              <span class='kw'>U</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>3</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>3</span>)), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>2</span>)),
+              <span class='kw'>U</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>3</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>3</span>)), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>2</span>))*<span class='fl'>20</span>,
               <span class='kw'>V</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>4</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/diag'>diag</a></span>(<span class='fl'>4</span>)), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>2</span>))
  )
 <span class='co'># fit model</span>
@@ -274,17 +274,17 @@ numbers output more results.</p></td>
                     <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;              [,1]         [,2]         [,3]        [,4]
-#&gt; [1,] -0.006334331  0.005291675  0.046679547  0.02229027
-#&gt; [2,] -0.030859583 -0.010536029 -0.030230830 -0.02094065
-#&gt; [3,] -0.060336897 -0.078355369 -0.007457056 -0.04333072
+#&gt;              [,1]          [,2]         [,3]        [,4]
+#&gt; [1,] -0.006918817 -0.0009574353  0.053231959  0.02453389
+#&gt; [2,] -0.025088467 -0.0112054400 -0.035662049 -0.01118708
+#&gt; [3,] -0.054821822 -0.0872571747 -0.009776439 -0.04146129
 #&gt; 
 #&gt; , , 2
 #&gt; 
 #&gt;          [,1]     [,2]     [,3]     [,4]
-#&gt; [1,] 1.967747 1.947942 1.963370 1.987717
-#&gt; [2,] 2.102479 1.969607 1.858999 2.030892
-#&gt; [3,] 2.144823 2.052449 2.002152 2.032446
+#&gt; [1,] 1.960503 1.949415 1.966908 1.988809
+#&gt; [2,] 2.108863 1.963060 1.866584 2.030630
+#&gt; [3,] 2.147068 2.051693 2.003326 2.027193
 #&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5 0.5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
