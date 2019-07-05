@@ -99,7 +99,7 @@
 ##' prior <- c(.5,.5) # equal probability prior
 ##' # create an intialization object, starts at the true parameters
 ##' init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
-##'               U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
+##'               U = array(c(diag(3), diag(3)), dim = c(3,3,2))*20,
 ##'               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 ##'  )
 ##' # fit model
@@ -110,7 +110,7 @@
 ##' plot(res) # the log likelihood by iteration
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
-                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 3){
+                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5){
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -157,6 +157,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
     } else {
         U = array(rep(diag(p),nclass),c(p,p,nclass))
+        if(model == "t") U = (nu-2) * var(x[1,1,]) * U
     }
     if( !is.null(init$V)){
         V = init$V
@@ -189,7 +190,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     oldlogLik = 0
     olderlogLik = 0
     i = 0
-    while(i < iter && ( (abs(eps) > tolerance) || (i < miniter))){
+    while(i < iter && ( ((eps) > tolerance) || (i < miniter))){
         if(verbose) cat("\nEntering iteration:", i)
         if(verbose>1) print(pi)
         centers = newcenters
@@ -490,7 +491,7 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
         if(length(dim(V) == 2)) V = array(rep(V,K), dim = c(q,q,K))
     } 
     if(varmethod == "identity"){
-        if(is.null(U)) U = array(c(rep(diag(p),K)), dim = c(p,p,K))
+        if(is.null(U)) U = array(c(rep(diag(p),K)), dim = c(p,p,K)) 
         if(is.null(V)) V = array(c(rep(diag(q),K)), dim = c(q,q,K))
     }
    
