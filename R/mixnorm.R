@@ -100,7 +100,7 @@
 ##' C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
 ##' prior <- c(.5,.5) # equal probability prior
 ##' # create an intialization object, starts at the true parameters
-##' init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
+##' init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
 ##'               U = array(c(diag(3), diag(3)), dim = c(3,3,2))*20,
 ##'               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 ##'  )
