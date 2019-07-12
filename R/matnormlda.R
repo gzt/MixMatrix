@@ -685,27 +685,6 @@ nobs.matrixqda <- function(object, ...){
     object$N
 }
 
-#' @export
-AIC.matrixlda <- function(object, ..., k = 2){
-    stats::AIC(logLik.matrixlda(object),...,k)
-}
-
-#' @export
-AIC.matrixqda <- function(object, ..., k = 2){
-    stats::AIC(logLik.matrixqda(object),...,k)
-}
-
-#' @export
-BIC.matrixlda <- function(object, ...){
-    stats::BIC(logLik.matrixlda(object),...)
-}
-
-#' @export
-BIC.matrixqda <- function(object, ...){
-    stats::BIC(logLik.matrixqda(object),...)
-}
-
-
 
 #' Classify Matrix Variate Observations by Quadratic Discrimination
 #'
