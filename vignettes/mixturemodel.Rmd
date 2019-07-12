@@ -80,9 +80,9 @@ library(MixMatrix)
  print(res$centers) # the final centers
  print(res$pi) # the final mixing proportion
  logLik(res)
- BIC(logLik(res))
+ AIC(logLik(res))
  plot(res) # the log likelihood by iteration
-
+dl
 ```
 
 ### Initialization function
