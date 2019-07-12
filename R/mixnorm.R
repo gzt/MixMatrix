@@ -50,7 +50,7 @@
 ##'      \item{\code{prior}}{the prior probabilities used.}
 ##'      \item{\code{init}}{the initialization used.}
 #'       \item{\code{K}}{the number of groups} 
-#'       \item{\code{n}}{the number of observations} 
+#'       \item{\code{N}}{the number of observations} 
 #'       \item{\code{centers}}{the group means.}
 #'       \item{\code{U}}{the between-row covariance matrices}
 #'       \item{\code{V}}{the between-column covariance matrix}
@@ -110,6 +110,8 @@
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
 ##' plot(res) # the log likelihood by iteration
+##' logLik(res)
+##' BIC(res)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5){
@@ -362,7 +364,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         prior = prior,
         init = init,
         K = nclass,
-        n = n,
+        N = n,
         centers = centers,
         U = U,
         V = V,
@@ -392,6 +394,40 @@ print.MixMatrixModel <- function(x, ...){
 plot.MixMatrixModel <- function(x, ...){
     plot(x = 1:length(x$logLik), y = x$logLik,
          ylab="Log Likelihood",xlab="iteration",...)
+}
+
+
+#' @export
+logLik.MixMatrixModel <- function(object, ...){
+
+    dims = dim(object$centers)
+    n <- object$call$N
+    p <- dims[1]
+    q <- dims[2]
+    numgroups  = length(levels(grouping))
+    grouplist = levels(grouping)
+    meanpars = p*q
+    upars = (p+1)*p/2
+    vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
+    nupar = 0 # only fixed for now
+    numgroups = (object$K)
+
+### insert here logic for parsing out different values for this later
+### as ways of restricting variances and means are added
+    
+    df = numgroups*(vpars + upars + nupar + meanpars - 1)
+    logLik = object$logLik[length(object$logLik)]
+    
+    class(logLik) = "logLik"
+    attr(logLik, 'df') <- df
+    attr(logLik, 'nobs') <- n
+    logLik
+    
+}
+
+#' @export
+nobs.MixMatrixModel <- function(object, ...){
+    object$N
 }
 
 ##' Initializing settings for Matrix Mixture Models

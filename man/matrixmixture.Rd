@@ -49,7 +49,7 @@ A list of class \code{MixMatrixModel} containing the following
      \item{\code{prior}}{the prior probabilities used.}
      \item{\code{init}}{the initialization used.}
       \item{\code{K}}{the number of groups} 
-      \item{\code{n}}{the number of observations} 
+      \item{\code{N}}{the number of observations} 
       \item{\code{centers}}{the group means.}
       \item{\code{U}}{the between-row covariance matrices}
       \item{\code{V}}{the between-column covariance matrix}
@@ -90,6 +90,8 @@ init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
 print(res$centers) # the final centers
 print(res$pi) # the final mixing proportion
 plot(res) # the log likelihood by iteration
+logLik(res)
+BIC(res)
 }
 \references{
 Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
