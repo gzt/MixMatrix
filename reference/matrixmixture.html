@@ -211,7 +211,7 @@ numbers output more results.</p></td>
      <dt><code>prior</code></dt><dd><p>the prior probabilities used.</p></dd>
      <dt><code>init</code></dt><dd><p>the initialization used.</p></dd>
       <dt><code>K</code></dt><dd><p>the number of groups</p></dd> 
-      <dt><code>n</code></dt><dd><p>the number of observations</p></dd> 
+      <dt><code>N</code></dt><dd><p>the number of observations</p></dd> 
       <dt><code>centers</code></dt><dd><p>the group means.</p></dd>
       <dt><code>U</code></dt><dd><p>the between-row covariance matrices</p></dd>
       <dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
@@ -285,7 +285,7 @@ numbers output more results.</p></td>
 #&gt; [1,] 1.960503 1.949415 1.966908 1.988809
 #&gt; [2,] 2.108863 1.963060 1.866584 2.030630
 #&gt; [3,] 2.147068 2.051693 2.003326 2.027193
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5 0.5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div></pre>
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5 0.5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -2551.11 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 5323.315</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
