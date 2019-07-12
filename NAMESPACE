@@ -2,6 +2,8 @@
 
 S3method(logLik,matrixlda)
 S3method(logLik,matrixqda)
+S3method(nobs,matrixlda)
+S3method(nobs,matrixqda)
 S3method(plot,MixMatrixModel)
 S3method(predict,matrixlda)
 S3method(predict,matrixqda)
