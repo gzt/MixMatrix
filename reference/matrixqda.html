@@ -226,7 +226,82 @@ variances for the case when different groups have different variances.</p>
 <span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'>#combine together</span>
 <span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>30</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>2</span>,<span class='fl'>30</span>)) <span class='co'># define groups</span>
 <span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># set prior</span>
-<span class='no'>D</span> <span class='kw'>&lt;-</span> <span class='fu'>matrixqda</span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>)</div></pre>
+<span class='no'>D</span> <span class='kw'>&lt;-</span> <span class='fu'>matrixqda</span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; 'log Lik.' -958.9359 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; $prior
+#&gt;   1   2 
+#&gt; 0.5 0.5 
+#&gt; 
+#&gt; $counts
+#&gt;  1  2 
+#&gt; 30 30 
+#&gt; 
+#&gt; $means
+#&gt; , , 1
+#&gt; 
+#&gt;             [,1]        [,2]        [,3]        [,4]
+#&gt; [1,]  0.07351694 -0.08704738  0.13826608  0.06657800
+#&gt; [2,] -0.05562527 -0.08631880 -0.12719766 -0.07388404
+#&gt; [3,] -0.12802865 -0.33410177 -0.05220913 -0.03813562
+#&gt; 
+#&gt; , , 2
+#&gt; 
+#&gt;           [,1]     [,2]      [,3]     [,4]
+#&gt; [1,] 1.1213360 1.230815 0.9142843 1.082488
+#&gt; [2,] 1.3283770 1.244675 0.5694279 1.000457
+#&gt; [3,] 0.8961279 0.800175 1.1439663 1.048916
+#&gt; 
+#&gt; 
+#&gt; $U
+#&gt; , , 1
+#&gt; 
+#&gt;            [,1]       [,2]       [,3]
+#&gt; [1,] 1.00000000 0.14788530 0.02800227
+#&gt; [2,] 0.14788530 0.86714312 0.02258292
+#&gt; [3,] 0.02800227 0.02258292 0.98364372
+#&gt; 
+#&gt; , , 2
+#&gt; 
+#&gt;              [,1]       [,2]         [,3]
+#&gt; [1,]  1.000000000 -0.0173930 -0.004498732
+#&gt; [2,] -0.017392997  0.9987747 -0.100860770
+#&gt; [3,] -0.004498732 -0.1008608  0.977978559
+#&gt; 
+#&gt; 
+#&gt; $V
+#&gt; , , 1
+#&gt; 
+#&gt;             [,1]        [,2]        [,3]        [,4]
+#&gt; [1,]  0.81179597 -0.13499901  0.07550758 -0.15466849
+#&gt; [2,] -0.13499901  0.82945236 -0.04492883  0.06490810
+#&gt; [3,]  0.07550758 -0.04492883  1.03826075 -0.09438137
+#&gt; [4,] -0.15466849  0.06490810 -0.09438137  0.97282616
+#&gt; 
+#&gt; , , 2
+#&gt; 
+#&gt;             [,1]       [,2]       [,3]        [,4]
+#&gt; [1,]  0.76072995 0.01856625 0.03148175 -0.05903717
+#&gt; [2,]  0.01856625 0.67294239 0.05448755  0.10257451
+#&gt; [3,]  0.03148175 0.05448755 1.02451969  0.03848553
+#&gt; [4,] -0.05903717 0.10257451 0.03848553  1.03348309
+#&gt; 
+#&gt; 
+#&gt; $lev
+#&gt; [1] "1" "2"
+#&gt; 
+#&gt; $N
+#&gt; [1] 60
+#&gt; 
+#&gt; $method
+#&gt; [1] "normal"
+#&gt; 
+#&gt; $nu
+#&gt; NULL
+#&gt; 
+#&gt; $call
+#&gt; matrixqda(x = C, grouping = groups, prior = prior)
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "matrixqda"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
