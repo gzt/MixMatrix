@@ -73,7 +73,6 @@ groups <- c(rep(1,30),rep(2,30)) # define groups
 prior <- c(.5,.5) # set prior
 D<-matrixlda(C, groups, prior) # fit model
 logLik(D)
-BIC(D)
 print(D)
 }
 \references{

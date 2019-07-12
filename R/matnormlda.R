@@ -99,7 +99,6 @@
 #' prior <- c(.5,.5) # set prior
 #' D<-matrixlda(C, groups, prior) # fit model
 #' logLik(D)
-#' BIC(D)
 #' print(D)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                        nu = 10,..., subset)  {
@@ -413,7 +412,6 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' prior <- c(.5,.5) # set prior
 #' D <- matrixqda(C, groups, prior)
 #' logLik(D)
-#' BIC(D)
 #' print(D)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
  
@@ -528,7 +526,7 @@ logLik.matrixlda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
         olddata <-
-            eval(parse(text = paste(
+            eval.parent(parse(text = paste(
                                   deparse(object$call$x,
                                           backtick = TRUE),
                                   "[,,",
@@ -536,7 +534,7 @@ logLik.matrixlda = function(object,...){
                                   ",drop = FALSE]"
                               )))
         groups <-
-            eval(parse(text = paste(
+            eval.parent(parse(text = paste(
                                   deparse(object$call$grouping,
                                           backtick = TRUE),
                                   "[",
@@ -544,8 +542,8 @@ logLik.matrixlda = function(object,...){
                                   "]"
                               )))
     } else {
-        olddata <- eval(object$call$x)
-        groups <- eval(object$call$grouping)
+        olddata <- eval.parent(object$call$x)
+        groups <- eval.parent(object$call$grouping)
         }
 
     groups = factor(groups)
@@ -608,7 +606,7 @@ logLik.matrixqda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
         data <-
-            eval(parse(text = paste(
+            eval.parent(parse(text = paste(
                                   deparse(object$call$x,
                                           backtick = TRUE),
                                   "[,,",
@@ -616,7 +614,7 @@ logLik.matrixqda = function(object,...){
                                   ",drop = FALSE]"
                               )))
         grouping <-
-            eval(parse(text = paste(
+            eval.parent(parse(text = paste(
                                   deparse(object$call$grouping,
                                           backtick = TRUE),
                                   "[",
@@ -625,8 +623,8 @@ logLik.matrixqda = function(object,...){
                               )))
     }
     else {
-        data <- eval(object$call$x)
-        grouping <- eval(object$call$grouping)
+        data <- eval.parent(object$call$x)
+        grouping <- eval.parent(object$call$grouping)
         }
     if (!is.null(nas <- object$call$na.action))
         data <- eval(call(nas, data))
