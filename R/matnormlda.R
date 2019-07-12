@@ -99,6 +99,7 @@
 #' prior <- c(.5,.5) # set prior
 #' D<-matrixlda(C, groups, prior) # fit model
 #' logLik(D)
+#' BIC(D)
 #' print(D)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                        nu = 10,..., subset)  {
@@ -412,6 +413,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' prior <- c(.5,.5) # set prior
 #' D <- matrixqda(C, groups, prior)
 #' logLik(D)
+#' BIC(D)
 #' print(D)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
  
@@ -526,7 +528,7 @@ logLik.matrixlda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
         olddata <-
-            eval.parent(parse(text = paste(
+            eval(parse(text = paste(
                                   deparse(object$call$x,
                                           backtick = TRUE),
                                   "[,,",
@@ -534,17 +536,16 @@ logLik.matrixlda = function(object,...){
                                   ",drop = FALSE]"
                               )))
         groups <-
-            eval.parent(parse(text = paste(
+            eval(parse(text = paste(
                                   deparse(object$call$grouping,
                                           backtick = TRUE),
                                   "[",
                                   deparse(sub, backtick = TRUE),
                                   "]"
                               )))
-    }
-    else {
-        olddata <- eval.parent(object$call$x)
-        groups <- eval.parent(object$call$grouping)
+    } else {
+        olddata <- eval(object$call$x)
+        groups <- eval(object$call$grouping)
         }
 
     groups = factor(groups)
@@ -553,6 +554,7 @@ logLik.matrixlda = function(object,...){
     p <- dims[1]
     q <- dims[2]
     numgroups  = length(levels(groups))
+    grouplist = levels(groups)
     meanpars = p*q
     upars = (p+1)*p/2
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
@@ -591,7 +593,7 @@ logLik.matrixlda = function(object,...){
         nu = 0
     } else nu = object$nu
     
-    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x = olddata[,,groups == levels(groups)[i], drop = FALSE],
+    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x = olddata[,,groups == grouplist[i], drop = FALSE],
                                                           df = nu , mean = object$means[,,i],
                                                           U = object$U * object$scaling, V = object$V, log = TRUE))
     
@@ -606,7 +608,7 @@ logLik.matrixqda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
         data <-
-            eval.parent(parse(text = paste(
+            eval(parse(text = paste(
                                   deparse(object$call$x,
                                           backtick = TRUE),
                                   "[,,",
@@ -614,7 +616,7 @@ logLik.matrixqda = function(object,...){
                                   ",drop = FALSE]"
                               )))
         grouping <-
-            eval.parent(parse(text = paste(
+            eval(parse(text = paste(
                                   deparse(object$call$grouping,
                                           backtick = TRUE),
                                   "[",
@@ -623,8 +625,8 @@ logLik.matrixqda = function(object,...){
                               )))
     }
     else {
-        data <- eval.parent(object$call$x)
-        grouping <- eval.parent(object$call$grouping)
+        data <- eval(object$call$x)
+        grouping <- eval(object$call$grouping)
         }
     if (!is.null(nas <- object$call$na.action))
         data <- eval(call(nas, data))
@@ -635,6 +637,7 @@ logLik.matrixqda = function(object,...){
     p <- dims[1]
     q <- dims[2]
     numgroups  = length(levels(grouping))
+    grouplist = levels(grouping)
     meanpars = p*q
     upars = (p+1)*p/2
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
@@ -672,7 +675,7 @@ logLik.matrixqda = function(object,...){
     if(is.null(object$nu)) nu = 0
     else nu = object$nu
     
-    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x=data[,,grouping == levels(grouping)[i], drop = FALSE],
+    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x=data[,,grouping == grouplist[i], drop = FALSE],
                                                           df = nu , mean = object$means[,,i],
                                                    U = object$U[,,i], V = object$V[,,i], log = TRUE))
     class(logLik) = "logLik"
