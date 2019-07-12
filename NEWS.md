@@ -2,6 +2,7 @@
 
 * Added a number of citations and references to manuals and vignettes, including
   clarifying sources of any other functions.
+* Added `logLik` functions for LDA, QDA, and MixMatrix objects
 
 # MixMatrix 0.2.0
 
