@@ -681,11 +681,13 @@ logLik.matrixqda = function(object,...){
     logLik
 }
 
+#' @importFrom stats nobs
 #' @export
 nobs.matrixlda <- function(object, ...){
     object$N
     }
 
+#' @importFrom stats nobs
 #' @export
 nobs.matrixqda <- function(object, ...){
     object$N
