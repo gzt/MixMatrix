@@ -258,9 +258,9 @@ numbers output more results.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>20180221</span>)
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 <span class='co'># 3x4 matrices with mean 0</span>
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>2</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>2</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 <span class='co'># 3x4 matrices with mean 2</span>
 <span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'># combine into one array</span>
 <span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
@@ -274,18 +274,18 @@ numbers output more results.</p></td>
                     <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;              [,1]          [,2]         [,3]        [,4]
-#&gt; [1,] -0.006918817 -0.0009574353  0.053231959  0.02453389
-#&gt; [2,] -0.025088467 -0.0112054400 -0.035662049 -0.01118708
-#&gt; [3,] -0.054821822 -0.0872571747 -0.009776439 -0.04146129
+#&gt;              [,1]         [,2]        [,3]         [,4]
+#&gt; [1,]  0.001741222 -0.008898201  0.03764730  0.016884605
+#&gt; [2,] -0.012953815 -0.014521968 -0.03022551 -0.007169073
+#&gt; [3,] -0.032794710 -0.070624929 -0.01196513 -0.021123126
 #&gt; 
 #&gt; , , 2
 #&gt; 
 #&gt;          [,1]     [,2]     [,3]     [,4]
-#&gt; [1,] 1.960503 1.949415 1.966908 1.988809
-#&gt; [2,] 2.108863 1.963060 1.866584 2.030630
-#&gt; [3,] 2.147068 2.051693 2.003326 2.027193
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5 0.5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -2551.11 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 5323.315</div></pre>
+#&gt; [1,] 1.970542 1.966309 1.978277 1.991657
+#&gt; [2,] 2.077108 1.978337 1.918175 2.018974
+#&gt; [3,] 2.099783 2.027759 2.004154 2.019298
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5 0.5</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -2289.165 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 4799.425</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
