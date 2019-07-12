@@ -93,9 +93,9 @@
 ##' 
 ##' @examples
 ##' set.seed(20180221)
-##' A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 20)
+##' A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 5)
 ##' # 3x4 matrices with mean 0
-##' B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 20)
+##' B <- rmatrixt(30,mean=matrix(1,nrow=3,ncol=4), df = 5)
 ##' # 3x4 matrices with mean 2
 ##' C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
 ##' prior <- c(.5,.5) # equal probability prior
@@ -105,7 +105,7 @@
 ##'               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 ##'  )
 ##' # fit model
-##'  res<-matrixmixture(C, init = init, prior = prior, nu = 20,
+##'  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
 ##'                     model = "t", tolerance = 1e-1)
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
@@ -218,7 +218,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         newposterior = exp(newposterior)
         totalpost = rowSums(newposterior)
         newposterior = newposterior / totalpost
-        if(verbose>1) print(newposterior[1:3,])
+        if(verbose>1) print(newposterior[1:5,])
         
         ## update S_ig - conditional weights, only if non-normal
         
@@ -316,9 +316,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         logLik = 0
         for(obs in 1:n){
             for(j in 1:K){
-                logLik = logLik + log(pi[j]) +
+                logLik = logLik + newposterior[obs,j]*(log(pi[j]) +
                 dmatrixt(x = x[,,obs], df = nu, mean = newcenters[,,j],
-                         U = newU[,,j], V = newV[,,j], log = TRUE)
+                         U = newU[,,j], V = newV[,,j], log = TRUE))
             }
         }
         if(verbose) cat("\nLog likelihood:", logLik)
@@ -346,9 +346,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     logLik = 0
     for(i in 1:n){
         for(j in 1:K){
-            logLik = logLik + log(pi[j]) +
+            logLik = logLik + posterior[i,j]*(log(pi[j]) +
                 dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
-                         U = U[,,j], V = V[,,j], log = TRUE)
+                         U = U[,,j], V = V[,,j], log = TRUE))
         }
     }
     if(verbose>1) {
