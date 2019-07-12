@@ -517,7 +517,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   )
 }
 
-
+#' @export
 logLik.matrixlda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
@@ -597,6 +597,7 @@ logLik.matrixlda = function(object,...){
     logLik
 }
 
+#' @export
 logLik.matrixqda = function(object,...){
 
     if (!is.null(sub <- object$call$subset)){
@@ -684,22 +685,24 @@ nobs.matrixqda <- function(object, ...){
     object$N
 }
 
+#' @export
 AIC.matrixlda <- function(object, ..., k = 2){
-    AIC(logLik.matrixlda(object),...,k)
+    stats::AIC(logLik.matrixlda(object),...,k)
 }
 
-
+#' @export
 AIC.matrixqda <- function(object, ..., k = 2){
-    AIC(logLik.matrixqda(object),...,k)
+    stats::AIC(logLik.matrixqda(object),...,k)
 }
 
+#' @export
 BIC.matrixlda <- function(object, ...){
-    BIC(logLik.matrixlda(object),...)
+    stats::BIC(logLik.matrixlda(object),...)
 }
 
-
+#' @export
 BIC.matrixqda <- function(object, ...){
-    BIC(logLik.matrixqda(object),...)
+    stats::BIC(logLik.matrixqda(object),...)
 }
 
 
