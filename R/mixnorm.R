@@ -159,7 +159,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
     } else {
         U = array(rep(diag(p),nclass),c(p,p,nclass))
-        if(model == "t") U = (nu-2) * var(x[1,1,]) * U
+        if(model == "t") U = (nu-2) * stats::var(x[1,1,]) * U
     }
     if( !is.null(init$V)){
         V = init$V

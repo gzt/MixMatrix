@@ -109,8 +109,8 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
                          df = 10, fixed = TRUE,
                          tol = .Machine$double.eps^0.5, max.iter = 5000, U, V,...) {
-  if (df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
-    if (class(data) == "list") data <- array(unlist(data),
+  if (is.null(df) || df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
+  if (class(data) == "list") data <- array(unlist(data),
                                            dim = c(nrow(data[[1]]),
                                                    ncol(data[[1]]), length(data)))
   if (!all(is.numeric(data),is.numeric(tol),

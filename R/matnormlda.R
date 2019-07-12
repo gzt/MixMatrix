@@ -116,7 +116,8 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
-  q <- dims[2]
+   q <- dims[2]
+  
   if (n != length(grouping))
     stop("nrow(x) and length(grouping) are different")
   g <- as.factor(grouping)
@@ -146,8 +147,9 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   names(prior) <- names(counts) <- lev1
 
   group.means = array(0, dim = c(p, q, ng))
-  for (i in seq(ng)) {
-    group.means[, , i] = rowMeans(x[, , g == levels(g)[i], drop = FALSE], dims = 2)
+  for (i in seq(ng)) { 
+      group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE],
+                                                         max.iter = 1, ...)$mean)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
@@ -514,6 +516,192 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
     class = "matrixqda"
   )
 }
+
+
+logLik.matrixlda = function(object,...){
+
+    if (!is.null(sub <- object$call$subset)){
+        olddata <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$x,
+                                          backtick = TRUE),
+                                  "[,,",
+                                  deparse(sub, backtick = TRUE),
+                                  ",drop = FALSE]"
+                              )))
+        groups <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$grouping,
+                                          backtick = TRUE),
+                                  "[",
+                                  deparse(sub, backtick = TRUE),
+                                  "]"
+                              )))
+    }
+    else {
+        olddata <- eval.parent(object$call$x)
+        groups <- eval.parent(object$call$grouping)
+        }
+
+    groups = factor(groups)
+    dims <- dim(olddata)
+    n <- dims[3]
+    p <- dims[1]
+    q <- dims[2]
+    numgroups  = length(levels(groups))
+    meanpars = p*q
+    upars = (p+1)*p/2
+    vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
+    nupar = 0 # if nu not fixed, becomes 1
+
+    if (!is.null(object$call$row.means) && (object$call$row.means)) meanpars = meanpars / q
+
+    if (!is.null(object$call$col.means) && (object$call$col.means)) meanpars = meanpars / p
+
+    if (!is.null(object$call$col.variance)){
+        Vvars <- object$call$col.variance
+        if (grepl("^ar", x = Vvars,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^cs", x = Vvars ,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^i", x = Vvars,ignore.case = TRUE)) vpars = 1
+
+        if (grepl("^cor", x = Vvars,ignore.case = TRUE)) vpars = (q-1)*q/2 + 1
+    }
+    if (!is.null(object$call$row.variance)){
+        Uvars <- object$call$row.variance
+        if (grepl("^ar", x = Uvars,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^cs", x = Uvars ,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^i", x = Uvars,ignore.case = TRUE)) upars = 1
+
+        if (grepl("^cor", x = Uvars,ignore.case = TRUE)) upars = (p-1)*p/2 + 1
+    }
+
+    if(!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+
+    df = vpars + upars + nupar + numgroups*meanpars - 1
+    logLik = 0
+    if(is.null(object$nu)) {
+        nu = 0
+    } else nu = object$nu
+    
+    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x = olddata[,,groups == levels(groups)[i], drop = FALSE],
+                                                          df = nu , mean = object$means[,,i],
+                                                          U = object$U * object$scaling, V = object$V, log = TRUE))
+    
+    class(logLik) = "logLik"
+    attr(logLik, 'df') <- df
+    attr(logLik, 'nobs') <- n
+    logLik
+}
+
+logLik.matrixqda = function(object,...){
+
+    if (!is.null(sub <- object$call$subset)){
+        data <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$x,
+                                          backtick = TRUE),
+                                  "[,,",
+                                  deparse(sub, backtick = TRUE),
+                                  ",drop = FALSE]"
+                              )))
+        grouping <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$grouping,
+                                          backtick = TRUE),
+                                  "[",
+                                  deparse(sub, backtick = TRUE),
+                                  "]"
+                              )))
+    }
+    else {
+        data <- eval.parent(object$call$x)
+        grouping <- eval.parent(object$call$grouping)
+        }
+    if (!is.null(nas <- object$call$na.action))
+        data <- eval(call(nas, data))
+
+    grouping = factor(grouping)
+    dims <- dim(data)
+    n <- dims[3]
+    p <- dims[1]
+    q <- dims[2]
+    numgroups  = length(levels(grouping))
+    meanpars = p*q
+    upars = (p+1)*p/2
+    vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
+    nupar = 0 # if nu not fixed, becomes 1
+
+    if (!is.null(object$call$row.means) && (object$call$row.means)) meanpars = meanpars / q
+
+    if (!is.null(object$call$col.means) && (object$call$col.means)) meanpars = meanpars / p
+
+    if (!is.null(object$call$col.variance)){
+        Vvars <- object$call$col.variance
+        if (grepl("^ar", x = Vvars,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^cs", x = Vvars ,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^i", x = Vvars,ignore.case = TRUE)) vpars = 1
+
+        if (grepl("^cor", x = Vvars,ignore.case = TRUE)) vpars = (q-1)*q/2 + 1
+    }
+    if (!is.null(object$call$row.variance)){
+        Uvars <- object$call$row.variance
+        if (grepl("^ar", x = Uvars,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^cs", x = Uvars ,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^i", x = Uvars,ignore.case = TRUE)) upars = 1
+
+        if (grepl("^cor", x = Uvars,ignore.case = TRUE)) upars = (p-1)*p/2 + 1
+    }
+
+    if(!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+
+    df = numgroups*(vpars + upars + nupar + meanpars - 1)
+    logLik = 0
+    if(is.null(object$nu)) nu = 0
+    else nu = object$nu
+    
+    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x=data[,,grouping == levels(grouping)[i], drop = FALSE],
+                                                          df = nu , mean = object$means[,,i],
+                                                   U = object$U[,,i], V = object$V[,,i], log = TRUE))
+    class(logLik) = "logLik"
+    attr(logLik, 'df') <- df
+    attr(logLik, 'nobs') <- n
+    logLik
+}
+
+nobs.matrixlda <- function(object, ...){
+    object$N
+    }
+
+nobs.matrixqda <- function(object, ...){
+    object$N
+}
+
+AIC.matrixlda <- function(object, ..., k = 2){
+    AIC(logLik.matrixlda(object),...,k)
+}
+
+
+AIC.matrixqda <- function(object, ..., k = 2){
+    AIC(logLik.matrixqda(object),...,k)
+}
+
+BIC.matrixlda <- function(object, ...){
+    BIC(logLik.matrixlda(object),...)
+}
+
+
+BIC.matrixqda <- function(object, ...){
+    BIC(logLik.matrixqda(object),...)
+}
+
 
 
 #' Classify Matrix Variate Observations by Quadratic Discrimination
