@@ -469,7 +469,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], nu = df[i], ...)
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
       df[i] = mlfit$nu
     } else{
       mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
@@ -673,9 +673,18 @@ logLik.matrixqda = function(object,...){
     if(is.null(object$nu)) nu = 0
     else nu = object$nu
     
-    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x=data[,,grouping == grouplist[i], drop = FALSE],
-                                                          df = nu , mean = object$means[,,i],
-                                                   U = object$U[,,i], V = object$V[,,i], log = TRUE))
+    for (i in 1:numgroups) {
+        if(object$method == "t"){
+        logLik = logLik + sum(dmatrixt(x=data[,,grouping == grouplist[i], drop = FALSE],
+                                                          df = nu[i] , mean = object$means[,,i],
+                                       U = object$U[,,i], V = object$V[,,i], log = TRUE))
+        } else {
+                    logLik = logLik + sum(dmatrixnorm(x=data[,,grouping == grouplist[i], drop = FALSE],
+                                                          mean = object$means[,,i],
+                                       U = object$U[,,i], V = object$V[,,i], log = TRUE))
+            }
+
+        }
     class(logLik) = "logLik"
     attr(logLik, 'df') <- df
     attr(logLik, 'nobs') <- n
