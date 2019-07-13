@@ -247,8 +247,13 @@ test_that("Output of LDA/QDA/Predict", {
     expect_equal(sum(predict(qdamodel, prior=c(.7,.3),newdata = matrix(
                                                           0, nrow = 2, ncol = 2))$posterior), 1)
     expect_equal(sum(predict(qdamodel)$posterior[1,]), 1)
-    
-  
+
+    llda = logLik(ldamodel)
+    lqda = logLik(qdamodel)
+    expect_equal(class(llda), "logLik")
+    expect_equal(nobs(llda),8)
+    expect_equal(class(lqda) , "logLik")
+    expect_equal(nobs(lqda),8)
   newlda <- matrixlda(C, groups, priors, method = "t")
   newqda <- matrixqda(C, groups, priors, method = "t")
   newprior <- c(-1,2)
@@ -270,7 +275,8 @@ test_that("Output of LDA/QDA/Predict", {
     expect_equal(sum(predict(newqda, prior=c(.7,.3),newdata = matrix(
                                                         0, nrow = 2, ncol = 2))$posterior), 1)
     expect_equal(sum(predict(newqda)$posterior[1,]), 1)
-    
+    expect_equal(class(logLik(ldamodel)) , "logLik")
+    expect_equal(class(logLik(qdamodel)) , "logLik")
 
 })
 

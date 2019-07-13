@@ -590,10 +590,15 @@ logLik.matrixlda = function(object,...){
     if(is.null(object$nu)) {
         nu = 0
     } else nu = object$nu
-    
+    if(object$method == "normal"){
+        for (i in 1:numgroups) logLik = logLik + sum(dmatrixnorm(x = olddata[,,groups == grouplist[i], drop = FALSE],
+                                                          mean = object$means[,,i],
+                                                          U = object$U * object$scaling, V = object$V, log = TRUE))
+    } else {
     for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x = olddata[,,groups == grouplist[i], drop = FALSE],
                                                           df = nu , mean = object$means[,,i],
                                                           U = object$U * object$scaling, V = object$V, log = TRUE))
+    }
     
     class(logLik) = "logLik"
     attr(logLik, 'df') <- df
