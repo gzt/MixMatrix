@@ -82,7 +82,7 @@ library(MixMatrix)
  logLik(res)
  AIC(logLik(res))
  plot(res) # the log likelihood by iteration
-dl
+
 ```
 
 ### Initialization function
