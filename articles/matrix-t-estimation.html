@@ -190,19 +190,13 @@ S_{|S|}^{(t+1)} &amp;= E(S_{|S|} | \Theta^{(t)}) = E \left[\sum_{i = 1}^N \log| 
 <a class="sourceLine" id="cb2-33" data-line-number="33"><span class="co">#&gt; [1] 1.155396e-08</span></a>
 <a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb2-35" data-line-number="35"><span class="co">#&gt; $logLik</span></a>
-<a class="sourceLine" id="cb2-36" data-line-number="36"><span class="co">#&gt;  [1] -501.5074 -487.1170 -456.2536 -430.9883 -414.2034 -403.7505 -397.3392</span></a>
-<a class="sourceLine" id="cb2-37" data-line-number="37"><span class="co">#&gt;  [8] -393.3964 -390.9523 -389.4243 -388.4617 -387.8514 -387.4625 -387.2137</span></a>
-<a class="sourceLine" id="cb2-38" data-line-number="38"><span class="co">#&gt; [15] -387.0538 -386.9509 -386.8845 -386.8416 -386.8138 -386.7958 -386.7841</span></a>
-<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="co">#&gt; [22] -386.7765 -386.7715 -386.7683 -386.7662 -386.7649 -386.7640 -386.7634</span></a>
-<a class="sourceLine" id="cb2-40" data-line-number="40"><span class="co">#&gt; [29] -386.7630 -386.7628 -386.7626 -386.7625 -386.7625 -386.7624 -386.7624</span></a>
-<a class="sourceLine" id="cb2-41" data-line-number="41"><span class="co">#&gt; [36] -386.7624 -386.7624 -386.7624 -386.7624 -386.7623 -386.7623 -386.7623</span></a>
-<a class="sourceLine" id="cb2-42" data-line-number="42"><span class="co">#&gt; [43] -386.7623 -386.7623</span></a>
-<a class="sourceLine" id="cb2-43" data-line-number="43"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-44" data-line-number="44"><span class="co">#&gt; $convergence</span></a>
-<a class="sourceLine" id="cb2-45" data-line-number="45"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb2-46" data-line-number="46"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-47" data-line-number="47"><span class="co">#&gt; $call</span></a>
-<a class="sourceLine" id="cb2-48" data-line-number="48"><span class="co">#&gt; MLmatrixt(data = A, df = 7)</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-36" data-line-number="36"><span class="co">#&gt; [1] -386.7623</span></a>
+<a class="sourceLine" id="cb2-37" data-line-number="37"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-38" data-line-number="38"><span class="co">#&gt; $convergence</span></a>
+<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb2-40" data-line-number="40"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-41" data-line-number="41"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb2-42" data-line-number="42"><span class="co">#&gt; MLmatrixt(data = A, df = 7)</span></a></code></pre></div>
 <p>There are two restrictions possible for the mean matrices: <code>row.mean = TRUE</code> will force a common mean within a row and <code>col.mean = TRUE</code> will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on <span class="math inline">\(\mathbf{U}\)</span> and <span class="math inline">\(\mathbf{V}\)</span>, the row-wise variance and column-wise variance, are possible with <code>row.variance</code> and <code>col.variance</code> commands.</p>
 <p>The options for variance restrictions are the same as for the <code><a href="../reference/MLmatrixnorm.html">MLmatrixnorm()</a></code> function. Currently the options for variance restrictions are to impose an AR(1) structure by providing the <code>AR(1)</code> option, a compound symmetry structure by providing the <code>CS</code> option, to impose a correlation matrix structure by specifying <code>correlation</code> or <code>corr</code>, or to impose an identical and independent structure by specifying <code>Independent</code> or <code>I</code>. This works by using <code>uniroot</code> to find the appropriate <span class="math inline">\(\rho\)</span> which sets the derivative of the log-likelihood to zero for the <code>AR</code> and <code>CS</code> options - it is not fast but if this is the true structure it will be better in some sense than an unstructured variance matrix. The <span class="math inline">\(\rho\)</span> parameter should be <span class="math inline">\(&gt;0\)</span> and is forced to be non-negative. If the data behaves incompatibly with those restrictions, the function will provide a warning and exit with the current model fit.</p>
 </div>
@@ -223,27 +217,27 @@ S_{|S|}^{(t+1)} &amp;= E(S_{|S|} | \Theta^{(t)}) = E \left[\sum_{i = 1}^N \log| 
 <tbody>
 <tr class="odd">
 <td align="left">25</td>
-<td align="right">6.132647</td>
-<td align="right">18.44128</td>
-<td align="right">10.807538</td>
-<td align="right">11.19913</td>
-<td align="right">3.088932</td>
+<td align="right">6.132687</td>
+<td align="right">18.44125</td>
+<td align="right">10.80753</td>
+<td align="right">11.19912</td>
+<td align="right">3.088930</td>
 </tr>
 <tr class="even">
 <td align="left">50</td>
-<td align="right">6.466014</td>
-<td align="right">16.67994</td>
-<td align="right">11.006898</td>
-<td align="right">11.04982</td>
-<td align="right">2.455761</td>
+<td align="right">6.466024</td>
+<td align="right">16.67992</td>
+<td align="right">11.00689</td>
+<td align="right">11.04981</td>
+<td align="right">2.455755</td>
 </tr>
 <tr class="odd">
 <td align="left">100</td>
-<td align="right">8.265923</td>
-<td align="right">13.37667</td>
-<td align="right">9.990114</td>
-<td align="right">10.17745</td>
-<td align="right">1.156677</td>
+<td align="right">8.265903</td>
+<td align="right">13.37668</td>
+<td align="right">9.99018</td>
+<td align="right">10.17744</td>
+<td align="right">1.156663</td>
 </tr>
 </tbody>
 </table>
