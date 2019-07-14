@@ -293,6 +293,25 @@ test_that("LDA/QDA logLik works",{
   C <- array(c(A,B), dim = c(2,2,2*ntotal))
   groups <- c(rep(1,ntotal),rep(2,ntotal))
   priors = c(.5,.5)
+    
+  # norm vs t DF 0
+  ldamodel <- matrixlda(C, groups, priors, method = "normal")
+  qdamodel <- matrixqda(C, groups, priors, method = "normal")
+  ldamodelc <- matrixlda(C, groups, priors, method = "t", nu  = 0)
+  qdamodelc <- matrixqda(C, groups, priors, method = "t", nu = 0)
+    
+  expect_equal(ldamodel$method, ldamodelc$method)
+  expect_equal(qdamodel$method, qdamodelc$method)
+    
+   # norm vs t 
+  ldamodel <- matrixlda(C, groups, priors, method = "normal")
+  qdamodel <- matrixqda(C, groups, priors, method = "normal")
+  ldamodelc <- matrixlda(C, groups, priors, method = "t")
+  qdamodelc <- matrixqda(C, groups, priors, method = "t")
+    
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df) 
+    
   # row.mean vs col.mean
   ldamodel <- matrixlda(C, groups, priors, row.mean = TRUE, U = covmatrix, V = covmatrix)
   qdamodel <- matrixqda(C, groups, priors, row.mean = TRUE, U = badcovmatrix, V = badcovmatrix)
