@@ -38,7 +38,7 @@ test_that("Bad results warn or stop",{
     expect_warning(capture.output(matrixmixture(C, init, prior = c(.5,.5), iter = 1, verbose = 100),
                                   type = "output"))
     expect_warning(matrixmixture(C, init, prior = 2,model="t",nu = 10, iter = 1))
-    expect_warning(matrixmixture(C, prior = c(.5,.5),model="t",nu = 10, iter = 1))
+    expect_warning(matrixmixture(C, K = 2,model="t",nu = 10, iter = 1))
 
 
     }
