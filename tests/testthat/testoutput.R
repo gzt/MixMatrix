@@ -254,6 +254,8 @@ test_that("Output of LDA/QDA/Predict", {
     expect_equal(nobs(llda),8)
     expect_equal(class(lqda) , "logLik")
     expect_equal(nobs(lqda),8)
+    expect_equal(attributes(llda)$nobs,nobs(ldamodel))
+    expect_equal(attributes(lqda)$nobs,nobs(qdamodel))
   newlda <- matrixlda(C, groups, priors, method = "t")
   newqda <- matrixqda(C, groups, priors, method = "t")
   newprior <- c(-1,2)
@@ -277,6 +279,74 @@ test_that("Output of LDA/QDA/Predict", {
     expect_equal(sum(predict(newqda)$posterior[1,]), 1)
     expect_equal(class(logLik(ldamodel)) , "logLik")
     expect_equal(class(logLik(qdamodel)) , "logLik")
+
+})
+
+test_that("LDA/QDA logLik works",{
+    set.seed(20190628)
+    ntotal = 25
+    covmatrix =  matrix(c(1,.5,.5,1),nrow=2)
+    badcovmatrix = matrix(c(1,.96,.96,1), nrow=2, ncol=2)
+  A <- rmatrixnorm(ntotal, mean = matrix(0, nrow = 2, ncol = 2), U =covmatrix, V = covmatrix)
+  B <- rmatrixnorm(ntotal, mean = matrix(1, nrow = 2, ncol = 2), U= covmatrix, V = covmatrix)
+  
+  C <- array(c(A,B), dim = c(2,2,2*ntotal))
+  groups <- c(rep(1,ntotal),rep(2,ntotal))
+  priors = c(.5,.5)
+  # row.mean vs col.mean
+  ldamodel <- matrixlda(C, groups, priors, row.mean = TRUE, U = covmatrix, V = covmatrix)
+  qdamodel <- matrixqda(C, groups, priors, row.mean = TRUE, U = badcovmatrix, V = badcovmatrix)
+  ldamodelc <- matrixlda(C, groups, priors, col.mean = TRUE)
+  qdamodelc <- matrixqda(C, groups, priors, col.mean = TRUE)
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+  
+  # row variance vs col variance AR
+  ldamodel <- matrixlda(C, groups, priors, row.variance = "AR")
+  qdamodel <- matrixqda(C, groups, priors, row.variance = "AR")
+  ldamodelc <- matrixlda(C, groups, priors, col.variance = "AR")
+  qdamodelc <- matrixqda(C, groups, priors, col.variance = "AR")
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+  # row variance vs col variance CS
+  ldamodel <- matrixlda(C, groups, priors, row.variance = "CS")
+  qdamodel <- matrixqda(C, groups, priors, row.variance = "CS")
+  ldamodelc <- matrixlda(C, groups, priors, col.variance = "CS")
+  qdamodelc <- matrixqda(C, groups, priors, col.variance = "CS")
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+  
+  # row variance vs col variance corr
+  ldamodel <- matrixlda(C, groups, priors, row.variance = "corr")
+  qdamodel <- matrixqda(C, groups, priors, row.variance = "corr")
+  ldamodelc <- matrixlda(C, groups, priors, col.variance = "corr")
+  qdamodelc <- matrixqda(C, groups, priors, col.variance = "corr")
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+
+  
+  # row variance vs col variance I
+  ldamodel <- matrixlda(C, groups, priors, row.variance = "I")
+  qdamodel <- matrixqda(C, groups, priors, row.variance = "I")
+  ldamodelc <- matrixlda(C, groups, priors, col.variance = "I")
+  qdamodelc <- matrixqda(C, groups, priors, col.variance = "I")
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+
+  # AR vs CS
+  ldamodel <- matrixlda(C, groups, priors, row.variance = "AR")
+  qdamodel <- matrixqda(C, groups, priors, row.variance = "AR")
+  ldamodelc <- matrixlda(C, groups, priors, row.variance = "CS")
+  qdamodelc <- matrixqda(C, groups, priors, row.variance = "CS")
+  # only works because square!
+  expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
+  expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df)
+  expect_lt(attributes(logLik(ldamodel))$df, attributes(logLik(qdamodel))$df)
 
 })
 
