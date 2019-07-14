@@ -311,7 +311,7 @@ test_that("LDA/QDA logLik works",{
     
   expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
   expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df) 
-    
+
   # row.mean vs col.mean
   ldamodel <- matrixlda(C, groups, priors, row.mean = TRUE, U = covmatrix, V = covmatrix)
   qdamodel <- matrixqda(C, groups, priors, row.mean = TRUE, U = badcovmatrix, V = badcovmatrix)

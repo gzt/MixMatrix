@@ -558,9 +558,9 @@ logLik.matrixlda = function(object,...){
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
     nupar = 0 # if nu not fixed, becomes 1
 
-    if (!is.null(object$call$row.means) && (object$call$row.means)) meanpars = meanpars / q
+    if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
 
-    if (!is.null(object$call$col.means) && (object$call$col.means)) meanpars = meanpars / p
+    if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
 
     if (!is.null(object$call$col.variance)){
         Vvars <- object$call$col.variance
@@ -646,9 +646,9 @@ logLik.matrixqda = function(object,...){
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
     nupar = 0 # if nu not fixed, becomes 1
 
-    if (!is.null(object$call$row.means) && (object$call$row.means)) meanpars = meanpars / q
+    if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
 
-    if (!is.null(object$call$col.means) && (object$call$col.means)) meanpars = meanpars / p
+    if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
 
     if (!is.null(object$call$col.variance)){
         Vvars <- object$call$col.variance
