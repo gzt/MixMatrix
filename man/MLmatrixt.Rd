@@ -66,7 +66,7 @@ Returns a list with the following elements:
       \item{\code{iter}}{the number of iterations}
       \item{\code{tol}}{the squared difference between iterations of
            the variance matrices at the time of stopping}
-      \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+      \item{\code{logLik}}{log likelihood of result.}
       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
       \item{\code{call}}{The (matched) function call.}
    }

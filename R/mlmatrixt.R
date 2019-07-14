@@ -73,7 +73,7 @@
 #'       \item{\code{iter}}{the number of iterations}
 #'       \item{\code{tol}}{the squared difference between iterations of
 #'            the variance matrices at the time of stopping}
-#'       \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+#'       \item{\code{logLik}}{log likelihood of result.}
 #'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
@@ -345,11 +345,11 @@ Smatrix = array(0,c(p,p,n))
                             #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
 
     }
-    if (!isTRUE(sign(nuLL(p - 1)) * sign(nuLL(1000)) <= 0)) {
+    if (!isTRUE(sign(nuLL(1 + 1e-6)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
       varflag = TRUE
     }else{
-    fit0 <- stats::uniroot(nuLL, c(p - 1, 1000),...)
+    fit0 <- stats::uniroot(nuLL, c(1 + 1e-6, 1000),...)
     new.df = fit0$root
     }
     #print(new.df)
@@ -366,12 +366,12 @@ Smatrix = array(0,c(p,p,n))
     df <- new.df
 
     iter <- iter + 1
-    logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
-    logLikvec = c(logLikvec, logLik)
+    
+    #logLikvec = c(logLikvec, logLik)
   }
   if (iter >= max.iter || error.term > tol || varflag)
     warning("Failed to converge")
-
+  logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
   converged = !(iter >= max.iter || error.term > tol || varflag)
     
   return(list(mean = mu,
@@ -381,7 +381,7 @@ Smatrix = array(0,c(p,p,n))
               nu = df,
               iter = iter,
               tol = error.term,
-              logLik = logLikvec,
+              logLik = logLik,
               convergence = converged,
               call = match.call()))
 }
