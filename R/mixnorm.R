@@ -37,6 +37,12 @@
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     
 ##' @param method what method to use to fit the distribution. Currently no options.
+#' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
+#'    common mean within each row. If both this and \code{col.mean} are
+#'    \code{TRUE}, there will be a common mean for the entire matrix.
+#' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
+#'    common mean within each row. If both this and \code{row.mean} are
+#'    \code{TRUE}, there will be a common mean for the entire matrix.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood.
 ##' @param nu degrees of freedom parameter
@@ -113,7 +119,7 @@
 ##' logLik(res)
 ##' BIC(res)
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
-                          model = "normal", method = NULL,
+                          model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5){
     if (class(x) == "list")
         x <- array(unlist(x),
@@ -260,22 +266,44 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                     if(verbose > 2) print(newcenters[,,j])
                 }
             }
-            for(j in 1:K) newcenters[,,j] = newcenters[,,j] / sumzig[j]
+            for(j in 1:K) {
+                newcenters[,,j] = newcenters[,,j] / sumzig[j]
+                if (row.mean) {
+                                        # make it so that the mean is constant within a row
+                    newcenters[,,j] <- matrix(rowMeans(newcenters[,,j]), nrow = dims[1], ncol = dims[2])
+                }
+                if (col.mean) {
+                                        # make it so that the mean is constant within a column
+                    newcenters[,,j] <- matrix(colMeans(newcenters[,,j]), nrow = dims[1], ncol = dims[2], byrow = TRUE)
+                }
+            }
         } else {
-
+            
             for(j in 1:K){
-            newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
-            if(verbose > 2) print(newcenters[,,j])
+                if (row.mean && col.mean) {
+                                        # make it so that the mean is constant within a row
+                    scalarmu = matrixtrace(SSX[,,j] %*% solve(V[,,j]) %*% ones(q,p)) / matrixtrace(SS[,,j] %*% ones(p,q) %*% solve(V[,,j]) %*% ones(q,p))
+                    newcenters[,,j] <-   scalarmu * ones(p,q)
+                } else if (col.mean) {
+                                        # make it so that the mean is constant within a column
+                                        # ie mu = p x 1, times ones 1 x q
+                    newcenters[,,j] <- ones(p,p) %*% SSX[,,j] / sum(SS[,,j])
+                } else if (row.mean) {
+                                        # make it so that the mean is constant within a row
+                                        # ie  ones p x 1 times mu = 1 x q
+                    newcenters[,,j] = solve( SS[,,j]) %*% SSX[,,j] %*% (solve(V[,,j]) %*% ones(q,q)) / sum(solve(V[,,j]))
+                } else {
+                    newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
+                }
+                if(verbose > 2) print(newcenters[,,j])
             }
         }
-                                        
-        
-    
+            
 ### max for U, V
     ## if normal
     if(model == "normal"){
         for(j in 1:K){
-            for (iterations in 1:20){
+           # for (iterations in 1:20){
             zigmult = rep(newposterior[,j], each = q*q)
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
             inter.V <- txax(swept.data, U[,,j]) * zigmult
@@ -287,7 +315,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
             newU[,,j] <- new.U/(new.U[1, 1])
             if(verbose >2) print(newU[,,j])
-            }
+           # }
         }
     } else {
         for(j in 1:K){
@@ -407,6 +435,8 @@ logLik.MixMatrixModel <- function(object, ...){
     numgroups  = length(levels(grouping))
     grouplist = levels(grouping)
     meanpars = p*q
+    if(!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars/q
+    if(!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars/p
     upars = (p+1)*p/2
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
     nupar = 0 # only fixed for now

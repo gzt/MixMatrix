@@ -5,8 +5,9 @@
 \title{Fit a matrix variate mixture model}
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
-  iter = 1000, model = "normal", method = NULL, tolerance = 0.1,
-  nu = NULL, ..., verbose = 0, miniter = 5)
+  iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
+  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
+  miniter = 5)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
@@ -29,6 +30,14 @@ provided, the prior will be of equal distribution.}
 \item{model}{whether to use the \code{normal} or \code{t} distribution.}
 
 \item{method}{what method to use to fit the distribution. Currently no options.}
+
+\item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{col.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
+
+\item{col.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{row.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{tolerance}{convergence criterion, using Aitken acceleration of the
 log-likelihood.}
