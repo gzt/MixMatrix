@@ -59,10 +59,10 @@ test_that("Mean restrictions work",{
     mix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE))
 
     
-    trcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, method = "t"))
-    trmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, method = "t"))
-    tcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, method = "t"))
-    tmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, method = "t"))
+    trcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t"))
+    trmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t"))
+    tcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t"))
+    tmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t"))
     
 
     llrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE))
@@ -71,10 +71,10 @@ test_that("Mean restrictions work",{
     llmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE))
 
     
-    lltrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, method = "t"))
-    lltrmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, method = "t"))
-    lltcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, method = "t"))
-    lltmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, method = "t"))
+    lltrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t"))
+    lltrmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t"))
+    lltcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t"))
+    lltmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t"))
 
 
 
