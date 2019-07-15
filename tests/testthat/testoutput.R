@@ -158,13 +158,13 @@ test_that("Equivalent outputs for different functions:", {
   set.seed(20180219)
   A <- rmatrixnorm(40, mean = array(1, dim = c(4, 5)),
                 U = CSgenerate(4,.2), V = ARgenerate(5, .8), list = TRUE)
-  B <- MLmatrixnorm(A, row.mean = TRUE)
+  B <- MLmatrixnorm(A, row.mean = TRUE, V = ARgenerate(5,.8))
   expect_equal(B$U[1, 1], 1)
   expect_equal(B$V[1, 1], 1)
 
   expect_true(B$convergence)
   expect_equal(B$mean[1, 1], B$mean[1, 2])
- C <- MLmatrixnorm(A, col.mean = TRUE, row.mean = TRUE)
+ C <- MLmatrixnorm(A, col.mean = TRUE, row.mean = TRUE, U = CSgenerate(4,.2))
   expect_equal(C$mean[1, 1], C$mean[2, 1])
   expect_equal(C$mean[1, 1], C$mean[1, 2])
  
@@ -188,7 +188,7 @@ test_that("Equivalent outputs for different functions:", {
   C <- MLmatrixnorm(A, col.variance = "I")
   expect_equal(C$V[1,4],0)
 
-  D <- MLmatrixt(A, col.mean = TRUE)
+  D <- MLmatrixt(A, col.mean = TRUE, U = CSgenerate(4,.2), V = ARgenerate(5,.8))
   expect_true(D$convergence)
   expect_warning(MLmatrixt(A, fixed = FALSE, max.iter = 2))
   expect_equal(D$U[1, 1], 1)
