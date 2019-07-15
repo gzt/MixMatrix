@@ -99,8 +99,8 @@
 
 <p>A package for matrix variate distributions, including the normal, <em>t</em>, and inverted <em>t</em>. Currently provides classification with LDA and QDA for matrix variate <em>t</em> distributions and normal distributions, EM for parameter estimation for matrix variate <em>t</em> distributions, with sampling and density functions for those distributions as well as methods for parameter estimation for matrix variate normals and <em>t</em> with some restrictions on mean and variance parameters. Provides some clustering and classification by mixture modeling for matrix variate <em>t</em> distributions and normal distributions.</p>
 <p>See the vignettes for an example of how it works.</p>
-<p>It is currently possible to constrain the mean matrices for normal and <em>t</em> distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both in the maximum likelihood estimation functions and the LDA and QDA functions, but not in the mixture models.</p>
-<p>There isn’t much R software out there for working with these distributions. The excellent <a href="https://cran.r-project.org/package=matrixsampling">matrixsampling</a> package has sampling and distribution functions for these and many other matrix distributions, as does <a href="https://cran.r-project.org/package=LaplacesDemon">LaplacesDemon</a>. The <a href="https://cran.r-project.org/package=MatrixLDA">MatrixLDA</a> package performs LDA for normal distributions with penalized likelihood.</p>
+<p>It is currently possible to constrain the mean matrices for normal and <em>t</em> distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both in the maximum likelihood estimation functions and the LDA and QDA functions. In the mixture model function, it is possible to have a common mean within groups across rows, columns, or both.</p>
+<p>There are some other R packages you may be interested in if you are working with matrix-variate distributions. The excellent <a href="https://cran.r-project.org/package=matrixsampling">matrixsampling</a> package has sampling and distribution functions for these and many other matrix distributions, as does <a href="https://cran.r-project.org/package=LaplacesDemon">LaplacesDemon</a>. The <a href="https://cran.r-project.org/package=MatrixLDA">MatrixLDA</a> package performs LDA for normal distributions with penalized likelihood.</p>
 <p>Install from CRAN by running:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">'MixMatrix'</span>)</a></code></pre></div>
 <p>The development version of the software can be installed by running:</p>
@@ -128,6 +128,17 @@ CSgenerate(5, .5)</a></code></pre>
  D &lt;- matrixqda(C, groups, prior)
  predict(D)$posterior[1:10,]</code></pre>
 <p>In the future, this will include a more comprehensive treatment of matrix variate mixture modeling, including complete specification of covariance matrices in mixture modeling after the style of <a href="https://cran.r-project.org/package=mclust">Mclust</a>, <a href="https://cran.r-project.org/package=teigen">t-Eigen</a>, and other similar work.</p>
+<pre><code> A &lt;- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+ B &lt;- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
+ C &lt;- array(c(A,B), dim=c(3,4,60))
+ groups &lt;- c(rep(1,30),rep(2,30))
+ prior &lt;- c(.5,.5)
+ D &lt;- matrixmixture(C, prior, row.mean = TRUE, tolerance = 1e-2)
+ print(D$centers) # the final centers
+ print(D$pi) # the final mixing proportion
+ logLik(D)
+ BIC(logLik(D))
+ plot(D) # the log likelihood by iteration</code></pre>
 </div>
 <div id="contribution-and-contact-information" class="section level2">
 <h2 class="hasAnchor">
