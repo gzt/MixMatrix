@@ -102,3 +102,25 @@ test_that("Mean restrictions work",{
     
 
 })
+
+
+test_that("Predict Mix Model works", {
+
+
+    set.seed(20180221)
+    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,60))
+    prior <- c(.5,.5)
+
+    mix <- matrixmixture(C, prior = c(.5,.5))
+    expect_error(predict(mix, newdata = matrix(0,nrow = 3, ncol = 2)),
+                 "dimension")
+    expect_error(predict(mix, newdata = (matrix(0,nrow = 2, ncol = 3))),
+               "dimension")
+    
+    expect_equal(sum(predict(mix, newdata = matrix(
+                                           0, nrow = 3, ncol = 4))$posterior), 1)
+    expect_equal(sum(predict(mix, prior = c(.7,.3))$posterior[1,]), 1)
+
+    })

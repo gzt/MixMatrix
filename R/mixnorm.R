@@ -371,14 +371,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     centers = newcenters
     posterior = newposterior
     pi = colMeans(posterior)
-    logLik = 0
-    for(i in 1:n){
-        for(j in 1:K){
-            logLik = logLik + posterior[i,j]*(log(pi[j]) +
-                dmatrixt(x = x[,,i], df = nu, mean = centers[,,j],
-                         U = U[,,j], V = V[,,j], log = TRUE))
-        }
-    }
+    
     if(verbose>1) {
         print("Final centers:")
         print(centers)
@@ -616,15 +609,15 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
     for (i in seq(n)) {
       Xi = matrix(x[, , i], p, q)
       for (j in seq(ng)) {
-          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df, mean = object$centers[,,j,drop=FALSE],
-                               U = object$U[,,j,drop=FALSE], V = object$V[,,j,drop=FALSE], log = TRUE)
+          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df, mean = matrix(object$centers[,,j],nrow=p,ncol=q),
+                               U = matrix(object$U[,,j],nrow=p,ncol=p), V = matrix(object$V[,,j],nrow=q,ncol=q), log = TRUE)
       }
     }
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
     nm <- names(object$prior)
-    cl <- factor(nm[max.col(posterior)], levels = object$lev)
+    cl <- max.col(posterior)
     list(class = cl, posterior = posterior)      
         
 }
