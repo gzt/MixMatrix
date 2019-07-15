@@ -24,14 +24,14 @@ remainder are chosen by \code{centermethod}.}
 \item{U}{(optional) either a matrix or an array of  \eqn{q \times q}{q * q}
 matrices for use as the \code{U}
 argument. If a matrix is provided, it is duplicated to provide an array.
-If an array is provided, is should have \code{K} slices.}
+If an array is provided, it should have \code{K} slices.}
 
 \item{V}{(optional) either a matrix or an array of matrices for use as the \code{U}
 argument. If a matrix is provided, it is duplicated to provide an array.
-If an array is provided, is should have \code{K} slices.}
+If an array is provided, it should have \code{K} slices.}
 
 \item{centermethod}{what method to use to generate initial centers.
-Current support random start (\code{random}) or performing k-means
+Currently support random start (\code{random}) or performing k-means
 (\code{kmeans}) on the vectorized version for a small number of
 iterations and then converting back.
 By default, if \code{K} centers are provided, nothing will be done.}

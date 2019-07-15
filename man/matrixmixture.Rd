@@ -7,7 +7,7 @@
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
   col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
-  miniter = 5)
+  miniter = 5, convergence = TRUE)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
@@ -40,7 +40,7 @@ common mean within each row. If both this and \code{row.mean} are
 \code{TRUE}, there will be a common mean for the entire matrix.}
 
 \item{tolerance}{convergence criterion, using Aitken acceleration of the
-log-likelihood.}
+log-likelihood by default.}
 
 \item{nu}{degrees of freedom parameter}
 
@@ -50,6 +50,10 @@ log-likelihood.}
 numbers output more results.}
 
 \item{miniter}{minimum number of iterations}
+
+\item{convergence}{By default, \code{TRUE}. Whether to use Aitken acceleration to
+determine convergence. If false, it instead checks if the change in
+log-likelihood is less than \code{tolerance}.}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following
@@ -101,6 +105,7 @@ print(res$pi) # the final mixing proportion
 plot(res) # the log likelihood by iteration
 logLik(res)
 BIC(res)
+predict(res, newdata = C[,,c(1,31)])
 }
 \references{
 Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.

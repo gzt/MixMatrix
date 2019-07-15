@@ -44,12 +44,15 @@
 ##'    common mean within each row. If both this and \code{row.mean} are
 ##'    \code{TRUE}, there will be a common mean for the entire matrix.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
-##'     log-likelihood.
+##'     log-likelihood by default.
 ##' @param nu degrees of freedom parameter
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @param verbose whether to print diagnostic output, by default \code{0}. Higher
 ##'     numbers output more results.
 ##' @param miniter minimum number of iterations
+##' @param convergence By default, \code{TRUE}. Whether to use Aitken acceleration to
+##'     determine convergence. If false, it instead checks if the change in
+##'     log-likelihood is less than \code{tolerance}.
 ##' @return A list of class \code{MixMatrixModel} containing the following
 ##'     components:
 ##' \describe{
@@ -118,9 +121,10 @@
 ##' plot(res) # the log likelihood by iteration
 ##' logLik(res)
 ##' BIC(res)
+##' predict(res, newdata = C[,,c(1,31)])
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
-                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5){
+                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5, convergence = TRUE){
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -354,10 +358,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             ## initialize to some not-so-bad values so that doesn't immediately "converge"
             olderlogLik = oldlogLik - .2*abs(oldlogLik)
             }
-        #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
+                                        #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
+        if(convergence){
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik + 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
+        } else eps = logLik - oldlogLik
+        
         i = i + 1
         if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
         logLikvec = c(logLikvec, logLik)
@@ -471,12 +478,12 @@ nobs.MixMatrixModel <- function(object, ...){
 ##' @param U (optional) either a matrix or an array of  \eqn{q \times q}{q * q}
 ##'      matrices for use as the \code{U}
 ##'      argument. If a matrix is provided, it is duplicated to provide an array.
-##'      If an array is provided, is should have \code{K} slices.
+##'      If an array is provided, it should have \code{K} slices.
 ##' @param V  (optional) either a matrix or an array of matrices for use as the \code{U}
 ##'      argument. If a matrix is provided, it is duplicated to provide an array.
-##'      If an array is provided, is should have \code{K} slices.
+##'      If an array is provided, it should have \code{K} slices.
 ##' @param centermethod what method to use to generate initial centers.
-##'      Current support random start (\code{random}) or performing k-means
+##'      Currently support random start (\code{random}) or performing k-means
 ##'      (\code{kmeans}) on the vectorized version for a small number of
 ##'      iterations and then converting back.
 ##'      By default, if \code{K} centers are provided, nothing will be done.
@@ -523,23 +530,26 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
     n = dims[3]
     remains = K
     cenflag = FALSE
+    centers = array(dim = c(p,q,K))
     if(length(prior) == 1) K = prior
     if(!is.null(K)) prior = rep(1,K)/K
     if(!is.null(init)){
         if(!is.null(init$centers)){
             cenflag = TRUE
             initcenters = init$centers
-            dimcen = dim(centers)
+            dimcen = dim(initcenters)
             if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
-            remains = K - dimcen[3]
+            if(length(dimcen) == 2) remains = K -1
+                else remains = K - dimcen[3]
         }
-        U = init$U
-        V = init$V
-        }
-    if(centermethod == "random" && (remains > 0)){
-    select = sample(n,remains, replace = FALSE)
-    centers = data[,,select]
+        if(is.null(U)) U = init$U
+        if(is.null(V)) V = init$V
+    }
     if(cenflag) centers[,,(remains+1):K] = initcenters
+    
+    if(centermethod == "random" && (remains > 0)){
+        select = sample(n,remains, replace = FALSE)
+        centers[,,1:remains] = data[,,select]
     }
     if((remains > 0) && (centermethod == "kmeans" || centermethod == "k-means")){
         res = kmeans(matrix(data, nrow = n), centers = remains, ...)
