@@ -141,7 +141,7 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
     <pre class="usage"><span class='fu'>matrixmixture</span>(<span class='no'>x</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>prior</span>),
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
+  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,7 +196,7 @@ common mean within each row. If both this and <code>row.mean</code> are
     <tr>
       <th>tolerance</th>
       <td><p>convergence criterion, using Aitken acceleration of the
-log-likelihood.</p></td>
+log-likelihood by default.</p></td>
     </tr>
     <tr>
       <th>nu</th>
@@ -214,6 +214,12 @@ numbers output more results.</p></td>
     <tr>
       <th>miniter</th>
       <td><p>minimum number of iterations</p></td>
+    </tr>
+    <tr>
+      <th>convergence</th>
+      <td><p>By default, <code>TRUE</code>. Whether to use Aitken acceleration to
+determine convergence. If false, it instead checks if the change in
+log-likelihood is less than <code>tolerance</code>.</p></td>
     </tr>
     </table>
     
@@ -298,7 +304,14 @@ numbers output more results.</p></td>
 #&gt; [1,] 1.0498256 1.075903 0.7999675 1.0084605
 #&gt; [2,] 0.9498398 1.077331 0.9983676 1.0938548
 #&gt; [3,] 0.8780119 1.017352 0.8637524 0.9749027
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4857148 0.5142852</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -575.4127 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 1371.92</div></pre>
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4857148 0.5142852</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -575.4127 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 1371.92</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>31</span>)])</div><div class='output co'>#&gt; $class
+#&gt; [1] 1 2
+#&gt; 
+#&gt; $posterior
+#&gt;              [,1]         [,2]
+#&gt; [1,] 9.999110e-01 8.904127e-05
+#&gt; [2,] 1.971711e-06 9.999980e-01
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
