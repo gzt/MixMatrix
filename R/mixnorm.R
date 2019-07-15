@@ -37,12 +37,12 @@
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     
 ##' @param method what method to use to fit the distribution. Currently no options.
-#' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{col.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
-#' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{row.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
+##' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
+##'    common mean within each row. If both this and \code{col.mean} are
+##'    \code{TRUE}, there will be a common mean for the entire matrix.
+##' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
+##'    common mean within each row. If both this and \code{row.mean} are
+##'    \code{TRUE}, there will be a common mean for the entire matrix.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood.
 ##' @param nu degrees of freedom parameter
@@ -569,4 +569,62 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
         U = U,
         V = V
         )
+}
+
+#' @export
+# S3 method for predict on class MixMatrixModel
+predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
+        if (!inherits(object, "MixMatrixModel"))
+            stop("object not of class \"MixMatrixModel\"")
+
+    if (missing(newdata)) {
+        newdata <- eval.parent(object$call$x)
+    }
+
+    if (is.null(dim(newdata)))
+      stop("'newdata' is not an array")
+    if (any(!is.finite(newdata)))
+      stop("infinite, NA or NaN values in 'newdata'")
+    x <- (newdata)
+  
+
+    if (length(dim(x)) == 2) x <- array(x, dim= c(dim(x),1))
+
+    if (ncol(x[, , 1, drop = FALSE]) != ncol(object$centers[, , 1, drop = FALSE]))
+      stop("wrong column dimension of matrices")
+    if (nrow(x[, , 1, drop = FALSE]) != nrow(object$centers[, , 1, drop = FALSE]))
+      stop("wrong row dimension of matrices")
+    ng <- length(object$prior)
+    if (!missing(prior)) {
+      if (length(prior) != ng) stop("invalid prior length")
+      if (any(prior < 0) || round(sum(prior), 5) != 1)
+        stop("invalid 'prior'")
+    }
+
+    dims = dim(x)
+    # x is a p x q x n array
+    n <- dims[3]
+    p <- dims[1]
+    q <- dims[2]
+    df <- object$nu
+
+ 
+  dist = matrix(0, nrow = n, ncol = ng)
+    posterior = matrix(0, nrow = n, ncol = ng)
+   
+
+    for (i in seq(n)) {
+      Xi = matrix(x[, , i], p, q)
+      for (j in seq(ng)) {
+          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df, mean = object$centers[,,j,drop=FALSE],
+                               U = object$U[,,j,drop=FALSE], V = object$V[,,j,drop=FALSE], log = TRUE)
+      }
+    }
+    posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
+    totalpost = rowSums(posterior)
+    posterior = posterior / totalpost
+    nm <- names(object$prior)
+    cl <- factor(nm[max.col(posterior)], levels = object$lev)
+    list(class = cl, posterior = posterior)      
+        
 }
