@@ -46,6 +46,7 @@ test_that("Bad results warn or stop",{
 
 test_that("Mean restrictions work",{
 
+    test_equal <- function(x, tolerance = 1e-6) all(abs(x - x[[1]]) < tolerance)
 
     set.seed(20180221)
     A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
@@ -53,16 +54,16 @@ test_that("Mean restrictions work",{
     C <- array(c(A,B), dim=c(3,4,60))
     prior <- c(.5,.5)
 
-    rcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE))
-    rmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE))
-    cmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE))
-    mix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE))
+    expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE)$centers[,,1])))
+    expect_true( test_equal (c(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE)$centers[1,,1])))
+    expect_true( test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE)$centers[,1,1]))
+    expect_true( !test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE)$centers[1,,1]))
 
     
-    trcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t"))
-    trmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t"))
-    tcmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t"))
-    tmix <- (matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t"))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t")$centers[,,1]))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t")$centers[1,,1]))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t")$centers[,1,1]))
+    expect_true(!test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t")$centers[,1,1]))
     
 
     llrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE))
@@ -76,21 +77,6 @@ test_that("Mean restrictions work",{
     lltcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t"))
     lltmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t"))
 
-
-
-    expect_equal(rcmix$centers[1, 1, 1], rcmix$centers[1, 2, 1])
-    expect_equal(rcmix$centers[1, 1, 1], rcmix$centers[2, 1, 1])
-
-    expect_equal(trcmix$centers[1, 1, 1], trcmix$centers[1, 2, 1])
-    expect_equal(trcmix$centers[1, 1, 1], trcmix$centers[2, 1, 1])
-    
-
-    expect_equal(rmix$centers[1, 1, 1], rmix$centers[1, 2, 1])
-    expect_equal(cmix$centers[1, 1, 1], cmix$centers[2, 1, 1])
-
-    expect_equal(trmix$centers[1, 1, 1], trmix$centers[1, 2, 1])
-    expect_equal(tcmix$centers[1, 1, 1], tcmix$centers[2, 1, 1])
-    
     expect_equal(attributes(llrcmix)$df, attributes(lltrcmix)$df)
     expect_equal(attributes(llmix)$df, attributes(lltmix)$df)
     expect_equal(attributes(llcmix)$df, attributes(lltcmix)$df)
