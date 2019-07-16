@@ -102,11 +102,11 @@
 ##' 
 ##' @examples
 ##' set.seed(20180221)
-##' A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 5)
+##' A <- rmatrixt(20,mean=matrix(0,nrow=3,ncol=4), df = 5)
 ##' # 3x4 matrices with mean 0
-##' B <- rmatrixt(30,mean=matrix(1,nrow=3,ncol=4), df = 5)
+##' B <- rmatrixt(20,mean=matrix(1,nrow=3,ncol=4), df = 5)
 ##' # 3x4 matrices with mean 2
-##' C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
+##' C <- array(c(A,B), dim=c(3,4,40)) # combine into one array
 ##' prior <- c(.5,.5) # equal probability prior
 ##' # create an intialization object, starts at the true parameters
 ##' init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
@@ -119,9 +119,9 @@
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
 ##' plot(res) # the log likelihood by iteration
-##' logLik(res)
-##' BIC(res)
-##' predict(res, newdata = C[,,c(1,31)])
+##' logLik(res) # log likelihood of final result
+##' BIC(res) # BIC of final result
+##' predict(res, newdata = C[,,c(1,21)]) # predicted class membership
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
                           tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5, convergence = TRUE){
@@ -235,7 +235,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if(model == "t"){
             dfmult = df + p + q - 1
             for(j in 1:K){
-                
+             ### .SStep(data,centers,U,V,df,weights)
                 zigmult = rep(newposterior[,j], each = p*p)
                 swept.data <- sweep(x, c(1, 2), centers[,,j])
                 
@@ -307,31 +307,32 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     ## if normal
     if(model == "normal"){
         for(j in 1:K){
-           # for (iterations in 1:20){
+            ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance) #### or do EEE, etc formulation
             zigmult = rep(newposterior[,j], each = q*q)
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
             inter.V <- txax(swept.data, U[,,j]) * zigmult
             newV[,,j] <- rowSums(inter.V, dims = 2)/(sumzig[j] * p)
-            if(verbose >2) print(newV[,,j])
-               
             zigmult = rep(newposterior[,j], each = p*p)
             inter.U <- xatx(swept.data, newV[,,j]) * zigmult
             new.U = rowSums(inter.U, dims = 2)/(sumzig[j]*q)
             newU[,,j] <- new.U/(new.U[1, 1])
-            if(verbose >2) print(newU[,,j])
-           # }
+
         }
     } else {
         for(j in 1:K){
-
+            ### .TVarFunc(data, centers,SS,SSX,SSXX,df,weights,row.variance,col.variance) #### or do EEE, etc formulation
             newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
                                                       t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
             newV[,,j] = newV[,,j]/newV[1,1,j]
-            
             newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
             newU[,,j] = solve(newUinv)
         }
     }
+
+
+
+### Fit NU:
+        
         
 ####### Eval convergence
         if(verbose > 1){
@@ -358,7 +359,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
             ## initialize to some not-so-bad values so that doesn't immediately "converge"
             olderlogLik = oldlogLik - .2*abs(oldlogLik)
             }
-                                        #eps = sum((newcenters - centers)^2)+sum( (newU-U)^2) + sum( (newV-V)^2 )
+
         if(convergence){
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik + 1/(1-aitken) * (logLik - oldlogLik)
@@ -533,10 +534,6 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
     if(!is.null(centers)) {
         cenflag = TRUE
         initcenters = centers
-        dimcen = dim(initcenters)
-        if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
-        if(length(dimcen) == 2) remains = K -1
-        else remains = K - dimcen[3]
     }
     newcenters = array(dim = c(p,q,K))
     if(length(prior) == 1) K = prior
@@ -545,16 +542,17 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
         if(!is.null(init$centers)){
             cenflag = TRUE
             initcenters = init$centers
-            dimcen = dim(initcenters)
-            if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
-            if(length(dimcen) == 2) remains = K -1
-                else remains = K - dimcen[3]
-        }
+            }
         if(is.null(U)) U = init$U
         if(is.null(V)) V = init$V
     }
-    if(cenflag) newcenters[,,(remains+1):K] = initcenters
-    
+    if(cenflag) {
+        dimcen = dim(initcenters)
+        if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
+        if(length(dimcen) == 2) remains = K -1
+        else remains = K - dimcen[3]
+        newcenters[,,(remains+1):K] = initcenters
+    }
     if(centermethod == "random" && (remains > 0)){
         select = sample(n,remains, replace = FALSE)
         newcenters[,,1:remains] = data[,,select]
@@ -574,16 +572,17 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
         if(is.null(U)) U = array(c(rep(diag(p),K)), dim = c(p,p,K)) 
         if(is.null(V)) V = array(c(rep(diag(q),K)), dim = c(q,q,K))
     }
-   
+    
     list(
         centers = newcenters,
         U = U,
         V = V
-        )
+    )
 }
 
-#' @export
+
 # S3 method for predict on class MixMatrixModel
+##' @export
 predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
         if (!inherits(object, "MixMatrixModel"))
             stop("object not of class \"MixMatrixModel\"")
