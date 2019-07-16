@@ -235,21 +235,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if(model == "t"){
             dfmult = df + p + q - 1
             for(j in 1:K){
-             ### .SStep(data,centers,U,V,df,weights)
-                zigmult = rep(newposterior[,j], each = p*p)
-                swept.data <- sweep(x, c(1, 2), centers[,,j])
-                
-                Stmp = xatx(swept.data,V[,,j])
-                for (obs in 1:n) Stmp[,,obs] = Stmp[,,obs] + U[,,j]
-                Smatrix = cubeinv(Stmp) * zigmult
-                
-                SS[,,j] = rowSums(Smatrix ,FALSE, 2)
-                
-                SSXtmp = cubemult(Smatrix, x)
-                SSX[,,j] = rowSums(SSXtmp, FALSE, 2)
-                
-                SSXXtmp = cubemult(x,SSXtmp)
-                SSXX[,,j] = rowSums(SSXXtmp,FALSE, 2)
+                Slist = .SStep(x, centers[,,j], U[,,j], V[,,j], newposterior[,j])
+                SS[,,j] = Slist$SS
+                SSX[,,j] = Slist$SSX
+                SSXX[,,j] = Slist$SSXX
+                ## SSD[,,j] = Slist$SSD
              }
         }
  
@@ -260,49 +250,12 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if (verbose) cat("\nNew pi: ", pi,"\n")
         ## max for centers, U, V
 ### max for centers
-        ## if normal
+        
         sumzig = colSums(newposterior)
         if(verbose>1) cat("\n Column sums of posterior", sumzig)
-        if(model == "normal"){
-            for(obs in 1:n){
-                for(j in 1:K){
-                    newcenters[,,j] = newcenters[,,j] + x[,,obs] * newposterior[obs,j]
-                    if(verbose > 2) print(newcenters[,,j])
-                }
-            }
-            for(j in 1:K) {
-                newcenters[,,j] = newcenters[,,j] / sumzig[j]
-                if (row.mean) {
-                                        # make it so that the mean is constant within a row
-                    newcenters[,,j] <- matrix(rowMeans(newcenters[,,j]), nrow = dims[1], ncol = dims[2])
-                }
-                if (col.mean) {
-                                        # make it so that the mean is constant within a column
-                    newcenters[,,j] <- matrix(colMeans(newcenters[,,j]), nrow = dims[1], ncol = dims[2], byrow = TRUE)
-                }
-            }
-        } else {
-            
-            for(j in 1:K){
-                if (row.mean && col.mean) {
-                                        # make it so that the mean is constant within a row
-                    scalarmu = matrixtrace(SSX[,,j] %*% solve(V[,,j]) %*% ones(q,p)) / matrixtrace(SS[,,j] %*% ones(p,q) %*% solve(V[,,j]) %*% ones(q,p))
-                    newcenters[,,j] <-   scalarmu * ones(p,q)
-                } else if (col.mean) {
-                                        # make it so that the mean is constant within a column
-                                        # ie mu = p x 1, times ones 1 x q
-                    newcenters[,,j] <- ones(p,p) %*% SSX[,,j] / sum(SS[,,j])
-                } else if (row.mean) {
-                                        # make it so that the mean is constant within a row
-                                        # ie  ones p x 1 times mu = 1 x q
-                    newcenters[,,j] = solve( SS[,,j]) %*% SSX[,,j] %*% (solve(V[,,j]) %*% ones(q,q)) / sum(solve(V[,,j]))
-                } else {
-                    newcenters[,,j] =  solve( SS[,,j]) %*% SSX[,,j]
-                }
-                if(verbose > 2) print(newcenters[,,j])
-            }
-        }
-            
+        for(j in 1:K) newcenters[,,j] = .MeansFunction(x,U[,,j],V[,,j],SS[,,j], SSX[,,j],
+                                                       newposterior[,j],row.mean,col.mean, model)
+
 ### max for U, V
     ## if normal
     if(model == "normal"){

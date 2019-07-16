@@ -5,9 +5,9 @@ context("Testing matrixmixture")
 test_that("Testing bad input",{
     
     set.seed(20180221)
-    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-    B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
-    C <- array(c(A,B), dim=c(3,4,60))
+    A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(15,mean=matrix(2,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
     init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
                 U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
@@ -27,9 +27,9 @@ test_that("Testing bad input",{
 test_that("Bad results warn or stop",{
 
     set.seed(20180221)
-    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-    B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
-    C <- array(c(A,B), dim=c(3,4,60))
+    A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(15,mean=matrix(2,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
     init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
                 U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
@@ -49,9 +49,9 @@ test_that("Mean restrictions work",{
     test_equal <- function(x, tolerance = 1e-6) all(abs(x - x[[1]]) < tolerance)
 
     set.seed(20180221)
-    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-    B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-    C <- array(c(A,B), dim=c(3,4,60))
+    A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(15,mean=matrix(1,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
 
     expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE)$centers[,,1])))
@@ -102,9 +102,9 @@ test_that("Predict Mix Model works", {
 
 
     set.seed(20180221)
-    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-    B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-    C <- array(c(A,B), dim=c(3,4,60))
+    A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(15,mean=matrix(1,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
 
     mix <- matrixmixture(C, prior = c(.5,.5))
@@ -122,9 +122,9 @@ test_that("Predict Mix Model works", {
 test_that("Init function works", {
 
     set.seed(20180221)
-    A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-    B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-    C <- array(c(A,B), dim=c(3,4,60))
+    A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
+    B <- rmatrixnorm(15,mean=matrix(1,nrow=3,ncol=4))
+    C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
 
     testinit <- init_matrixmixture(C,K=2, centers = matrix(7,3,4), U = 4*diag(3), V = 3*diag(4))

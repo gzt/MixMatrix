@@ -319,41 +319,55 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
   row.set.var = FALSE
   if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "I"
-  }
-  # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
-  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
-    # row.set.var = TRUE
-    row.variance = "cor"
-  }
-  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "AR(1)"
-  }
-  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "CS"
-  }
+
+ rowvarparse <- .varparse(row.variance)
+  row.set.var = rowvarparse$varflag
+  row.variance = rowvarparse$varopt
+
+
+  
+  ## if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "I"
+  ## }
+  ## # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
+  ## if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
+  ##   # row.set.var = TRUE
+  ##   row.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "AR(1)"
+  ## }
+  ## if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "CS"
+  ## }
   col.set.var = FALSE
   if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-  if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "I"
-  }
-  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
-    # col.set.var = TRUE
-    col.variance = "cor"
-  }
-  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "AR(1)"
-  }
-  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "CS"
-  }
+
+
+  colvarparse <- .varparse(col.variance)
+  col.set.var = colvarparse$varflag
+  col.variance = colvarparse$varopt
+
+  
+  ## if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "I"
+  ## }
+  ## if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+  ##   # col.set.var = TRUE
+  ##   col.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "AR(1)"
+  ## }
+  ## if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "CS"
+  ## }
   # if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices

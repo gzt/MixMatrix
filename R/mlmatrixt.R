@@ -121,43 +121,53 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   if (!(missing(V))) {
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
-  row.set.var = FALSE
   if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "I"
-  }
+  rowvarparse <- .varparse(row.variance)
+  row.set.var = rowvarparse$varflag
+  row.variance = rowvarparse$varopt
+  ## row.set.var = FALSE
+  ## if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+  ## if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "I"
+  ## }
  
-  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
+  ## if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
  
-    row.variance = "cor"
-  }
-  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "AR(1)"
-  }
-  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "CS"
-  }
+  ##   row.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "AR(1)"
+  ## }
+  ## if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "CS"
+  ## }
   col.set.var = FALSE
   if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-  if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "I"
-  }
-  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+
+  colvarparse <- .varparse(col.variance)
+  col.set.var = colvarparse$varflag
+  col.variance = colvarparse$varopt
+
   
-    col.variance = "cor"
-  }
-  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "AR(1)"
-  }
-  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "CS"
-  }
+  ## if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "I"
+  ## }
+  ## if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+  
+  ##   col.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "AR(1)"
+  ## }
+  ## if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "CS"
+  ## }
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
@@ -221,43 +231,25 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 p = dims[1]
 q = dims[2]
 n = dims[3]
-Smatrix = array(0,c(p,p,n))
+#Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error.term > tol && (!varflag)) {
-    swept.data <- sweep(data, c(1, 2), mu)
+    
     dfmult = df + p + q - 1
 
-    ### E step
+### E step
+      Slist = .SStep(data,mu,U,V,rep(1,n))
+      SS = Slist$SS
+      SSX = Slist$SSX
+      SSXX = Slist$SSXX
+      SSD = Slist$SSD
 
-    Stmp = xatx(swept.data,0.5*(V+t(V)))
-    for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U
-    Smatrix = cubeinv(Stmp)
-
-    SS = rowSums(Smatrix,FALSE, 2)
-
-    SSXtmp = cubemult(Smatrix, data)
-    SSX = rowSums(SSXtmp, FALSE, 2)
-
-    SSXXtmp = cubemult(data,SSXtmp)
-    SSXX = rowSums(SSXXtmp,FALSE, 2)
  
-    ### CM STEP
+### CM STEP
+      ### MEANS:
+      new.Mu = .MeansFunction(data, U=U,V=V, SS, SSX, rep(1,n), row.mean, col.mean, "t")
 
-      if (row.mean && col.mean) {
-        # make it so that the mean is constant within a row
-        scalarmu = matrixtrace(SSX %*% solve(V) %*% ones(q,p)) / matrixtrace(SS %*% ones(p,q) %*% solve(V) %*% ones(q,p))
-        new.Mu <-   scalarmu * ones(p,q)
-        } else if (col.mean) {
-        # make it so that the mean is constant within a column
-        # ie mu = p x 1, times ones 1 x q
-        new.Mu <- ones(p,p) %*% SSX / sum(SS)
-        } else if (row.mean) {
-          # make it so that the mean is constant within a row
-          # ie  ones p x 1 times mu = 1 x q
-        new.Mu = solve( SS) %*% SSX %*% (solve(V) %*% ones(q,q)) / sum(solve(V))
-          } else {
-    new.Mu =  solve( SS) %*% SSX
-      }
+      ### VARS:
     
     if (col.variance == "I") {
       new.V = diag(dims[2])
@@ -266,8 +258,8 @@ Smatrix = array(0,c(p,p,n))
       nLL <- function(theta) {
         vardetmat <- vardet(dims[2], theta, TRUE, col.variance)
         varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
-        SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
-
+        #SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
+        SXOX = SSX %*% varinvmat %*% t(rowSums(data, dims = 2)) #only need trace to be equal
         return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% new.Mu %*% varinvmat %*% t(new.Mu) - SSX %*% varinvmat %*% t(new.Mu) - new.Mu %*% varinvmat %*% t(SSX)))
       }
       if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
@@ -335,8 +327,8 @@ Smatrix = array(0,c(p,p,n))
     if (!fixed) {
     new.df = df
     ## insert E step for NU and M step for NU
-
-    SSDtmp = detsum(Smatrix)
+    SSDtmp = SSD
+    #SSDtmp = detsum(Smatrix)
     detSS = determinant(SS, logarithm = TRUE)$modulus[1]
     nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
                              CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
