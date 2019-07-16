@@ -364,10 +364,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
         linf = oldlogLik + 1/(1-aitken) * (logLik - oldlogLik)
         eps = linf - logLik
+        if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
         } else eps = logLik - oldlogLik
         
         i = i + 1
-        if(verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
+
         logLikvec = c(logLikvec, logLik)
     }
     if ((i == iter || eps > tolerance) ){
