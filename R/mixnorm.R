@@ -530,7 +530,15 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
     n = dims[3]
     remains = K
     cenflag = FALSE
-    centers = array(dim = c(p,q,K))
+    if(!is.null(centers)) {
+        cenflag = TRUE
+        initcenters = centers
+        dimcen = dim(initcenters)
+        if(!((dimcen[1]==p)&&(dimcen[2] == q))) stop("wrong dimension for provided centers")
+        if(length(dimcen) == 2) remains = K -1
+        else remains = K - dimcen[3]
+    }
+    newcenters = array(dim = c(p,q,K))
     if(length(prior) == 1) K = prior
     if(!is.null(K)) prior = rep(1,K)/K
     if(!is.null(init)){
@@ -545,16 +553,16 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
         if(is.null(U)) U = init$U
         if(is.null(V)) V = init$V
     }
-    if(cenflag) centers[,,(remains+1):K] = initcenters
+    if(cenflag) newcenters[,,(remains+1):K] = initcenters
     
     if(centermethod == "random" && (remains > 0)){
         select = sample(n,remains, replace = FALSE)
-        centers[,,1:remains] = data[,,select]
+        newcenters[,,1:remains] = data[,,select]
     }
     if((remains > 0) && (centermethod == "kmeans" || centermethod == "k-means")){
         res = kmeans(matrix(data, nrow = n), centers = remains, ...)
-        centers = array(res$centers, dim = c(p,q,remains))
-        if(cenflag) centers = array(c(centers, initcenters), dim = c(p,q,K))
+        newcenters = array(res$centers, dim = c(p,q,remains))
+        if(cenflag) newcenters = array(c(newcenters, initcenters), dim = c(p,q,K))
     }
     if(!is.null(U)){
         if(length(dim(U) == 2)) U = array(rep(U,K), dim = c(p,p,K))
@@ -568,7 +576,7 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
     }
    
     list(
-        centers = centers,
+        centers = newcenters,
         U = U,
         V = V
         )
