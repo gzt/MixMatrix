@@ -60,10 +60,14 @@ test_that("Mean restrictions work",{
     expect_true( !test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE)$centers[1,,1]))
 
     
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t")$centers[,,1]))
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t")$centers[1,,1]))
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t")$centers[,1,1]))
-    expect_true(!test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t")$centers[,1,1]))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                         row.mean = TRUE, model = "t", nu = 5)$centers[,,1]))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
+                                         row.mean = TRUE, model = "t", nu = 5)$centers[1,,1]))
+    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                         row.mean = FALSE, model = "t", nu = 5)$centers[,1,1]))
+    expect_true(!test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
+                                          row.mean = FALSE, model = "t", nu = 5)$centers[,1,1]))
     
 
     llrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE))
@@ -72,10 +76,14 @@ test_that("Mean restrictions work",{
     llmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE))
 
     
-    lltrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE, model = "t"))
-    lltrmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE, model = "t"))
-    lltcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE, model = "t"))
-    lltmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE, model = "t"))
+    lltrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                     row.mean = TRUE, model = "t", nu = 5))
+    lltrmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
+                                    row.mean = TRUE, model = "t", nu = 5))
+    lltcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                    row.mean = FALSE, model = "t", nu = 5 ))
+    lltmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
+                                   row.mean = FALSE, model = "t", nu = 5))
 
     expect_equal(attributes(llrcmix)$df, attributes(lltrcmix)$df)
     expect_equal(attributes(llmix)$df, attributes(lltmix)$df)
