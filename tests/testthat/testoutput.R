@@ -223,7 +223,9 @@ test_that("Output of LDA/QDA/Predict", {
     B <- rmatrixnorm(4, mean = matrix(1, nrow = 2, ncol = 2))
     set.seed(20190628)
 
-  C <- array(c(A,B), dim = c(2,2,8))
+    C <- array(c(A,B), dim = c(2,2,8))
+    Czero <- C
+    Czero[1,1,] <- 0
   D <- array(0, dim = c(2,2,4))
   E <- array(c(A,D), dim = c(2,2,8))
   groups <- c(rep(1,4),rep(2,4))
@@ -231,6 +233,8 @@ test_that("Output of LDA/QDA/Predict", {
   priors = c(.5,.5)
     ldamodel <- matrixlda(C, groups, priors, subset = rep(TRUE,8))
     qdamodel <- matrixqda(C, groups, priors, subset = rep(TRUE,8))
+    expect_error(matrixlda(Czero, groups, priors, subset = rep(TRUE, 8)), "constant")
+    expect_error(suppressWarnings(matrixqda(Czero, groups, priors, subset = rep(TRUE, 8))), "constant")
     expect_error(predict(ldamodel, newdata = matrix(0,nrow = 3, ncol = 2)),
                  "dimension")
     expect_error(predict(ldamodel, newdata = (matrix(0,nrow = 2, ncol = 3))),
