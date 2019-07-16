@@ -277,11 +277,11 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>20180221</span>)
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>20</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 <span class='co'># 3x4 matrices with mean 0</span>
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>1</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
+<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>20</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/matrix'>matrix</a></span>(<span class='fl'>1</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 <span class='co'># 3x4 matrices with mean 2</span>
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'># combine into one array</span>
+<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>40</span>)) <span class='co'># combine into one array</span>
 <span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
 <span class='co'># create an intialization object, starts at the true parameters</span>
 <span class='no'>init</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>centers</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/array'>array</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>0</span>,<span class='fl'>12</span>),<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>12</span>)), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>2</span>)),
@@ -293,24 +293,24 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
                     <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;             [,1]        [,2]        [,3]         [,4]
-#&gt; [1,] -0.01086714  0.04261811 -0.01411360  0.052454170
-#&gt; [2,] -0.03621490  0.02538117 -0.01440544 -0.001147127
-#&gt; [3,] -0.10433066 -0.07450761 -0.05590796 -0.044857508
+#&gt;              [,1]        [,2]        [,3]        [,4]
+#&gt; [1,]  0.118071818  0.05317993  0.03319480 -0.02085214
+#&gt; [2,]  0.007379857 -0.03635011 -0.03093277 -0.05093965
+#&gt; [3,] -0.037025975 -0.10837660 -0.07753960 -0.06213568
 #&gt; 
 #&gt; , , 2
 #&gt; 
-#&gt;           [,1]     [,2]      [,3]      [,4]
-#&gt; [1,] 1.0498256 1.075903 0.7999675 1.0084605
-#&gt; [2,] 0.9498398 1.077331 0.9983676 1.0938548
-#&gt; [3,] 0.8780119 1.017352 0.8637524 0.9749027
-#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4857148 0.5142852</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; 'log Lik.' -575.4127 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>)</div><div class='output co'>#&gt; [1] 1371.92</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>31</span>)])</div><div class='output co'>#&gt; $class
+#&gt;          [,1]      [,2]      [,3]      [,4]
+#&gt; [1,] 1.064523 1.0560948 0.8613412 1.0382325
+#&gt; [2,] 1.067484 0.9423253 1.0902751 0.9920680
+#&gt; [3,] 1.081461 1.0673839 0.9881403 0.7963019
+#&gt; </div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4987078 0.5012922</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/logLik'>logLik</a></span>(<span class='no'>res</span>) <span class='co'># log likelihood of final result</span></div><div class='output co'>#&gt; 'log Lik.' -395.6237 (df=54)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/AIC'>BIC</a></span>(<span class='no'>res</span>) <span class='co'># BIC of final result</span></div><div class='output co'>#&gt; [1] 990.4469</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/predict'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>21</span>)]) <span class='co'># predicted class membership</span></div><div class='output co'>#&gt; $class
 #&gt; [1] 1 2
 #&gt; 
 #&gt; $posterior
 #&gt;              [,1]         [,2]
-#&gt; [1,] 9.999110e-01 8.904127e-05
-#&gt; [2,] 1.971711e-06 9.999980e-01
+#&gt; [1,] 9.999881e-01 1.190415e-05
+#&gt; [2,] 7.969302e-07 9.999992e-01
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
