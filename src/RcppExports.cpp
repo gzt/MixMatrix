@@ -134,19 +134,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// axbt
-arma::cube axbt(arma::cube& a, arma::mat& x, arma::cube& b);
-RcppExport SEXP _MixMatrix_axbt(SEXP aSEXP, SEXP xSEXP, SEXP bSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::cube& >::type a(aSEXP);
-    Rcpp::traits::input_parameter< arma::mat& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::cube& >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(axbt(a, x, b));
-    return rcpp_result_gen;
-END_RCPP
-}
 // cubemult
 arma::cube cubemult(arma::cube& x, arma::cube& y);
 RcppExport SEXP _MixMatrix_cubemult(SEXP xSEXP, SEXP ySEXP) {
@@ -182,7 +169,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MixMatrix_dmatnorm_calc", (DL_FUNC) &_MixMatrix_dmatnorm_calc, 4},
     {"_MixMatrix_dmat_t_calc", (DL_FUNC) &_MixMatrix_dmat_t_calc, 5},
     {"_MixMatrix_testsymmetric", (DL_FUNC) &_MixMatrix_testsymmetric, 2},
-    {"_MixMatrix_axbt", (DL_FUNC) &_MixMatrix_axbt, 3},
     {"_MixMatrix_cubemult", (DL_FUNC) &_MixMatrix_cubemult, 2},
     {"_MixMatrix_detsum", (DL_FUNC) &_MixMatrix_detsum, 1},
     {NULL, NULL, 0}

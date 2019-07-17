@@ -41,10 +41,6 @@ testsymmetric <- function(x, tol) {
     .Call(`_MixMatrix_testsymmetric`, x, tol)
 }
 
-axbt <- function(a, x, b) {
-    .Call(`_MixMatrix_axbt`, a, x, b)
-}
-
 cubemult <- function(x, y) {
     .Call(`_MixMatrix_cubemult`, x, y)
 }
