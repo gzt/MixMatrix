@@ -219,80 +219,11 @@ n = dims[3]
       ### VARS:
       new.V = .colVars(data,new.Mu, U, V, df, rep(1,n),SS, SSX, SSXX,
                        col.variance, col.set.var)
-    ## if (col.variance == "I") {
-    ##   new.V = diag(dims[2])
-    ## } else if (col.set.var) {
 
-    ##   nLL <- function(theta) {
-    ##     vardetmat <- vardet(dims[2], theta, TRUE, col.variance)
-    ##     varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
-    ##     #SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
-    ##     SXOX = SSX %*% varinvmat %*% t(rowSums(data, dims = 2)) #only need trace to be equal
-    ##     return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% new.Mu %*% varinvmat %*% t(new.Mu) - SSX %*% varinvmat %*% t(new.Mu) - new.Mu %*% varinvmat %*% t(SSX)))
-    ##   }
-    ##   if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
-    ##     warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-    ##     rho.col = 0
-    ##     varflag = TRUE
-    ##   } else {
-    ##     fit0 <- stats::uniroot(nLL, c(0.01,.999),...)
-    ##     rho.col <- fit0$root
-    ##   }
-    ##   new.V <- varmatgenerate(dims[2], rho.col,col.variance)
-    ## } else {
-
-    ##   new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-    ##   if (col.variance == "cor") {
-    ##     new.V = stats::cov2cor(new.V)
-    ##     if (!all(is.finite(new.V))) {
-    ##       varflag = TRUE
-    ##       new.V = diag(q)
-    ##       }
-    ##     } else new.V = new.V/new.V[1,1]
-    ## }
-    # Fix V to have unit variance on first component
 
       new.U = .rowVars(data,new.Mu, U, V, df, rep(1,n),SS, SSX, SSXX,
                        row.variance, row.set.var)
           
-    ## if (row.variance == "I") {
-    ##   new.U = diag(dims[1]) * n * (df + p - 1)*p/matrixtrace(SS * dfmult)
-    ## } else if (row.set.var) {
-
-    ##   nLL <- function(theta) {
-    ##     vardetmat <- vardet(dims[1], theta, TRUE, row.variance)
-    ##     Sigma = varmatgenerate(dims[1], theta, row.variance)
-    ##     var = n * (df + p - 1)*p/matrixtrace(Sigma %*% SS * dfmult)
-    ##     varderivative = varderiv(dims[1],theta, row.variance)
-    ##     return(var*dfmult*matrixtrace(varderivative %*% SS) + n*(df + p - 1)*vardetmat)
-    ##   }
-    ##   if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
-    ##     warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-    ##     rho.row = 0
-    ##     varflag = TRUE
-    ##   } else {
-    ##     fit0 <- stats::uniroot(nLL, c(0.01,.998),...)
-    ##     rho.row <- fit0$root
-    ##   }
-
-    ##   new.U <- varmatgenerate(dims[1], rho.row,row.variance)
-    ##   var = n * (df + p - 1)*p/matrixtrace(new.U %*% SS * dfmult)
-    ##   new.U = var*new.U
-    ## } else {
-
-    ## newUinv = (dfmult/(n * (df + p - 1))) * SS
-    ## new.U = solve(newUinv)
-    ## if (row.variance == "cor") {
-    ##   vartmp = exp(mean(log(diag(new.U)))) # should be pos def so no problems
-    ##   if (!is.finite(vartmp)) {
-    ##     vartmp = 1
-    ##     varflag = TRUE
-    ##     warning("Variance estimate for correlation matrix not positive definite.")
-    ##   }
-    ##   new.U = vartmp * stats::cov2cor(new.U)
-    ##   # this cute trick preserves the determinant of the matrix
-    ##   }
-    ## }
 
     ### IF NU UPDATE
     if (!fixed) {
@@ -308,11 +239,11 @@ n = dims[3]
                             #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
 
     }
-    if (!isTRUE(sign(nuLL(1 + 1e-6)) * sign(nuLL(1000)) <= 0)) {
+    if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
       varflag = TRUE
     }else{
-    fit0 <- stats::uniroot(nuLL, c(1 + 1e-6, 1000),...)
+    fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
     new.df = fit0$root
     }
     #print(new.df)

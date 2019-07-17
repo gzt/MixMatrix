@@ -45,7 +45,9 @@
 ##'    \code{TRUE}, there will be a common mean for the entire matrix.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood by default.
-##' @param nu degrees of freedom parameter
+##' @param nu degrees of freedom parameter. Can be a vector of length \code{K}.
+##' @param fixdf Whether \code{nu} is estimated or held fixed. If \code{TRUE}, held
+##'     constant.
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @param verbose whether to print diagnostic output, by default \code{0}. Higher
 ##'     numbers output more results.
@@ -124,7 +126,7 @@
 ##' predict(res, newdata = C[,,c(1,21)]) # predicted class membership
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
-                          tolerance = 1e-1, nu=NULL, ..., verbose = 0, miniter = 5, convergence = TRUE){
+                          tolerance = 1e-1, nu=NULL, fixdf = TRUE,..., verbose = 0, miniter = 5, convergence = TRUE){
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -138,6 +140,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     if (model == "normal") nu = 0
     if (model != "normal") {
         df = nu
+        
     }
         
     dims = dim(x)
@@ -165,13 +168,19 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 ### extract initialization state
     ### should perhaps handle this by passing to init
     nclass = length(prior)
+    ## if (model != "normal") {
+    ## if df is not a vector of length K, take first element and fill out vec
+    ## works for normal, too
+        if(length(df) != nclass) df = rep(df[1],nclass)
+        
+    
     centers = init$centers
     if( !is.null(init$U)){
         U = init$U
         
     } else {
         U = array(rep(diag(p),nclass),c(p,p,nclass))
-        if(model == "t") U = (nu-2) * stats::var(x[1,1,]) * U
+        if(model == "t") U = (df[1]-2) * stats::var(x[1,1,]) * U
     }
     if( !is.null(init$V)){
         V = init$V
@@ -194,9 +203,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     }
     convergeflag = FALSE
     Smatrix = array(0,c(p,p,n))
-    SS = array(0,c(p,p,K))
-    SSX = array(0,c(p,q,K))
-    SSXX = array(0,c(q,q,K))
+    SS = array(0,c(p,p,nclass))
+    SSX = array(0,c(p,q,nclass))
+    SSXX = array(0,c(q,q,nclass))
+    SSD = rep(0,nclass)
     newU = U
     newV = V
     newcenters = centers
@@ -208,7 +218,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         if(verbose) cat("\nEntering iteration:", i)
         if(verbose>1) print(pi)
         centers = newcenters
-        newcenters = array(0, dim = c(p,q,K))
+        newcenters = array(0, dim = c(p,q,nclass))
         U = newU
         V = newV
         posterior = newposterior
@@ -217,10 +227,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         ## update expectations of sufficient statistics
         ## update z_ig weights
 
-            for(j in 1:K){
+            for(j in 1:nclass){
                 newposterior[,j] = log(pi[j]) +
                     dmatrixt(x = x[,,],
-                             df = nu, mean = centers[,,j],
+                             df = df[j], mean = centers[,,j],
                              U = U[,,j], V = V[,,j], log = TRUE)
               }
 
@@ -234,12 +244,12 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
         if(model == "t"){
             dfmult = df + p + q - 1
-            for(j in 1:K){
+            for(j in 1:nclass){
                 Slist = .SStep(x, centers[,,j], U[,,j], V[,,j], newposterior[,j])
                 SS[,,j] = Slist$SS
                 SSX[,,j] = Slist$SSX
                 SSXX[,,j] = Slist$SSXX
-                ## SSD[,,j] = Slist$SSD
+                SSD[j] = Slist$SSD
              }
         }
  
@@ -253,13 +263,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
         sumzig = colSums(newposterior)
         if(verbose>1) cat("\n Column sums of posterior", sumzig)
-        for(j in 1:K) newcenters[,,j] = .MeansFunction(x,U[,,j],V[,,j],SS[,,j], SSX[,,j],
+        for(j in 1:nclass) newcenters[,,j] = .MeansFunction(x,U[,,j],V[,,j],SS[,,j], SSX[,,j],
                                                        newposterior[,j],row.mean,col.mean, model)
 
 ### max for U, V
     ## if normal
     if(model == "normal"){
-        for(j in 1:K){
+        for(j in 1:nclass){
             ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance) #### or do EEE, etc formulation
             zigmult = rep(newposterior[,j], each = q*q)
             swept.data   <- sweep(x, c(1, 2), newcenters[,,j])
@@ -272,21 +282,42 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 
         }
     } else {
-        for(j in 1:K){
+        for(j in 1:nclass){
             ### .TVarFunc(data, centers,SS,SSX,SSXX,df,weights,row.variance,col.variance) #### or do EEE, etc formulation
-            newV[,,j] = (dfmult / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
+            newV[,,j] = (dfmult[j] / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
                                                       t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
             newV[,,j] = newV[,,j]/newV[1,1,j]
-            newUinv = (dfmult/(sumzig[j] * (df + p - 1))) * SS[,,j]
+            newUinv = (dfmult[j]/(sumzig[j] * (df[j] + p - 1))) * SS[,,j]
             newU[,,j] = solve(newUinv)
         }
     }
 
-
-
+        
+        
 ### Fit NU:
-        
-        
+        new.df = df
+        if(model == "t" && fixdf == FALSE){
+            for(j in 1:nclass){
+                detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
+                nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
+                                      CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
+                                      (SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nu + p - 1))+p*log(nu + p + q - 1))))
+                                        # this latest ECME-ish one gives SLIGHTLY different results but is faster
+                                        #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
+                                      
+                }
+                if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
+                    warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
+                    varflag = TRUE
+                }else{
+                    fit0 <- stats::uniroot(nuLL, c(1 + 1e-6, 1000),...)
+                    new.df[j] = fit0$root
+                }
+                
+            }
+            
+        }
+            
 ####### Eval convergence
         if(verbose > 1){
             print("New centers:")
@@ -301,9 +332,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         oldlogLik = logLik
         logLik = 0
         for(obs in 1:n){
-            for(j in 1:K){
+            for(j in 1:nclass){
                 logLik = logLik + newposterior[obs,j]*(log(pi[j]) +
-                dmatrixt(x = x[,,obs], df = nu, mean = newcenters[,,j],
+                dmatrixt(x = x[,,obs], df = new.df[j], mean = newcenters[,,j],
                          U = newU[,,j], V = newV[,,j], log = TRUE))
             }
         }
@@ -333,7 +364,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     centers = newcenters
     posterior = newposterior
     pi = colMeans(posterior)
-    
+    df = new.df
     if(verbose>1) {
         print("Final centers:")
         print(centers)
@@ -353,7 +384,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         V = V,
         posterior = posterior,
         pi = pi,
-        nu = nu,
+        nu = df,
         convergence = convergeflag,
         iter = i, 
         logLik = logLikvec,
@@ -396,6 +427,7 @@ logLik.MixMatrixModel <- function(object, ...){
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
     nupar = 0 # only fixed for now
     numgroups = (object$K)
+    if(!is.null(object$call$fixdf) &&!(object$call$fixdf)) nupar = K
 
 ### insert here logic for parsing out different values for this later
 ### as ways of restricting variances and means are added
@@ -580,7 +612,7 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
     for (i in seq(n)) {
       Xi = matrix(x[, , i], p, q)
       for (j in seq(ng)) {
-          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df, mean = matrix(object$centers[,,j],nrow=p,ncol=q),
+          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df[j], mean = matrix(object$centers[,,j],nrow=p,ncol=q),                                               
                                U = matrix(object$U[,,j],nrow=p,ncol=p), V = matrix(object$V[,,j],nrow=q,ncol=q), log = TRUE)
       }
     }
