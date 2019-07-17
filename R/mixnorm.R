@@ -209,6 +209,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     SSD = rep(0,nclass)
     newU = U
     newV = V
+    new.df = df
     newcenters = centers
     logLik = 0
     oldlogLik = 0
@@ -221,6 +222,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         newcenters = array(0, dim = c(p,q,nclass))
         U = newU
         V = newV
+        df = new.df
         posterior = newposterior
   
 ####### E STEP
@@ -296,7 +298,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
 ### Fit NU:
         new.df = df
+        if(verbose) print(model)
+        if(verbose) print(fixdf)
         if(model == "t" && fixdf == FALSE){
+            print("fixed = false")
             for(j in 1:nclass){
                 detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
                 nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
@@ -306,12 +311,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
                                         #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
                                       
                 }
-                if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
+                if (!isTRUE(sign(nuLL(3)) * sign(nuLL(1000)) <= 0)) {
                     warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
                     varflag = TRUE
                 }else{
-                    fit0 <- stats::uniroot(nuLL, c(1 + 1e-6, 1000),...)
+                    fit0 <- stats::uniroot(nuLL, c(3, 1000),...)
                     new.df[j] = fit0$root
+                    print(new.df[j])
                 }
                 
             }
@@ -352,7 +358,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         } else eps = logLik - oldlogLik
         
         i = i + 1
-
+      #  print(new.df)
         logLikvec = c(logLikvec, logLik)
     }
     if ((i == iter || eps > tolerance) ){
