@@ -55,7 +55,7 @@ test_that("Mean restrictions work",{
     prior <- c(.5,.5)
 
     expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE)$centers[,,1])))
-    expect_true( test_equal (c(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE)$centers[1,,1])))
+    expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE)$centers[1,,1])))
     expect_true( test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE)$centers[,1,1]))
     expect_true( !test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE)$centers[1,,1]))
 
