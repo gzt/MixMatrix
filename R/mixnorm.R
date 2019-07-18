@@ -285,10 +285,15 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         }
     } else {
         for(j in 1:nclass){
+            newV[,,j] = .colVars(x, newcenters[,,j],df[j],newposterior[,j],
+                                 SS[,,j],SSX[,,j],SSXX[,,j],...)
             ### .TVarFunc(data, centers,SS,SSX,SSXX,df,weights,row.variance,col.variance) #### or do EEE, etc formulation
-            newV[,,j] = (dfmult[j] / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
-                                                      t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
-            newV[,,j] = newV[,,j]/newV[1,1,j]
+            #newV[,,j] = (dfmult[j] / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
+            #                                          t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
+                                        #newV[,,j] = newV[,,j]/newV[1,1,j]
+
+            
+            newU[,,j] = .rowVars(x,newcenters[,,j],df[j],newposterior[,j],SS[,,j],SSX[,,j],SSXX[,,j],...)
             newUinv = (dfmult[j]/(sumzig[j] * (df[j] + p - 1))) * SS[,,j]
             newU[,,j] = solve(newUinv)
         }
@@ -298,26 +303,27 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
 ### Fit NU:
         new.df = df
-        if(verbose) print(model)
-        if(verbose) print(fixdf)
         if(model == "t" && fixdf == FALSE){
-            print("fixed = false")
+            ######## THIS DOES NOT WORK.
             for(j in 1:nclass){
                 detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
-                nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
-                                      CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
-                                      (SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nu + p - 1))+p*log(nu + p + q - 1))))
+                nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
+                                      CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
+                                      #(SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
                                         # this latest ECME-ish one gives SLIGHTLY different results but is faster
-                                        #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
+                                        (SSD[j]/sumzig[j] +  determinant(newU[,,j], logarithm = TRUE)$modulus[1]))
                                       
                 }
-                if (!isTRUE(sign(nuLL(3)) * sign(nuLL(1000)) <= 0)) {
+                if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
                     warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
                     varflag = TRUE
+                    ## print(nuLL(3))
+                    ## print(SSD[j])
+                    ## print(nuLL(1000))
+                    ## print(sumzig[j])
                 }else{
-                    fit0 <- stats::uniroot(nuLL, c(3, 1000),...)
+                    fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
                     new.df[j] = fit0$root
-                    print(new.df[j])
                 }
                 
             }
