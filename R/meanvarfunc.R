@@ -118,11 +118,11 @@
 }
 
 
-.rowVars <- function(data,center,U,V,df,weights,SS,SSX,SSXX,
+.rowVars <- function(data,center,df,weights,SS,SSX,SSXX,
                      row.variance="none",row.set.var=FALSE,...){
     n = sum(weights)
-    p = dim(U)[1]
-    q = dim(V)[1]
+    p = dim(data)[1]
+    q = dim(data)[2]
     dfmult = df + p + q - 1
     
     if (row.variance == "I") {
