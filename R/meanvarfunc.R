@@ -76,11 +76,11 @@
 
 
 
-.colVars <- function(data,center,U,V,df,weights,SS,SSX,SSXX,
+.colVars <- function(data,center,df,weights,SS,SSX,SSXX,
                      col.variance="none",col.set.var=FALSE,...){
     n = sum(weights)
-    p = dim(U)[1]
-    q = dim(V)[1]
+    p = dim(data)[1]
+    q = dim(data)[2]
     dfmult = df + p + q - 1
     if (col.variance == "I") {
       new.V = diag(q)
