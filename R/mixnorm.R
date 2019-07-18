@@ -138,11 +138,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     if (is.null(nu) || nu == 0 || is.infinite(nu)) model = "normal"
         
     if (model == "normal") nu = 0
-    if (model != "normal") {
-        df = nu
-        
-    }
-        
+    #if (model != "normal") {
+    #    df = nu
+    #    
+    #}
+    df = nu    
     dims = dim(x)
     ## x is a p * q * n array
     n <- dims[3]
@@ -427,7 +427,7 @@ logLik.MixMatrixModel <- function(object, ...){
     vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
     nupar = 0 # only fixed for now
     numgroups = (object$K)
-    if(!is.null(object$call$fixdf) &&!(object$call$fixdf)) nupar = K
+    if(!is.null(object$call$fixdf) &&!(object$call$fixdf)) nupar = numgroups
 
 ### insert here logic for parsing out different values for this later
 ### as ways of restricting variances and means are added
@@ -515,6 +515,7 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
     p = dims[1]
     q = dims[2]
     n = dims[3]
+    if(is.null(prior) && is.null(K)) stop("No prior and no K")
     remains = K
     cenflag = FALSE
     if(!is.null(centers)) {
