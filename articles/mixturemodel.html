@@ -92,7 +92,7 @@
       <h1>Matrix Variate Mixture Models with the t distribution</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2019-07-18</h4>
+            <h4 class="date">2019-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
       <div class="hidden name"><code>mixturemodel.Rmd</code></div>
@@ -150,9 +150,9 @@
 <a class="sourceLine" id="cb2-29" data-line-number="29"> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(res<span class="op">$</span>pi) <span class="co"># the final mixing proportion</span></a>
 <a class="sourceLine" id="cb2-30" data-line-number="30"><span class="co">#&gt; [1] 0.4999994 0.5000006</span></a>
 <a class="sourceLine" id="cb2-31" data-line-number="31"> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/logLik">logLik</a></span>(res)</a>
-<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="co">#&gt; 'log Lik.' -211.696 (df=54)</span></a>
+<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="co">#&gt; 'log Lik.' -442.5182 (df=54)</span></a>
 <a class="sourceLine" id="cb2-33" data-line-number="33"> <span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/AIC">AIC</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/logLik">logLik</a></span>(res))</a>
-<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; [1] 531.3919</span></a>
+<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; [1] 993.0365</span></a>
 <a class="sourceLine" id="cb2-35" data-line-number="35"> <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(res) <span class="co"># the log likelihood by iteration</span></a></code></pre></div>
 <p><img src="mixturemodel_files/figure-html/demo-1.png" width="700"> The default method for determining convergence is based on Aitken acceleration of the log-likelihood. However, it can be set to stop based on changes in the log-likelihood instead.</p>
 </div>
