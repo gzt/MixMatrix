@@ -173,7 +173,7 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
 #' @return Returns the density at the provided observation. This is an
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
-#'
+#' @noRd
 #' @keywords internal
 #'
 #'

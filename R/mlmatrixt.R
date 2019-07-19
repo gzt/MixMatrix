@@ -214,7 +214,7 @@ n = dims[3]
  
 ### CM STEP
       ### MEANS:
-      new.Mu = .MeansFunction(data, U=U,V=V, SS, SSX, rep(1,n), row.mean, col.mean, "t")
+      new.Mu = .MeansFunction(data, V=V, SS, SSX, rep(1,n), row.mean, col.mean, "t")
 
       ### VARS:
       new.V = .colVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,

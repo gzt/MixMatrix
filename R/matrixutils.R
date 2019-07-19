@@ -309,7 +309,7 @@ derivCS <- function(n, rho){
 #' Trace of a matrix
 #'
 #' @param A square numeric matrix
-#'
+#' @noRd
 #' @return trace of a matrix
 #' @keywords internal
 matrixtrace = function(A){
@@ -324,7 +324,7 @@ matrixtrace = function(A){
 #' @param nrow Number of rows
 #' @param ncol Number of columns
 #' @keywords internal
-#'
+#' @noRd
 #' @return Matrix of ones
 ones = function(nrow, ncol){
  matrix(1,nrow = nrow, ncol = ncol)

@@ -26,7 +26,8 @@
     list(SS=SS, SSX = SSX, SSXX = SSXX, SSD = SSD)
 }
 
-.MeansFunction <- function(data, U=NULL,V=NULL, SS=NULL, SSX=NULL, weights, row.mean = FALSE, col.mean = FALSE, model = "normal",...){
+# if 'normal', require only data and weights. if otherwise, require U, V, SS, SSX.
+.MeansFunction <- function(data, V=NULL, SS=NULL, SSX=NULL, weights, row.mean = FALSE, col.mean = FALSE, model = "normal",...){
     dims <- dim(data)
     p <- dims[1]
     q <- dims[2]

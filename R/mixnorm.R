@@ -265,7 +265,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
         sumzig = colSums(newposterior)
         if(verbose>1) cat("\n Column sums of posterior", sumzig)
-        for(j in 1:nclass) newcenters[,,j] = .MeansFunction(x,U[,,j],V[,,j],SS[,,j], SSX[,,j],
+        for(j in 1:nclass) newcenters[,,j] = .MeansFunction(x,V[,,j],SS[,,j], SSX[,,j],
                                                        newposterior[,j],row.mean,col.mean, model)
 
 ### max for U, V
@@ -343,13 +343,19 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         olderlogLik = oldlogLik
         oldlogLik = logLik
         logLik = 0
-        for(obs in 1:n){
-            for(j in 1:nclass){
-                logLik = logLik + newposterior[obs,j]*(log(pi[j]) +
-                dmatrixt(x = x[,,obs], df = new.df[j], mean = newcenters[,,j],
-                         U = newU[,,j], V = newV[,,j], log = TRUE))
+        #for(obs in 1:n){
+        for(j in 1:nclass){
+            if(new.df[j] == 0 || new.df[j] == Inf){
+                logLik = logLik + newposterior[,j]*(log(pi[j]) +
+                         dmatnorm_calc(x = x, mean = newcenters[,,j],
+                            U = newU[,,j], V = newV[,,j]))
+                } else {
+                logLik = logLik + newposterior[,j]*(log(pi[j]) +
+                dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
+                            U = newU[,,j], V = newV[,,j]))
+                }
             }
-        }
+        #}
         if(verbose) cat("\nLog likelihood:", logLik)
         if(i == 0) {
             ## initialize to some not-so-bad values so that doesn't immediately "converge"

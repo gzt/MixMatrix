@@ -241,6 +241,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
 
 #' Matrix trace
+#' @noRd
 #' @keywords internal
 mattrace <- function(x)       
     sum(diag(x))
@@ -340,24 +341,32 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     if (object$method == "t") df = object$nu
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    solveV = matrix(solve(object$V * object$scaling),q,q)
-    solveU = matrix(solve(object$U),p,p)
-    VMUM = vector("list", ng)
-    VMU = vector("list", ng)
-    for (j in seq(ng)) {
-      VMU[[j]] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
-      VMUM[[j]] =  VMU[[j]] %*% object$means[, , j]
-    }
+    ## solveV = matrix(solve(object$V * object$scaling),q,q)
+    ## solveU = matrix(solve(object$U),p,p)
+    ## VMUM = vector("list", ng)
+    ## VMU = vector("list", ng)
+    ## for (j in seq(ng)) {
+    ##   VMU[[j]] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
+    ##   VMUM[[j]] =  VMU[[j]] %*% object$means[, , j]
+    ## }
 
-    for (i in seq(n)) {
-      Xi = matrix(x[, , i],p,q)
-      # if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
-      for (j in seq(ng)) {
-        if (object$method == "t") {
-          dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
-                                                log(prior[j])
-        } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
-      }
+    ## for (i in seq(n)) {
+    ##   Xi = matrix(x[, , i],p,q)
+    ##   # if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
+    ##   for (j in seq(ng)) {
+    ##     if (object$method == "t") {
+    ##       dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
+    ##                                             log(prior[j])
+    ##     } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
+    ##   }
+    ## }
+
+    for (j in seq(ng)){
+        if (object$method == "t"){
+            dist[,j] = dmat_t_calc(x,df,object$means[,,j],object$U,object$V*object$scaling)+log(prior[j])
+        } else {
+            dist[,j] = dmatnorm_calc(x,object$means[,,j],object$U,object$V*object$scaling)+log(prior[j])
+        }
     }
 
     dist <- ((dist - apply(dist, 1L, max, na.rm = TRUE)))
@@ -594,13 +603,13 @@ logLik.matrixlda = function(object,...){
         nu = 0
     } else nu = object$nu
     if(object$method == "normal"){
-        for (i in 1:numgroups) logLik = logLik + sum(dmatrixnorm(x = olddata[,,groups == grouplist[i], drop = FALSE],
+        for (i in 1:numgroups) logLik = logLik + sum(dmatnorm_calc(x = olddata[,,groups == grouplist[i], drop = FALSE],
                                                           mean = object$means[,,i],
-                                                          U = object$U * object$scaling, V = object$V, log = TRUE))
+                                                          U = object$U * object$scaling, V = object$V))
     } else {
-    for (i in 1:numgroups) logLik = logLik + sum(dmatrixt(x = olddata[,,groups == grouplist[i], drop = FALSE],
+    for (i in 1:numgroups) logLik = logLik + sum(dmat_t_calc(x = olddata[,,groups == grouplist[i], drop = FALSE],
                                                           df = nu , mean = object$means[,,i],
-                                                          U = object$U * object$scaling, V = object$V, log = TRUE))
+                                                          U = object$U * object$scaling, V = object$V))
     }
     
     class(logLik) = "logLik"
@@ -683,13 +692,13 @@ logLik.matrixqda = function(object,...){
     
     for (i in 1:numgroups) {
         if(object$method == "t"){
-        logLik = logLik + sum(dmatrixt(x=data[,,grouping == grouplist[i], drop = FALSE],
+        logLik = logLik + sum(dmat_t_calc(x=data[,,grouping == grouplist[i], drop = FALSE],
                                                           df = nu[i] , mean = object$means[,,i],
-                                       U = object$U[,,i], V = object$V[,,i], log = TRUE))
+                                       U = object$U[,,i], V = object$V[,,i]))
         } else {
-                    logLik = logLik + sum(dmatrixnorm(x=data[,,grouping == grouplist[i], drop = FALSE],
+                    logLik = logLik + sum(dmatnorm_calc(x=data[,,grouping == grouplist[i], drop = FALSE],
                                                           mean = object$means[,,i],
-                                       U = object$U[,,i], V = object$V[,,i], log = TRUE))
+                                       U = object$U[,,i], V = object$V[,,i]))
             }
 
         }
@@ -805,41 +814,47 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    cholU = vector("list", ng)
-    cholV = vector("list", ng)
-    solveU = vector("list", ng)
-    solveV = vector("list", ng)
-    for (j in seq(ng)) {
-        cholV[[j]] = chol(object$V[, , j])
-        cholU[[j]] = chol(object$U[, , j])
-        solveV[[j]] = chol2inv(cholV[[j]])
-        solveU[[j]] = chol2inv(cholU[[j]])
-    }
-    VMUM = vector("list",ng)
-    detfactor =  numeric(ng)
-    VMU = vector("list",ng)
-    for (j in seq(ng)) {
-      VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
-      VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
-      logdetU = 2*sum(log(diag(cholU[[j]])))
-      logdetV = 2*sum(log(diag(cholV[[j]])))
-      detfactor[j] = -.5 * (q * logdetU + p * logdetV)
-    }
-
-    for (i in seq(n)) {
-      Xi = matrix(x[, , i], p, q)
-      for (j in seq(ng)) {
+    ## cholU = vector("list", ng)
+    ## cholV = vector("list", ng)
+    ## solveU = vector("list", ng)
+    ## solveV = vector("list", ng)
+    ## for (j in seq(ng)) {
+    ##     cholV[[j]] = chol(object$V[, , j])
+    ##     cholU[[j]] = chol(object$U[, , j])
+    ##     solveV[[j]] = chol2inv(cholV[[j]])
+    ##     solveU[[j]] = chol2inv(cholU[[j]])
+    ## }
+    ## VMUM = vector("list",ng)
+    ## detfactor =  numeric(ng)
+    ## VMU = vector("list",ng)
+    #for (j in seq(ng)) {
+    #  VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
+    #  VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
+    #  logdetU = 2*sum(log(diag(cholU[[j]])))
+    #  logdetV = 2*sum(log(diag(cholV[[j]])))
+    #  detfactor[j] = -.5 * (q * logdetU + p * logdetV)
+    #}
+    for (j in seq(ng)){
         if (object$method == "t"){
-
-          dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
-            detfactor[j]
+            dist[,j] = dmat_t_calc(x,df[j],object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
         } else {
-        dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
-          mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
-          detfactor[j]
+            dist[,j] = dmatnorm_calc(x,object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
         }
-      }
     }
+    #for (i in seq(n)) {
+    ##   Xi = matrix(x[, , i], p, q)
+    ##   for (j in seq(ng)) {
+    ##     if (object$method == "t"){
+    ##         dist[i,j] = dmat_t_calc(array(Xi,dim=c(p,q,1)),df[j],object$means[,,j],object$U[,,j],object$V[,,j])
+    ##       #dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
+    ##        # detfactor[j]
+    ##     } else {
+    ##     dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
+    ##       mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
+    ##       detfactor[j]
+    ##     }
+    ##   }
+    ## }
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost
