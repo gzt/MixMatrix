@@ -384,3 +384,12 @@ test_that("Warning messages for inverted t",{
 
 
 })
+
+
+test_that("Sample size for ML:",{
+    
+    expect_error(MLmatrixt(rmatrixt(2,df = 5, mean = matrix(0,5,6))))
+    
+    expect_error(MLmatrixnorm(rmatrixnorm(2,mean = matrix(0,5,6))))
+
+})

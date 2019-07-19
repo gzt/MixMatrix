@@ -372,7 +372,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   dims <- dim(data)
   
   if (max(dims[1]/dims[2], dims[2]/dims[1]) > (dims[3] - 1))
-    warning("Need more observations to estimate parameters.")
+    stop("Need more observations to estimate parameters.")
   # don't have initial starting point for U and V, start with diag.
   if (missing(U))
     U <- diag(dims[1])
