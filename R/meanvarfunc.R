@@ -26,7 +26,7 @@
     list(SS=SS, SSX = SSX, SSXX = SSXX, SSD = SSD)
 }
 
-.MeansFunction <- function(data, U=NULL,V=NULL, SS, SSX, weights, row.mean, col.mean, model = "normal"){
+.MeansFunction <- function(data, U=NULL,V=NULL, SS=NULL, SSX=NULL, weights, row.mean = FALSE, col.mean = FALSE, model = "normal",...){
     dims <- dim(data)
     p <- dims[1]
     q <- dims[2]
@@ -76,7 +76,7 @@
 
 
 
-.colVars <- function(data,center,df,weights,SS,SSX,SSXX,
+.colVars <- function(data,center,df=0,weights,SS,SSX,SSXX,
                      col.variance="none",col.set.var=FALSE,...){
     n = sum(weights)
     p = dim(data)[1]
@@ -118,7 +118,7 @@
 }
 
 
-.rowVars <- function(data,center,df,weights,SS,SSX,SSXX,
+.rowVars <- function(data,center,df=0,weights,SS,SSX,SSXX,
                      row.variance="none",row.set.var=FALSE,...){
     n = sum(weights)
     p = dim(data)[1]

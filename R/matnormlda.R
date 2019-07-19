@@ -149,9 +149,12 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   names(prior) <- names(counts) <- lev1
 
   group.means = array(0, dim = c(p, q, ng))
-  for (i in seq(ng)) { 
-      group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE],
-                                                         max.iter = 1, ...)$mean)
+   for (i in seq(ng)) {
+       group.means[,,i] = .MeansFunction(x,
+                                         SS = NULL, SSX = NULL,
+                                         weights = 1.0* ( g == levels(g)[i]),...)
+      #group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE],
+       #                                                  max.iter = 1, ...)$mean)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
