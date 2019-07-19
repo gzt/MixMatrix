@@ -122,7 +122,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
 
-  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+#  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
   row.set.var = FALSE
   
   rowvarparse <- .varparse(row.variance)
@@ -130,7 +130,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   row.variance = rowvarparse$varopt
 
   col.set.var = FALSE
-  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+#  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
 
   colvarparse <- .varparse(col.variance)
   col.set.var = colvarparse$varflag

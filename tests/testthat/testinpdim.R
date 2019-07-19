@@ -81,7 +81,7 @@ test_that("Testing bad matrix dimension input", {
   expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = A),df = 0, U = A, V = B))
   expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = A), U = B, V = A))
   expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = A), U = A, V = B))
-
+  
 })
 
 

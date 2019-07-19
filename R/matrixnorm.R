@@ -88,8 +88,6 @@ rmatrixnorm <- function(n, mean,
   if (missing(R))
     if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
-  if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
-    stop("Non-numeric input. ")
 
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -318,7 +316,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
   row.set.var = FALSE
-  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+#  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
 
  rowvarparse <- .varparse(row.variance)
   row.set.var = rowvarparse$varflag
@@ -344,7 +342,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   ##   row.variance = "CS"
   ## }
   col.set.var = FALSE
-  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+#  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
 
 
   colvarparse <- .varparse(col.variance)
