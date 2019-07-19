@@ -108,6 +108,7 @@ test_that("Predict Mix Model works", {
     prior <- c(.5,.5)
 
     mix <- matrixmixture(C, prior = c(.5,.5))
+    mixt <-  matrixmixture(C, prior = c(.5,.5), model = "t", nu = 5)
     expect_error(predict(mix, newdata = matrix(0,nrow = 3, ncol = 2)),
                  "dimension")
     expect_error(predict(mix, newdata = (matrix(0,nrow = 2, ncol = 3))),
@@ -116,7 +117,9 @@ test_that("Predict Mix Model works", {
     expect_equal(sum(predict(mix, newdata = matrix(
                                            0, nrow = 3, ncol = 4))$posterior), 1)
     expect_equal(sum(predict(mix, prior = c(.7,.3))$posterior[1,]), 1)
-
+    expect_equal(sum(predict(mixt, newdata = matrix(
+                                           0, nrow = 3, ncol = 4))$posterior), 1)
+    expect_equal(sum(predict(mixt, prior = c(.7,.3))$posterior[1,]), 1)
 })
 
 test_that("Init function works", {
