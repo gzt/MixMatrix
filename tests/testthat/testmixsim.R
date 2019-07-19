@@ -46,7 +46,7 @@ test_that("Bad results warn or stop",{
 
 test_that("Mean restrictions work",{
 
-    test_equal <- function(x, tolerance = 1e-6) all(abs(x - x[[1]]) < tolerance)
+    test_allequal <- function(x) all(abs(c(x) - c(x)[1]) < 1e-6)
 
     set.seed(20180221)
     A <- rmatrixnorm(15,mean=matrix(0,nrow=3,ncol=4))
@@ -54,20 +54,20 @@ test_that("Mean restrictions work",{
     C <- array(c(A,B), dim=c(3,4,30))
     prior <- c(.5,.5)
 
-    expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE)$centers[,,1])))
-    expect_true( test_equal(c(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE)$centers[1,,1])))
-    expect_true( test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE)$centers[,1,1]))
-    expect_true( !test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE)$centers[1,,1]))
+    expect_true( test_allequal(c(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE)$centers[,,1])))
+    expect_true( test_allequal(c(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = TRUE)$centers[1,,1])))
+    expect_true( test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = FALSE)$centers[,1,1]))
+    expect_true( !test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE, row.mean = FALSE)$centers[1,,1]))
 
     
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
-                                         row.mean = TRUE, model = "t", nu = 5)$centers[,,1]))
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
-                                         row.mean = TRUE, model = "t", nu = 5)$centers[1,,1]))
-    expect_true(test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+    expect_true(test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                        row.mean = TRUE, model = "t", nu = 5)$centers[,,1]))
+    expect_true(test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
+                                        row.mean = TRUE, model = "t", nu = 5)$centers[1,,1]))
+    expect_true(test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE,
+                                        row.mean = FALSE, model = "t", nu = 5)$centers[,1,1]))
+    expect_true(!test_allequal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
                                          row.mean = FALSE, model = "t", nu = 5)$centers[,1,1]))
-    expect_true(!test_equal(matrixmixture(C, prior = c(.5,.5), col.mean = FALSE,
-                                          row.mean = FALSE, model = "t", nu = 5)$centers[,1,1]))
     
 
     llrcmix <- logLik(matrixmixture(C, prior = c(.5,.5), col.mean = TRUE, row.mean = TRUE))

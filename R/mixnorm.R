@@ -228,14 +228,20 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 ####### E STEP
         ## update expectations of sufficient statistics
         ## update z_ig weights
-
-            for(j in 1:nclass){
+        
+        for(j in 1:nclass){
+            if(model == "normal") {
                 newposterior[,j] = log(pi[j]) +
-                    dmatrixt(x = x[,,],
-                             df = df[j], mean = centers[,,j],
-                             U = U[,,j], V = V[,,j], log = TRUE)
-              }
-
+                    dmatnorm_calc(x = x, mean = centers[,,j],
+                                U = U[,,j], V = V[,,j])
+            } else {
+                newposterior[,j] = log(pi[j]) +
+                    dmat_t_calc(x = x,
+                                df = df[j], mean = centers[,,j],
+                                U = U[,,j], V = V[,,j])
+            }
+        }
+        
         newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
         newposterior = exp(newposterior)
         totalpost = rowSums(newposterior)
@@ -345,14 +351,14 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         logLik = 0
         #for(obs in 1:n){
         for(j in 1:nclass){
-            if(new.df[j] == 0 || new.df[j] == Inf){
+            if(model == "normal" || new.df[j] == 0 || new.df[j] == Inf){
                 logLik = logLik + newposterior[,j]*(log(pi[j]) +
-                         dmatnorm_calc(x = x, mean = newcenters[,,j],
-                            U = newU[,,j], V = newV[,,j]))
+                         sum(dmatnorm_calc(x = x, mean = newcenters[,,j],
+                            U = newU[,,j], V = newV[,,j])))
                 } else {
                 logLik = logLik + newposterior[,j]*(log(pi[j]) +
-                dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
-                            U = newU[,,j], V = newV[,,j]))
+                sum(dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
+                            U = newU[,,j], V = newV[,,j])))
                 }
             }
         #}
@@ -628,11 +634,19 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
     posterior = matrix(0, nrow = n, ncol = ng)
    
 
-    for (i in seq(n)) {
-      Xi = matrix(x[, , i], p, q)
-      for (j in seq(ng)) {
-          dist[i,j] = log(prior[j]) + dmatrixt(x = Xi, df = df[j], mean = matrix(object$centers[,,j],nrow=p,ncol=q),                                               
-                               U = matrix(object$U[,,j],nrow=p,ncol=p), V = matrix(object$V[,,j],nrow=q,ncol=q), log = TRUE)
+   # for (i in seq(n)) {
+      #Xi = matrix(x[, , i], p, q)
+        for (j in seq(ng)) {
+            if(object$model == "normal"){
+          dist[,j] = log(prior[j]) + dmatnorm_calc(x, 
+                                         mean = matrix(object$centers[,,j],nrow=p,ncol=q),
+                                         U = matrix(object$U[,,j],nrow=p,ncol=p),
+                                         V = matrix(object$V[,,j],nrow=q,ncol=q))
+                } else {
+          dist[,j] = log(prior[j]) + dmat_t_calc(x, df = df[j],
+                                         mean = matrix(object$centers[,,j],nrow=p,ncol=q),
+                                         U = matrix(object$U[,,j],nrow=p,ncol=p),
+                                         V = matrix(object$V[,,j],nrow=q,ncol=q))
       }
     }
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
