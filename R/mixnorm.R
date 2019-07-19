@@ -352,12 +352,12 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         #for(obs in 1:n){
         for(j in 1:nclass){
             if(model == "normal" || new.df[j] == 0 || new.df[j] == Inf){
-                logLik = logLik + newposterior[,j]*(log(pi[j]) +
-                         sum(dmatnorm_calc(x = x, mean = newcenters[,,j],
+                logLik = logLik +sum( newposterior[,j]*(log(pi[j]) +
+                         dmatnorm_calc(x = x, mean = newcenters[,,j],
                             U = newU[,,j], V = newV[,,j])))
                 } else {
-                logLik = logLik + newposterior[,j]*(log(pi[j]) +
-                sum(dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
+                logLik = logLik + sum(newposterior[,j]*(log(pi[j]) +
+                dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
                             U = newU[,,j], V = newV[,,j])))
                 }
             }
