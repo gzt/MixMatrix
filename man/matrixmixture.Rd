@@ -6,8 +6,8 @@
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
-  col.mean = FALSE, tolerance = 0.1, nu = NULL, fixdf = TRUE, ...,
-  verbose = 0, miniter = 5, convergence = TRUE)
+  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
+  miniter = 5, convergence = TRUE)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
@@ -43,9 +43,6 @@ common mean within each row. If both this and \code{row.mean} are
 log-likelihood by default.}
 
 \item{nu}{degrees of freedom parameter. Can be a vector of length \code{K}.}
-
-\item{fixdf}{Whether \code{nu} is estimated or held fixed. If \code{TRUE}, held
-constant.}
 
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
