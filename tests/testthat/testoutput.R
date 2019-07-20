@@ -310,8 +310,8 @@ test_that("LDA/QDA logLik works",{
    # norm vs t 
   ldamodel <- matrixlda(C, groups, priors, method = "normal")
   qdamodel <- matrixqda(C, groups, priors, method = "normal")
-  ldamodelc <- matrixlda(C, groups, priors, method = "t")
-  qdamodelc <- matrixqda(C, groups, priors, method = "t")
+  ldamodelc <- matrixlda(C, groups, priors, method = "t", nu = 5)
+  qdamodelc <- matrixqda(C, groups, priors, method = "t", nu = 5)
     
   expect_equal(attributes(logLik(ldamodel))$df, attributes(logLik(ldamodelc))$df)
   expect_equal(attributes(logLik(qdamodel))$df, attributes(logLik(qdamodelc))$df) 
