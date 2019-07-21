@@ -62,14 +62,41 @@
 #' @param ... (optional) additional arguments can be passed to \code{optim}
 #'    if using restrictions on the variance.
 #'
-#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-#'    matrix, the variance parameter (the first entry of the variance matrices
-#'    are constrained to be 1 for uniqueness), the number of iterations, the
-#'    squared difference between iterations of the variance matrices at the time
-#'    of stopping, the log likelihood, and a convergence code.
+#' @return Returns a list with the following elements:
+#' \describe{
+#'       \item{\code{mean}}{the mean matrix}
+#'       \item{\code{U}}{the between-row covariance matrix}
+#'       \item{\code{V}}{the between-column covariance matrix}
+#'       \item{\code{var}}{the scalar variance parameter
+#'            (the first entry of the covariances are restricted to unity)}
+#'       \item{\code{nu}}{the degrees of freedom parameter}
+#'       \item{\code{iter}}{the number of iterations}
+#'       \item{\code{tol}}{the squared difference between iterations of
+#'            the variance matrices at the time of stopping}
+#'       \item{\code{logLik}}{log likelihood of result.}
+#'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+#'       \item{\code{call}}{The (matched) function call.}
+#'    }
+#'
 #' @export
 #' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
 #'
+#' @references
+#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#'        Distribution and the Inverted Multivariate t
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+#'
+#'     Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm: A Simple Extension of
+#'           EM and ECM with Faster Monotone Convergence.” Biometrika 81 (4): 633–48.
+#'           \doi{10.2307/2337067}
+#'
+#'    Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation via the ECM
+#'             Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
+#'             \doi{10.1093/biomet/80.2.267}
+#' 
+#'     Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed., 272–5. John Wiley.
+
+#' 
 #' @examples
 #' set.seed(20180202)
 #' A <- rmatrixt(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -82,8 +109,8 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
                          df = 10, fixed = TRUE,
                          tol = .Machine$double.eps^0.5, max.iter = 5000, U, V,...) {
-  if (df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
-    if (class(data) == "list") data <- array(unlist(data),
+  if (is.null(df) || df == 0 || is.infinite(df)) return(MLmatrixnorm(data,row.mean,col.mean,row.variance,col.variance,tol,max.iter,U,V,...))
+  if (class(data) == "list") data <- array(unlist(data),
                                            dim = c(nrow(data[[1]]),
                                                    ncol(data[[1]]), length(data)))
   if (!all(is.numeric(data),is.numeric(tol),
@@ -94,49 +121,26 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   if (!(missing(V))) {
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
+
+#  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
   row.set.var = FALSE
-  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "I"
-  }
- 
-  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
- 
-    row.variance = "cor"
-  }
-  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "AR(1)"
-  }
-  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "CS"
-  }
-  col.set.var = FALSE
-  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-  if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "I"
-  }
-  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
   
-    col.variance = "cor"
-  }
-  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "AR(1)"
-  }
-  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "CS"
-  }
-  # if data is array, presumes indexed over third column (same as output
-  # of rmatrixnorm) if list, presumes is a list of the matrices
+  rowvarparse <- .varparse(row.variance)
+  row.set.var = rowvarparse$varflag
+  row.variance = rowvarparse$varopt
+
+  col.set.var = FALSE
+#  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+
+  colvarparse <- .varparse(col.variance)
+  col.set.var = colvarparse$varflag
+  col.variance = colvarparse$varopt
+
+  
   dims <- dim(data)
 
   if (max(dims[1]/dims[2], dims[2]/dims[1]) > (dims[3] - 1))
-    warning("Need more observations to estimate parameters.")
+    stop("Need more observations to estimate parameters.")
   # don't have initial starting point for U and V, start with diag.
   if (missing(U))
     U <- diag(dims[1])
@@ -194,122 +198,39 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 p = dims[1]
 q = dims[2]
 n = dims[3]
-Smatrix = array(0,c(p,p,n))
+#Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error.term > tol && (!varflag)) {
-    swept.data <- sweep(data, c(1, 2), mu)
+    
     dfmult = df + p + q - 1
 
-    ### E step
+### E step
+      Slist = .SStep(data,mu,U,V,rep(1,n))
+      SS = Slist$SS
+      SSX = Slist$SSX
+      SSXX = Slist$SSXX
+      SSD = Slist$SSD
 
-    Stmp = xatx(swept.data,0.5*(V+t(V)))
-    for (i in 1:n) Stmp[,,i] = Stmp[,,i] + U
-    Smatrix = cubeinv(Stmp)
-
-    SS = rowSums(Smatrix,FALSE, 2)
-
-    SSXtmp = cubemult(Smatrix, data)
-    SSX = rowSums(SSXtmp, FALSE, 2)
-
-    SSXXtmp = cubemult(data,SSXtmp)
-    SSXX = rowSums(SSXXtmp,FALSE, 2)
  
-    ### CM STEP
+### CM STEP
+      ### MEANS:
+      new.Mu = .MeansFunction(data, V=V, SS, SSX, rep(1,n), row.mean, col.mean, "t")
 
-      if (row.mean && col.mean) {
-        # make it so that the mean is constant within a row
-        scalarmu = matrixtrace(SSX %*% solve(V) %*% ones(q,p)) / matrixtrace(SS %*% ones(p,q) %*% solve(V) %*% ones(q,p))
-        new.Mu <-   scalarmu * ones(p,q)
-        } else if (col.mean) {
-        # make it so that the mean is constant within a column
-        # ie mu = p x 1, times ones 1 x q
-        new.Mu <- ones(p,p) %*% SSX / sum(SS)
-        } else if (row.mean) {
-          # make it so that the mean is constant within a row
-          # ie  ones p x 1 times mu = 1 x q
-        new.Mu = solve( SS) %*% SSX %*% (solve(V) %*% ones(q,q)) / sum(solve(V))
-          } else {
-    new.Mu =  solve( SS) %*% SSX
-      }
-    
-    if (col.variance == "I") {
-      new.V = diag(dims[2])
-    } else if (col.set.var) {
+      ### VARS:
+      new.V = .colVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
+                       col.variance, col.set.var)
 
-      nLL <- function(theta) {
-        vardetmat <- vardet(dims[2], theta, TRUE, col.variance)
-        varinvmat <- varinv(dims[2], theta, TRUE, col.variance)
-        SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
 
-        return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% new.Mu %*% varinvmat %*% t(new.Mu) - SSX %*% varinvmat %*% t(new.Mu) - new.Mu %*% varinvmat %*% t(SSX)))
-      }
-      if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
-        warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-        rho.col = 0
-        varflag = TRUE
-      } else {
-        fit0 <- stats::uniroot(nLL, c(0.01,.999),...)
-        rho.col <- fit0$root
-      }
-      new.V <- varmatgenerate(dims[2], rho.col,col.variance)
-    } else {
-
-      new.V = (dfmult / (n * p)) * (SSXX - t(SSX) %*% new.Mu - t(new.Mu) %*% SSX + t(new.Mu) %*% SS %*% new.Mu)
-      if (col.variance == "cor") {
-        new.V = stats::cov2cor(new.V)
-        if (!all(is.finite(new.V))) {
-          varflag = TRUE
-          new.V = diag(q)
-          }
-        } else new.V = new.V/new.V[1,1]
-    }
-    # Fix V to have unit variance on first component
-
-    if (row.variance == "I") {
-      new.U = diag(dims[1]) * n * (df + p - 1)*p/matrixtrace(SS * dfmult)
-    } else if (row.set.var) {
-
-      nLL <- function(theta) {
-        vardetmat <- vardet(dims[1], theta, TRUE, row.variance)
-        Sigma = varmatgenerate(dims[1], theta, row.variance)
-        var = n * (df + p - 1)*p/matrixtrace(Sigma %*% SS * dfmult)
-        varderivative = varderiv(dims[1],theta, row.variance)
-        return(var*dfmult*matrixtrace(varderivative %*% SS) + n*(df + p - 1)*vardetmat)
-      }
-      if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
-        warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
-        rho.row = 0
-        varflag = TRUE
-      } else {
-        fit0 <- stats::uniroot(nLL, c(0.01,.998),...)
-        rho.row <- fit0$root
-      }
-
-      new.U <- varmatgenerate(dims[1], rho.row,row.variance)
-      var = n * (df + p - 1)*p/matrixtrace(new.U %*% SS * dfmult)
-      new.U = var*new.U
-    } else {
-
-    newUinv = (dfmult/(n * (df + p - 1))) * SS
-    new.U = solve(newUinv)
-    if (row.variance == "cor") {
-      vartmp = exp(mean(log(diag(new.U)))) # should be pos def so no problems
-      if (!is.finite(vartmp)) {
-        vartmp = 1
-        varflag = TRUE
-        warning("Variance estimate for correlation matrix not positive definite.")
-      }
-      new.U = vartmp * stats::cov2cor(new.U)
-      # this cute trick preserves the determinant of the matrix
-      }
-    }
+      new.U = .rowVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
+                       row.variance, row.set.var)
+          
 
     ### IF NU UPDATE
     if (!fixed) {
     new.df = df
     ## insert E step for NU and M step for NU
-
-    SSDtmp = detsum(Smatrix)
+    SSDtmp = SSD
+    #SSDtmp = detsum(Smatrix)
     detSS = determinant(SS, logarithm = TRUE)$modulus[1]
     nuLL = function(nu) {(CholWishart::mvdigamma((nu + p - 1)/2, p) -
                              CholWishart::mvdigamma((nu + p + q - 1)/2, p) -
@@ -318,11 +239,11 @@ Smatrix = array(0,c(p,p,n))
                             #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
 
     }
-    if (!isTRUE(sign(nuLL(p - 1)) * sign(nuLL(1000)) <= 0)) {
+    if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
       varflag = TRUE
     }else{
-    fit0 <- stats::uniroot(nuLL, c(p - 1, 1000),...)
+    fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
     new.df = fit0$root
     }
     #print(new.df)
@@ -339,12 +260,12 @@ Smatrix = array(0,c(p,p,n))
     df <- new.df
 
     iter <- iter + 1
-    logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
-    logLikvec = c(logLikvec, logLik)
+    
+    #logLikvec = c(logLikvec, logLik)
   }
   if (iter >= max.iter || error.term > tol || varflag)
     warning("Failed to converge")
-
+  logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
   converged = !(iter >= max.iter || error.term > tol || varflag)
     
   return(list(mean = mu,
@@ -354,7 +275,7 @@ Smatrix = array(0,c(p,p,n))
               nu = df,
               iter = iter,
               tol = error.term,
-              logLik = logLikvec,
+              logLik = logLik,
               convergence = converged,
               call = match.call()))
 }

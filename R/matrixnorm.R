@@ -48,7 +48,9 @@
 #' @return This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #' @export
-#'
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
+
 #' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
 #'     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 #'     
@@ -86,8 +88,6 @@ rmatrixnorm <- function(n, mean,
   if (missing(R))
     if (!symm.check(V)) stop("V not symmetric.")
   dims <- dim(mean)
-  if (!(all(is.numeric(mean), is.numeric(U),is.numeric(V))))
-    stop("Non-numeric input. ")
 
   # checks for conformable matrix dimensions
   if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
@@ -171,7 +171,7 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
 #' @return Returns the density at the provided observation. This is an
 #'    alternative method of computing which works by flattening out into
 #'    a vector instead of a matrix.
-#'
+#' @noRd
 #' @keywords internal
 #'
 #'
@@ -252,7 +252,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 #'     correlation matrix, or 'Independence' for
 #'     independent and identical variance across the rows.
-#'     Only positive correlations are allowed for AR(1) and CS.
+#'     Only positive correlations are allowed for AR(1) and CS covariances.
 #'     Note that while maximum likelihood estimators are available (and used) for
 #'     the unconstrained variance matrices, \code{optim} is used for any
 #'     constraints so it may be considerably slower.
@@ -263,18 +263,33 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
-#' @param U (optional) Can provide a starting point for the U matrix.
+#' @param U (optional) Can provide a starting point for the \code{U} matrix.
 #'    By default, an identity matrix.
-#' @param V (optional) Can provide a starting point for the V matrix.
+#' @param V (optional) Can provide a starting point for the \code{V} matrix.
 #'    By default, an identity matrix.
 #' @param ... (optional) additional arguments can be passed to \code{optim}
 #'    if using restrictions on the variance.
 #'
-#' @return Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-#'    matrix, the variance parameter (the first entry of the variance matrices
-#'    are constrained to be 1 for uniqueness), the number of iterations, the
-#'    squared difference between iterations of the variance matrices at the
-#'    time of stopping, the log likelihood, and a convergence code.
+#' @return Returns a list with a the following elements:
+#' \describe{
+#'       \item{\code{mean}}{the mean matrix}
+#'       \item{\code{scaling}}{the scalar variance parameter
+#'            (the first entry of the covariances are restricted to unity)}
+#'       \item{\code{U}}{the between-row covariance matrix}
+#'       \item{\code{V}}{the between-column covariance matrix}
+#'       \item{\code{iter}}{the number of iterations}
+#'       \item{\code{tol}}{the squared difference between iterations of
+#'            the variance matrices at the time of stopping}
+#'       \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+#'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+#'       \item{\code{call}}{The (matched) function call.}
+#'    }
+#'
+#' @references   Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+#'
+#'     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
 #' @export
 #' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
 #'
@@ -301,49 +316,63 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
   row.set.var = FALSE
-  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "I"
-  }
-  # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
-  if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
-    # row.set.var = TRUE
-    row.variance = "cor"
-  }
-  if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "AR(1)"
-  }
-  if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
-    row.set.var = TRUE
-    row.variance = "CS"
-  }
+#  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+
+ rowvarparse <- .varparse(row.variance)
+  row.set.var = rowvarparse$varflag
+  row.variance = rowvarparse$varopt
+
+
+  
+  ## if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "I"
+  ## }
+  ## # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
+  ## if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
+  ##   # row.set.var = TRUE
+  ##   row.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "AR(1)"
+  ## }
+  ## if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
+  ##   row.set.var = TRUE
+  ##   row.variance = "CS"
+  ## }
   col.set.var = FALSE
-  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-  if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "I"
-  }
-  if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
-    # col.set.var = TRUE
-    col.variance = "cor"
-  }
-  if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "AR(1)"
-  }
-  if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
-    col.set.var = TRUE
-    col.variance = "CS"
-  }
+#  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+
+
+  colvarparse <- .varparse(col.variance)
+  col.set.var = colvarparse$varflag
+  col.variance = colvarparse$varopt
+
+  
+  ## if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "I"
+  ## }
+  ## if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
+  ##   # col.set.var = TRUE
+  ##   col.variance = "cor"
+  ## }
+  ## if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "AR(1)"
+  ## }
+  ## if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
+  ##   col.set.var = TRUE
+  ##   col.variance = "CS"
+  ## }
   # if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
   # if data is array, presumes indexed over third column (same as output
   # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
   
   if (max(dims[1]/dims[2], dims[2]/dims[1]) > (dims[3] - 1))
-    warning("Need more observations to estimate parameters.")
+    stop("Need more observations to estimate parameters.")
   # don't have initial starting point for U and V, start with diag.
   if (missing(U))
     U <- diag(dims[1])

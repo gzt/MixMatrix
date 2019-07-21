@@ -4,7 +4,7 @@
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
 [![packageversion](https://img.shields.io/badge/Package%20version-0.2.1%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
-![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)](https://github.com/gzt/MixMatrix/)
 
 
 A package for matrix variate distributions, including the normal, *t*, and 
@@ -22,14 +22,15 @@ It is currently possible to constrain the mean matrices for normal and *t*
 distributed matrices to have a common mean across rows, columns, or both, as 
 well as AR(1), compound symmetric, on identity covariance matrices across rows, 
 columns, or both in the maximum likelihood estimation functions and the LDA and
-QDA functions, but not in the mixture models.
+QDA functions. In the mixture model function, it is possible to have a common
+mean within groups across rows, columns, or both.
 
-
-There isn't much R software out there for working with these distributions. The 
-excellent [matrixsampling](https://cran.r-project.org/package=matrixsampling) 
+There are some other R packages you may be interested in if you are working with
+matrix-variate distributions. The excellent 
+[matrixsampling](https://cran.r-project.org/package=matrixsampling) 
 package has sampling and distribution functions for these and many other matrix 
-distributions,
-as does [LaplacesDemon](https://cran.r-project.org/package=LaplacesDemon). The
+distributions, as does 
+[LaplacesDemon](https://cran.r-project.org/package=LaplacesDemon). The
 [MatrixLDA](https://cran.r-project.org/package=MatrixLDA) package performs LDA 
 for normal distributions with penalized likelihood.
 
@@ -90,6 +91,22 @@ In the future, this will include a more comprehensive treatment of matrix variat
 mixture modeling, including complete specification of covariance matrices in 
 mixture modeling after the style of [Mclust](https://cran.r-project.org/package=mclust), 
 [t-Eigen](https://cran.r-project.org/package=teigen), and other similar work.
+
+
+```
+ A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+ B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
+ C <- array(c(A,B), dim=c(3,4,60))
+ groups <- c(rep(1,30),rep(2,30))
+ prior <- c(.5,.5)
+ D <- matrixmixture(C, prior, row.mean = TRUE, tolerance = 1e-2)
+ print(D$centers) # the final centers
+ print(D$pi) # the final mixing proportion
+ logLik(D)
+ BIC(logLik(D))
+ plot(D) # the log likelihood by iteration
+```
+
 
 ## Contribution and contact information	
 

@@ -24,7 +24,7 @@ common mean within each row. If both this and \code{row.mean} are
 'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
-Only positive correlations are allowed for AR(1) and CS.
+Only positive correlations are allowed for AR(1) and CS covariances.
 Note that while maximum likelihood estimators are available (and used) for
 the unconstrained variance matrices, \code{optim} is used for any
 constraints so it may be considerably slower.}
@@ -39,21 +39,30 @@ between iterations of the two variance-covariance matrices.}
 
 \item{max.iter}{Maximum possible iterations of the algorithm.}
 
-\item{U}{(optional) Can provide a starting point for the U matrix.
+\item{U}{(optional) Can provide a starting point for the \code{U} matrix.
 By default, an identity matrix.}
 
-\item{V}{(optional) Can provide a starting point for the V matrix.
+\item{V}{(optional) Can provide a starting point for the \code{V} matrix.
 By default, an identity matrix.}
 
 \item{...}{(optional) additional arguments can be passed to \code{optim}
 if using restrictions on the variance.}
 }
 \value{
-Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-   matrix, the variance parameter (the first entry of the variance matrices
-   are constrained to be 1 for uniqueness), the number of iterations, the
-   squared difference between iterations of the variance matrices at the
-   time of stopping, the log likelihood, and a convergence code.
+Returns a list with a the following elements:
+\describe{
+      \item{\code{mean}}{the mean matrix}
+      \item{\code{scaling}}{the scalar variance parameter
+           (the first entry of the covariances are restricted to unity)}
+      \item{\code{U}}{the between-row covariance matrix}
+      \item{\code{V}}{the between-column covariance matrix}
+      \item{\code{iter}}{the number of iterations}
+      \item{\code{tol}}{the squared difference between iterations of
+           the variance matrices at the time of stopping}
+      \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+      \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+      \item{\code{call}}{The (matched) function call.}
+   }
 }
 \description{
 Maximum likelihood estimates exist for \eqn{N > max(p/q,q/p)+1} and are
@@ -71,6 +80,13 @@ results=MLmatrixnorm(A, tol = 1e-5)
 print(results)
 
 
+}
+\references{
+Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+    Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+
+    Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+    Vol. 104. CRC Press. ISBN:978-1584880462
 }
 \seealso{
 \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}

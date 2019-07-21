@@ -1,12 +1,14 @@
 ---
 title: "ML estimation of the Matrix Variate t Distribution"
 author: "Geoffrey Thompson"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{matrix-t-estimation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: matrixpaper.bib
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
@@ -44,8 +46,92 @@ $\mathbf{M}$ a mean matrix, $\nu$ the degrees of freedom parameter, and
 $\Gamma_p()$ the multivariate gamma function, which is implemented in the 
 [`CholWishart`](http://gzt.github.io/CholWishart) package available on CRAN.
 
-For details of the ECME algorithm used for estimation, there is a forthcoming 
-paper.
+
+For $p = 1$ and $\Sigma = \nu$ (or $q = 1$ and $\Omega = \nu$),
+this reduces to the familiar multivariate $t$ distribution. If the
+$p \times q$ dimensional random variable $X$ follows the matrix
+variate $t$ distribution $t(\nu, M, \Sigma, \Omega)$ with center
+$M$, positive definite spread matrices $\Sigma$ ($p \times p$) and
+$\Omega$ ($q \times q$), and degrees of freedom $\nu$, it can be
+shown that, given a certain weight matrix $S$, $X$ has a matrix
+variate normal distribution and that $S$ is Wishart-distributed.
+Specifically, \begin{align*}
+X | M, \Sigma, \Omega, \nu, S & \sim  N(M, S^{-1} \otimes \Omega) \\
+S|M, \Omega, \Sigma, \nu & \sim  W_p(\nu + p  -1, \Sigma^{-1})
+\end{align*} Additionally, it can be shown the Wishart is the conjugate
+prior distribution for the parameter $\Sigma$, and thus the
+conditional posterior distribution of $S$, i.e., its distribution
+given $(M, \Omega, \Sigma, \nu, X)$ is
+\[S | X, M, \Omega, \Sigma, \nu \sim \mathrm{W}_p(\nu+p+q-1, [(X-M)\Omega^{-1}(X-M)^T + \Sigma]^{-1})   \]
+
+For an observed set of $X_i$, $i = 1, 2, \ldots, N$, then, we can construct
+an ECM-style algorithm by augmenting our data with a set of weights, $S_i$,
+and use this to estimate the parameters of the matrix variate $t$ distribution.
+Briefly, we define a set of complete data sufficient statistics based on the $S_i$
+and update them with their expectations in the E-step. Then, the other parameters
+are maximized in the CM steps. 
+
+The complete data sufficient statistics for the quantities to be estimated are:
+\[S_{SX} =\sum_{i = 1}^N S_i X_i; \quad S_S =  \sum_{i = 1}^N S_i; \quad S_{XSX} =  \sum_{i = 1}^N  X_i^T S_i X_i \quad S_{|S|} = \sum_{i = 1}^N \log |Si|\]
+
+### E-step
+
+Define at step $t$ the set
+$\Theta^{(t)} = (X_{obs},\nu^{(t)}, M^{(t)}, \Sigma^{(t)}, \Omega^{(t)})$. 
+Then, given these values, we have, based on the properties of the Wishart distribution,
+\[S_{i}^{(t+1)} = E(S_i | \Theta^{(t)}) = (\nu^{(t)}+p+q-1)[(X_i-M^{(t)})\Omega^{(t)^{-1 }}(X_i-M^{(t)})^T + \Sigma^{(t)}]^{-1} \]
+From this we can derive the other expected values: 
+$$
+ \begin{align*}
+S_{S}^{(t+1)} &= E(S_S | \Theta^{(t)}) = \sum_{i=1}^N S_{i}^{(t+1)} \\
+S_{SX}^{(t+1)} &= E(S_{SX} | \Theta^{(t)}) =  \sum_{i=1}^NE(S_iX_i|\Theta^{(t)}) = \sum_{i=1}^N S_{i}^{(t+1)}X_i \\
+S_{XSX}^{(t+1)} &= E(S_{XSX} | \Theta^{(t)}) =  \sum_{i=1}^NE(X_i^TS_iX_i|\Theta^{(t)}) = \sum_{i=1}^N X_i^TS_{i}^{(t+1)}X_i
+\end{align*}
+$$
+This last value only needs to be computed if $\nu$ is unknown:
+$$
+\begin{align*}
+S_{|S|}^{(t+1)} &= E(S_{|S|} | \Theta^{(t)}) = E \left[\sum_{i = 1}^N \log| S_i|  \big| \Theta^{(t)} \right]\\
+&=N\psi_{p}\left({\frac {\nu^{(t)} + p + q -1}{2}}\right) + Np \log 2 +\sum_{i=1}^N \log \left|\frac{S_{i,obs}^{(t+1)}}{\nu^{(t)} + p + q -1}\right|
+\end{align*}
+$$
+
+### CM Steps
+
+
+Similarly to the case of the multivariate $t$, it is more efficient to
+partition the maximization step into multiple steps. This is an ECME
+algorithm that first maximizes the expected log-likelihood for
+$(M, \Sigma, \Omega)$ and then maximizes the actual log-likelihood
+over $\nu$ given $(M, \Sigma, \Omega)$, similar to \cite{liurubin1994}.
+
+Based on the updated weight matrices $S_i^{(t+1)}$ and statistics
+based on $\Theta^{(t)}$ and $X_{obs}$,
+
+$$
+\begin{align*}
+\widehat{M} &= \left(\sum_{i = 1}^NS_i^{(t+1)}\right)^{-1}\sum_{i=1}^NS_iX_i  = {S_{S}^{(t+1)}}^{-1} S_{SX}^{(t+1)} \\
+\widehat{\Omega} &= \frac{1}{Np} \sum_{i = 1}^N (X_i - {M}^{(t)})^T S_i^{(t+1)} (X_i - {M}^{(t)}) =\frac{1}{Np} \left(S_{XSX}^{(t+1)} - {S_{SX}^{(t+1)}}^T {S_{S}^{(t+1)}}^{-1}{S_{SX}^{(t+1)}}  \right) \\
+ \widehat{\Sigma}^{-1} &= \frac{1}{N(\nu^{(t)}+p-1)}\sum_{i = 1}^N S_i^{(t+1)} = \frac{S_S^{(t+1)}}{N(\nu^{(t)}+p-1)}
+\end{align*}
+$$
+And, again, with the set of $S_i$ observed, the MLE of
+$\nu$ can be obtained:
+\[ N \frac{d}{d\nu}\log \Gamma_p ((\nu+p-1)/2) - \frac{1}{2} (S_{|S|} - Np\log2 + N \log |\widehat{\Sigma}|) = 0\]
+Note that $\nu > p -1$. 
+Specifically, we have: 
+$$
+\begin{align*}
+ 0 &= N \psi_p((\nu+p-1)/2) -  \left(N\psi_{p}\left({\frac {\nu + p + q -1}{2}}\right)  +\sum_{i=1}^N \log \left|\frac{S_{i,obs}^{(t+1)}}{\nu + p + q -1}\right| - N \log \left|\frac{S_S^{(t+1)}}{N(\nu+p-1)}\right|\right) \\*
+ &=  \psi_p((\nu+p-1)/2) - \left(\psi_{p}\left({\frac {\nu + p + q -1}{2}}\right)  +\frac{1}{N}\sum_{i=1}^N \log \left|Z_{i,obs}^{(t+1)}\right| + p \log \frac{N(\nu + p -1)}{\nu + p +q -1} - \log \left|Z_S^{(t+1)}\right|\right)
+\end{align*}$$
+where $Z_{*}$ is the appropriate $S_{*}$ statistic with
+$(\nu + p + q -1)$ factored out and $\psi_p$ is the
+$p$-dimensional digamma function. This can be solved for $\nu$ using
+a 1-dimensional search.
+
+
+## Applications and results
 
 ### With $\nu$ known
 
@@ -89,14 +175,15 @@ principal mathematical difficulty of the matrix-variate $t$ distribution.
 It is performed using ECME. Generally, a fair amount more data are needed
 in order to have good convergence properties for the estimator, but they have
 not been derived analytically. Here you can see the recovery of the parameter
-for a few choices of the parameter and sample sizes. Because of the relative 
+for a few  sample sizes. Because of the relative 
 slowness of running a longer simulation, this only includes one set of examples.
-I give code for a longer and larger simulation that what is plotted 
-if you're really interested. What is plotted below is only the `df = 10`
+I give code for a longer and larger simulation than what is plotted 
+if you're really interested below. What is plotted below is only the `df = 10`
 example with 75 trials and a maximum number of iterations `max.iter =  50`.
 The full simulation may take several minutes.
 
-```{r dontrun, eval=FALSE}
+```{r dontrun, eval=FALSE, echo = FALSE}
+### Here is the long simulation
 library(ggplot2)
 
 set.seed(20181102)
@@ -174,6 +261,7 @@ knitr::kable(dfdataframe %>% group_by(truedf, samplesize) %>%
 	median = median(estdf),
 	mean=mean(estdf),
 	sd = sd(estdf)))
+### Here ends the long simulation
 
 ```
 

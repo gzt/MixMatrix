@@ -8,7 +8,7 @@ matrixlda(x, grouping, prior, tol = 1e-04, method = "normal",
   nu = 10, ..., subset)
 }
 \arguments{
-\item{x}{3-D array matrix data.}
+\item{x}{3-D array of matrix data indexed by the third dimension}
 
 \item{grouping}{vector}
 
@@ -59,18 +59,31 @@ the data are from a matrix variate normal distribution.
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
-The function does not take the formula interface. It \code{method = 't'}
+The function does not take the formula interface. If \code{method = 't'}
 is selected, this performs discrimination using the matrix variate t
 distribution, presuming equal covariances between classes.
 }
 \examples{
 set.seed(20180221)
+# construct two populations of 3x4 random matrices with different means
 A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60))
-groups <- c(rep(1,30),rep(2,30))
-prior <- c(.5,.5)
-matrixlda(C, groups, prior)
+C <- array(c(A,B), dim=c(3,4,60)) #combine together
+groups <- c(rep(1,30),rep(2,30)) # define groups
+prior <- c(.5,.5) # set prior
+D<-matrixlda(C, groups, prior) # fit model
+logLik(D)
+print(D)
+}
+\references{
+Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+      analysis for image matrix", Pattern Recognition Letters, Volume 26,
+      Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+
+    Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+       Method for Classification With Matrix-Valued Predictors", Journal of
+       Computational and Graphical Statistics, 28:1, 11-22,
+       \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
 }
 \seealso{
 \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},

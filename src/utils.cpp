@@ -41,22 +41,6 @@ bool testsymmetric(arma::mat x, double tol){
 
 
 // [[Rcpp::export]]
-arma::cube axbt(arma::cube & a, arma::mat & x, arma::cube & b){
-  // a is p x q x n, x is q x q, b is r x q x n; returns a * x * t(b) cube
-  int p = a.n_rows;
-  // int q  = x.n_cols;
-  int r = b.n_rows;
-  int numslices = a.n_slices;
-  if (x.n_rows != x.n_cols || a.n_cols != x.n_rows || x.n_cols != b.n_cols) throw Rcpp::exception("error: non-conformable dimensions");
-  arma::cube results(p, r, numslices);
-  for(int i = 0; i < numslices; i++){
-    results.slice(i) = (a.slice(i)) * x * trans(b.slice(i));
-  }
-  return results;
-}
-
-
-// [[Rcpp::export]]
 arma::cube cubemult(arma::cube & x, arma::cube & y){
   // multiplies t(x) * y by slice
     int q  = x.n_cols;

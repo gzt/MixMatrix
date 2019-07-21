@@ -1,10 +1,14 @@
 ---
 title: "Matrix Variate Mixture Models with the t distribution"
+author: "Geoffrey Thompson"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{MixMatrix}
+  %\VignetteIndexEntry{Mixture Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: mixture.bib
+link-citations: yes
 ---
 
 ```{r, include = FALSE}
@@ -17,19 +21,23 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(MixMatrix)
 ```
-## Matrix Variate Mixture Modeling
+## Matrix Variate Mixture Modeling with the $t$ Distribution
 
 The matrix variate *t* distribution was introduced in a previous vignette along 
 with an EM algorithm for maximum likelihood fitting of the parameters. This can
 be extended rather easily to the case of mixture models for model-based 
 clustering.
 
-As in the case of mixture modeling in general, the difference is the EM algorithm
+As in the case of mixture modeling in general [@fraley2002model; @mclachlan2019finite], 
+the difference in the EM algorithm
 is that one is now including estimates of $\pi_{j}$ for $j$ in  $1,2, \ldots, g$, 
 the estimated probabilities of group membership for the $g$ groups in each step
-and weights $\tau_{ig}$, weights for each observation $i$ and group $j$, where
-\[\pi_j = \sum_{i = 1}^n \tau_{ij}\] and 
+and weights $\tau_{ij}$, weights for each observation $i$ and group $j$, where
+\[\pi_j = \frac{1}{n}\sum_{i = 1}^n \tau_{ij}\] and 
 \[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]
+
+The case of the matrix variate normal distribution can be seen in @viroliclass2011,
+while the case of the multivariate *t* can be seen in @ANDREWS2011520.
 
 The updates on the parameters $\Theta$ are weighted by $\tau_{ij}$ in an 
 Expectation/Conditional Maximization algorithm.
@@ -39,10 +47,13 @@ Expectation/Conditional Maximization algorithm.
 The `matrixmixture()` function fits unrestricted covariance matrices currently,
 but future features will implement a [`teigen`](https://cran.r-project.org/package=teigen) 
 type of covariance restriction capability for use with the $t$ distribution.
+It can set means to be constant along rows or columns or both using the 
+`row.mean = TRUE` and `col.mean = TRUE` settings.
 
 Currently, this can perform model fitting with unrestricted covariance matrices and 
 fixed degrees of freedom (`nu`) parameter or for the matrix normal distribution. 
-It does not solve the identifiability problem.
+It does not solve the identifiability problem, that is, that permutations of the 
+labels will yield identical solutions.
 
 ### `matrixmixture` function
 
@@ -51,27 +62,34 @@ there are or an initialization of a vector of probabilities `prior`, an optional
 initialization of centers and covariance matrices `init` (if the covariances are
 left blank, they will be initialized to identity matrices), and optional 
 arguments controlling the other parameters of function, such as number of 
-iterations and normal vs *t*. If the `model = "t"` is chosen, the degrees
+iterations and normal vs *t*. If `model = "t"` is chosen, the degrees
 of freedom `nu` must be provided, but in the future it can be estimated.
 
 ```{r demo}
 library(MixMatrix)
  set.seed(20180221)
- A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10)
- B <- rmatrixt(30,mean=matrix(2,nrow=3,ncol=4), df = 10)
- C <- array(c(A,B), dim=c(3,4,60))
- prior <- c(.5,.5)
- init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
+ A <- rmatrixt(30,mean=matrix(0,nrow=3,ncol=4), df = 10) # 3x4 matrices with mean 0
+ B <- rmatrixt(30,mean=matrix(1,nrow=3,ncol=4), df = 10) # 3x4 matrices with mean 2
+ C <- array(c(A,B), dim=c(3,4,60)) # combine into one array
+ prior <- c(.5,.5) # equal probability prior
+ # create an intialization object, starts at the true parameters
+ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
               U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
-              )
- res<-matrixmixture(C, init = init, prior = prior, nu = 20,
-                    model = "t", tolerance = 1e-1)
-print(res) # note: prints head of posterior, not full list
-
-plot(res)
+             )
+ # fit model
+ res<-matrixmixture(C, init = init, prior = prior, nu = 10,
+                    model = "t", tolerance = 1e-2)
+ print(res$centers) # the final centers
+ print(res$pi) # the final mixing proportion
+ logLik(res)
+ AIC(logLik(res))
+ plot(res) # the log likelihood by iteration
 
 ```
+The default method for determining convergence is based on Aitken acceleration of the
+log-likelihood. However, it can be set to stop based on changes in the log-likelihood
+instead.
 
 ### Initialization function
 
@@ -79,7 +97,7 @@ The packages also provides a helper function `init_matrixmixture()` to provide
 the `init` object for you. At present, it can either use the `kmeans()` 
 function on the vectorization of the input data to provide starting centers or 
 select random points. The `...` arguments are passed to `kmeans()` (so `nstart`
-of other similar arguments can be  passed in). If a 
+of other similar arguments can be set). If a 
 partially formed `init` object is sent to the initializer, it will complete it.
 However, it will not validate that, for instance, the covariance matrices are 
 valid. Partial supply of initial centers is also supported - that is, if 
@@ -93,8 +111,9 @@ init_matrixmixture(C, prior = c(.5,.5), centermethod = 'kmeans')
 init_matrixmixture(C, K = 2, centermethod = 'random')
 
 ```
-The method for determining convergence is based on Aitken acceleration of the
-log-likelihood. 
+
+
+
 
 ## Session Information
 
@@ -113,3 +132,5 @@ labs = labs[!labs %in% c("setup", "toc", "getlabels", "allcode")]
 ```{r allcode, ref.label = labs, eval = FALSE} 
 
 ```
+
+## References

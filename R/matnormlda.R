@@ -2,8 +2,8 @@
 #   MixMatrix: Classification with Matrix Variate Normal and t distributions
 #   Copyright (C) 2018-9  GZ Thompson <gzthompson@gmail.com>
 #
-#   These functions are based on modifications of the source for 
-#   MASS::lda() and MASS::qda(),
+#   These functions are based on extensive modifications and reworkings
+#   of the source for MASS::lda() and MASS::qda(),
 #   copyright (C) 1994-2013 W. N. Venables and B. D. Ripley
 #   released under GPL 2 or greater. This software is released under GPL-3.
 #
@@ -34,12 +34,12 @@
 #' The estimated variance matrices are weighted by the prior. However,
 #' if there are not enough members of a class to estimate a variance,
 #' this may be a problem.
-#' The function does not take the formula interface. It \code{method = 't'}
+#' The function does not take the formula interface. If \code{method = 't'}
 #' is selected, this performs discrimination using the matrix variate t
 #' distribution, presuming equal covariances between classes. 
 #'
 #'
-#' @param x 3-D array matrix data.
+#' @param x 3-D array of matrix data indexed by the third dimension
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
 #'    as the number of classes
@@ -76,18 +76,30 @@
 #' @seealso  \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
 #'     \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
 #'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
-
+#'
+#' @references
+#'     Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+#'       analysis for image matrix", Pattern Recognition Letters, Volume 26,
+#'       Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+#' 
+#'     Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+#'        Method for Classification With Matrix-Valued Predictors", Journal of
+#'        Computational and Graphical Statistics, 28:1, 11-22,
+#'        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
 #' 
 #' @export
 #'
 #' @examples
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
-#' matrixlda(C, groups, prior)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
+#' D<-matrixlda(C, groups, prior) # fit model
+#' logLik(D)
+#' print(D)
 matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                        nu = 10,..., subset)  {
    if (is.null(dim(x)))
@@ -106,7 +118,8 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
-  q <- dims[2]
+   q <- dims[2]
+  
   if (n != length(grouping))
     stop("nrow(x) and length(grouping) are different")
   g <- as.factor(grouping)
@@ -136,8 +149,12 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   names(prior) <- names(counts) <- lev1
 
   group.means = array(0, dim = c(p, q, ng))
-  for (i in seq(ng)) {
-    group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], max.iter = 1, ...)$mean)
+   for (i in seq(ng)) {
+       group.means[,,i] = .MeansFunction(x,
+                                         SS = NULL, SSX = NULL,
+                                         weights = 1.0* ( g == levels(g)[i]),...)
+      #group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE],
+       #                                                  max.iter = 1, ...)$mean)
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
@@ -224,6 +241,7 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
 
 #' Matrix trace
+#' @noRd
 #' @keywords internal
 mattrace <- function(x)       
     sum(diag(x))
@@ -262,11 +280,12 @@ mattrace <- function(x)
 #'
 #' @examples
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
 #' D <- matrixlda(C, groups, prior)
 #' predict(D)$posterior[1:10,]
 #'
@@ -322,24 +341,32 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     if (object$method == "t") df = object$nu
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    solveV = matrix(solve(object$V * object$scaling),q,q)
-    solveU = matrix(solve(object$U),p,p)
-    VMUM = vector("list", ng)
-    VMU = vector("list", ng)
-    for (j in seq(ng)) {
-      VMU[[j]] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
-      VMUM[[j]] =  VMU[[j]] %*% object$means[, , j]
-    }
+    ## solveV = matrix(solve(object$V * object$scaling),q,q)
+    ## solveU = matrix(solve(object$U),p,p)
+    ## VMUM = vector("list", ng)
+    ## VMU = vector("list", ng)
+    ## for (j in seq(ng)) {
+    ##   VMU[[j]] = solveV %*% crossprod(matrix(object$means[, , j],p,q), solveU )
+    ##   VMUM[[j]] =  VMU[[j]] %*% object$means[, , j]
+    ## }
 
-    for (i in seq(n)) {
-      Xi = matrix(x[, , i],p,q)
-      # if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
-      for (j in seq(ng)) {
-        if (object$method == "t") {
-          dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
-                                                log(prior[j])
-        } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
-      }
+    ## for (i in seq(n)) {
+    ##   Xi = matrix(x[, , i],p,q)
+    ##   # if (object$method == "t") UXVX = solveV %*% crossprod(Xi,  solveU) %*% (Xi)
+    ##   for (j in seq(ng)) {
+    ##     if (object$method == "t") {
+    ##       dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
+    ##                                             log(prior[j])
+    ##     } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
+    ##   }
+    ## }
+
+    for (j in seq(ng)){
+        if (object$method == "t"){
+            dist[,j] = dmat_t_calc(x,df,object$means[,,j],object$U,object$V*object$scaling)+log(prior[j])
+        } else {
+            dist[,j] = dmatnorm_calc(x,object$means[,,j],object$U,object$V*object$scaling)+log(prior[j])
+        }
     }
 
     dist <- ((dist - apply(dist, 1L, max, na.rm = TRUE)))
@@ -360,21 +387,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
 #' variances for the case when different groups have different variances.
 #'
-#' @param x 3-D array or list of matrix data.
-#' @param grouping vector
-#' @param prior a vector of prior probabilities of the same length
-#'    as the number of classes
-#' @param tol by default, \code{1e-4}. Tolerance parameter checks
-#'    for 0 variance.
-#' @param method whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
-#'    By default, normal.
-#' @param nu If using the t-distribution, the degrees of freedom parameter. By default, 10.
-#' @param ... Arguments passed to or from other methods, such
-#'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
-#'    \code{row.mean})
-#' @param subset An index vector specifying the cases to be used in the
-#'          training sample.  (NOTE: If given, this argument must be
-#'          named.)
+#' @inheritParams matrixlda
 #'
 #' @return Returns a list of class \code{matrixqda} containing
 #'    the following components:
@@ -395,17 +408,23 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'     \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
 #'     \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 
+#'
+#' @references Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #' 
 #' @export
 #'
 #' @examples
-#' #' set.seed(20180221)
+#' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
 #' D <- matrixqda(C, groups, prior)
+#' logLik(D)
+#' print(D)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {
  
   if (is.null(dim(x)))
@@ -462,7 +481,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t"){
-      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], nu = df[i], ...)
+      mlfit =  MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
       df[i] = mlfit$nu
     } else{
       mlfit =  MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
@@ -514,6 +533,193 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
   )
 }
 
+#' @export
+logLik.matrixlda = function(object,...){
+
+    if (!is.null(sub <- object$call$subset)){
+        olddata <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$x,
+                                          backtick = TRUE),
+                                  "[,,",
+                                  deparse(sub, backtick = TRUE),
+                                  ",drop = FALSE]"
+                              )))
+        groups <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$grouping,
+                                          backtick = TRUE),
+                                  "[",
+                                  deparse(sub, backtick = TRUE),
+                                  "]"
+                              )))
+    } else {
+        olddata <- eval.parent(object$call$x)
+        groups <- eval.parent(object$call$grouping)
+        }
+
+    groups = factor(groups)
+    dims <- dim(olddata)
+    n <- dims[3]
+    p <- dims[1]
+    q <- dims[2]
+    numgroups  = length(levels(groups))
+    grouplist = levels(groups)
+    meanpars = p*q
+    upars = (p+1)*p/2
+    vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
+    nupar = 0 # if nu not fixed, becomes 1
+
+    if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
+
+    if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
+
+    if (!is.null(object$call$col.variance)){
+        Vvars <- object$call$col.variance
+        if (grepl("^ar", x = Vvars,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^cs", x = Vvars ,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^i", x = Vvars,ignore.case = TRUE)) vpars = 1
+
+        if (grepl("^cor", x = Vvars,ignore.case = TRUE)) vpars = (q-1)*q/2 + 1
+    }
+    if (!is.null(object$call$row.variance)){
+        Uvars <- object$call$row.variance
+        if (grepl("^ar", x = Uvars,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^cs", x = Uvars ,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^i", x = Uvars,ignore.case = TRUE)) upars = 1
+
+        if (grepl("^cor", x = Uvars,ignore.case = TRUE)) upars = (p-1)*p/2 + 1
+    }
+
+    if(!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+
+    df = vpars + upars + nupar + numgroups*meanpars - 1
+    logLik = 0
+    if(is.null(object$nu)) {
+        nu = 0
+    } else nu = object$nu
+    if(object$method == "normal"){
+        for (i in 1:numgroups) logLik = logLik + sum(dmatnorm_calc(x = olddata[,,groups == grouplist[i], drop = FALSE],
+                                                          mean = object$means[,,i],
+                                                          U = object$U * object$scaling, V = object$V))
+    } else {
+    for (i in 1:numgroups) logLik = logLik + sum(dmat_t_calc(x = olddata[,,groups == grouplist[i], drop = FALSE],
+                                                          df = nu , mean = object$means[,,i],
+                                                          U = object$U * object$scaling, V = object$V))
+    }
+    
+    class(logLik) = "logLik"
+    attr(logLik, 'df') <- df
+    attr(logLik, 'nobs') <- n
+    logLik
+}
+
+#' @export
+logLik.matrixqda = function(object,...){
+
+    if (!is.null(sub <- object$call$subset)){
+        data <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$x,
+                                          backtick = TRUE),
+                                  "[,,",
+                                  deparse(sub, backtick = TRUE),
+                                  ",drop = FALSE]"
+                              )))
+        grouping <-
+            eval.parent(parse(text = paste(
+                                  deparse(object$call$grouping,
+                                          backtick = TRUE),
+                                  "[",
+                                  deparse(sub, backtick = TRUE),
+                                  "]"
+                              )))
+    }
+    else {
+        data <- eval.parent(object$call$x)
+        grouping <- eval.parent(object$call$grouping)
+        }
+    if (!is.null(nas <- object$call$na.action))
+        data <- eval(call(nas, data))
+
+    grouping = factor(grouping)
+    dims <- dim(data)
+    n <- dims[3]
+    p <- dims[1]
+    q <- dims[2]
+    numgroups  = length(levels(grouping))
+    grouplist = levels(grouping)
+    meanpars = p*q
+    upars = (p+1)*p/2
+    vpars = (q+1)*q/2 # note of course that there's one par that will get subbed off variance
+    nupar = 0 # if nu not fixed, becomes 1
+
+    if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
+
+    if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
+
+    if (!is.null(object$call$col.variance)){
+        Vvars <- object$call$col.variance
+        if (grepl("^ar", x = Vvars,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^cs", x = Vvars ,ignore.case = TRUE)) vpars = 2
+
+        if (grepl("^i", x = Vvars,ignore.case = TRUE)) vpars = 1
+
+        if (grepl("^cor", x = Vvars,ignore.case = TRUE)) vpars = (q-1)*q/2 + 1
+    }
+    if (!is.null(object$call$row.variance)){
+        Uvars <- object$call$row.variance
+        if (grepl("^ar", x = Uvars,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^cs", x = Uvars ,ignore.case = TRUE)) upars = 2
+
+        if (grepl("^i", x = Uvars,ignore.case = TRUE)) upars = 1
+
+        if (grepl("^cor", x = Uvars,ignore.case = TRUE)) upars = (p-1)*p/2 + 1
+    }
+
+    if(!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+
+    df = numgroups*(vpars + upars + nupar + meanpars - 1)
+    logLik = 0
+    if(is.null(object$nu)) nu = 0
+    else nu = object$nu
+    
+    for (i in 1:numgroups) {
+        if(object$method == "t"){
+        logLik = logLik + sum(dmat_t_calc(x=data[,,grouping == grouplist[i], drop = FALSE],
+                                                          df = nu[i] , mean = object$means[,,i],
+                                       U = object$U[,,i], V = object$V[,,i]))
+        } else {
+                    logLik = logLik + sum(dmatnorm_calc(x=data[,,grouping == grouplist[i], drop = FALSE],
+                                                          mean = object$means[,,i],
+                                       U = object$U[,,i], V = object$V[,,i]))
+            }
+
+        }
+    class(logLik) = "logLik"
+    attr(logLik, 'df') <- df
+    attr(logLik, 'nobs') <- n
+    logLik
+}
+
+#' @importFrom stats nobs
+#' @export
+nobs.matrixlda <- function(object, ...){
+    object$N
+    }
+
+#' @importFrom stats nobs
+#' @export
+nobs.matrixqda <- function(object, ...){
+    object$N
+}
+
 
 #' Classify Matrix Variate Observations by Quadratic Discrimination
 #'
@@ -545,15 +751,18 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu =
 #' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #' @export
 #'
+
 #' @examples
+#'
 #' set.seed(20180221)
+#' # construct two populations of 3x4 random matrices with different means
 #' A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 #' B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-#' C <- array(c(A,B), dim=c(3,4,60))
-#' groups <- c(rep(1,30),rep(2,30))
-#' prior <- c(.5,.5)
-#' D <- matrixqda(C, groups, prior)
-#' predict(D)$posterior[1:10,]
+#' C <- array(c(A,B), dim=c(3,4,60)) #combine together
+#' groups <- c(rep(1,30),rep(2,30)) # define groups
+#' prior <- c(.5,.5) # set prior
+#' D <- matrixqda(C, groups, prior) # fit model
+#' predict(D)$posterior[1:10,] # predict, show results of first 10
 #'
 ## S3 method for class "matrixqda"
 predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
@@ -605,41 +814,47 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    cholU = vector("list", ng)
-    cholV = vector("list", ng)
-    solveU = vector("list", ng)
-    solveV = vector("list", ng)
-    for (j in seq(ng)) {
-        cholV[[j]] = chol(object$V[, , j])
-        cholU[[j]] = chol(object$U[, , j])
-        solveV[[j]] = chol2inv(cholV[[j]])
-        solveU[[j]] = chol2inv(cholU[[j]])
-    }
-    VMUM = vector("list",ng)
-    detfactor =  numeric(ng)
-    VMU = vector("list",ng)
-    for (j in seq(ng)) {
-      VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
-      VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
-      logdetU = 2*sum(log(diag(cholU[[j]])))
-      logdetV = 2*sum(log(diag(cholV[[j]])))
-      detfactor[j] = -.5 * (q * logdetU + p * logdetV)
-    }
-
-    for (i in seq(n)) {
-      Xi = matrix(x[, , i], p, q)
-      for (j in seq(ng)) {
+    ## cholU = vector("list", ng)
+    ## cholV = vector("list", ng)
+    ## solveU = vector("list", ng)
+    ## solveV = vector("list", ng)
+    ## for (j in seq(ng)) {
+    ##     cholV[[j]] = chol(object$V[, , j])
+    ##     cholU[[j]] = chol(object$U[, , j])
+    ##     solveV[[j]] = chol2inv(cholV[[j]])
+    ##     solveU[[j]] = chol2inv(cholU[[j]])
+    ## }
+    ## VMUM = vector("list",ng)
+    ## detfactor =  numeric(ng)
+    ## VMU = vector("list",ng)
+    #for (j in seq(ng)) {
+    #  VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
+    #  VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
+    #  logdetU = 2*sum(log(diag(cholU[[j]])))
+    #  logdetV = 2*sum(log(diag(cholV[[j]])))
+    #  detfactor[j] = -.5 * (q * logdetU + p * logdetV)
+    #}
+    for (j in seq(ng)){
         if (object$method == "t"){
-
-          dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
-            detfactor[j]
+            dist[,j] = dmat_t_calc(x,df[j],object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
         } else {
-        dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
-          mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
-          detfactor[j]
+            dist[,j] = dmatnorm_calc(x,object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
         }
-      }
     }
+    #for (i in seq(n)) {
+    ##   Xi = matrix(x[, , i], p, q)
+    ##   for (j in seq(ng)) {
+    ##     if (object$method == "t"){
+    ##         dist[i,j] = dmat_t_calc(array(Xi,dim=c(p,q,1)),df[j],object$means[,,j],object$U[,,j],object$V[,,j])
+    ##       #dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
+    ##        # detfactor[j]
+    ##     } else {
+    ##     dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
+    ##       mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
+    ##       detfactor[j]
+    ##     }
+    ##   }
+    ## }
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost

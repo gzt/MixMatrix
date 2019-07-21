@@ -28,5 +28,4 @@ reference:
   contents:
   - ARgenerate
   - CSgenerate
-  - starts_with("deriv")
 

@@ -54,6 +54,12 @@
 #'    array.
 #'
 #'    \code{dmatrixt} returns the density at quantile \code{x}.
+#' @references  Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
+#'
+#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#'        Distribution and the Inverted Multivariate t
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
 #' @details
 #' The matrix \eqn{t}-distribution is parameterized slightly
 #'  differently from the univariate and multivariate \eqn{t}-distributions
@@ -72,10 +78,13 @@
 #'
 #' @examples
 #' set.seed(20180202)
+#' # random matrix with df = 10 and the given mean and L matrix
 #' rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+#' # comparing 1-D distribution of t to matrix
 #' summary(rt(n=100,df=10))
 #' summary(rmatrixt(n=100,df=10,matrix(0)))
+#' # demonstrating equivalence of 1x1 matrix t to usual t
 #' set.seed(20180204)
 #' x = rmatrixt(n=1,mean=matrix(0),df=1)
 #' dt(x,1)
@@ -209,7 +218,13 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #' 
 #' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
 #'    and \code{\link[stats]{Distributions}}.
-#'         
+#'
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#'     Vol. 104. CRC Press. ISBN:978-1584880462
+#' 
+#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#'        Distribution and the Inverted Multivariate t
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
 
 #' @export
 #' @examples

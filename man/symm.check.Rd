@@ -14,19 +14,12 @@ it may need to be specified as it's a sum of entries.}
 }
 \value{
 logical TRUE if symmetric FALSE otherwise.
-Not as robust as \code{isSymmetric()}.
+    Not as robust as \code{isSymmetric()}.
 }
 \description{
 Quick check whether matrix input is symmetric -
 checks sum of absolute differences of transposes
 as well as dimensions. Not robust, so only an
 internal function to be used with known safe input.
-}
-\examples{
-\dontrun{
-A = ARgenerate(5,.9)
-symm.check(A)
-A[1,2] = 5
-symm.check(A)}
 }
 \keyword{internal}

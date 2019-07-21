@@ -19,35 +19,40 @@ knitr::opts_chunk$set(
 
 
 In the `MixMatrix` package, I now have some functions for training a linear or quadratic classifier.
-The usage is pretty similar to the function `MASS::lda()` or `MASS::qda()`, however it requires the input
-as an array or list of matrices and the group variable provided as a vector (that is, it cannot handle
+The usage is fairly similar to the function `MASS::lda()` or `MASS::qda()`, however it requires the input
+as an array and the group variable provided as a vector (that is, it cannot handle
 data frames or the formula interface directly, which is reasonable, as there is no immediately
-clear way to make that work for a collection of matrices - anybody using it would have to roll their own
-solutions anyway).
+clear way to make that work for a collection of matrices).
 
 ```{r generatedata}
 set.seed(20180222)
 library('MixMatrix')
-A <- rmatrixnorm(30, mean = matrix(0, nrow=2, ncol=3))
+A <- rmatrixnorm(30, mean = matrix(0, nrow=2, ncol=3)) # creating the three groups
 B <- rmatrixnorm(30, mean = matrix(c(1,0), nrow=2, ncol=3))
 C <- rmatrixnorm(30, mean = matrix(c(0,1), nrow=2, ncol=3))
-ABC <- array(c(A,B,C), dim = c(2,3,90))
-groups <- factor(c(rep("A",30),rep("B",30),rep("C",30)))
-prior = c(30,30,30)/90
-matlda <- matrixlda(x = ABC,grouping = groups, prior = prior)
-matqda <- matrixqda(x = ABC,grouping = groups, prior = prior)
+ABC <- array(c(A,B,C), dim = c(2,3,90)) # combining into on array
+groups <- factor(c(rep("A",30),rep("B",30),rep("C",30))) # labels
+prior = c(30,30,30)/90 # equal prior
+matlda <- matrixlda(x = ABC,grouping = groups, prior = prior) # perform LDA
+matqda <- matrixqda(x = ABC,grouping = groups, prior = prior) # perform QDA
 ```
 
-This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple regularized linear/quadratic 
-discriminant function based on the likelihood function (see previous post for details). 
-As such, the reported posteriors are based on the normal distribution.
+This does not sphere the data or extract an SVD or Fisher discriminant scores - 
+it is a simple regularized linear/quadratic discriminant function based on the 
+likelihood function. As such, the reported posteriors are based on the normal 
+distribution.
 
-The `matrixlda` function presumes equal covariance parameters while `matrixqda` fits separate covariance parameters.
+The `matrixlda` function presumes equal covariance parameters while `matrixqda` 
+fits separate covariance parameters.
 
-It is possible to set variance or mean restrictions using the `...` argument. These restrictions are applied to all groups.
+It is possible to set variance or mean restrictions using the `...` argument. 
+These restrictions are applied to all groups.
 
-The `predict` method for these objects works in much the same way as for `lda` or `qda` objects: provide the function and the new data, then it will return the MAP class assignments and the posterior. If no new data is 
-provided, it will attempt to run it on the original data if it is available in the environment.
+The `predict` method for these objects works in much the same way as for `lda` 
+or `qda` objects: provide the function and the new data, then it will return 
+the MAP class assignments and the posterior. If no new data is 
+provided, it will attempt to run it on the original data if it is available 
+in the environment.
 
 ```{r predict}
 ABC[,,c(1,31,61)] # true class memberships: A, B, C
@@ -57,11 +62,18 @@ predict(matlda, ABC[,,c(1,31,61)])
 predict(matqda,  ABC[,,c(1,31,61)])
 
 ```
-In this example, points from classes A, B, and C were selected and they ended up being classified as B, B, and A. The QDA and LDA rules had only minor disagreements, which is to be expected when they do truly have the same covariances.
+In this example, points from classes A, B, and C were selected and they ended 
+up being classified as B, B, and A. The QDA and LDA rules had only minor 
+disagreements, which is to be expected when they do truly have the same covariances.
 
 ## Details of the modeling choices
 
-Suppose there are two populations, $\pi_1$ and $\pi_2$ with prior probabilities of belonging to these classes, $p_1$ and $p_2$. Define a function, $c(1|2)$ as the cost of misclassifying a member of population $\pi_2$ as a member of class $1$ (and vice versa). Further, define $P(1|2)$ as the probability of classifying a member of population $\pi_2$ as a member of class $1$ (and vice versa).  Then we define the *expected cost of misclassification* as:
+Suppose there are two populations, $\pi_1$ and $\pi_2$ with prior probabilities 
+of belonging to these classes, $p_1$ and $p_2$. Define a function, $c(1|2)$ as 
+the cost of misclassifying a member of population $\pi_2$ as a member of class 
+$1$ (and vice versa). Further, define $P(1|2)$ as the probability of classifying 
+a member of population $\pi_2$ as a member of class $1$ (and vice versa).  Then 
+we define the *expected cost of misclassification* as:
 
 \[ECM = c(2|1)P(2|1)p_1 + c(1|2)P(1|2)p_2 \]
 
@@ -81,7 +93,9 @@ Recall the probability density function for a matrix variate normal distribution
 
 \[f(\mathbf{X};\mathbf{M}, \mathbf{U}, \mathbf{V}) = \frac{\exp\left( -\frac{1}{2} \, \mathrm{tr}\left[ \mathbf{V}^{-1} (\mathbf{X} - \mathbf{M})^{T} \mathbf{U}^{-1} (\mathbf{X} - \mathbf{M}) \right] \right)}{(2\pi)^{np/2} |\mathbf{V}|^{n/2} |\mathbf{U}|^{p/2}} \]
 
-$\mathbf{X}$ and $\mathbf{M}$ are $n \times p$, $\mathbf{U}$ is $n \times n$ and describes the covariance relationship between the rows, and $\mathbf{V}$ is $p \times p$ and describes the covariance relationship between the columns. 
+$\mathbf{X}$ and $\mathbf{M}$ are $n \times p$, $\mathbf{U}$ is $n \times n$ 
+and describes the covariance relationship between the rows, and $\mathbf{V}$ is 
+$p \times p$ and describes the covariance relationship between the columns. 
 
 ## Estimated Minimum ECM Rule for Two Matrix Variate Normal Populations
 
@@ -96,23 +110,31 @@ R(\mathbf{X}) & = & \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_1^{-1} \mathbf{X
 
 ## How to classify based on this:
 
-If $R(\mathbf{X}) \geq \log(c(1|2)p_2) - \log(c(2|1)p_1)$, assign $\mathbf{X}$ to group $1$, otherwise assign to group $2$.
+If $R(\mathbf{X}) \geq \log(c(1|2)p_2) - \log(c(2|1)p_1)$, assign $\mathbf{X}$ 
+to group $1$, otherwise assign to group $2$.
 
 
-In the multivariate case, this is equivalent to the LDA/QDA rules - term (1) is the quadratic form which vanishes in case of equal covariances between groups, term (2) is the LDA term, and terms (3) and (4) are constants which depend on the parameters and not $\mathrm{X}$. 
+In the multivariate case, this is equivalent to the LDA/QDA rules - term (1) 
+is the quadratic form which vanishes in case of equal covariances between groups, 
+term (2) is the LDA term, and terms (3) and (4) are constants which depend on 
+the parameters and not $\mathrm{X}$. 
 
-Typically, the models we have used have implicitly used an equal probability prior and an equal cost of misclassification, but other inputs can be specified. In case of equal priors and equal cost of misclassification, this term is 0.
+Typically, the models we have used have implicitly used an equal probability 
+prior and an equal cost of misclassification, but other inputs can be specified. 
+In case of equal priors and equal cost of misclassification, this term is 0.
 
-## If there were equal covariances:
+## If there are equal covariances:
 
-If the two groups have the same covariances, then this simplifies. The classification rule is then:
+If the two groups have the same covariances, then this simplifies. The 
+classification rule is then:
 \begin{eqnarray} 
 R(\mathbf{X}) & = & \mathrm{trace}\big[ (\mathbf{V}^{-1} (\mathbf{M}_1 -\mathbf{M}_2)^{T}\mathbf{U}^{-1}) \mathbf{X} \\
  &  & -\frac{1}{2}(\mathbf{V}^{-1} \mathbf{M}_1^{T} \mathbf{U}^{-1} \mathbf{M}_1 - \mathbf{V}^{-1} \mathbf{M}_2^{T} \mathbf{U}^{-1} \mathbf{M}_2) \big]    \\ 
    & \geq & \log(c(1|2)p_2) - \log(c(2|1)p_1)
 \end{eqnarray}
 
-Classify to group $1$ if the last term is true. Note this is linear in $\mathbf{X}$. This is directly analogous to LDA in the multivariate case.
+Classify to group $1$ if the last term is true. Note this is linear in 
+$\mathbf{X}$. This is directly analogous to LDA in the multivariate case.
 
 
 ## Generalizing to multiple classes

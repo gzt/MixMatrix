@@ -22,7 +22,4 @@ Determinant or derivative of log-inverse for the specified matrix structure.
 \description{
 Determinant selector for chosen covariance matrix.
 }
-\examples{
-\dontrun{vardet(5,.5,TRUE, "AR(1)"}
-}
 \keyword{internal}

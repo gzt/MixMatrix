@@ -89,15 +89,8 @@ CSgenerate <- function(n,rho) {
 #'    it may need to be specified as it's a sum of entries.
 #'
 #' @return logical TRUE if symmetric FALSE otherwise.
-#' Not as robust as \code{isSymmetric()}.
+#'     Not as robust as \code{isSymmetric()}.
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{
-#' A = ARgenerate(5,.9)
-#' symm.check(A)
-#' A[1,2] = 5
-#' symm.check(A)}
 symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
    if (!is.matrix(A)) return(FALSE)
    if (!is.numeric(A)) return(FALSE)
@@ -121,10 +114,6 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
 #' @return Specified matrix structure
 #'
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{varmatgenerate(5,.2,"AR(1)")}
-#'
 varmatgenerate <- function(n, rho, variance) {
   if (variance == "I" || variance == "independence" || variance == "Independence") variance = "I"
   if (variance == "AR(1)") return(ARgenerate(n,rho))
@@ -144,9 +133,6 @@ varmatgenerate <- function(n, rho, variance) {
 #'
 #' @return Determinant or derivative of log-inverse for the specified matrix structure.
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{vardet(5,.5,TRUE, "AR(1)"}
 vardet <- function(n, rho, deriv, variance){
 
   if (variance == "AR(1)") return(ARdet(n,rho, deriv))
@@ -168,9 +154,6 @@ vardet <- function(n, rho, deriv, variance){
 #'
 #' @return The inverse or derivative of the inverse of the selected matrix structure.
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{varinv(5,.5,TRUE, "AR(1)"}
 varinv <- function(n, rho, deriv, variance){
 
   if (variance == "AR(1)") return(invAR(n,rho, deriv))
@@ -193,12 +176,6 @@ varinv <- function(n, rho, deriv, variance){
 #' @return determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
 #'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{
-#' ARdet(ARgenerate(5,.4,deriv=TRUE))
-#' }
-#'
 ARdet <- function(n, rho, deriv = FALSE) {
 
   if (!deriv) return((1 - rho^2)^(n - 1))
@@ -216,12 +193,6 @@ ARdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @return determinant of an CS covariance matrix
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{
-#' CSdet(ARgenerate(5,.4,deriv=TRUE))
-#' }
-#'
 CSdet <- function(n, rho, deriv = FALSE) {
 
   if (!deriv) return((1 + rho*(n - 1))*(1 - rho)^(n - 1))
@@ -238,11 +209,6 @@ CSdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @return Matrix of the inverse of the AR(1) covariance matrix (or its inverse)
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{
-#' invAR(5,.5, TRUE)
-#' }
 invAR <- function(n,rho, deriv = FALSE){
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
@@ -270,10 +236,6 @@ invAR <- function(n,rho, deriv = FALSE){
 #' @return inverse matrix or derivative of the inverse matrix.
 #' @keywords internal
 #'
-#' @examples
-#' \dontrun{
-#' invCS(3,.25,TRUE)
-#' }
 invCS <- function(n, rho, deriv = FALSE){
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
@@ -301,9 +263,6 @@ invCS <- function(n, rho, deriv = FALSE){
 #'
 #' @return The derivative of the selected matrix structure.
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{varderiv(5, .5, "AR(1)"}
 varderiv <- function(n, rho, variance){
 
   if (variance == "AR(1)") return(derivAR(n,rho))
@@ -319,7 +278,8 @@ varderiv <- function(n, rho, variance){
 #'
 #' @param n dimensions
 #' @param rho off-diagonal parameter
-#'
+#' @return matrix derivative of an AR(1) matrix
+#' @keywords internal
 derivAR <- function(n, rho){
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
@@ -334,7 +294,8 @@ derivAR <- function(n, rho){
 #'
 #' @param n dimensions
 #' @param rho off-diagonal parameter
-#'
+#' @return matrix derivative of a CS matrix with unit diagonal
+#' @keywords internal
 derivCS <- function(n, rho){
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
@@ -348,13 +309,9 @@ derivCS <- function(n, rho){
 #' Trace of a matrix
 #'
 #' @param A square numeric matrix
-#'
+#' @noRd
 #' @return trace of a matrix
 #' @keywords internal
-#'
-#' @examples
-#' \dontrun{A <- diag(6:1)
-#' matrixtrace(A)}
 matrixtrace = function(A){
   b = dim(A)
   if (b[1] != b[2]) warning("non-conformable dimensions")
@@ -367,12 +324,8 @@ matrixtrace = function(A){
 #' @param nrow Number of rows
 #' @param ncol Number of columns
 #' @keywords internal
-#'
+#' @noRd
 #' @return Matrix of ones
-#'
-#' @examples
-#' \dontrun{A <- ones(5,3)
-#' print(A)}
 ones = function(nrow, ncol){
  matrix(1,nrow = nrow, ncol = ncol)
 }

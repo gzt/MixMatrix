@@ -8,7 +8,7 @@ matrixqda(x, grouping, prior, tol = 1e-04, method = "normal",
   nu = 10, ..., subset)
 }
 \arguments{
-\item{x}{3-D array or list of matrix data.}
+\item{x}{3-D array of matrix data indexed by the third dimension}
 
 \item{grouping}{vector}
 
@@ -18,10 +18,11 @@ as the number of classes}
 \item{tol}{by default, \code{1e-4}. Tolerance parameter checks
 for 0 variance.}
 
-\item{method}{whether to use the normal distribution (\code{normal}) or the t-distribution (\code{t}).
-By default, normal.}
+\item{method}{whether to use the normal distribution (\code{normal}) or the
+t distribution (\code{t}). By default, normal.}
 
-\item{nu}{If using the t-distribution, the degrees of freedom parameter. By default, 10.}
+\item{nu}{If using the t-distribution, the degrees of freedom parameter. By
+default, 10.}
 
 \item{...}{Arguments passed to or from other methods, such
 as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
@@ -56,13 +57,20 @@ This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
 variances for the case when different groups have different variances.
 }
 \examples{
-#' set.seed(20180221)
+set.seed(20180221)
+# construct two populations of 3x4 random matrices with different means
 A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
 B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60))
-groups <- c(rep(1,30),rep(2,30))
-prior <- c(.5,.5)
+C <- array(c(A,B), dim=c(3,4,60)) #combine together
+groups <- c(rep(1,30),rep(2,30)) # define groups
+prior <- c(.5,.5) # set prior
 D <- matrixqda(C, groups, prior)
+logLik(D)
+print(D)
+}
+\references{
+Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+    Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 }
 \seealso{
 \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},

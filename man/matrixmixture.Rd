@@ -5,16 +5,19 @@
 \title{Fit a matrix variate mixture model}
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
-  iter = 1000, model = "normal", method = NULL, tolerance = 0.1,
-  nu = NULL, ..., verbose = 0, miniter = 3)
+  iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
+  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
+  miniter = 5, convergence = TRUE)
 }
 \arguments{
-\item{x}{data, \code{p x q x n} array}
+\item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
 
-\item{init}{a list containing an array of \code{K} of \code{p x q} means,
-and optionally \code{p x p} and \code{q x q} positive definite variance
-matrices. By default, those are presumed to be identity if not provided.
-If \code{init} is missing, it will be provided using the prior or K by
+\item{init}{a list containing an array of \code{K} of \eqn{p \times q}{p * q} means labeled
+\code{centers},
+and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q} positive definite variance
+matrices labeled \code{U} and \code{V}.
+By default, those are presumed to be identity if not provided.
+If \code{init} is missing, it will be provided using the \code{prior} or \code{K} by
 \code{init_matrixmix}.}
 
 \item{prior}{prior for the \code{K} classes, a vector that adds to unity}
@@ -28,10 +31,18 @@ provided, the prior will be of equal distribution.}
 
 \item{method}{what method to use to fit the distribution. Currently no options.}
 
-\item{tolerance}{convergence criterion, using Aitken acceleration of the
-log-likelihood.}
+\item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{col.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
 
-\item{nu}{degrees of freedom parameter}
+\item{col.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
+common mean within each row. If both this and \code{row.mean} are
+\code{TRUE}, there will be a common mean for the entire matrix.}
+
+\item{tolerance}{convergence criterion, using Aitken acceleration of the
+log-likelihood by default.}
+
+\item{nu}{degrees of freedom parameter. Can be a vector of length \code{K}.}
 
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
@@ -39,6 +50,10 @@ log-likelihood.}
 numbers output more results.}
 
 \item{miniter}{minimum number of iterations}
+
+\item{convergence}{By default, \code{TRUE}. Whether to use Aitken acceleration to
+determine convergence. If false, it instead checks if the change in
+log-likelihood is less than \code{tolerance}.}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following
@@ -47,7 +62,7 @@ A list of class \code{MixMatrixModel} containing the following
      \item{\code{prior}}{the prior probabilities used.}
      \item{\code{init}}{the initialization used.}
       \item{\code{K}}{the number of groups} 
-      \item{\code{n}}{the number of observations} 
+      \item{\code{N}}{the number of observations} 
       \item{\code{centers}}{the group means.}
       \item{\code{U}}{the between-row covariance matrices}
       \item{\code{V}}{the between-column covariance matrix}
@@ -56,9 +71,11 @@ A list of class \code{MixMatrixModel} containing the following
       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
            was used.}
       \item{\code{convergence }}{whether the model converged}
-      \item{\code{logLik }}{a vector of the log-likelihoods of each iteration ending in
+      \item{\code{logLik}}{a vector of the log-likelihoods
+              of each iteration ending in
               the final log-likelihood of the model}
-      \item{\code{method }}{the method used}
+      \item{\code{model}}{the model used}
+      \item{\code{method}}{the method used}
       \item{\code{call}}{The (matched) function call.}
    }
 }
@@ -68,21 +85,47 @@ and unconstrained covariance matrices for a matrix variate normal or
 matrix variate t distribution (with specified degrees of freedom \code{nu}).
 }
 \examples{
-
 set.seed(20180221)
-A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-B <- rmatrixnorm(30,mean=matrix(2,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60))
-prior <- c(.5,.5)
-init = list(centers = array(c(rep(0,12),rep(2,12)), dim = c(3,4,2)),
-             U = array(c(diag(3), diag(3)), dim = c(3,3,2)),
-             V = array(c(diag(4), diag(4)), dim = c(4,4,2))
-             )
-res<-matrixmixture(C, init = init, prior = prior)
-print(res) # note: prints head of posterior, not full list
-if(interactive()) plot(res)
-res<-matrixmixture(C, init = init, prior = prior, model = "t", nu = 5)
-if(interactive()) plot(res)
+A <- rmatrixt(20,mean=matrix(0,nrow=3,ncol=4), df = 5)
+# 3x4 matrices with mean 0
+B <- rmatrixt(20,mean=matrix(1,nrow=3,ncol=4), df = 5)
+# 3x4 matrices with mean 2
+C <- array(c(A,B), dim=c(3,4,40)) # combine into one array
+prior <- c(.5,.5) # equal probability prior
+# create an intialization object, starts at the true parameters
+init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
+              U = array(c(diag(3), diag(3)), dim = c(3,3,2))*20,
+              V = array(c(diag(4), diag(4)), dim = c(4,4,2))
+ )
+# fit model
+ res<-matrixmixture(C, init = init, prior = prior, nu = 5,
+                    model = "t", tolerance = 1e-1)
+print(res$centers) # the final centers
+print(res$pi) # the final mixing proportion
+plot(res) # the log likelihood by iteration
+logLik(res) # log likelihood of final result
+BIC(res) # BIC of final result
+predict(res, newdata = C[,,c(1,21)]) # predicted class membership
+}
+\references{
+Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
+      "Model-Based Classification via Mixtures of Multivariate
+      T-Distributions." Computational Statistics & Data Analysis 55 (1):
+      520–29. \doi{10.1016/j.csda.2010.05.019}.
+
+    Fraley, Chris, and Adrian E Raftery. 2002. "Model-Based Clustering,
+       Discriminant Analysis, and Density Estimation." Journal of the
+       American Statistical Association 97 (458). Taylor & Francis: 611–31.
+       \doi{10.1198/016214502760047131}.
+
+    McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019.
+          "Finite Mixture Models." Annual Review of Statistics and Its
+          Application 6. Annual Reviews: 355–78.
+          \doi{10.1146/annurev-statistics-031017-100325}.
+
+    Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
+          for Classifying Three-Way Data." Statistics and Computing 21 (4):
+          511–22. \doi{10.1007/s11222-010-9188-x}.
 }
 \seealso{
 \code{\link{init_matrixmixture}}

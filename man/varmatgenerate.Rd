@@ -19,8 +19,4 @@ Specified matrix structure
 \description{
 Select a variance structure to generate.
 }
-\examples{
-\dontrun{varmatgenerate(5,.2,"AR(1)")}
-
-}
 \keyword{internal}

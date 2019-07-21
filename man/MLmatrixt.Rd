@@ -55,11 +55,21 @@ By default, an identity matrix.}
 if using restrictions on the variance.}
 }
 \value{
-Returns a list with a mean matrix, a \eqn{U} matrix, a \eqn{V}
-   matrix, the variance parameter (the first entry of the variance matrices
-   are constrained to be 1 for uniqueness), the number of iterations, the
-   squared difference between iterations of the variance matrices at the time
-   of stopping, the log likelihood, and a convergence code.
+Returns a list with the following elements:
+\describe{
+      \item{\code{mean}}{the mean matrix}
+      \item{\code{U}}{the between-row covariance matrix}
+      \item{\code{V}}{the between-column covariance matrix}
+      \item{\code{var}}{the scalar variance parameter
+           (the first entry of the covariances are restricted to unity)}
+      \item{\code{nu}}{the degrees of freedom parameter}
+      \item{\code{iter}}{the number of iterations}
+      \item{\code{tol}}{the squared difference between iterations of
+           the variance matrices at the time of stopping}
+      \item{\code{logLik}}{log likelihood of result.}
+      \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+      \item{\code{call}}{The (matched) function call.}
+   }
 }
 \description{
 For the matrix variate normal distribution, maximum likelihood estimates
@@ -79,6 +89,21 @@ results=MLmatrixt(A, tol = 1e-5, df = 5)
 print(results)
 
 
+}
+\references{
+Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+       Distribution and the Inverted Multivariate t
+       Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+
+    Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm: A Simple Extension of
+          EM and ECM with Faster Monotone Convergence.” Biometrika 81 (4): 633–48.
+          \doi{10.2307/2337067}
+
+   Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation via the ECM
+            Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
+            \doi{10.1093/biomet/80.2.267}
+
+    Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed., 272–5. John Wiley.
 }
 \seealso{
 \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
