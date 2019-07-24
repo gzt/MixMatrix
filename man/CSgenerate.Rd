@@ -18,5 +18,7 @@ returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \code{rho} 
 Generate a compound symmetric correlation matrix
 }
 \examples{
+# generates a covariance matrix with 1 on the main diagonal
+# and 0.5 on the off-diagonal elements.
 CSgenerate(3,.5)
 }

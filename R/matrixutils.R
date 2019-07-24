@@ -58,6 +58,8 @@ ARgenerate <- function(n, rho) {
 #' @export
 #'
 #' @examples
+#' # generates a covariance matrix with 1 on the main diagonal
+#' # and 0.5 on the off-diagonal elements.
 #' CSgenerate(3,.5)
 
 CSgenerate <- function(n,rho) {
@@ -87,7 +89,7 @@ CSgenerate <- function(n,rho) {
 #' @param A Numeric real matrix. Does not check if real.
 #' @param tol tolerance - note that if you have a big matrix
 #'    it may need to be specified as it's a sum of entries.
-#'
+#' @noRd
 #' @return logical TRUE if symmetric FALSE otherwise.
 #'     Not as robust as \code{isSymmetric()}.
 #' @keywords internal
@@ -110,7 +112,7 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
 #' @param n number of dimensions
 #' @param rho parameter for selected variance structure.
 #' @param variance variance structure - AR(1) or CS.
-#'
+#' @noRd
 #' @return Specified matrix structure
 #'
 #' @keywords internal
@@ -151,7 +153,7 @@ vardet <- function(n, rho, deriv, variance){
 #' @param deriv logical whether to return the inverse or the derivative of
 #'     the inverse
 #' @param variance  variance structure - AR(1) or CS.
-#'
+#' @noRd
 #' @return The inverse or derivative of the inverse of the selected matrix structure.
 #' @keywords internal
 varinv <- function(n, rho, deriv, variance){
@@ -172,7 +174,7 @@ varinv <- function(n, rho, deriv, variance){
 #' @param rho off-diagonal parameter
 #' @param deriv logical whether to return the determinant or the derivative of
 #'     the log of the determinant
-#'
+#' @noRd
 #' @return determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
 #'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
@@ -190,7 +192,7 @@ ARdet <- function(n, rho, deriv = FALSE) {
 #' @param rho off-diagonal parameter
 #' @param deriv logical whether to return the determinant or the
 #' derivative of the log determinant of the inverse
-#'
+#' @noRd
 #' @return determinant of an CS covariance matrix
 #' @keywords internal
 CSdet <- function(n, rho, deriv = FALSE) {
@@ -206,7 +208,7 @@ CSdet <- function(n, rho, deriv = FALSE) {
 #' @param n dimensions of matrix
 #' @param rho correlation parameter
 #' @param deriv logical. if TRUE will output the derivative of the inverse matrix.
-#'
+#' @noRd
 #' @return Matrix of the inverse of the AR(1) covariance matrix (or its inverse)
 #' @keywords internal
 invAR <- function(n,rho, deriv = FALSE){
@@ -232,7 +234,7 @@ invAR <- function(n,rho, deriv = FALSE){
 #' @param n dimension of the matrix
 #' @param rho compound symmetric factor
 #' @param deriv logical, whether to return the derivative of the inverse.
-#'
+#' @noRd
 #' @return inverse matrix or derivative of the inverse matrix.
 #' @keywords internal
 #'
@@ -260,7 +262,7 @@ invCS <- function(n, rho, deriv = FALSE){
 #' @param n dimensions
 #' @param rho off-diagonal parameter
 #' @param variance  variance structure - AR(1) or CS.
-#'
+#' @noRd
 #' @return The derivative of the selected matrix structure.
 #' @keywords internal
 varderiv <- function(n, rho, variance){
@@ -279,6 +281,7 @@ varderiv <- function(n, rho, variance){
 #' @param n dimensions
 #' @param rho off-diagonal parameter
 #' @return matrix derivative of an AR(1) matrix
+#' @noRd
 #' @keywords internal
 derivAR <- function(n, rho){
   if (!(n > 1)) stop("n needs to be greater than 1")
