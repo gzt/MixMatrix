@@ -78,11 +78,15 @@
 #'     \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 #'
 #' @references
+#'     G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+#'     "Classification with the matrix-variate-t distribution", arXiv
+#'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+#' 
 #'     Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
 #'       analysis for image matrix", Pattern Recognition Letters, Volume 26,
 #'       Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
 #' 
-#'     Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+#'   Aaron Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
 #'        Method for Classification With Matrix-Valued Predictors", Journal of
 #'        Computational and Graphical Statistics, 28:1, 11-22,
 #'        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
@@ -239,16 +243,6 @@ matrixlda <-  function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 }
 
 
-
-#' Matrix trace
-#' @noRd
-#' @keywords internal
-mattrace <- function(x)       
-    sum(diag(x))
-
-
-
-
 #' Classify Matrix Variate Observations by Linear Discrimination
 #'
 #' Classify matrix variate observations in conjunction with \code{matrixlda}.
@@ -357,7 +351,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
     ##     if (object$method == "t") {
     ##       dist[i, j] = -.5 * (df + p + q -1) * log(det(diag(q) + solveV %*% t(Xi - object$means[,,j]) %*% solveU %*% ((Xi - object$means[,,j])))) +
     ##                                             log(prior[j])
-    ##     } else dist[i, j] = mattrace(VMU[[j]] %*% Xi) +  mattrace(-.5*VMUM[[j]]) + log(prior[j])
+    ##     } else dist[i, j] = matrixtrace(VMU[[j]] %*% Xi) +  matrixtrace(-.5*VMUM[[j]]) + log(prior[j])
     ##   }
     ## }
 
@@ -849,8 +843,8 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##       #dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
     ##        # detfactor[j]
     ##     } else {
-    ##     dist[i, j] = mattrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
-    ##       mattrace(VMU[[j]] %*% Xi) -.5 *  mattrace(VMUM[[j]]) + log(prior[j]) +
+    ##     dist[i, j] = matrixtrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
+    ##       matrixtrace(VMU[[j]] %*% Xi) -.5 *  matrixtrace(VMUM[[j]]) + log(prior[j]) +
     ##       detfactor[j]
     ##     }
     ##   }

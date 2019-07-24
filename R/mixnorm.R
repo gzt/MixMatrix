@@ -32,7 +32,7 @@
 ##'     \code{init_matrixmix}.
 ##' @param prior prior for the \code{K} classes, a vector that adds to unity
 ##' @param K number of classes - provide either this or the prior. If this is
-##'     provided, the prior will be of equal distribution.
+##'     provided, the prior will be of uniform distribution among the classes.
 ##' @param iter maximum number of iterations.
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'     

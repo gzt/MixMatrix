@@ -23,7 +23,7 @@ If \code{init} is missing, it will be provided using the \code{prior} or \code{K
 \item{prior}{prior for the \code{K} classes, a vector that adds to unity}
 
 \item{K}{number of classes - provide either this or the prior. If this is
-provided, the prior will be of equal distribution.}
+provided, the prior will be of uniform distribution among the classes.}
 
 \item{iter}{maximum number of iterations.}
 

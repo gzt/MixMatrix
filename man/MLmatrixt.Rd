@@ -91,7 +91,11 @@ print(results)
 
 }
 \references{
-Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
+    "Classification with the matrix-variate-t distribution", arXiv
+    e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+
+    Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
        Distribution and the Inverted Multivariate t
        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
 

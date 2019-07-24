@@ -76,11 +76,15 @@ logLik(D)
 print(D)
 }
 \references{
-Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+    "Classification with the matrix-variate-t distribution", arXiv
+    e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+
+    Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
       analysis for image matrix", Pattern Recognition Letters, Volume 26,
       Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
 
-    Aaron J. Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+  Aaron Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
        Method for Classification With Matrix-Valued Predictors", Journal of
        Computational and Graphical Statistics, 28:1, 11-22,
        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
