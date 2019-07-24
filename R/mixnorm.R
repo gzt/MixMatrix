@@ -291,12 +291,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         for(j in 1:nclass){
             newV[,,j] = .colVars(x, newcenters[,,j],df[j],newposterior[,j],
                                  SS[,,j],SSX[,,j],SSXX[,,j],...)
-            ### .TVarFunc(data, centers,SS,SSX,SSXX,df,weights,row.variance,col.variance) #### or do EEE, etc formulation
-            #newV[,,j] = (dfmult[j] / (sumzig[j] * p)) * (SSXX[,,j] - t(SSX[,,j]) %*% newcenters[,,j] -
-            #                                          t(newcenters[,,j]) %*% SSX[,,j] + t(newcenters[,,j]) %*% SS[,,j] %*% newcenters[,,j])
-                                        #newV[,,j] = newV[,,j]/newV[1,1,j]
-
-            
+                        
             newU[,,j] = .rowVars(x,newcenters[,,j],df[j],newposterior[,j],SS[,,j],SSX[,,j],SSXX[,,j],...)
             newUinv = (dfmult[j]/(sumzig[j] * (df[j] + p - 1))) * SS[,,j]
             newU[,,j] = solve(newUinv)
