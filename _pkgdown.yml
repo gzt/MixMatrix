@@ -12,7 +12,7 @@ reference:
   - starts_with("rmatrixn")
   - starts_with("rmatrixt")
   - starts_with("rmatrixi")
-- title: Maximum Likelikhood Estimation
+- title: Maximum Likelihood Estimation
   desc: Maximum likelihood estimation for the normal and t distribution
   contents:
   - starts_with("ML")
