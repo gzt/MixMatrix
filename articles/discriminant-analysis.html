@@ -101,61 +101,62 @@
 
     
     
-<p>In the <code>MixMatrix</code> package, I now have some functions for training a linear or quadratic classifier. The usage is fairly similar to the function <code><a href="https://www.rdocumentation.org/packages/MASS/topics/lda">MASS::lda()</a></code> or <code><a href="https://www.rdocumentation.org/packages/MASS/topics/qda">MASS::qda()</a></code>, however it requires the input as an array and the group variable provided as a vector (that is, it cannot handle data frames or the formula interface directly, which is reasonable, as there is no immediately clear way to make that work for a collection of matrices).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180222</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'MixMatrix'</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>)) <span class="co"># creating the three groups</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>)) <span class="co"># combining into on array</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>))) <span class="co"># labels</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span> <span class="co"># equal prior</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform LDA</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">matqda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixqda.html">matrixqda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform QDA</span></a></code></pre></div>
-<p>This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple regularized linear/quadratic discriminant function based on the likelihood function. As such, the reported posteriors are based on the normal distribution.</p>
-<p>The <code>matrixlda</code> function presumes equal covariance parameters while <code>matrixqda</code> fits separate covariance parameters.</p>
-<p>It is possible to set variance or mean restrictions using the <code>...</code> argument. These restrictions are applied to all groups.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(MixMatrix)</a></code></pre></div>
+<p>In the <code>MixMatrix</code> package, there are two functions for training a linear or quadratic classifier. The usage is fairly similar to the function <code><a href="https://www.rdocumentation.org/packages/MASS/topics/lda">MASS::lda()</a></code> or <code><a href="https://www.rdocumentation.org/packages/MASS/topics/qda">MASS::qda()</a></code>, however it requires the input as an array and the group variable provided as a vector (that is, it cannot handle data frames or the formula interface directly, which is reasonable, as there is no immediately clear way to make that work for a collection of matrices).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180222</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'MixMatrix'</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>)) <span class="co"># creating the three groups</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>)) <span class="co"># combining into on array</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>))) <span class="co"># labels</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span> <span class="co"># equal prior</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform LDA</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">matqda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixqda.html">matrixqda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform QDA</span></a></code></pre></div>
+<p>This does not sphere the data or extract an SVD or Fisher discriminant scores - it is a simple regularized linear/quadratic discriminant function based on the likelihood function.</p>
+<p>The <code>matrixlda</code> function presumes equal covariance matrices among the groups while <code>matrixqda</code> fits separate covariance for each groups.</p>
+<p>It is possible to set variance or mean restrictions from the <code>MLmatrixnorm</code> and <code>MLmatrixt</code> functions using the <code>...</code> argument. These restrictions are applied to all groups.</p>
 <p>The <code>predict</code> method for these objects works in much the same way as for <code>lda</code> or <code>qda</code> objects: provide the function and the new data, then it will return the MAP class assignments and the posterior. If no new data is provided, it will attempt to run it on the original data if it is available in the environment.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">## , , 1</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">## </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">##             [,1]       [,2]      [,3]</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">## [1,] -0.07020924  0.8559433 0.9827602</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">## [2,]  1.30097854 -0.6893054 0.2830575</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">## </a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">## , , 2</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">##           [,1]     [,2]        [,3]</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">## [1,] 2.2374662 2.408268 -0.37053822</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">## [2,] 0.9653824 0.630897 -0.08850761</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">## </a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">## , , 3</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">## </a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">##            [,1]       [,2]      [,3]</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">## [1,] -1.6961217 -1.5642705 0.2045711</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">## [2,]  0.7782369  0.1842012 0.3869149</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">## $class</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">## [1] B B A</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">## Levels: A B C</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb2-25" data-line-number="25">## $posterior</a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">##            [,1]        [,2]       [,3]</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">## [1,] 0.27340107 0.690217317 0.03638161</a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">## [2,] 0.03833953 0.949049289 0.01261118</a>
-<a class="sourceLine" id="cb2-29" data-line-number="29">## [3,] 0.54647035 0.001273576 0.45225607</a>
-<a class="sourceLine" id="cb2-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matqda,  ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
-<a class="sourceLine" id="cb2-32" data-line-number="32">## $class</a>
-<a class="sourceLine" id="cb2-33" data-line-number="33">## [1] B B A</a>
-<a class="sourceLine" id="cb2-34" data-line-number="34">## Levels: A B C</a>
-<a class="sourceLine" id="cb2-35" data-line-number="35">## </a>
-<a class="sourceLine" id="cb2-36" data-line-number="36">## $posterior</a>
-<a class="sourceLine" id="cb2-37" data-line-number="37">##            [,1]        [,2]       [,3]</a>
-<a class="sourceLine" id="cb2-38" data-line-number="38">## [1,] 0.24302341 0.735815885 0.02116070</a>
-<a class="sourceLine" id="cb2-39" data-line-number="39">## [2,] 0.03295848 0.963641160 0.00340036</a>
-<a class="sourceLine" id="cb2-40" data-line-number="40">## [3,] 0.54611977 0.007871269 0.44600896</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; , , 1</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;             [,1]       [,2]      [,3]</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; [1,] -0.07020924  0.8559433 0.9827602</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [2,]  1.30097854 -0.6893054 0.2830575</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; , , 2</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt;           [,1]     [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; [1,] 2.2374662 2.408268 -0.37053822</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; [2,] 0.9653824 0.630897 -0.08850761</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; , , 3</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;            [,1]       [,2]      [,3]</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; [1,] -1.6961217 -1.5642705 0.2045711</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; [2,]  0.7782369  0.1842012 0.3869149</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#predict the membership of the first observation of each group</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)]) </a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; [1] B B A</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; Levels: A B C</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; $posterior</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt;            [,1]        [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; [1,] 0.27340107 0.690217317 0.03638161</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; [2,] 0.03833953 0.949049289 0.01261118</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; [3,] 0.54647035 0.001273576 0.45225607</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#predict the membership of the first observation of each group</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matqda,  ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; $class</span></a>
+<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; [1] B B A</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt; Levels: A B C</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; $posterior</span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt;            [,1]        [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt; [1,] 0.24302341 0.735815885 0.02116070</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; [2,] 0.03295848 0.963641160 0.00340036</span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; [3,] 0.54611977 0.007871269 0.44600896</span></a></code></pre></div>
 <p>In this example, points from classes A, B, and C were selected and they ended up being classified as B, B, and A. The QDA and LDA rules had only minor disagreements, which is to be expected when they do truly have the same covariances.</p>
 <div id="details-of-the-modeling-choices" class="section level2">
 <h2 class="hasAnchor">
@@ -215,217 +216,221 @@ R_g(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_g^{-1}
 <h2 class="hasAnchor">
 <a href="#structure-of-the-objects" class="anchor"></a>Structure of the objects</h2>
 <p>The objects returned by <code>matrixlda</code> and <code>matrixqda</code> are S3 classes. See below example output:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">matlda</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">## $prior</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">##         A         B         C </a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">## 0.3333333 0.3333333 0.3333333 </a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">## </a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">## $counts</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">##  A  B  C </a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">## 30 30 30 </a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">## $means</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">## , , 1</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">## </a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">##            [,1]        [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">## [1,] 0.08629672 -0.06362916 -0.3045685</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">## [2,] 0.03851982 -0.01375580  0.3978759</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">## </a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">## , , 2</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">##           [,1]       [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">## [1,] 1.2872487  1.1199220 1.01282774</a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">## [2,] 0.3044151 -0.3797203 0.06539076</a>
-<a class="sourceLine" id="cb3-22" data-line-number="22">## </a>
-<a class="sourceLine" id="cb3-23" data-line-number="23">## , , 3</a>
-<a class="sourceLine" id="cb3-24" data-line-number="24">## </a>
-<a class="sourceLine" id="cb3-25" data-line-number="25">##            [,1]       [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-26" data-line-number="26">## [1,] 0.07377351 -0.3278233 -0.3031961</a>
-<a class="sourceLine" id="cb3-27" data-line-number="27">## [2,] 0.92568372  1.3738475  0.9353985</a>
-<a class="sourceLine" id="cb3-28" data-line-number="28">## </a>
-<a class="sourceLine" id="cb3-29" data-line-number="29">## </a>
-<a class="sourceLine" id="cb3-30" data-line-number="30">## $scaling</a>
-<a class="sourceLine" id="cb3-31" data-line-number="31">## [1] 1.002299</a>
-<a class="sourceLine" id="cb3-32" data-line-number="32">## </a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">## $U</a>
-<a class="sourceLine" id="cb3-34" data-line-number="34">##            [,1]       [,2]</a>
-<a class="sourceLine" id="cb3-35" data-line-number="35">## [1,] 1.00000000 0.03243759</a>
-<a class="sourceLine" id="cb3-36" data-line-number="36">## [2,] 0.03243759 0.97819549</a>
-<a class="sourceLine" id="cb3-37" data-line-number="37">## </a>
-<a class="sourceLine" id="cb3-38" data-line-number="38">## $V</a>
-<a class="sourceLine" id="cb3-39" data-line-number="39">##             [,1]        [,2]        [,3]</a>
-<a class="sourceLine" id="cb3-40" data-line-number="40">## [1,]  1.00000000  0.01988966 -0.04879263</a>
-<a class="sourceLine" id="cb3-41" data-line-number="41">## [2,]  0.01988966  0.93839973 -0.04563610</a>
-<a class="sourceLine" id="cb3-42" data-line-number="42">## [3,] -0.04879263 -0.04563610  0.93321444</a>
-<a class="sourceLine" id="cb3-43" data-line-number="43">## </a>
-<a class="sourceLine" id="cb3-44" data-line-number="44">## $lev</a>
-<a class="sourceLine" id="cb3-45" data-line-number="45">## [1] "A" "B" "C"</a>
-<a class="sourceLine" id="cb3-46" data-line-number="46">## </a>
-<a class="sourceLine" id="cb3-47" data-line-number="47">## $N</a>
-<a class="sourceLine" id="cb3-48" data-line-number="48">## [1] 90</a>
-<a class="sourceLine" id="cb3-49" data-line-number="49">## </a>
-<a class="sourceLine" id="cb3-50" data-line-number="50">## $method</a>
-<a class="sourceLine" id="cb3-51" data-line-number="51">## [1] "normal"</a>
-<a class="sourceLine" id="cb3-52" data-line-number="52">## </a>
-<a class="sourceLine" id="cb3-53" data-line-number="53">## $nu</a>
-<a class="sourceLine" id="cb3-54" data-line-number="54">## NULL</a>
-<a class="sourceLine" id="cb3-55" data-line-number="55">## </a>
-<a class="sourceLine" id="cb3-56" data-line-number="56">## $call</a>
-<a class="sourceLine" id="cb3-57" data-line-number="57">## matrixlda(x = ABC, grouping = groups, prior = prior)</a>
-<a class="sourceLine" id="cb3-58" data-line-number="58">## </a>
-<a class="sourceLine" id="cb3-59" data-line-number="59">## attr(,"class")</a>
-<a class="sourceLine" id="cb3-60" data-line-number="60">## [1] "matrixlda"</a>
-<a class="sourceLine" id="cb3-61" data-line-number="61"></a>
-<a class="sourceLine" id="cb3-62" data-line-number="62">matqda</a>
-<a class="sourceLine" id="cb3-63" data-line-number="63">## $prior</a>
-<a class="sourceLine" id="cb3-64" data-line-number="64">##         A         B         C </a>
-<a class="sourceLine" id="cb3-65" data-line-number="65">## 0.3333333 0.3333333 0.3333333 </a>
-<a class="sourceLine" id="cb3-66" data-line-number="66">## </a>
-<a class="sourceLine" id="cb3-67" data-line-number="67">## $counts</a>
-<a class="sourceLine" id="cb3-68" data-line-number="68">##  A  B  C </a>
-<a class="sourceLine" id="cb3-69" data-line-number="69">## 30 30 30 </a>
-<a class="sourceLine" id="cb3-70" data-line-number="70">## </a>
-<a class="sourceLine" id="cb3-71" data-line-number="71">## $means</a>
-<a class="sourceLine" id="cb3-72" data-line-number="72">## , , 1</a>
-<a class="sourceLine" id="cb3-73" data-line-number="73">## </a>
-<a class="sourceLine" id="cb3-74" data-line-number="74">##            [,1]        [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-75" data-line-number="75">## [1,] 0.08629672 -0.06362916 -0.3045685</a>
-<a class="sourceLine" id="cb3-76" data-line-number="76">## [2,] 0.03851982 -0.01375580  0.3978759</a>
-<a class="sourceLine" id="cb3-77" data-line-number="77">## </a>
-<a class="sourceLine" id="cb3-78" data-line-number="78">## , , 2</a>
-<a class="sourceLine" id="cb3-79" data-line-number="79">## </a>
-<a class="sourceLine" id="cb3-80" data-line-number="80">##           [,1]       [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-81" data-line-number="81">## [1,] 1.2872487  1.1199220 1.01282774</a>
-<a class="sourceLine" id="cb3-82" data-line-number="82">## [2,] 0.3044151 -0.3797203 0.06539076</a>
-<a class="sourceLine" id="cb3-83" data-line-number="83">## </a>
-<a class="sourceLine" id="cb3-84" data-line-number="84">## , , 3</a>
-<a class="sourceLine" id="cb3-85" data-line-number="85">## </a>
-<a class="sourceLine" id="cb3-86" data-line-number="86">##            [,1]       [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-87" data-line-number="87">## [1,] 0.07377351 -0.3278233 -0.3031961</a>
-<a class="sourceLine" id="cb3-88" data-line-number="88">## [2,] 0.92568372  1.3738475  0.9353985</a>
-<a class="sourceLine" id="cb3-89" data-line-number="89">## </a>
-<a class="sourceLine" id="cb3-90" data-line-number="90">## </a>
-<a class="sourceLine" id="cb3-91" data-line-number="91">## $U</a>
-<a class="sourceLine" id="cb3-92" data-line-number="92">## , , 1</a>
-<a class="sourceLine" id="cb3-93" data-line-number="93">## </a>
-<a class="sourceLine" id="cb3-94" data-line-number="94">##            [,1]       [,2]</a>
-<a class="sourceLine" id="cb3-95" data-line-number="95">## [1,] 1.00000000 0.02620514</a>
-<a class="sourceLine" id="cb3-96" data-line-number="96">## [2,] 0.02620514 0.95989647</a>
-<a class="sourceLine" id="cb3-97" data-line-number="97">## </a>
-<a class="sourceLine" id="cb3-98" data-line-number="98">## , , 2</a>
-<a class="sourceLine" id="cb3-99" data-line-number="99">## </a>
-<a class="sourceLine" id="cb3-100" data-line-number="100">##            [,1]       [,2]</a>
-<a class="sourceLine" id="cb3-101" data-line-number="101">## [1,]  1.0000000 -0.0173514</a>
-<a class="sourceLine" id="cb3-102" data-line-number="102">## [2,] -0.0173514  0.9456145</a>
-<a class="sourceLine" id="cb3-103" data-line-number="103">## </a>
-<a class="sourceLine" id="cb3-104" data-line-number="104">## , , 3</a>
-<a class="sourceLine" id="cb3-105" data-line-number="105">## </a>
-<a class="sourceLine" id="cb3-106" data-line-number="106">##          [,1]     [,2]</a>
-<a class="sourceLine" id="cb3-107" data-line-number="107">## [1,] 1.000000 0.129851</a>
-<a class="sourceLine" id="cb3-108" data-line-number="108">## [2,] 0.129851 1.061265</a>
-<a class="sourceLine" id="cb3-109" data-line-number="109">## </a>
-<a class="sourceLine" id="cb3-110" data-line-number="110">## </a>
-<a class="sourceLine" id="cb3-111" data-line-number="111">## $V</a>
-<a class="sourceLine" id="cb3-112" data-line-number="112">## , , 1</a>
-<a class="sourceLine" id="cb3-113" data-line-number="113">## </a>
-<a class="sourceLine" id="cb3-114" data-line-number="114">##             [,1]        [,2]        [,3]</a>
-<a class="sourceLine" id="cb3-115" data-line-number="115">## [1,]  1.05498245 -0.07418973  0.09476411</a>
-<a class="sourceLine" id="cb3-116" data-line-number="116">## [2,] -0.07418973  0.98800103 -0.04390729</a>
-<a class="sourceLine" id="cb3-117" data-line-number="117">## [3,]  0.09476411 -0.04390729  0.79903040</a>
-<a class="sourceLine" id="cb3-118" data-line-number="118">## </a>
-<a class="sourceLine" id="cb3-119" data-line-number="119">## , , 2</a>
-<a class="sourceLine" id="cb3-120" data-line-number="120">## </a>
-<a class="sourceLine" id="cb3-121" data-line-number="121">##             [,1]       [,2]        [,3]</a>
-<a class="sourceLine" id="cb3-122" data-line-number="122">## [1,]  1.09941477 0.12678075 -0.03952663</a>
-<a class="sourceLine" id="cb3-123" data-line-number="123">## [2,]  0.12678075 0.94606849  0.03910645</a>
-<a class="sourceLine" id="cb3-124" data-line-number="124">## [3,] -0.03952663 0.03910645  0.85913748</a>
-<a class="sourceLine" id="cb3-125" data-line-number="125">## </a>
-<a class="sourceLine" id="cb3-126" data-line-number="126">## , , 3</a>
-<a class="sourceLine" id="cb3-127" data-line-number="127">## </a>
-<a class="sourceLine" id="cb3-128" data-line-number="128">##              [,1]         [,2]       [,3]</a>
-<a class="sourceLine" id="cb3-129" data-line-number="129">## [1,]  0.833193637  0.008466708 -0.2084547</a>
-<a class="sourceLine" id="cb3-130" data-line-number="130">## [2,]  0.008466708  0.875328749 -0.1142510</a>
-<a class="sourceLine" id="cb3-131" data-line-number="131">## [3,] -0.208454704 -0.114250988  1.1520533</a>
-<a class="sourceLine" id="cb3-132" data-line-number="132">## </a>
-<a class="sourceLine" id="cb3-133" data-line-number="133">## </a>
-<a class="sourceLine" id="cb3-134" data-line-number="134">## $lev</a>
-<a class="sourceLine" id="cb3-135" data-line-number="135">## [1] "A" "B" "C"</a>
-<a class="sourceLine" id="cb3-136" data-line-number="136">## </a>
-<a class="sourceLine" id="cb3-137" data-line-number="137">## $N</a>
-<a class="sourceLine" id="cb3-138" data-line-number="138">## [1] 90</a>
-<a class="sourceLine" id="cb3-139" data-line-number="139">## </a>
-<a class="sourceLine" id="cb3-140" data-line-number="140">## $method</a>
-<a class="sourceLine" id="cb3-141" data-line-number="141">## [1] "normal"</a>
-<a class="sourceLine" id="cb3-142" data-line-number="142">## </a>
-<a class="sourceLine" id="cb3-143" data-line-number="143">## $nu</a>
-<a class="sourceLine" id="cb3-144" data-line-number="144">## NULL</a>
-<a class="sourceLine" id="cb3-145" data-line-number="145">## </a>
-<a class="sourceLine" id="cb3-146" data-line-number="146">## $call</a>
-<a class="sourceLine" id="cb3-147" data-line-number="147">## matrixqda(x = ABC, grouping = groups, prior = prior)</a>
-<a class="sourceLine" id="cb3-148" data-line-number="148">## </a>
-<a class="sourceLine" id="cb3-149" data-line-number="149">## attr(,"class")</a>
-<a class="sourceLine" id="cb3-150" data-line-number="150">## [1] "matrixqda"</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">matlda</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; $prior</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;         A         B         C </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; 0.3333333 0.3333333 0.3333333 </span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; $counts</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;  A  B  C </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 30 30 30 </span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; $means</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; , , 1</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;            [,1]        [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; [1,] 0.08629672 -0.06362916 -0.3045685</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; [2,] 0.03851982 -0.01375580  0.3978759</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; , , 2</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt;           [,1]       [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; [1,] 1.2872487  1.1199220 1.01282774</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; [2,] 0.3044151 -0.3797203 0.06539076</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; , , 3</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt;            [,1]       [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; [1,] 0.07377351 -0.3278233 -0.3031961</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; [2,] 0.92568372  1.3738475  0.9353985</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; $scaling</span></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">#&gt; [1] 1.002299</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33"><span class="co">#&gt; $U</span></a>
+<a class="sourceLine" id="cb4-34" data-line-number="34"><span class="co">#&gt;            [,1]       [,2]</span></a>
+<a class="sourceLine" id="cb4-35" data-line-number="35"><span class="co">#&gt; [1,] 1.00000000 0.03243759</span></a>
+<a class="sourceLine" id="cb4-36" data-line-number="36"><span class="co">#&gt; [2,] 0.03243759 0.97819549</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-38" data-line-number="38"><span class="co">#&gt; $V</span></a>
+<a class="sourceLine" id="cb4-39" data-line-number="39"><span class="co">#&gt;             [,1]        [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb4-40" data-line-number="40"><span class="co">#&gt; [1,]  1.00000000  0.01988966 -0.04879263</span></a>
+<a class="sourceLine" id="cb4-41" data-line-number="41"><span class="co">#&gt; [2,]  0.01988966  0.93839973 -0.04563610</span></a>
+<a class="sourceLine" id="cb4-42" data-line-number="42"><span class="co">#&gt; [3,] -0.04879263 -0.04563610  0.93321444</span></a>
+<a class="sourceLine" id="cb4-43" data-line-number="43"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-44" data-line-number="44"><span class="co">#&gt; $lev</span></a>
+<a class="sourceLine" id="cb4-45" data-line-number="45"><span class="co">#&gt; [1] "A" "B" "C"</span></a>
+<a class="sourceLine" id="cb4-46" data-line-number="46"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-47" data-line-number="47"><span class="co">#&gt; $N</span></a>
+<a class="sourceLine" id="cb4-48" data-line-number="48"><span class="co">#&gt; [1] 90</span></a>
+<a class="sourceLine" id="cb4-49" data-line-number="49"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-50" data-line-number="50"><span class="co">#&gt; $method</span></a>
+<a class="sourceLine" id="cb4-51" data-line-number="51"><span class="co">#&gt; [1] "normal"</span></a>
+<a class="sourceLine" id="cb4-52" data-line-number="52"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-53" data-line-number="53"><span class="co">#&gt; $nu</span></a>
+<a class="sourceLine" id="cb4-54" data-line-number="54"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb4-55" data-line-number="55"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-56" data-line-number="56"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb4-57" data-line-number="57"><span class="co">#&gt; matrixlda(x = ABC, grouping = groups, prior = prior)</span></a>
+<a class="sourceLine" id="cb4-58" data-line-number="58"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-59" data-line-number="59"><span class="co">#&gt; attr(,"class")</span></a>
+<a class="sourceLine" id="cb4-60" data-line-number="60"><span class="co">#&gt; [1] "matrixlda"</span></a>
+<a class="sourceLine" id="cb4-61" data-line-number="61"></a>
+<a class="sourceLine" id="cb4-62" data-line-number="62">matqda</a>
+<a class="sourceLine" id="cb4-63" data-line-number="63"><span class="co">#&gt; $prior</span></a>
+<a class="sourceLine" id="cb4-64" data-line-number="64"><span class="co">#&gt;         A         B         C </span></a>
+<a class="sourceLine" id="cb4-65" data-line-number="65"><span class="co">#&gt; 0.3333333 0.3333333 0.3333333 </span></a>
+<a class="sourceLine" id="cb4-66" data-line-number="66"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-67" data-line-number="67"><span class="co">#&gt; $counts</span></a>
+<a class="sourceLine" id="cb4-68" data-line-number="68"><span class="co">#&gt;  A  B  C </span></a>
+<a class="sourceLine" id="cb4-69" data-line-number="69"><span class="co">#&gt; 30 30 30 </span></a>
+<a class="sourceLine" id="cb4-70" data-line-number="70"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-71" data-line-number="71"><span class="co">#&gt; $means</span></a>
+<a class="sourceLine" id="cb4-72" data-line-number="72"><span class="co">#&gt; , , 1</span></a>
+<a class="sourceLine" id="cb4-73" data-line-number="73"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-74" data-line-number="74"><span class="co">#&gt;            [,1]        [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-75" data-line-number="75"><span class="co">#&gt; [1,] 0.08629672 -0.06362916 -0.3045685</span></a>
+<a class="sourceLine" id="cb4-76" data-line-number="76"><span class="co">#&gt; [2,] 0.03851982 -0.01375580  0.3978759</span></a>
+<a class="sourceLine" id="cb4-77" data-line-number="77"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-78" data-line-number="78"><span class="co">#&gt; , , 2</span></a>
+<a class="sourceLine" id="cb4-79" data-line-number="79"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-80" data-line-number="80"><span class="co">#&gt;           [,1]       [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-81" data-line-number="81"><span class="co">#&gt; [1,] 1.2872487  1.1199220 1.01282774</span></a>
+<a class="sourceLine" id="cb4-82" data-line-number="82"><span class="co">#&gt; [2,] 0.3044151 -0.3797203 0.06539076</span></a>
+<a class="sourceLine" id="cb4-83" data-line-number="83"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-84" data-line-number="84"><span class="co">#&gt; , , 3</span></a>
+<a class="sourceLine" id="cb4-85" data-line-number="85"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-86" data-line-number="86"><span class="co">#&gt;            [,1]       [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-87" data-line-number="87"><span class="co">#&gt; [1,] 0.07377351 -0.3278233 -0.3031961</span></a>
+<a class="sourceLine" id="cb4-88" data-line-number="88"><span class="co">#&gt; [2,] 0.92568372  1.3738475  0.9353985</span></a>
+<a class="sourceLine" id="cb4-89" data-line-number="89"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-90" data-line-number="90"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-91" data-line-number="91"><span class="co">#&gt; $U</span></a>
+<a class="sourceLine" id="cb4-92" data-line-number="92"><span class="co">#&gt; , , 1</span></a>
+<a class="sourceLine" id="cb4-93" data-line-number="93"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-94" data-line-number="94"><span class="co">#&gt;            [,1]       [,2]</span></a>
+<a class="sourceLine" id="cb4-95" data-line-number="95"><span class="co">#&gt; [1,] 1.00000000 0.02620514</span></a>
+<a class="sourceLine" id="cb4-96" data-line-number="96"><span class="co">#&gt; [2,] 0.02620514 0.95989647</span></a>
+<a class="sourceLine" id="cb4-97" data-line-number="97"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-98" data-line-number="98"><span class="co">#&gt; , , 2</span></a>
+<a class="sourceLine" id="cb4-99" data-line-number="99"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-100" data-line-number="100"><span class="co">#&gt;            [,1]       [,2]</span></a>
+<a class="sourceLine" id="cb4-101" data-line-number="101"><span class="co">#&gt; [1,]  1.0000000 -0.0173514</span></a>
+<a class="sourceLine" id="cb4-102" data-line-number="102"><span class="co">#&gt; [2,] -0.0173514  0.9456145</span></a>
+<a class="sourceLine" id="cb4-103" data-line-number="103"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-104" data-line-number="104"><span class="co">#&gt; , , 3</span></a>
+<a class="sourceLine" id="cb4-105" data-line-number="105"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-106" data-line-number="106"><span class="co">#&gt;          [,1]     [,2]</span></a>
+<a class="sourceLine" id="cb4-107" data-line-number="107"><span class="co">#&gt; [1,] 1.000000 0.129851</span></a>
+<a class="sourceLine" id="cb4-108" data-line-number="108"><span class="co">#&gt; [2,] 0.129851 1.061265</span></a>
+<a class="sourceLine" id="cb4-109" data-line-number="109"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-110" data-line-number="110"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-111" data-line-number="111"><span class="co">#&gt; $V</span></a>
+<a class="sourceLine" id="cb4-112" data-line-number="112"><span class="co">#&gt; , , 1</span></a>
+<a class="sourceLine" id="cb4-113" data-line-number="113"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-114" data-line-number="114"><span class="co">#&gt;             [,1]        [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb4-115" data-line-number="115"><span class="co">#&gt; [1,]  1.05498245 -0.07418973  0.09476411</span></a>
+<a class="sourceLine" id="cb4-116" data-line-number="116"><span class="co">#&gt; [2,] -0.07418973  0.98800103 -0.04390729</span></a>
+<a class="sourceLine" id="cb4-117" data-line-number="117"><span class="co">#&gt; [3,]  0.09476411 -0.04390729  0.79903040</span></a>
+<a class="sourceLine" id="cb4-118" data-line-number="118"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-119" data-line-number="119"><span class="co">#&gt; , , 2</span></a>
+<a class="sourceLine" id="cb4-120" data-line-number="120"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-121" data-line-number="121"><span class="co">#&gt;             [,1]       [,2]        [,3]</span></a>
+<a class="sourceLine" id="cb4-122" data-line-number="122"><span class="co">#&gt; [1,]  1.09941477 0.12678075 -0.03952663</span></a>
+<a class="sourceLine" id="cb4-123" data-line-number="123"><span class="co">#&gt; [2,]  0.12678075 0.94606849  0.03910645</span></a>
+<a class="sourceLine" id="cb4-124" data-line-number="124"><span class="co">#&gt; [3,] -0.03952663 0.03910645  0.85913748</span></a>
+<a class="sourceLine" id="cb4-125" data-line-number="125"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-126" data-line-number="126"><span class="co">#&gt; , , 3</span></a>
+<a class="sourceLine" id="cb4-127" data-line-number="127"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-128" data-line-number="128"><span class="co">#&gt;              [,1]         [,2]       [,3]</span></a>
+<a class="sourceLine" id="cb4-129" data-line-number="129"><span class="co">#&gt; [1,]  0.833193637  0.008466708 -0.2084547</span></a>
+<a class="sourceLine" id="cb4-130" data-line-number="130"><span class="co">#&gt; [2,]  0.008466708  0.875328749 -0.1142510</span></a>
+<a class="sourceLine" id="cb4-131" data-line-number="131"><span class="co">#&gt; [3,] -0.208454704 -0.114250988  1.1520533</span></a>
+<a class="sourceLine" id="cb4-132" data-line-number="132"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-133" data-line-number="133"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-134" data-line-number="134"><span class="co">#&gt; $lev</span></a>
+<a class="sourceLine" id="cb4-135" data-line-number="135"><span class="co">#&gt; [1] "A" "B" "C"</span></a>
+<a class="sourceLine" id="cb4-136" data-line-number="136"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-137" data-line-number="137"><span class="co">#&gt; $N</span></a>
+<a class="sourceLine" id="cb4-138" data-line-number="138"><span class="co">#&gt; [1] 90</span></a>
+<a class="sourceLine" id="cb4-139" data-line-number="139"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-140" data-line-number="140"><span class="co">#&gt; $method</span></a>
+<a class="sourceLine" id="cb4-141" data-line-number="141"><span class="co">#&gt; [1] "normal"</span></a>
+<a class="sourceLine" id="cb4-142" data-line-number="142"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-143" data-line-number="143"><span class="co">#&gt; $nu</span></a>
+<a class="sourceLine" id="cb4-144" data-line-number="144"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb4-145" data-line-number="145"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-146" data-line-number="146"><span class="co">#&gt; $call</span></a>
+<a class="sourceLine" id="cb4-147" data-line-number="147"><span class="co">#&gt; matrixqda(x = ABC, grouping = groups, prior = prior)</span></a>
+<a class="sourceLine" id="cb4-148" data-line-number="148"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-149" data-line-number="149"><span class="co">#&gt; attr(,"class")</span></a>
+<a class="sourceLine" id="cb4-150" data-line-number="150"><span class="co">#&gt; [1] "matrixqda"</span></a></code></pre></div>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session info</h2>
 <p>This vignette was built using <code>rmarkdown</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">## R version 3.6.1 (2017-01-27)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">## Platform: x86_64-pc-linux-gnu (64-bit)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">## Running under: Ubuntu 14.04.5 LTS</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">## </a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">## Matrix products: default</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">## BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">## LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">## </a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">## locale:</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">## </a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">## attached base packages:</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">## [1] stats     graphics  grDevices utils     datasets  methods   base     </a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">## </a>
-<a class="sourceLine" id="cb4-21" data-line-number="21">## other attached packages:</a>
-<a class="sourceLine" id="cb4-22" data-line-number="22">## [1] MixMatrix_0.2.2</a>
-<a class="sourceLine" id="cb4-23" data-line-number="23">## </a>
-<a class="sourceLine" id="cb4-24" data-line-number="24">## loaded via a namespace (and not attached):</a>
-<a class="sourceLine" id="cb4-25" data-line-number="25">##  [1] Rcpp_1.0.1       knitr_1.23       xml2_1.2.0       magrittr_1.5    </a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">##  [5] roxygen2_6.1.1   MASS_7.3-51.4    R6_2.4.0         rlang_0.4.0     </a>
-<a class="sourceLine" id="cb4-27" data-line-number="27">##  [9] stringr_1.4.0    tools_3.6.1      xfun_0.8         htmltools_0.3.6 </a>
-<a class="sourceLine" id="cb4-28" data-line-number="28">## [13] commonmark_1.7   yaml_2.2.0       digest_0.6.20    assertthat_0.2.1</a>
-<a class="sourceLine" id="cb4-29" data-line-number="29">## [17] rprojroot_1.3-2  pkgdown_1.3.0    crayon_1.3.4     fs_1.3.1        </a>
-<a class="sourceLine" id="cb4-30" data-line-number="30">## [21] memoise_1.1.0    evaluate_0.14    rmarkdown_1.14   stringi_1.4.3   </a>
-<a class="sourceLine" id="cb4-31" data-line-number="31">## [25] compiler_3.6.1   desc_1.2.0       backports_1.1.4</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2017-01-27)</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 14.04.5 LTS</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; [1] MixMatrix_0.2.2</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.1       knitr_1.23       xml2_1.2.0       magrittr_1.5    </span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt;  [5] roxygen2_6.1.1   MASS_7.3-51.4    R6_2.4.0         rlang_0.4.0     </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt;  [9] stringr_1.4.0    tools_3.6.1      xfun_0.8         htmltools_0.3.6 </span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; [13] commonmark_1.7   yaml_2.2.0       digest_0.6.20    assertthat_0.2.1</span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; [17] rprojroot_1.3-2  pkgdown_1.3.0    crayon_1.3.4     fs_1.3.1        </span></a>
+<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="co">#&gt; [21] memoise_1.1.0    evaluate_0.14    rmarkdown_1.14   stringi_1.4.3   </span></a>
+<a class="sourceLine" id="cb5-31" data-line-number="31"><span class="co">#&gt; [25] compiler_3.6.1   desc_1.2.0       backports_1.1.4</span></a></code></pre></div>
 </div>
 <div id="all-the-code-for-easy-copying" class="section level2">
 <h2 class="hasAnchor">
 <a href="#all-the-code-for-easy-copying" class="anchor"></a>All the code for easy copying</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180222</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'MixMatrix'</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>)) <span class="co"># creating the three groups</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>)) <span class="co"># combining into on array</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>))) <span class="co"># labels</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span> <span class="co"># equal prior</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform LDA</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">matqda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixqda.html">matrixqda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform QDA</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matqda,  ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">matlda</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">matqda</a>
-<a class="sourceLine" id="cb5-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="dt">collapse =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="dt">comment =</span> <span class="st">"#&gt;"</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">20180222</span>)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">'MixMatrix'</span>)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>)) <span class="co"># creating the three groups</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">C &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span>(<span class="dv">30</span>, <span class="dt">mean =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">ABC &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(A,B,C), <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">90</span>)) <span class="co"># combining into on array</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">groups &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"A"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"B"</span>,<span class="dv">30</span>),<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"C"</span>,<span class="dv">30</span>))) <span class="co"># labels</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">prior =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">30</span>,<span class="dv">30</span>,<span class="dv">30</span>)<span class="op">/</span><span class="dv">90</span> <span class="co"># equal prior</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">matlda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixlda.html">matrixlda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform LDA</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">matqda &lt;-<span class="st"> </span><span class="kw"><a href="../reference/matrixqda.html">matrixqda</a></span>(<span class="dt">x =</span> ABC,<span class="dt">grouping =</span> groups, <span class="dt">prior =</span> prior) <span class="co"># perform QDA</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)] <span class="co"># true class memberships: A, B, C</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#predict the membership of the first observation of each group</span></a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matlda, ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)]) </a>
+<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#predict the membership of the first observation of each group</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(matqda,  ABC[,,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>,<span class="dv">31</span>,<span class="dv">61</span>)])</a>
+<a class="sourceLine" id="cb6-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb6-21" data-line-number="21">matlda</a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23">matqda</a>
+<a class="sourceLine" id="cb6-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()</a></code></pre></div>
 </div>
   </div>
 
