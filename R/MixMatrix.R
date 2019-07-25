@@ -1,4 +1,4 @@
-#' Functions for Matrix Distributions
+#' Classification with Matrix Variate Normal and t Distributions
 #'
 #' Provides sampling and density functions for matrix
 #' variate normal, \eqn{t}, and inverted \eqn{t} distributions;
