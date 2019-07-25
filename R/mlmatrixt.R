@@ -16,8 +16,6 @@
 #   along with this program; if not, a copy is available at
 #   https://www.R-project.org/Licenses/
 
-
-
 #' Maximum likelihood estimation for matrix variate t distributions
 #'
 #' For the matrix variate normal distribution, maximum likelihood estimates
