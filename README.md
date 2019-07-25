@@ -8,11 +8,12 @@
 
 
 Provides sampling and density functions for matrix 
-variate normal, *t*, and inverted *t* distributions;  ML estimation for matrix
-variate normal and *t* distributions including some restrictions on the
-parameters using the EM algorithm; and classification by linear and quadratic discriminant
-analysis for matrix variate normal and *t* distributions. Performs clustering
-with matrix variate normal and *t* mixture models.
+variate normal, *t*, and inverted *t* distributions;  ML estimation  
+using the EM algorithm for matrix variate normal and *t* distributions 
+including some restrictions on the parameters; and classification by linear 
+and quadratic discriminant analysis for matrix variate normal and *t* 
+distributions. Performs clustering with matrix variate normal and *t* mixture 
+models.
 
 See the vignettes for an example of how it works.
 

@@ -588,7 +588,7 @@ init_matrixmixture<- function(data, prior = NULL, K = length(prior), centers = N
 
 # S3 method for predict on class MixMatrixModel
 ##' @export
-predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
+predict.MixMatrixModel <- function(object, newdata, prior = object$pi,...){
         if (!inherits(object, "MixMatrixModel"))
             stop("object not of class \"MixMatrixModel\"")
 
@@ -649,5 +649,4 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$prior,...){
     nm <- names(object$prior)
     cl <- max.col(posterior)
     list(class = cl, posterior = posterior)      
-        
 }
