@@ -17,7 +17,7 @@ Description: Provides sampling and density functions for matrix
     parameters; and classification by linear and quadratic discriminant
     analysis for matrix variate normal and t distributions described
     in Thompson et al. (2019) <arXiv:1907.09565>. Performs clustering
-    of matrix variate normal and t distributions by mixture modeling.
+    with matrix variate normal and t mixture models.
 Depends: R (>= 3.5.0)
 Imports:
     stats, 

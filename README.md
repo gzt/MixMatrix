@@ -3,18 +3,16 @@
  [![Travis-CI Build Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-ci.org/gzt/MixMatrix)
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.1%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.2%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)](https://github.com/gzt/MixMatrix/)
 
 
-A package for matrix variate distributions, including the normal, *t*, and 
-inverted *t*. Currently provides classification with LDA and QDA for matrix 
-variate *t* distributions and normal distributions, EM for parameter 
-estimation for matrix variate *t* distributions,  with sampling and density 
-functions for those distributions  as well as methods for parameter 
-estimation for matrix variate normals and *t* with some restrictions on mean 
-and variance parameters. Provides some clustering and classification by mixture 
-modeling for matrix variate *t* distributions and normal distributions.
+Provides sampling and density functions for matrix 
+variate normal, *t*, and inverted *t* distributions;  ML estimation for matrix
+variate normal and *t* distributions including some restrictions on the
+parameters using the EM algorithm; and classification by linear and quadratic discriminant
+analysis for matrix variate normal and *t* distributions. Performs clustering
+with matrix variate normal and *t* mixture models.
 
 See the vignettes for an example of how it works.
 
@@ -94,12 +92,16 @@ mixture modeling after the style of [Mclust](https://cran.r-project.org/package=
 
 
 ```
+	### set two different matrix variate populations and combine into one array
  A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
  B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
  C <- array(c(A,B), dim=c(3,4,60))
  groups <- c(rep(1,30),rep(2,30))
  prior <- c(.5,.5)
+	### set up the mixture model
  D <- matrixmixture(C, prior, row.mean = TRUE, tolerance = 1e-2)
+    ### print the results, the final mixing proportion, the log-likelihood,
+	### the BIC, and a plot of the log-likelihood.
  print(D$centers) # the final centers
  print(D$pi) # the final mixing proportion
  logLik(D)
