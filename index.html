@@ -16,7 +16,7 @@
     parameters; and classification by linear and quadratic discriminant
     analysis for matrix variate normal and t distributions described
     in Thompson et al. (2019) &lt;arXiv:1907.09565&gt;. Performs clustering
-    of matrix variate normal and t distributions by mixture modeling.">
+    with matrix variate normal and t mixture models.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -98,7 +98,7 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#mixmatrix" class="anchor"></a>MixMatrix</h1></div>
 
-<p>A package for matrix variate distributions, including the normal, <em>t</em>, and inverted <em>t</em>. Currently provides classification with LDA and QDA for matrix variate <em>t</em> distributions and normal distributions, EM for parameter estimation for matrix variate <em>t</em> distributions, with sampling and density functions for those distributions as well as methods for parameter estimation for matrix variate normals and <em>t</em> with some restrictions on mean and variance parameters. Provides some clustering and classification by mixture modeling for matrix variate <em>t</em> distributions and normal distributions.</p>
+<p>Provides sampling and density functions for matrix variate normal, <em>t</em>, and inverted <em>t</em> distributions; ML estimation for matrix variate normal and <em>t</em> distributions including some restrictions on the parameters using the EM algorithm; and classification by linear and quadratic discriminant analysis for matrix variate normal and <em>t</em> distributions. Performs clustering with matrix variate normal and <em>t</em> mixture models.</p>
 <p>See the vignettes for an example of how it works.</p>
 <p>It is currently possible to constrain the mean matrices for normal and <em>t</em> distributed matrices to have a common mean across rows, columns, or both, as well as AR(1), compound symmetric, on identity covariance matrices across rows, columns, or both in the maximum likelihood estimation functions and the LDA and QDA functions. In the mixture model function, it is possible to have a common mean within groups across rows, columns, or both.</p>
 <p>There are some other R packages you may be interested in if you are working with matrix-variate distributions. The excellent <a href="https://cran.r-project.org/package=matrixsampling">matrixsampling</a> package has sampling and distribution functions for these and many other matrix distributions, as does <a href="https://cran.r-project.org/package=LaplacesDemon">LaplacesDemon</a>. The <a href="https://cran.r-project.org/package=MatrixLDA">MatrixLDA</a> package performs LDA for normal distributions with penalized likelihood.</p>
@@ -129,12 +129,16 @@ CSgenerate(5, .5)</a></code></pre>
  D &lt;- matrixqda(C, groups, prior)
  predict(D)$posterior[1:10,]</code></pre>
 <p>In the future, this will include a more comprehensive treatment of matrix variate mixture modeling, including complete specification of covariance matrices in mixture modeling after the style of <a href="https://cran.r-project.org/package=mclust">Mclust</a>, <a href="https://cran.r-project.org/package=teigen">t-Eigen</a>, and other similar work.</p>
-<pre><code> A &lt;- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
+<pre><code>    ### set two different matrix variate populations and combine into one array
+ A &lt;- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
  B &lt;- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
  C &lt;- array(c(A,B), dim=c(3,4,60))
  groups &lt;- c(rep(1,30),rep(2,30))
  prior &lt;- c(.5,.5)
+    ### set up the mixture model
  D &lt;- matrixmixture(C, prior, row.mean = TRUE, tolerance = 1e-2)
+    ### print the results, the final mixing proportion, the log-likelihood,
+    ### the BIC, and a plot of the log-likelihood.
  print(D$centers) # the final centers
  print(D$pi) # the final mixing proportion
  logLik(D)
@@ -180,7 +184,7 @@ CSgenerate(5, .5)</a></code></pre>
 <li><a href="https://travis-ci.org/gzt/MixMatrix"><img src="https://travis-ci.org/gzt/MixMatrix.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/gzt/MixMatrix"><img src="https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/github/gzt/MixMatrix?branch=master"><img src="https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg" alt="Coverage Status"></a></li>
-<li><a href="https://github.com/gzt/MixMatrix/releases"><img src="https://img.shields.io/badge/Package%20version-0.2.1%20-orange.svg?style=flat-square" alt="packageversion"></a></li>
+<li><a href="https://github.com/gzt/MixMatrix/releases"><img src="https://img.shields.io/badge/Package%20version-0.2.2%20-orange.svg?style=flat-square" alt="packageversion"></a></li>
 <li><a href="https://github.com/gzt/MixMatrix/"><img src="http://www.r-pkg.org/badges/version/MixMatrix" alt="CRAN_Status_Badge"></a></li>
 </ul>
 </div>
