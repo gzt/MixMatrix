@@ -90,6 +90,8 @@
 #'        Method for Classification With Matrix-Valued Predictors", Journal of
 #'        Computational and Graphical Statistics, 28:1, 11-22,
 #'        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
+#'   Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
+#'   S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
 #' 
 #' @export
 #'
@@ -403,7 +405,15 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'     \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 
 #'
-#' @references Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#' @references
+#'     G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+#'     "Classification with the matrix-variate-t distribution", arXiv
+#'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+#'
+#'   Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
+#'   S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
+#'
+#'     Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
 #'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #' 
 #' @export
@@ -757,7 +767,6 @@ nobs.matrixqda <- function(object, ...){
 #' prior <- c(.5,.5) # set prior
 #' D <- matrixqda(C, groups, prior) # fit model
 #' predict(D)$posterior[1:10,] # predict, show results of first 10
-#'
 ## S3 method for class "matrixqda"
 predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     if (!inherits(object, "matrixqda"))
@@ -808,26 +817,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
     ##### Here is where the work needs to be done.
     dist = matrix(0, nrow = n, ncol = ng)
     posterior = matrix(0, nrow = n, ncol = ng)
-    ## cholU = vector("list", ng)
-    ## cholV = vector("list", ng)
-    ## solveU = vector("list", ng)
-    ## solveV = vector("list", ng)
-    ## for (j in seq(ng)) {
-    ##     cholV[[j]] = chol(object$V[, , j])
-    ##     cholU[[j]] = chol(object$U[, , j])
-    ##     solveV[[j]] = chol2inv(cholV[[j]])
-    ##     solveU[[j]] = chol2inv(cholU[[j]])
-    ## }
-    ## VMUM = vector("list",ng)
-    ## detfactor =  numeric(ng)
-    ## VMU = vector("list",ng)
-    #for (j in seq(ng)) {
-    #  VMU[[j]] = matrix(solveV[[j]] %*% crossprod(matrix(object$means[, , j],p,q), solveU[[j]]),q,p)
-    #  VMUM[[j]] =  VMU[[j]] %*% matrix(object$means[, , j], p, q)
-    #  logdetU = 2*sum(log(diag(cholU[[j]])))
-    #  logdetV = 2*sum(log(diag(cholV[[j]])))
-    #  detfactor[j] = -.5 * (q * logdetU + p * logdetV)
-    #}
+
     for (j in seq(ng)){
         if (object$method == "t"){
             dist[,j] = dmat_t_calc(x,df[j],object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
@@ -835,20 +825,7 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
             dist[,j] = dmatnorm_calc(x,object$means[,,j],object$U[,,j],object$V[,,j])+log(prior[j])
         }
     }
-    #for (i in seq(n)) {
-    ##   Xi = matrix(x[, , i], p, q)
-    ##   for (j in seq(ng)) {
-    ##     if (object$method == "t"){
-    ##         dist[i,j] = dmat_t_calc(array(Xi,dim=c(p,q,1)),df[j],object$means[,,j],object$U[,,j],object$V[,,j])
-    ##       #dist[i, j] = -.5* (df[j] + p + q - 1) * log(det(diag(q) + solveV[[j]] %*% t(Xi - object$means[,,j]) %*% solveU[[j]] %*% (Xi - object$means[,,j]))) + log(prior[j]) +
-    ##        # detfactor[j]
-    ##     } else {
-    ##     dist[i, j] = matrixtrace(-.5 * solveV[[j]] %*% crossprod(Xi, solveU[[j]]) %*% Xi) +
-    ##       matrixtrace(VMU[[j]] %*% Xi) -.5 *  matrixtrace(VMUM[[j]]) + log(prior[j]) +
-    ##       detfactor[j]
-    ##     }
-    ##   }
-    ## }
+
     posterior = exp( (dist - apply(dist, 1L, max, na.rm = TRUE)))
     totalpost = rowSums(posterior)
     posterior = posterior / totalpost

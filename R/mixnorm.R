@@ -301,7 +301,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         
         
 ### Fit NU:
-
+### doesn't work yet
         new.df = df
         ## if(model == "t" && fixdf == FALSE){
         ##     ######## THIS DOES NOT WORK.

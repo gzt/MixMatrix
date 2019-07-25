@@ -56,16 +56,16 @@
 #'     
 #' @examples
 #' set.seed(20180202)
+#' # a draw from a matrix variate normal with a certain mean
+#' # and row-wise covariance
 #' rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
 #' set.seed(20180202)
+#' # another way of specifying this - note the output is equivalent
 #' A <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
 #' A[[1]]
-#' set.seed(20180202)
-#' B <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-#'    L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
-#' B[ , , 1]
+#' # demonstrating the dmatrixnorm function
 #' dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'   L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
 #'
@@ -295,8 +295,10 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 #' @examples
 #' set.seed(20180202)
+#' # simulating from a given density
 #' A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 #'    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
+#' # finding the parameters by ML estimation
 #' results=MLmatrixnorm(A, tol = 1e-5)
 #' print(results)
 #'
@@ -321,26 +323,6 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
  rowvarparse <- .varparse(row.variance)
   row.set.var = rowvarparse$varflag
   row.variance = rowvarparse$varopt
-
-
-  
-  ## if (grepl("^i", x = row.variance,ignore.case = TRUE)) {
-  ##   row.set.var = TRUE
-  ##   row.variance = "I"
-  ## }
-  ## # if (row.variance == "AR(1)" || row.variance == "CS") row.set.var = TRUE
-  ## if (grepl("^cor", x = row.variance,ignore.case = TRUE)) {
-  ##   # row.set.var = TRUE
-  ##   row.variance = "cor"
-  ## }
-  ## if (grepl("^ar", x = row.variance,ignore.case = TRUE)) {
-  ##   row.set.var = TRUE
-  ##   row.variance = "AR(1)"
-  ## }
-  ## if (grepl("^cs", x = row.variance,ignore.case = TRUE)) {
-  ##   row.set.var = TRUE
-  ##   row.variance = "CS"
-  ## }
   col.set.var = FALSE
 #  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
 
@@ -349,26 +331,6 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   col.set.var = colvarparse$varflag
   col.variance = colvarparse$varopt
 
-  
-  ## if (grepl("^i", x = col.variance, ignore.case = TRUE)) {
-  ##   col.set.var = TRUE
-  ##   col.variance = "I"
-  ## }
-  ## if (grepl("^cor", x = col.variance, ignore.case = TRUE)) {
-  ##   # col.set.var = TRUE
-  ##   col.variance = "cor"
-  ## }
-  ## if (grepl("^ar", x = col.variance, ignore.case = TRUE)) {
-  ##   col.set.var = TRUE
-  ##   col.variance = "AR(1)"
-  ## }
-  ## if (grepl("^CS", x = col.variance, ignore.case = TRUE)) {
-  ##   col.set.var = TRUE
-  ##   col.variance = "CS"
-  ## }
-  # if (col.variance == "AR(1)" || col.variance == "CS" ) col.set.var = TRUE
-  # if data is array, presumes indexed over third column (same as output
-  # of rmatrixnorm) if list, presumes is a list of the matrices
   dims <- dim(data)
   
   if (max(dims[1]/dims[2], dims[2]/dims[1]) > (dims[3] - 1))

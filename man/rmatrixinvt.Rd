@@ -64,6 +64,7 @@ Generate random draws from the inverted matrix
 }}
 
 \examples{
+# an example of drawing from the distribution and computing the density.
 A<-rmatrixinvt(n = 2, df = 10, diag(4))
 dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 }

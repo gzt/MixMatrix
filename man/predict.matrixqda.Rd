@@ -46,7 +46,6 @@ groups <- c(rep(1,30),rep(2,30)) # define groups
 prior <- c(.5,.5) # set prior
 D <- matrixqda(C, groups, prior) # fit model
 predict(D)$posterior[1:10,] # predict, show results of first 10
-
 }
 \seealso{
 \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}

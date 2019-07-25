@@ -228,6 +228,7 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 
 #' @export
 #' @examples
+#' # an example of drawing from the distribution and computing the density.
 #' A<-rmatrixinvt(n = 2, df = 10, diag(4))
 #' dmatrixinvt(A[,,1], df = 10, mean = diag(4))
 rmatrixinvt <- function(n, df, mean,
