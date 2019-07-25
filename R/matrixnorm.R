@@ -21,7 +21,7 @@
 #'
 #' @description  Density and random generation for the matrix variate normal distribution
 #'
-#' 
+#' @name rmatrixnorm
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
@@ -45,15 +45,17 @@
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
 #' @param log logical; if TRUE, probabilities p are given as log(p).
-#' @return This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+#' @return \code{rmatrixnorm} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
-#' @export
+#'
+#'    \code{dmatrixnorm} returns the density at \code{x}.
+#' 
 #' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 
 #' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
 #'     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
-#'     
+#' @export    
 #' @examples
 #' set.seed(20180202)
 #' # a draw from a matrix variate normal with a certain mean
@@ -122,9 +124,8 @@ rmatrixnorm <- function(n, mean,
 }
 
 
-#' @describeIn rmatrixnorm Density calculation for matrix variate normal distributions.
+#' @rdname rmatrixnorm
 #' @export
-#'
 dmatrixnorm <- function(x, mean = matrix(0, p, n),
                         L = diag(p),
                         R = diag(n), U = L %*% t(L),

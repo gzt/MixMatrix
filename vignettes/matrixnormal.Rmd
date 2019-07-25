@@ -12,14 +12,20 @@ link-citations: yes
 
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,comment="")
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
 library(MixMatrix)
 ```
 
 ## Matrix Variate Distributions
 
-Suppose there is a two-dimensional grid of observations: each observation is randomly distributed somehow, perhaps each spot on the grid has its own mean, there's a covariance relation across the rows that doesn't vary across the columns and a covariance relation across the columns that doesn't vary across the rows. One case where this might come up is a multivariate time series: at each point in time we are dealing with a multivariate observation (perhaps normally distributed or not) and then there is a covariance structure across time to account for. We may be interested in drawing from such distributions, calculating densities, or fitting parameters based on observations. Here I have some functions for doing so in the case of matrix variate normal distributions. For more details about matrix variate distributions in general and matrix variate normal distributions in particular, see @gupta1999matrix, whose results I rely on for much of this presentation.
+Suppose there is a two-dimensional grid of observations: each observation is randomly distributed somehow, perhaps each spot on the grid has its own mean, there's a covariance relation across the rows that doesn't vary across the columns and a covariance relation across the columns that doesn't vary across the rows. One case where this might come up is a multivariate time series: at each point in time we are dealing with a multivariate observation (perhaps normally distributed or not) and then there is a covariance structure across time to account for. We may be interested in drawing from such distributions, calculating densities, or estimating parameters based on observations. This package presents some functions for doing so in the case of matrix variate normal distributions. For more details about matrix variate distributions in general and matrix variate normal distributions in particular, see @gupta1999matrix, whose results I rely on for much of this presentation.
 
 ## Matrix Variate Normal Distributions
 

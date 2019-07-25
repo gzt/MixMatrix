@@ -52,17 +52,12 @@ If \code{list}  is \code{TRUE} , this will be ignored.}
    \eqn{p \times q}{p * q}  matrices or
    a \eqn{p \times q \times n}{p * q * n}  array.
 
-   \code{dmatrixinvt} returns the density at quantile \code{x}.
+   \code{dmatrixinvt} returns the density at  \code{x}.
 }
 \description{
-Generate random draws from the inverted matrix
-   variate t distribution
+Generate random samples from the inverted matrix
+   variate t distribution or compute densities.
 }
-\section{Functions}{
-\itemize{
-\item \code{dmatrixinvt}: Density function for inverted matrix t-distributions.
-}}
-
 \examples{
 # an example of drawing from the distribution and computing the density.
 A<-rmatrixinvt(n = 2, df = 10, diag(4))

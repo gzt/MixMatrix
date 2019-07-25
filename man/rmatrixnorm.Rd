@@ -48,17 +48,14 @@ unless they are not, in fact, invertible.}
 \item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }
 \value{
-This returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+\code{rmatrixnorm} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
    a \eqn{p \times q \times n}{p * q * n}  array.
+
+   \code{dmatrixnorm} returns the density at \code{x}.
 }
 \description{
 Density and random generation for the matrix variate normal distribution
 }
-\section{Functions}{
-\itemize{
-\item \code{dmatrixnorm}: Density calculation for matrix variate normal distributions.
-}}
-
 \examples{
 set.seed(20180202)
 # a draw from a matrix variate normal with a certain mean

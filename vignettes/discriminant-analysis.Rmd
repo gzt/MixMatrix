@@ -9,16 +9,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "##"
+  comment = "#>"
 )
 ```
 
-
-
-In the `MixMatrix` package, I now have some functions for training a linear or quadratic classifier.
+```{r setup}
+library(MixMatrix)
+```
+In the `MixMatrix` package, there are two functions for training a linear or quadratic classifier.
 The usage is fairly similar to the function `MASS::lda()` or `MASS::qda()`, however it requires the input
 as an array and the group variable provided as a vector (that is, it cannot handle
 data frames or the formula interface directly, which is reasonable, as there is no immediately
@@ -39,14 +40,13 @@ matqda <- matrixqda(x = ABC,grouping = groups, prior = prior) # perform QDA
 
 This does not sphere the data or extract an SVD or Fisher discriminant scores - 
 it is a simple regularized linear/quadratic discriminant function based on the 
-likelihood function. As such, the reported posteriors are based on the normal 
-distribution.
+likelihood function. 
 
-The `matrixlda` function presumes equal covariance parameters while `matrixqda` 
-fits separate covariance parameters.
+The `matrixlda` function presumes equal covariance matrices among the groups while `matrixqda` 
+fits separate covariance for each groups.
 
-It is possible to set variance or mean restrictions using the `...` argument. 
-These restrictions are applied to all groups.
+It is possible to set variance or mean restrictions from the `MLmatrixnorm` and `MLmatrixt`
+functions using the `...` argument. These restrictions are applied to all groups. 
 
 The `predict` method for these objects works in much the same way as for `lda` 
 or `qda` objects: provide the function and the new data, then it will return 
@@ -56,9 +56,9 @@ in the environment.
 
 ```{r predict}
 ABC[,,c(1,31,61)] # true class memberships: A, B, C
-
-predict(matlda, ABC[,,c(1,31,61)])
-
+#predict the membership of the first observation of each group
+predict(matlda, ABC[,,c(1,31,61)]) 
+#predict the membership of the first observation of each group
 predict(matqda,  ABC[,,c(1,31,61)])
 
 ```

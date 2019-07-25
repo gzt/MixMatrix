@@ -58,7 +58,7 @@ unless they are not, in fact, invertible.}
    \eqn{p \times q}{p * q}  matrices or a \eqn{p \times q \times n}{p * q * n}
    array.
 
-   \code{dmatrixt} returns the density at quantile \code{x}.
+   \code{dmatrixt} returns the density at \code{x}.
 }
 \description{
 Density and random generation for the matrix variate t distribution.
@@ -74,11 +74,6 @@ The matrix \eqn{t}-distribution is parameterized slightly
  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
  \eqn{MVN(0,I_p,I_q)}.
 }
-\section{Functions}{
-\itemize{
-\item \code{dmatrixt}: Density function for matrix variate t distribution
-}}
-
 \examples{
 set.seed(20180202)
 # random matrix with df = 10 and the given mean and L matrix

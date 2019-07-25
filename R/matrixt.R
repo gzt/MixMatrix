@@ -20,7 +20,7 @@
 #' Distribution functions for the matrix variate t distribution.
 #'
 #' Density and random generation for the matrix variate t distribution.
-#'
+#' @name rmatrixt
 #' @param n number of observations for generation
 #' @param x quantile for density
 #' @param df  degrees of freedom (\eqn{>0}, may be non-integer),
@@ -53,7 +53,7 @@
 #'    \eqn{p \times q}{p * q}  matrices or a \eqn{p \times q \times n}{p * q * n}
 #'    array.
 #'
-#'    \code{dmatrixt} returns the density at quantile \code{x}.
+#'    \code{dmatrixt} returns the density at \code{x}.
 #' @references  Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 #'
@@ -90,7 +90,6 @@
 #' dt(x,1)
 #' dmatrixt(x,df=1)
 #'
-
 rmatrixt <- function(n, df, mean,
                      L = diag(dim(as.matrix(mean))[1]),
                      R = diag(dim(as.matrix(mean))[2]),
@@ -155,7 +154,7 @@ rmatrixt <- function(n, df, mean,
   return(result)
 }
 
-#' @describeIn rmatrixt Density function for matrix variate t distribution
+#' @rdname rmatrixt
 #' @export
 dmatrixt <- function(x, df, mean = matrix(0, p, n),
            L = diag(p),
@@ -204,17 +203,19 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 }
 
 
-#' Distribution functions for matrix variate inverted t distributions
+#' @title Distribution functions for matrix variate inverted t distributions
 #'
-#' Generate random draws from the inverted matrix
-#'    variate t distribution
-
+#' @description Generate random samples from the inverted matrix
+#'    variate t distribution or compute densities.
+#' 
+#' @name rmatrixinvt
+#' @rdname rmatrixinvt
 #' @inheritParams rmatrixt
 #' @return \code{rmatrixinvt} returns either a list of \eqn{n}
 #'    \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
-#'    \code{dmatrixinvt} returns the density at quantile \code{x}.
+#'    \code{dmatrixinvt} returns the density at  \code{x}.
 #' 
 #' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
 #'    and \code{\link[stats]{Distributions}}.
@@ -279,7 +280,7 @@ rmatrixinvt <- function(n, df, mean,
 
 
 
-#' @describeIn rmatrixinvt Density function for inverted matrix t-distributions.
+#' @rdname rmatrixinvt
 #' @export
 dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
                      L = diag(p),

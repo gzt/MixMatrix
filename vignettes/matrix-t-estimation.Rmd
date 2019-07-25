@@ -29,10 +29,11 @@ EM algorithm. An EM algorithm for the multivariate $t$-distribution with no
 missing data was provided by @rubin1983. This was variously extended and 
 refined, as the EM algorithm can be quite slow to converge. One set of 
 refinements split the M-step into a series of conditional maximization (CM) 
-steps [@meng1993], and then a later refinement (called ECME) allowed for either 
+steps [@meng1993], and then a later refinement (called ECME - 
+Expectation/Conditional Maximization Either) allowed for *either* 
 conditional maximization steps or maximizing the constrained actual likelihood 
 [@liurubin1994], which leads to dramatically faster convergence. The matrix 
-variate $t$ is an extension of the multivariate version [@dickey1967], however, 
+variate $t$ is an extension of the multivariate version [@dickey1967]; however, 
 unlike the normal distribution, it cannot be treated as a rearrangement of the 
 multivariate case, so the addition of the extra dimension poses a non-trivial 
 problem for extending the results.
