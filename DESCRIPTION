@@ -13,8 +13,8 @@ Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("ctb","cph")))
 Description: Provides sampling and density functions for matrix
     variate normal, t, and inverted t distributions;  ML estimation for matrix
-    variate normal and t distributions including some restrictions on the
-    parameters using the EM algorithm; and classification by linear and
+    variate normal and t distributions using the EM algorithm,
+    including some restrictions on the parameters; and classification by linear and
     quadratic discriminant analysis for matrix variate normal and t
     distributions described in Thompson et al. (2019) <arXiv:1907.09565>.
     Performs clustering with matrix variate normal and t mixture models.
