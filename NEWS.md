@@ -1,3 +1,10 @@
+# MixMatrix 0.2.2
+
+* Added more citations and references.
+* Added reference to the paper this package accompanies.
+* A small series of bug fixes and internal function updates to more easily
+  support restrictions on means and variances different functions.
+
 # MixMatrix 0.2.1
 
 * Added a number of citations and references to manuals and vignettes, including
