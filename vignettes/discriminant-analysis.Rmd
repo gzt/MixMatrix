@@ -39,7 +39,7 @@ matqda <- matrixqda(x = ABC,grouping = groups, prior = prior) # perform QDA
 ```
 
 This does not sphere the data or extract an SVD or Fisher discriminant scores - 
-it is a simple regularized linear/quadratic discriminant function based on the 
+it is a simple linear/quadratic discriminant function based on the 
 likelihood function. 
 
 The `matrixlda` function presumes equal covariance matrices among the groups while `matrixqda` 
