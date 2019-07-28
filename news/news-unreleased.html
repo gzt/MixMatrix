@@ -126,7 +126,8 @@
 
     <div id="matrixdist-0-0-0-9919" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9919" class="anchor"></a>matrixdist 0.0.0.9919</h1>
+<a href="#matrixdist-0-0-0-9919" class="anchor"></a>matrixdist 0.0.0.9919<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
 <li>Changed the name of the maximum likelihood parameter fitting function to <code>MLmatrixnorm</code> since <code>mle.---</code> could be confused for a method.</li>
@@ -134,7 +135,8 @@
 </div>
     <div id="matrixdist-0-0-0-9920" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9920" class="anchor"></a>matrixdist 0.0.0.9920</h1>
+<a href="#matrixdist-0-0-0-9920" class="anchor"></a>matrixdist 0.0.0.9920<small> Unreleased </small>
+</h1>
 <ul>
 <li>added change to mean estimation to account for restricted means</li>
 <li>added changes to documentation</li>
@@ -142,7 +144,8 @@
 </div>
     <div id="matrixdist-0-0-0-9921" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9921" class="anchor"></a>matrixdist 0.0.0.9921</h1>
+<a href="#matrixdist-0-0-0-9921" class="anchor"></a>matrixdist 0.0.0.9921<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added support for using IID structure for covariance matrices</li>
 <li>correction on restricted means - only true if known variance</li>
@@ -150,7 +153,8 @@
 </div>
     <div id="matrixdist-0-0-0-9922" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9922" class="anchor"></a>matrixdist 0.0.0.9922</h1>
+<a href="#matrixdist-0-0-0-9922" class="anchor"></a>matrixdist 0.0.0.9922<small> Unreleased </small>
+</h1>
 <ul>
 <li>Added LDA and QDA functions with <code><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict()</a></code> methods. These functions are relatively fragile.</li>
 <li>Marked some functions as internal to clean up the NAMESPACE</li>
@@ -158,21 +162,24 @@
 </div>
     <div id="matrixdist-0-0-0-9923" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9923" class="anchor"></a>matrixdist 0.0.0.9923</h1>
+<a href="#matrixdist-0-0-0-9923" class="anchor"></a>matrixdist 0.0.0.9923<small> Unreleased </small>
+</h1>
 <ul>
 <li>Rewrote <code>rInvCholWishart</code> to fix a bug where it was not actually a Cholesky decomposition - while upper triangular, <code><a href="https://www.rdocumentation.org/packages/base/topics/crossprod">tcrossprod()</a></code> was InvWishart, not <code><a href="https://www.rdocumentation.org/packages/base/topics/crossprod">crossprod()</a></code>. The method is a little slower since it involves computing <code>rInvWishart</code> and then taking the Cholesky decomposition, but it is faster than doing it in R.</li>
 </ul>
 </div>
     <div id="matrixdist-0-0-0-9924" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9924" class="anchor"></a>matrixdist 0.0.0.9924</h1>
+<a href="#matrixdist-0-0-0-9924" class="anchor"></a>matrixdist 0.0.0.9924<small> Unreleased </small>
+</h1>
 <ul>
 <li>Wrote density functions for the Wishart and InvWishart distributions. Broke the Wishart functions and <code>mvgamma</code> functions into a separate file just for them as they are all related and I may break them into their own package.</li>
 </ul>
 </div>
     <div id="matrixdist-0-0-0-9925" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9925" class="anchor"></a>matrixdist 0.0.0.9925</h1>
+<a href="#matrixdist-0-0-0-9925" class="anchor"></a>matrixdist 0.0.0.9925<small> Unreleased </small>
+</h1>
 <ul>
 <li>add multivariate <code>digamma</code>
 </li>
@@ -183,7 +190,8 @@
 </div>
     <div id="matrixdist-0-0-0-9926" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9926" class="anchor"></a>matrixdist 0.0.0.9926</h1>
+<a href="#matrixdist-0-0-0-9926" class="anchor"></a>matrixdist 0.0.0.9926<small> Unreleased </small>
+</h1>
 <ul>
 <li>split Wishart functions into CholWishart package</li>
 <li>migrate some internal functions to <code>RcppArmadillo</code> to improve speed</li>
@@ -197,7 +205,8 @@
 </div>
     <div id="matrixdist-0-0-0-9927" class="section level1">
 <h1 class="page-header">
-<a href="#matrixdist-0-0-0-9927" class="anchor"></a>matrixdist 0.0.0.9927</h1>
+<a href="#matrixdist-0-0-0-9927" class="anchor"></a>matrixdist 0.0.0.9927<small> Unreleased </small>
+</h1>
 <ul>
 <li>include EM algorithm (actually an ECME) for estimation of parameters of matrix-variate <em>t</em>-distributions</li>
 <li>include variance specifications for EM for t distribution</li>
@@ -206,7 +215,8 @@
 </div>
     <div id="mixmatrix-0-0-0-9949" class="section level1">
 <h1 class="page-header">
-<a href="#mixmatrix-0-0-0-9949" class="anchor"></a>MixMatrix 0.0.0.9949</h1>
+<a href="#mixmatrix-0-0-0-9949" class="anchor"></a>MixMatrix 0.0.0.9949<small> Unreleased </small>
+</h1>
 <ul>
 <li>changing name to MixMatrix</li>
 </ul>
