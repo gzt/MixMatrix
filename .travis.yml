@@ -4,14 +4,6 @@ language: R
 r_packages:
   - covr
   - CholWishart
-  - pkgdown
-  - dplyr
-  - ggplot2
-  - knitr
-  - rmarkdown
-  - roxygen2
-  - devtools
-  - magrittr
 sudo: false
 warnings_are_errors: true
 cache: packages
