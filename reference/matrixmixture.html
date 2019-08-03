@@ -140,8 +140,8 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
 
     <pre class="usage"><span class='fu'>matrixmixture</span>(<span class='no'>x</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/length'>length</a></span>(<span class='no'>prior</span>),
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,6 +201,11 @@ log-likelihood by default.</p></td>
     <tr>
       <th>nu</th>
       <td><p>degrees of freedom parameter. Can be a vector of length <code>K</code>.</p></td>
+    </tr>
+    <tr>
+      <th>fixdf</th>
+      <td><p>whether or not to estimate the degrees of freedom parameter,
+<code>TRUE</code> means they are fixed, <code>FALSE</code> means they are estimated.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -290,7 +295,7 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
  )
 <span class='co'># fit model</span>
  <span class='no'>res</span><span class='kw'>&lt;-</span><span class='fu'>matrixmixture</span>(<span class='no'>C</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='no'>init</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
+                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>, <span class='kw'>fixdf</span><span class='kw'>=</span><span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
 #&gt;              [,1]        [,2]        [,3]        [,4]
