@@ -6,8 +6,8 @@
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
-  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
-  miniter = 5, convergence = TRUE)
+  col.mean = FALSE, tolerance = 0.1, nu = NULL, fixdf = TRUE, ...,
+  verbose = 0, miniter = 5, convergence = TRUE)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
@@ -43,6 +43,9 @@ common mean within each row. If both this and \code{row.mean} are
 log-likelihood by default.}
 
 \item{nu}{degrees of freedom parameter. Can be a vector of length \code{K}.}
+
+\item{fixdf}{whether or not to estimate the degrees of freedom parameter,
+\code{TRUE} means they are fixed, \code{FALSE} means they are estimated.}
 
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
@@ -99,7 +102,7 @@ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
  )
 # fit model
  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-                    model = "t", tolerance = 1e-1)
+                    model = "t", tolerance = 1e-1, fixdf=TRUE)
 print(res$centers) # the final centers
 print(res$pi) # the final mixing proportion
 plot(res) # the log likelihood by iteration

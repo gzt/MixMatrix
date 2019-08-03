@@ -147,13 +147,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // detsum
-double detsum(arma::cube& x);
-RcppExport SEXP _MixMatrix_detsum(SEXP xSEXP) {
+double detsum(arma::cube& x, arma::vec& weights);
+RcppExport SEXP _MixMatrix_detsum(SEXP xSEXP, SEXP weightsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::cube& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(detsum(x));
+    Rcpp::traits::input_parameter< arma::vec& >::type weights(weightsSEXP);
+    rcpp_result_gen = Rcpp::wrap(detsum(x, weights));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -170,7 +171,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_MixMatrix_dmat_t_calc", (DL_FUNC) &_MixMatrix_dmat_t_calc, 5},
     {"_MixMatrix_testsymmetric", (DL_FUNC) &_MixMatrix_testsymmetric, 2},
     {"_MixMatrix_cubemult", (DL_FUNC) &_MixMatrix_cubemult, 2},
-    {"_MixMatrix_detsum", (DL_FUNC) &_MixMatrix_detsum, 1},
+    {"_MixMatrix_detsum", (DL_FUNC) &_MixMatrix_detsum, 2},
     {NULL, NULL, 0}
 };
 

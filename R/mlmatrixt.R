@@ -209,7 +209,7 @@ n = dims[3]
     dfmult = df + p + q - 1
 
 ### E step
-      Slist = .SStep(data,mu,U,V,rep(1,n))
+      Slist = .SStep(data,mu,U,V,rep(1.0,n))
       SS = Slist$SS
       SSX = Slist$SSX
       SSXX = Slist$SSXX
@@ -218,10 +218,10 @@ n = dims[3]
  
 ### CM STEP
       ### MEANS:
-      new.Mu = .MeansFunction(data, V=V, SS, SSX, rep(1,n), row.mean, col.mean, "t")
+      new.Mu = .MeansFunction(data, V=V, SS, SSX, rep(1.0,n), row.mean, col.mean, "t")
 
       ### VARS:
-      new.V = .colVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
+      new.V = .colVars(data,new.Mu, df, rep(1.0,n),SS, SSX, SSXX,
                        col.variance, col.set.var)
 
 

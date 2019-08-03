@@ -12,16 +12,16 @@
     
     Stmp = xatx(swept.data,V)
     for (obs in 1:n) Stmp[,,obs] = Stmp[,,obs] + U
-    Smatrix = cubeinv(Stmp) * zigmult
+    Smatrix = cubeinv(Stmp)
     
-    SS = rowSums(Smatrix ,FALSE, 2)
+    SS = rowSums(Smatrix * zigmult ,FALSE, 2)
     
-    SSXtmp = cubemult(Smatrix, data)
+    SSXtmp = cubemult(Smatrix*zigmult, data)
     SSX = rowSums(SSXtmp, FALSE, 2)
     
     SSXXtmp = cubemult(data,SSXtmp)
     SSXX = rowSums(SSXXtmp,FALSE, 2)
-    SSD = detsum(Smatrix)
+    SSD = detsum(Smatrix, weights)
 
     list(SS=SS, SSX = SSX, SSXX = SSXX, SSD = SSD)
 }

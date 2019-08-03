@@ -55,9 +55,10 @@ arma::cube cubemult(arma::cube & x, arma::cube & y){
 }
 
 // [[Rcpp::export]]
-double detsum(arma::cube & x){
+double detsum(arma::cube & x, arma::vec & weights){
   // takes log det of each slice and adds it up
   if (x.n_rows != x.n_cols) throw Rcpp::exception("error: non-conformable dimensions");
+
   int numslices = x.n_slices;
   double result = 0;
   double mval, sign;
@@ -66,7 +67,7 @@ double detsum(arma::cube & x){
   if(sign <= 0){
     throw Rcpp::exception("error: result undefined when det < 0. observation: %d ", i+1);
     }
-  result += mval;
+  result += mval * weights(i);
   }
   return result;
 }

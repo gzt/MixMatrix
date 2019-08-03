@@ -45,7 +45,7 @@ cubemult <- function(x, y) {
     .Call(`_MixMatrix_cubemult`, x, y)
 }
 
-detsum <- function(x) {
-    .Call(`_MixMatrix_detsum`, x)
+detsum <- function(x, weights) {
+    .Call(`_MixMatrix_detsum`, x, weights)
 }
 
