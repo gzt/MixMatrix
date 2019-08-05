@@ -87,6 +87,7 @@ library(MixMatrix)
  plot(res) # the log likelihood by iteration
 
 ```
+
 The default method for determining convergence is based on Aitken acceleration of the
 log-likelihood. However, it can be set to stop based on changes in the log-likelihood
 instead.
