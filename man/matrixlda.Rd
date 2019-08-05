@@ -88,8 +88,9 @@ G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
        Method for Classification With Matrix-Valued Predictors", Journal of
        Computational and Graphical Statistics, 28:1, 11-22,
        \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
+
   Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
-  S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
+  S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0 \CRANpkg{MASS}
 }
 \seealso{
 \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
