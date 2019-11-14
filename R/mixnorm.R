@@ -117,7 +117,7 @@
 ##'  )
 ##' # fit model
 ##'  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-##'                     model = "t", tolerance = 1e-1, fixdf=TRUE)
+##'                     model = "t", tolerance = 1e-1, fixdf=FALSE)
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
 ##' plot(res) # the log likelihood by iteration
@@ -305,7 +305,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 ### Fit NU:
 ### doesn't work yet
         new.df = df 
-        if(model == "t" && fixdf == FALSE){
+        if(model == "t" && fixdf == FALSE && iter > 1){
             ######## THIS DOES NOT WORK.
             for(j in 1:nclass){
                 detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]

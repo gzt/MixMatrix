@@ -243,11 +243,11 @@ n = dims[3]
                             #(SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
 
     }
-    if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
+    if (!isTRUE(sign(nuLL(1e-6)) * sign(nuLL(1000)) <= 0)) {
       warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
       varflag = TRUE
     }else{
-    fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
+    fit0 <- stats::uniroot(nuLL, c(1e-6, 1000),...)
     new.df = fit0$root
     }
     #print(new.df)
