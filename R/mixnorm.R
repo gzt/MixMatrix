@@ -46,8 +46,6 @@
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood by default.
 ##' @param nu degrees of freedom parameter. Can be a vector of length \code{K}.
-##' @param fixdf whether or not to estimate the degrees of freedom parameter,
-##'     \code{TRUE} means they are fixed, \code{FALSE} means they are estimated.
 ##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
 ##' @param verbose whether to print diagnostic output, by default \code{0}. Higher
 ##'     numbers output more results.
@@ -119,7 +117,7 @@
 ##'  )
 ##' # fit model
 ##'  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-##'                     model = "t", tolerance = 1e-3)
+##'                     model = "t", tolerance = 1e-3, convergence = FALSE)
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
 ##' plot(res) # the log likelihood by iteration
@@ -128,7 +126,7 @@
 ##' predict(res, newdata = C[,,c(1,21)]) # predicted class membership
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=1000,
                           model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
-                          tolerance = 1e-1, nu=NULL, fixdf = TRUE,..., verbose = 0, miniter = 5, convergence = TRUE){
+                          tolerance = 1e-1, nu=NULL,..., verbose = 0, miniter = 5, convergence = TRUE){
     if (class(x) == "list")
         x <- array(unlist(x),
                    dim = c(nrow(x[[1]]),
@@ -307,31 +305,31 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
 ### Fit NU:
 ### doesn't work yet
         new.df = df 
-        if(model == "t" && fixdf == FALSE && iter > 1){
-            ######## THIS DOES NOT WORK.
-            for(j in 1:nclass){
-                detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
-                nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
-                                      CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
-                                     # (SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
-                                        # this latest ECME-ish one gives SLIGHTLY different results but is faster
-                                        (SSD[j]/sumzig[j] +  determinant(newU[,,j], logarithm = TRUE)$modulus[1]))
-                                      
-                }
-                if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
-                    warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
-                    varflag = TRUE
-                    ## print(nuLL(3))
-                    ## print(SSD[j])
-                    
-                }else{
-                    fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
-                    new.df[j] = fit0$root
-                }
-                
-            }
-            
-        }
+ ###       if(model == "t" && fixdf == FALSE && iter > 1){
+ ###           ######## THIS DOES NOT WORK.
+ ###           for(j in 1:nclass){
+ ###               detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
+ ###               nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
+ ###                                     CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
+ ###                                    # (SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
+ ###                                       # this latest ECME-ish one gives SLIGHTLY different results but is faster
+ ###                                       (SSD[j]/sumzig[j] +  determinant(newU[,,j], logarithm = TRUE)$modulus[1]))
+ ###                                     
+ ###               }
+ ###               if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
+ ###                   warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
+ ###                   varflag = TRUE
+ ###                   ## print(nuLL(3))
+ ###                   ## print(SSD[j])
+ ###                   
+ ###               }else{
+ ###                   fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
+ ###                   new.df[j] = fit0$root
+ ###               }
+ ###               
+ ###           }
+ ###           
+ ###       }
             
 ####### Eval convergence
         if(verbose > 1){
