@@ -6,8 +6,8 @@
 \usage{
 matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
   iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
-  col.mean = FALSE, tolerance = 0.1, nu = NULL, fixdf = TRUE, ...,
-  verbose = 0, miniter = 5, convergence = TRUE)
+  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
+  miniter = 5, convergence = TRUE)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
@@ -44,9 +44,6 @@ log-likelihood by default.}
 
 \item{nu}{degrees of freedom parameter. Can be a vector of length \code{K}.}
 
-\item{fixdf}{whether or not to estimate the degrees of freedom parameter,
-\code{TRUE} means they are fixed, \code{FALSE} means they are estimated.}
-
 \item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
 
 \item{verbose}{whether to print diagnostic output, by default \code{0}. Higher
@@ -56,7 +53,9 @@ numbers output more results.}
 
 \item{convergence}{By default, \code{TRUE}. Whether to use Aitken acceleration to
 determine convergence. If false, it instead checks if the change in
-log-likelihood is less than \code{tolerance}.}
+log-likelihood is less than \code{tolerance}. Aitken acceleration may
+prematurely end in the first few steps, so you may wish to set \code{miniter}
+or select \code{FALSE} if this is an issue.}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following
@@ -92,7 +91,7 @@ set.seed(20180221)
 A <- rmatrixt(20,mean=matrix(0,nrow=3,ncol=4), df = 5)
 # 3x4 matrices with mean 0
 B <- rmatrixt(20,mean=matrix(1,nrow=3,ncol=4), df = 5)
-# 3x4 matrices with mean 2
+# 3x4 matrices with mean 1
 C <- array(c(A,B), dim=c(3,4,40)) # combine into one array
 prior <- c(.5,.5) # equal probability prior
 # create an intialization object, starts at the true parameters
@@ -102,7 +101,7 @@ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
  )
 # fit model
  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-                    model = "t", tolerance = 1e-1)
+                    model = "t", tolerance = 1e-3, convergence = FALSE)
 print(res$centers) # the final centers
 print(res$pi) # the final mixing proportion
 plot(res) # the log likelihood by iteration
