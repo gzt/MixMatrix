@@ -1,3 +1,8 @@
+# MixMatrix 0.2.4
+
+* Fixed a minor bug in DF calculation for mixture models.
+* Fixed a minor bug in log likelihood calculation for mixture models.
+
 # MixMatrix 0.2.2
 
 * Added more citations and references.
