@@ -427,7 +427,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' C <- array(c(A,B), dim=c(3,4,60)) #combine together
 #' groups <- c(rep(1,30),rep(2,30)) # define groups
 #' prior <- c(.5,.5) # set prior
-#' D <- matrixqda(C, groups, prior)
+#' D <- matrixqda(C, groups, prior, method = "t", nu = 20)
 #' logLik(D)
 #' print(D)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",  nu = 10, ...,subset)  {

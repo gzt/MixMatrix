@@ -116,8 +116,8 @@
 ##'               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
 ##'  )
 ##' # fit model
-##'  res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-##'                     model = "t", tolerance = 1e-1, fixdf=TRUE)
+##'  res<-matrixmixture(C, init = init, prior = prior, nu = 5, 
+##'                     model = "t", tolerance = 1e-2)
 ##' print(res$centers) # the final centers
 ##' print(res$pi) # the final mixing proportion
 ##' plot(res) # the log likelihood by iteration
@@ -348,11 +348,11 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
         for(j in 1:nclass){
             if(model == "normal" || new.df[j] == 0 || new.df[j] == Inf){
                 logLik = logLik +sum( newposterior[,j]*(log(pi[j]) +
-                         dmatnorm_calc(x = x, mean = newcenters[,,j],
+                         newposterior[,j]*dmatnorm_calc(x = x, mean = newcenters[,,j],
                             U = newU[,,j], V = newV[,,j])))
                 } else {
                 logLik = logLik + sum(newposterior[,j]*(log(pi[j]) +
-                dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
+                newposterior[,j]*dmat_t_calc(x = x, df = new.df[j], mean = newcenters[,,j],
                             U = newU[,,j], V = newV[,,j])))
                 }
             }

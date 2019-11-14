@@ -64,7 +64,7 @@ B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
 C <- array(c(A,B), dim=c(3,4,60)) #combine together
 groups <- c(rep(1,30),rep(2,30)) # define groups
 prior <- c(.5,.5) # set prior
-D <- matrixqda(C, groups, prior)
+D <- matrixqda(C, groups, prior, method = "t", nu = 20)
 logLik(D)
 print(D)
 }

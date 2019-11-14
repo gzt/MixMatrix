@@ -101,8 +101,8 @@ init = list(centers = array(c(rep(0,12),rep(1,12)), dim = c(3,4,2)),
               V = array(c(diag(4), diag(4)), dim = c(4,4,2))
  )
 # fit model
- res<-matrixmixture(C, init = init, prior = prior, nu = 5,
-                    model = "t", tolerance = 1e-1, fixdf=TRUE)
+ res<-matrixmixture(C, init = init, prior = prior, nu = 5, 
+                    model = "t", tolerance = 1e-2)
 print(res$centers) # the final centers
 print(res$pi) # the final mixing proportion
 plot(res) # the log likelihood by iteration
