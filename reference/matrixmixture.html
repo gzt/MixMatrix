@@ -71,7 +71,7 @@ matrix variate t distribution (with specified degrees of freedom nu)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.4</span>
       </span>
     </div>
 
@@ -297,27 +297,27 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
  )
 <span class='co'># fit model</span>
  <span class='no'>res</span><span class='kw'>&lt;-</span><span class='fu'>matrixmixture</span>(<span class='no'>C</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='no'>init</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>, <span class='kw'>fixdf</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;            [,1]        [,2]         [,3]        [,4]
-#&gt; [1,] 0.12776520  0.09207106  0.047369358 -0.01589772
-#&gt; [2,] 0.08799242 -0.09954029 -0.008813607 -0.07192420
-#&gt; [3,] 0.05252349 -0.22693099 -0.052776857 -0.04901182
+#&gt;            [,1]        [,2]         [,3]         [,4]
+#&gt; [1,] 0.14002917  0.09898373  0.062407708 -0.001406398
+#&gt; [2,] 0.09248603 -0.08488415  0.005608342 -0.055155989
+#&gt; [3,] 0.06907271 -0.19525523 -0.046735211 -0.034367104
 #&gt; 
 #&gt; , , 2
 #&gt; 
-#&gt;          [,1]      [,2]      [,3]      [,4]
-#&gt; [1,] 1.015107 1.0178700 0.8504764 1.0542194
-#&gt; [2,] 1.016980 0.9259491 1.0811795 1.0172161
-#&gt; [3,] 1.123399 1.0812300 1.0065979 0.7837866
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4984685 0.5015315</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>res</span>) <span class='co'># log likelihood of final result</span></div><div class='output co'>#&gt; 'log Lik.' -652.6333 (df=58)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>BIC</a></span>(<span class='no'>res</span>) <span class='co'># BIC of final result</span></div><div class='output co'>#&gt; [1] 1519.222</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>21</span>)]) <span class='co'># predicted class membership</span></div><div class='output co'>#&gt; $class
+#&gt;          [,1]      [,2]     [,3]      [,4]
+#&gt; [1,] 1.015343 1.0254994 0.841771 1.0531384
+#&gt; [2,] 1.025463 0.9363218 1.078613 1.0188713
+#&gt; [3,] 1.114099 1.0803238 1.012833 0.7777991
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5054239 0.4945761</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>res</span>) <span class='co'># log likelihood of final result</span></div><div class='output co'>#&gt; 'log Lik.' -485.971 (df=54)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>BIC</a></span>(<span class='no'>res</span>) <span class='co'># BIC of final result</span></div><div class='output co'>#&gt; [1] 1171.141</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>21</span>)]) <span class='co'># predicted class membership</span></div><div class='output co'>#&gt; $class
 #&gt; [1] 1 2
 #&gt; 
 #&gt; $posterior
 #&gt;              [,1]         [,2]
-#&gt; [1,] 9.999991e-01 9.150755e-07
-#&gt; [2,] 3.250530e-07 9.999997e-01
+#&gt; [1,] 0.9995008772 0.0004991228
+#&gt; [2,] 0.0002383341 0.9997616659
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
