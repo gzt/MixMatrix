@@ -141,7 +141,7 @@ straightforward. The procedure is similar to the multivariate $t$ or the matrix
 variate normal. In this case, the interface is just like the interface for the 
 `MLmatrixnorm()` function:
 
-```{r mleone, cache=T}
+```{r mleone}
 set.seed(20190622)
 sigma = (1/7) * rWishart(1, 7, 1*diag(3:1))[,,1]
 A = rmatrixt(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
@@ -267,7 +267,7 @@ knitr::kable(dfdataframe %>% group_by(truedf, samplesize) %>%
 ```
 
 
-```{r dftenexample, echo = FALSE, cache = TRUE, message = FALSE, warning = FALSE}
+```{r dftenexample, echo = FALSE, message = FALSE, warning = FALSE}
 ##### Here is what is really run
 
 set.seed(20190621)
@@ -330,7 +330,7 @@ just as for the normal case, including estimating the degrees of freedom paramet
 The `qda` will only estimate `nu` with it varying between groups, it will not estimate
 a common `nu`. 
 
-```{r genlda, cache = TRUE}
+```{r genlda}
 A <- rmatrixt(30, mean = matrix(0, nrow=2, ncol=3), df = 10)
 B <- rmatrixt(30, mean = matrix(c(1,0), nrow=2, ncol=3), df = 10)
 C <- rmatrixt(30, mean = matrix(c(0,1), nrow=2, ncol=3), df = 10)

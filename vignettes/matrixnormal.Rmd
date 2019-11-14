@@ -84,7 +84,7 @@ dmatrixnorm(A,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
 
 Maximum likelihood estimation is possible for the matrix variate normal distribution (see @dutilleul1999mle or @2013arXiv13096609G for details). The pair of variance matrices are only identifiable up to a constant, so this function sets the first element of $\mathbf{U}$ to $1$. There is a closed-form solution for the mean matrix and the  $\mathbf{U}$ and  $\mathbf{V}$ have an iterative solution.
 
-```{r mleone, cache=T}
+```{r mleone}
 set.seed(20180202)
 A = rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
    L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
@@ -94,7 +94,7 @@ print(results)
 
 There are two restrictions possible for the mean matrices: `row.mean = TRUE` will force a common  mean within a row and `col.mean = TRUE` will force a common mean within a column. Setting both will ensure a constant mean for the entire system. Restrictions on $\mathbf{U}$ and $\mathbf{V}$ are possible with `row.variance` and `col.variance` commands.
 
-```{r mlerow, cache = T}
+```{r mlerow}
 results.fixrows = MLmatrixnorm(A, row.mean = TRUE, max.iter = 5)
 print(results.fixrows)
 # this failure is expected with misspecification! The number of iterations is also 
