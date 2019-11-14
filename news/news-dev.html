@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Version 0.2 • MixMatrix</title>
+<title>Version dev • MixMatrix</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="Version 0.2" />
+<meta property="og:title" content="Version dev" />
 
 
 
@@ -127,36 +127,105 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small>0.2</small></h1>
+      <h1>Changelog <small>dev</small></h1>
       
     </div>
 
-    <div id="mixmatrix-0-2-0" class="section level1">
+    <div id="matrixdist-0-0-0-9919" class="section level1">
 <h1 class="page-header">
-<a href="#mixmatrix-0-2-0" class="anchor"></a>MixMatrix 0.2.0<small> Unreleased </small>
+<a href="#matrixdist-0-0-0-9919" class="anchor"></a>matrixdist 0.0.0.9919<small> Unreleased </small>
 </h1>
 <ul>
-<li>Start to add mixture modeling - currently support unconstrained variances only and fixed <code>nu</code> parameters for the <code>model = "t"</code> option..</li>
-<li>Remove list support for matrix LDA and QDA, since they were just a pain to support for the <code>predict</code> methods.</li>
+<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
+<li>Changed the name of the maximum likelihood parameter fitting function to <code>MLmatrixnorm</code> since <code>mle.---</code> could be confused for a method.</li>
 </ul>
 </div>
-    <div id="mixmatrix-0-2-1" class="section level1">
+    <div id="matrixdist-0-0-0-9920" class="section level1">
 <h1 class="page-header">
-<a href="#mixmatrix-0-2-1" class="anchor"></a>MixMatrix 0.2.1<small> Unreleased </small>
+<a href="#matrixdist-0-0-0-9920" class="anchor"></a>matrixdist 0.0.0.9920<small> Unreleased </small>
 </h1>
 <ul>
-<li>Added a number of citations and references to manuals and vignettes, including clarifying sources of any other functions.</li>
-<li>Added <code>logLik</code> functions for LDA, QDA, and MixMatrix objects</li>
+<li>added change to mean estimation to account for restricted means</li>
+<li>added changes to documentation</li>
 </ul>
 </div>
-    <div id="mixmatrix-0-2-2" class="section level1">
+    <div id="matrixdist-0-0-0-9921" class="section level1">
 <h1 class="page-header">
-<a href="#mixmatrix-0-2-2" class="anchor"></a>MixMatrix 0.2.2<small> 2019-07-28 </small>
+<a href="#matrixdist-0-0-0-9921" class="anchor"></a>matrixdist 0.0.0.9921<small> Unreleased </small>
 </h1>
 <ul>
-<li>Added more citations and references.</li>
-<li>Added reference to the paper this package accompanies.</li>
-<li>A small series of bug fixes and internal function updates to more easily support restrictions on means and variances different functions.</li>
+<li>Added support for using IID structure for covariance matrices</li>
+<li>correction on restricted means - only true if known variance</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9922" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9922" class="anchor"></a>matrixdist 0.0.0.9922<small> Unreleased </small>
+</h1>
+<ul>
+<li>Added LDA and QDA functions with <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> methods. These functions are relatively fragile.</li>
+<li>Marked some functions as internal to clean up the NAMESPACE</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9923" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9923" class="anchor"></a>matrixdist 0.0.0.9923<small> Unreleased </small>
+</h1>
+<ul>
+<li>Rewrote <code>rInvCholWishart</code> to fix a bug where it was not actually a Cholesky decomposition - while upper triangular, <code><a href="https://rdrr.io/r/base/crossprod.html">tcrossprod()</a></code> was InvWishart, not <code><a href="https://rdrr.io/r/base/crossprod.html">crossprod()</a></code>. The method is a little slower since it involves computing <code>rInvWishart</code> and then taking the Cholesky decomposition, but it is faster than doing it in R.</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9924" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9924" class="anchor"></a>matrixdist 0.0.0.9924<small> Unreleased </small>
+</h1>
+<ul>
+<li>Wrote density functions for the Wishart and InvWishart distributions. Broke the Wishart functions and <code>mvgamma</code> functions into a separate file just for them as they are all related and I may break them into their own package.</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9925" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9925" class="anchor"></a>matrixdist 0.0.0.9925<small> Unreleased </small>
+</h1>
+<ul>
+<li>add multivariate <code>digamma</code>
+</li>
+<li>add a couple tests for <code>matrixt</code>
+</li>
+<li>new plan: add fitting for t-distribution, LDA for t-distribution</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9926" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9926" class="anchor"></a>matrixdist 0.0.0.9926<small> Unreleased </small>
+</h1>
+<ul>
+<li>split Wishart functions into CholWishart package</li>
+<li>migrate some internal functions to <code>RcppArmadillo</code> to improve speed</li>
+<li>add support for multiple observation input to <code>dmatrixnorm</code> function</li>
+<li>add support for multiple observation input to <code>dmatrixt</code> and <code>dmatrixinvt</code>
+</li>
+<li>dmatrix function now have large components in C++</li>
+<li>add error checking to <code>dmatrixinvt</code> - density only defined when matrix is positive definite</li>
+<li>improve speed of <code>MLmatrixnorm</code> by migrating more to C++ and fixing some R bottlenecks</li>
+</ul>
+</div>
+    <div id="matrixdist-0-0-0-9927" class="section level1">
+<h1 class="page-header">
+<a href="#matrixdist-0-0-0-9927" class="anchor"></a>matrixdist 0.0.0.9927<small> Unreleased </small>
+</h1>
+<ul>
+<li>include EM algorithm (actually an ECME) for estimation of parameters of matrix-variate <em>t</em>-distributions</li>
+<li>include variance specifications for EM for t distribution</li>
+<li>include the possibility of restricting covariance matrices to a correlation structure.</li>
+</ul>
+</div>
+    <div id="mixmatrix-0-0-0-9949" class="section level1">
+<h1 class="page-header">
+<a href="#mixmatrix-0-0-0-9949" class="anchor"></a>MixMatrix 0.0.0.9949<small> Unreleased </small>
+</h1>
+<ul>
+<li>changing name to MixMatrix</li>
 </ul>
 </div>
   </div>
@@ -165,9 +234,16 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#mixmatrix-0-2-0">0.2.0</a></li>
-        <li><a href="#mixmatrix-0-2-1">0.2.1</a></li>
-        <li><a href="#mixmatrix-0-2-2">0.2.2</a></li>
+        <li><a href="#matrixdist-0-0-0-9919">0.0.0.9919</a></li>
+        <li><a href="#matrixdist-0-0-0-9920">0.0.0.9920</a></li>
+        <li><a href="#matrixdist-0-0-0-9921">0.0.0.9921</a></li>
+        <li><a href="#matrixdist-0-0-0-9922">0.0.0.9922</a></li>
+        <li><a href="#matrixdist-0-0-0-9923">0.0.0.9923</a></li>
+        <li><a href="#matrixdist-0-0-0-9924">0.0.0.9924</a></li>
+        <li><a href="#matrixdist-0-0-0-9925">0.0.0.9925</a></li>
+        <li><a href="#matrixdist-0-0-0-9926">0.0.0.9926</a></li>
+        <li><a href="#matrixdist-0-0-0-9927">0.0.0.9927</a></li>
+        <li><a href="#mixmatrix-0-0-0-9949">0.0.0.9949</a></li>
       </ul>
     </div>
   </div>
