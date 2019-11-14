@@ -180,7 +180,7 @@ for a few  sample sizes. Because of the relative
 slowness of running a longer simulation, this only includes one set of examples.
 I give code for a longer and larger simulation than what is plotted 
 if you're really interested below. What is plotted below is only the `df = 10`
-example with 75 trials and a maximum number of iterations `max.iter =  50`.
+example with 75 trials and a maximum number of iterations `max.iter =  20`.
 The full simulation may take several minutes.
 
 ```{r dontrun, eval=FALSE, echo = FALSE}
@@ -276,9 +276,9 @@ df1050 <-  rep(0,50)
 df10100 <-  rep(0,50)
 
 for(i in 1:50){
-   df10[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 25), fixed = FALSE, df = 5, max.iter = 50)$nu)
-   df1050[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50), fixed = FALSE, df = 5, max.iter = 50)$nu)
-   df10100[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100), fixed = FALSE, df = 5, max.iter = 50)$nu)
+   df10[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 25), fixed = FALSE, df = 5, max.iter = 20)$nu)
+   df1050[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 50), fixed = FALSE, df = 5, max.iter = 20)$nu)
+   df10100[i] = suppressWarnings(MLmatrixt(rmatrixt(mean = matrix(0,5,3),df = 10, n = 100), fixed = FALSE, df = 5, max.iter = 20)$nu)
 }
 
 
