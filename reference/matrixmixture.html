@@ -144,8 +144,8 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
 
     <pre class="usage"><span class='fu'>matrixmixture</span>(<span class='no'>x</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
   <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,11 +207,6 @@ log-likelihood by default.</p></td>
       <td><p>degrees of freedom parameter. Can be a vector of length <code>K</code>.</p></td>
     </tr>
     <tr>
-      <th>fixdf</th>
-      <td><p>whether or not to estimate the degrees of freedom parameter,
-<code>TRUE</code> means they are fixed, <code>FALSE</code> means they are estimated.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>pass additional arguments to <code>MLmatrixnorm</code> or <code>MLmatrixt</code></p></td>
     </tr>
@@ -228,7 +223,9 @@ numbers output more results.</p></td>
       <th>convergence</th>
       <td><p>By default, <code>TRUE</code>. Whether to use Aitken acceleration to
 determine convergence. If false, it instead checks if the change in
-log-likelihood is less than <code>tolerance</code>.</p></td>
+log-likelihood is less than <code>tolerance</code>. Aitken acceleration may
+prematurely end in the first few steps, so you may wish to set <code>miniter</code>
+or select <code>FALSE</code> if this is an issue.</p></td>
     </tr>
     </table>
 
@@ -287,7 +284,7 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
 <span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>20</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
 <span class='co'># 3x4 matrices with mean 0</span>
 <span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>20</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='co'># 3x4 matrices with mean 2</span>
+<span class='co'># 3x4 matrices with mean 1</span>
 <span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>40</span>)) <span class='co'># combine into one array</span>
 <span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
 <span class='co'># create an intialization object, starts at the true parameters</span>
@@ -297,27 +294,27 @@ log-likelihood is less than <code>tolerance</code>.</p></td>
  )
 <span class='co'># fit model</span>
  <span class='no'>res</span><span class='kw'>&lt;-</span><span class='fu'>matrixmixture</span>(<span class='no'>C</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='no'>init</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-1</span>)
+                    <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"t"</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>1e-3</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>centers</span>) <span class='co'># the final centers</span></div><div class='output co'>#&gt; , , 1
 #&gt; 
-#&gt;            [,1]        [,2]         [,3]         [,4]
-#&gt; [1,] 0.14002917  0.09898373  0.062407708 -0.001406398
-#&gt; [2,] 0.09248603 -0.08488415  0.005608342 -0.055155989
-#&gt; [3,] 0.06907271 -0.19525523 -0.046735211 -0.034367104
+#&gt;              [,1]        [,2]        [,3]        [,4]
+#&gt; [1,]  0.117537755  0.05142832  0.03229732 -0.02163010
+#&gt; [2,]  0.005705083 -0.03489656 -0.03159498 -0.05027392
+#&gt; [3,] -0.041192795 -0.10381233 -0.07923590 -0.06302149
 #&gt; 
 #&gt; , , 2
 #&gt; 
-#&gt;          [,1]      [,2]     [,3]      [,4]
-#&gt; [1,] 1.015343 1.0254994 0.841771 1.0531384
-#&gt; [2,] 1.025463 0.9363218 1.078613 1.0188713
-#&gt; [3,] 1.114099 1.0803238 1.012833 0.7777991
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.5054239 0.4945761</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>res</span>) <span class='co'># log likelihood of final result</span></div><div class='output co'>#&gt; 'log Lik.' -485.971 (df=54)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>BIC</a></span>(<span class='no'>res</span>) <span class='co'># BIC of final result</span></div><div class='output co'>#&gt; [1] 1171.141</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>21</span>)]) <span class='co'># predicted class membership</span></div><div class='output co'>#&gt; $class
+#&gt;          [,1]      [,2]      [,3]      [,4]
+#&gt; [1,] 1.065892 1.0573621 0.8615166 1.0380062
+#&gt; [2,] 1.069079 0.9432203 1.0902007 0.9915732
+#&gt; [3,] 1.080176 1.0671593 0.9880986 0.7968937
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>res</span>$<span class='no'>pi</span>) <span class='co'># the final mixing proportion</span></div><div class='output co'>#&gt; [1] 0.4987695 0.5012305</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>res</span>) <span class='co'># the log likelihood by iteration</span></div><div class='img'><img src='matrixmixture-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>res</span>) <span class='co'># log likelihood of final result</span></div><div class='output co'>#&gt; 'log Lik.' -414.8875 (df=54)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>BIC</a></span>(<span class='no'>res</span>) <span class='co'># BIC of final result</span></div><div class='output co'>#&gt; [1] 1028.975</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>res</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>C</span>[,,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>21</span>)]) <span class='co'># predicted class membership</span></div><div class='output co'>#&gt; $class
 #&gt; [1] 1 2
 #&gt; 
 #&gt; $posterior
 #&gt;              [,1]         [,2]
-#&gt; [1,] 0.9995008772 0.0004991228
-#&gt; [2,] 0.0002383341 0.9997616659
+#&gt; [1,] 9.999883e-01 1.170306e-05
+#&gt; [2,] 6.703426e-07 9.999993e-01
 #&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
