@@ -142,10 +142,23 @@ and unconstrained covariance matrices for a matrix variate normal or
 matrix variate t distribution (with specified degrees of freedom <code>nu</code>).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>matrixmixture</span>(<span class='no'>x</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
-  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>matrixmixture</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
+  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>1000</span>,
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.1</span>,
+  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>miniter</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>convergence</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

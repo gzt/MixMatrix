@@ -144,9 +144,19 @@ and it will select centers and variance matrices to initialize or
 provide initial values and it will format them as expected for the function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>init_matrixmixture</span>(<span class='no'>data</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
-  <span class='kw'>centers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>U</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centermethod</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>,
-  <span class='kw'>varmethod</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>init_matrixmixture</span>(
+  <span class='no'>data</span>,
+  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
+  <span class='kw'>centers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>U</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>V</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>centermethod</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>,
+  <span class='kw'>varmethod</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
+  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
+  <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
