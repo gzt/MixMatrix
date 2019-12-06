@@ -5,12 +5,27 @@
 \alias{dmatrixnorm}
 \title{Matrix variate Normal distribution functions}
 \usage{
-rmatrixnorm(n, mean, L = diag(dim(as.matrix(mean))[1]),
-  R = diag(dim(as.matrix(mean))[2]), U = L \%*\% t(L), V = t(R) \%*\%
-  R, list = FALSE, array = NULL, force = FALSE)
+rmatrixnorm(
+  n,
+  mean,
+  L = diag(dim(as.matrix(mean))[1]),
+  R = diag(dim(as.matrix(mean))[2]),
+  U = L \%*\% t(L),
+  V = t(R) \%*\% R,
+  list = FALSE,
+  array = NULL,
+  force = FALSE
+)
 
-dmatrixnorm(x, mean = matrix(0, p, n), L = diag(p), R = diag(n),
-  U = L \%*\% t(L), V = t(R) \%*\% R, log = FALSE)
+dmatrixnorm(
+  x,
+  mean = matrix(0, p, n),
+  L = diag(p),
+  R = diag(n),
+  U = L \%*\% t(L),
+  V = t(R) \%*\% R,
+  log = FALSE
+)
 }
 \arguments{
 \item{n}{number of observations to generate - must be a positive integer.}

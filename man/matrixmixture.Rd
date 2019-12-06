@@ -4,10 +4,23 @@
 \alias{matrixmixture}
 \title{Fit a matrix variate mixture model}
 \usage{
-matrixmixture(x, init = NULL, prior = NULL, K = length(prior),
-  iter = 1000, model = "normal", method = NULL, row.mean = FALSE,
-  col.mean = FALSE, tolerance = 0.1, nu = NULL, ..., verbose = 0,
-  miniter = 5, convergence = TRUE)
+matrixmixture(
+  x,
+  init = NULL,
+  prior = NULL,
+  K = length(prior),
+  iter = 1000,
+  model = "normal",
+  method = NULL,
+  row.mean = FALSE,
+  col.mean = FALSE,
+  tolerance = 0.1,
+  nu = NULL,
+  ...,
+  verbose = 0,
+  miniter = 5,
+  convergence = TRUE
+)
 }
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}

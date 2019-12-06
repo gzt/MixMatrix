@@ -3,7 +3,6 @@
 \docType{package}
 \name{MixMatrix}
 \alias{MixMatrix}
-\alias{MixMatrix-package}
 \title{Classification with Matrix Variate Normal and t Distributions}
 \description{
 Provides sampling and density functions for matrix

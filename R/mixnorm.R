@@ -292,9 +292,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter=
     } else {
         for(j in 1:nclass){
             newV[,,j] = .colVars(x, newcenters[,,j],df[j],newposterior[,j],
-                                 SS[,,j],SSX[,,j],SSXX[,,j],...)
+                                 SS[,,j],SSX[,,j],SSXX[,,j],...)$V
                         
-            newU[,,j] = .rowVars(x,newcenters[,,j],df[j],newposterior[,j],SS[,,j],SSX[,,j],SSXX[,,j],...)
+            newU[,,j] = .rowVars(x,newcenters[,,j],df[j],newposterior[,j],SS[,,j],SSX[,,j],SSXX[,,j],...)$U
             newUinv = (dfmult[j]/(sumzig[j] * (df[j] + p - 1))) * SS[,,j]
             newU[,,j] = solve(newUinv)
         }

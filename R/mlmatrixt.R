@@ -172,8 +172,14 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 
       inter.V <- txax(swept.data, 0.5*(U+t(U)))
       V <- rowSums(inter.V, dims = 2)/(dims[3] * dims[1])
-      if (col.variance == "AR(1)") rho.col <- V[1,2]/V[1,1]
-      if (col.variance == "CS") rho.col <- mean(V[1,]/V[1,1])
+        if (col.variance == "AR(1)") {
+            V = stats::cov2cor(V)
+            rho.col <- V[1,2]
+            }
+        if (col.variance == "CS") {
+            V = stats::cov2cor(V)
+            rho.col <- mean(V[1,]/V[1,1])
+            }
       if (col.variance == "I") rho.col = 0
       if (rho.col > .9) rho.col <- .9
       if (rho.col < 0) rho.col <- 0
@@ -188,8 +194,14 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 
       inter.U <- xatx(swept.data, 0.5*(V+t(V)))
       U = rowSums(inter.U, dims = 2)/(dims[3]*dims[2])
-      if (row.variance == "AR(1)") rho.row <- U[1,2]/U[1,1]
-      if (row.variance == "CS") rho.row <- mean(U[1,]/U[1,1])
+        if (row.variance == "AR(1)") {
+            U = stats::cov2cor(U)
+            rho.row <- U[1,2]/U[1,1]
+            }
+        if (row.variance == "CS") {
+            U = stats::cov2cor(U)
+            rho.row <- mean(U[1,]/U[1,1])
+            }
       if (row.variance == "I") rho.row = 0
       if (rho.row > .9) rho.row <- .9
       if (rho.row < 0) rho.row = 0
@@ -221,13 +233,16 @@ n = dims[3]
       new.Mu = .MeansFunction(data, V=V, SS, SSX, rep(1.0,n), row.mean, col.mean, "t")
 
       ### VARS:
-      new.V = .colVars(data,new.Mu, df, rep(1.0,n),SS, SSX, SSXX,
-                       col.variance, col.set.var)
+      colvarlist = .colVars(data,new.Mu, df, rep(1.0,n),SS, SSX, SSXX,
+                       col.variance, col.set.var,varflag)
+      new.V = colvarlist$V
+      varflag=colvarlist$varflag
 
+      rowvarlist = .rowVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
+                       row.variance, row.set.var,varflag)
+      new.U = rowvarlist$U
+      varflag=rowvarlist$varflag
 
-      new.U = .rowVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
-                       row.variance, row.set.var)
-          
 
     ### IF NU UPDATE
     if (!fixed) {

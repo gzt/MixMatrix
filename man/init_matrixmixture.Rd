@@ -4,9 +4,19 @@
 \alias{init_matrixmixture}
 \title{Initializing settings for Matrix Mixture Models}
 \usage{
-init_matrixmixture(data, prior = NULL, K = length(prior),
-  centers = NULL, U = NULL, V = NULL, centermethod = "kmeans",
-  varmethod = "identity", model = "normal", init = NULL, ...)
+init_matrixmixture(
+  data,
+  prior = NULL,
+  K = length(prior),
+  centers = NULL,
+  U = NULL,
+  V = NULL,
+  centermethod = "kmeans",
+  varmethod = "identity",
+  model = "normal",
+  init = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{data, \eqn{p \times q \times n}{p * q * n} array}

@@ -78,7 +78,7 @@
 
 
 .colVars <- function(data,center,df=0,weights,SS,SSX,SSXX,
-                     col.variance="none",col.set.var=FALSE,...){
+                     col.variance="none",col.set.var=FALSE,varflag=FALSE,...){
     n = sum(weights)
     p = dim(data)[1]
     q = dim(data)[2]
@@ -94,7 +94,7 @@
         SXOX = SSX %*% varinvmat %*% t(rowSums(data, dims = 2)) #only need trace to be equal
         return(-n*p*vardetmat + dfmult  * matrixtrace(SXOX+ SS %*% center %*% varinvmat %*% t(center) - SSX %*% varinvmat %*% t(center) - center %*% varinvmat %*% t(SSX)))
       }
-      if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
+      if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.99)) <= 0)) {
         warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
         rho.col = 0
         varflag = TRUE
@@ -115,12 +115,12 @@
         } else new.V = new.V/new.V[1,1]
     }
     # Fix V to have unit variance on first component
-    new.V
+    list(V = new.V, varflag = varflag)
 }
 
 
 .rowVars <- function(data,center,df=0,weights,SS,SSX,SSXX,
-                     row.variance="none",row.set.var=FALSE,...){
+                     row.variance="none",row.set.var=FALSE,varflag=FALSE,...){
     n = sum(weights)
     p = dim(data)[1]
     q = dim(data)[2]
@@ -165,7 +165,7 @@
       }
     }
 
-    new.U
+    list(U = new.U, varflag=varflag)
 }
 
 

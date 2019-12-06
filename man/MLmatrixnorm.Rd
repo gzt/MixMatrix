@@ -4,9 +4,18 @@
 \alias{MLmatrixnorm}
 \title{Maximum likelihood estimation for matrix normal distributions}
 \usage{
-MLmatrixnorm(data, row.mean = FALSE, col.mean = FALSE,
-  row.variance = "none", col.variance = "none", tol = 10 *
-  .Machine$double.eps^0.5, max.iter = 100, U, V, ...)
+MLmatrixnorm(
+  data,
+  row.mean = FALSE,
+  col.mean = FALSE,
+  row.variance = "none",
+  col.variance = "none",
+  tol = 10 * .Machine$double.eps^0.5,
+  max.iter = 100,
+  U,
+  V,
+  ...
+)
 }
 \arguments{
 \item{data}{Either a list of matrices or a 3-D array with matrices in
