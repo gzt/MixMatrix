@@ -1,7 +1,7 @@
 Package: MixMatrix
 Type: Package
-Title:  Classification with Matrix Variate Normal and t Distributions
-Version: 0.2.4
+Title: Classification with Matrix Variate Normal and t Distributions
+Version: 0.2.5
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')),
 	  person(c("B. D.", "Ripley",
@@ -37,6 +37,6 @@ URL: http://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
 BugReports: http://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
