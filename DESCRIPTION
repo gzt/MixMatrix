@@ -15,7 +15,7 @@ Description: Provides sampling and density functions for matrix
     variate normal and t distributions using the EM algorithm,
     including some restrictions on the parameters; and classification by linear and
     quadratic discriminant analysis for matrix variate normal and t
-    distributions described in Thompson et al. (2019) <arXiv:1907.09565>.
+    distributions described in Thompson et al. (2019) <doi:10.1080/10618600.2019.1696208>.
     Performs clustering with matrix variate normal and t mixture models.
 Depends: R (>= 3.5.0)
 Imports:

@@ -1,5 +1,6 @@
 # MixMatrix 0.2.5
 
+* Update with DOI for associated paper.
 * Fix an issue with AR(1) and CS covariances. The way these are specified 
 means that in case of mis-specification, they may be non-monotonic if
 they are mis-specified and results are near the the boundary. 
