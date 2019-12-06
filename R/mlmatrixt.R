@@ -236,14 +236,13 @@ n = dims[3]
       ### VARS:
       colvarlist = .colVars(data,new.Mu, df, rep(1.0,n),SS, SSX, SSXX,
                        col.variance, col.set.var,varflag)
-      new.V = colvarlist$V
       varflag=colvarlist$varflag
+      if (!varflag) new.V = colvarlist$V
 
       rowvarlist = .rowVars(data,new.Mu, df, rep(1,n),SS, SSX, SSXX,
                        row.variance, row.set.var,varflag)
-      new.U = rowvarlist$U
       varflag=rowvarlist$varflag
-
+      if (!varflag) new.U = rowvarlist$U
 
     ### IF NU UPDATE
     if (!fixed) {

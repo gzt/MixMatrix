@@ -35,7 +35,8 @@ common mean within each row. If both this and \code{row.mean} are
 'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 correlation matrix, or 'Independence' for
 independent and identical variance across the rows.
-Only positive correlations are allowed for AR(1) and CS.
+Only positive correlations are allowed for AR(1) and CS and these
+restrictions may not be guaranteed to converge.
 Note that while maximum likelihood estimators are available (and used)
 for the unconstrained variance matrices, \code{optim} is used for any
 constraints so it may be considerably slower.}
