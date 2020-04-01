@@ -1,0 +1,24 @@
+linters: with_defaults(
+    object_name_linter = NULL, # 403
+    line_length_linter = NULL, # 262
+    commented_code_linter = NULL, # 46
+    dummy_linter = NULL
+  )
+exclusions: list(
+    "man/ARgenerate.Rd",
+    "man/CSgenerate.Rd",
+    "man/derivCS.Rd",
+    "man/init_matrixmixture.Rd",
+    "man/matrixlda.Rd",
+    "man/matrixmixture.Rd",
+    "man/matrixqda.Rd",
+    "man/MixMatrix.Rd",
+    "man/MLmatrixnorm.Rd",
+    "man/MLmatrixt.Rd",
+    "man/predict.matrixlda.Rd",
+    "man/predict.matrixqda.Rd",
+    "man/rmatrixinvt.Rd",
+    "man/rmatrixnorm.Rd",
+    "man/rmatrixt.Rd",
+    "man/vardet.Rd"
+    )

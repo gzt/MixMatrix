@@ -37,6 +37,6 @@ URL: http://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
 BugReports: http://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo

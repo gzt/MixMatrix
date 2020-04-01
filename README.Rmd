@@ -12,7 +12,9 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
   <!-- badges: start -->
+  
   [![R build status](https://github.com/gzt/MixMatrix/workflows/R-CMD-check/badge.svg)](https://github.com/gzt/MixMatrix/actions)
   [![Travis-CI Build Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-ci.org/gzt/MixMatrix)
  [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
