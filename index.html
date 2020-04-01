@@ -96,10 +96,11 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
+
 <div id="mixmatrix" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#mixmatrix" class="anchor"></a>MixMatrix</h1></div>
-
 <p>Provides sampling and density functions for matrix variate normal, <em>t</em>, and inverted <em>t</em> distributions; ML estimation<br>
 using the EM algorithm for matrix variate normal and <em>t</em> distributions including some restrictions on the parameters; and classification by linear and quadratic discriminant analysis for matrix variate normal and <em>t</em> distributions. Performs clustering with matrix variate normal and <em>t</em> mixture models.</p>
 <p>See the vignettes for an example of how it works.</p>
@@ -113,16 +114,16 @@ using the EM algorithm for matrix variate normal and <em>t</em> distributions in
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>The various <code>r*</code> and <code>d*</code> functions return or take as input an array indexed by the third dimension.</p>
-<pre><code>meanmatrix = matrix(1:12, nrow = 3)
-A = rmatrixnorm(n = 10, mean = meanmatrix, U = diag(3), V = diag(4))
-A[,,1:2]
-dmatrixnorm(A, mean = meanmatrix, U = diag(3), V = diag(4), log = TRUE)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>meanmatrix =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>, <span class="dt">nrow =</span> <span class="dv">3</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>A =<span class="st"> </span><span class="kw">rmatrixnorm</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">mean =</span> meanmatrix, <span class="dt">U =</span> <span class="kw">diag</span>(<span class="dv">3</span>), <span class="dt">V =</span> <span class="kw">diag</span>(<span class="dv">4</span>))</span>
+<span id="cb3-3"><a href="#cb3-3"></a>A[,,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">dmatrixnorm</span>(A, <span class="dt">mean =</span> meanmatrix, <span class="dt">U =</span> <span class="kw">diag</span>(<span class="dv">3</span>), <span class="dt">V =</span> <span class="kw">diag</span>(<span class="dv">4</span>), <span class="dt">log =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>The package presents a method of maximum likelihood estimation of the parameters of the matrix variate <em>t</em> distribution using ECME.</p>
-<pre><code>X = rmatrixt(n = 100, mean = meanmatrix, U = diag(3), V = diag(4), df = 10)
-MLmatrixt(X, fixed = FALSE) # fixed = FALSE indicates to estimate the DF parameter</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>X =<span class="st"> </span><span class="kw">rmatrixt</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">mean =</span> meanmatrix, <span class="dt">U =</span> <span class="kw">diag</span>(<span class="dv">3</span>), <span class="dt">V =</span> <span class="kw">diag</span>(<span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">MLmatrixt</span>(X, <span class="dt">fixed =</span> <span class="ot">FALSE</span>) <span class="co"># fixed = FALSE indicates to estimate the DF parameter</span></span></code></pre></div>
 <p>Because it might be useful in conjunction with the <code>r*</code> and <code>d*</code> functions, the package also includes some convenience functions for generating AR(1) and compound symmetry correlation matrices.</p>
-<pre><code><a href="reference/ARgenerate.html">ARgenerate(5, .5)
-CSgenerate(5, .5)</a></code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">ARgenerate</span>(<span class="dv">5</span>, <span class="fl">.5</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">CSgenerate</span>(<span class="dv">5</span>, <span class="fl">.5</span>)</span></code></pre></div>
 <p>The package also presents linear discriminant analysis and quadratic discriminant analysis for matrix variate distributions in the case of the normal and the <em>t</em>-distribution. In the case of the <em>t</em>, linear and quadratic refer whether the covariance matrices are constrained to be the same between classes rather than the form of the classifier.</p>
 <pre><code> A &lt;- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
  B &lt;- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4), U = 2 * ARgenerate(3, .8))
@@ -155,6 +156,7 @@ CSgenerate(5, .5)</a></code></pre>
 <p>Please note that the <code>MixMatrix</code> project is released with a <a href="https://gzt.github.io/MixMatrix/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -193,6 +195,7 @@ CSgenerate(5, .5)</a></code></pre>
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://github.com/gzt/MixMatrix/actions"><img src="https://github.com/gzt/MixMatrix/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://travis-ci.org/gzt/MixMatrix"><img src="https://travis-ci.org/gzt/MixMatrix.svg?branch=master" alt="Travis-CI Build Status"></a></li>
 <li><a href="https://ci.appveyor.com/project/gzt/MixMatrix"><img src="https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
 <li><a href="https://codecov.io/github/gzt/MixMatrix?branch=master"><img src="https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg" alt="Coverage Status"></a></li>
