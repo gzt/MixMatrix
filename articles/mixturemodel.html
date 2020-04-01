@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matrix Variate Mixture Models with the t distribution • MixMatrix</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Matrix Variate Mixture Models with the t distribution">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="MixMatrix">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/gzt/MixMatrix">
+  <a href="http://github.com/gzt/MixMatrix/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -91,25 +91,25 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Matrix Variate Mixture Models with the t distribution</h1>
+      <h1 data-toc-skip>Matrix Variate Mixture Models with the t distribution</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2019-12-06</h4>
+            <h4 class="date">2020-04-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="http://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
       <div class="hidden name"><code>mixturemodel.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MixMatrix)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MixMatrix</span>)</pre></body></html></div>
 <div id="matrix-variate-mixture-modeling-with-the-t-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#matrix-variate-mixture-modeling-with-the-t-distribution" class="anchor"></a>Matrix Variate Mixture Modeling with the <span class="math inline">\(t\)</span> Distribution</h2>
 <p>The matrix variate <em>t</em> distribution was introduced in a previous vignette along with an EM algorithm for maximum likelihood fitting of the parameters. This can be extended rather easily to the case of mixture models for model-based clustering.</p>
-<p>As in the case of mixture modeling in general <span class="citation">(Fraley and Raftery <a href="#ref-fraley2002model">2002</a>; McLachlan, Lee, and Rathnayake <a href="#ref-mclachlan2019finite">2019</a>)</span>, the difference in the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ij}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>, where <span class="math display">\[\pi_j = \frac{1}{n}\sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]</span></p>
-<p>The case of the matrix variate normal distribution can be seen in <span class="citation">Viroli (<a href="#ref-viroliclass2011">2011</a>)</span>, while the case of the multivariate <em>t</em> can be seen in <span class="citation">Andrews, McNicholas, and Subedi (<a href="#ref-ANDREWS2011520">2011</a>)</span>.</p>
+<p>As in the case of mixture modeling in general <span class="citation">(Fraley and Raftery <a href="#ref-fraley2002model" role="doc-biblioref">2002</a>; McLachlan, Lee, and Rathnayake <a href="#ref-mclachlan2019finite" role="doc-biblioref">2019</a>)</span>, the difference in the EM algorithm is that one is now including estimates of <span class="math inline">\(\pi_{j}\)</span> for <span class="math inline">\(j\)</span> in <span class="math inline">\(1,2, \ldots, g\)</span>, the estimated probabilities of group membership for the <span class="math inline">\(g\)</span> groups in each step and weights <span class="math inline">\(\tau_{ij}\)</span>, weights for each observation <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>, where <span class="math display">\[\pi_j = \frac{1}{n}\sum_{i = 1}^n \tau_{ij}\]</span> and <span class="math display">\[ \tau_{ij} = \frac{\pi_j f(x_i, \Theta_j)}{\sum_{l=1}^g \pi_l f(x_i, \Theta_l)}\]</span></p>
+<p>The case of the matrix variate normal distribution can be seen in <span class="citation">Viroli (<a href="#ref-viroliclass2011" role="doc-biblioref">2011</a>)</span>, while the case of the multivariate <em>t</em> can be seen in <span class="citation">Andrews, McNicholas, and Subedi (<a href="#ref-ANDREWS2011520" role="doc-biblioref">2011</a>)</span>.</p>
 <p>The updates on the parameters <span class="math inline">\(\Theta\)</span> are weighted by <span class="math inline">\(\tau_{ij}\)</span> in an Expectation/Conditional Maximization algorithm.</p>
 </div>
 <div id="usage" class="section level2">
@@ -121,41 +121,41 @@
 <h3 class="hasAnchor">
 <a href="#matrixmixture-function" class="anchor"></a><code>matrixmixture</code> function</h3>
 <p>The function takes data array <code>x</code>, either an argument <code>K</code> for how many groups there are or an initialization of a vector of probabilities <code>prior</code>, an optional initialization of centers and covariance matrices <code>init</code> (if the covariances are left blank, they will be initialized to identity matrices), and optional arguments controlling the other parameters of function, such as number of iterations and normal vs <em>t</em>. If <code>model = "t"</code> is chosen, the degrees of freedom <code>nu</code> must be provided, but in the future it can be estimated.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MixMatrix)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"> <span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">20180221</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"> A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">0</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>) <span class="co"># 3x4 matrices with mean 0</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"> B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">1</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>) <span class="co"># 3x4 matrices with mean 2</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"> C &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(A,B), <span class="dt">dim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">60</span>)) <span class="co"># combine into one array</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"> prior &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.<span class="dv">5</span>,.<span class="dv">5</span>) <span class="co"># equal probability prior</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"> <span class="co"># create an intialization object, starts at the true parameters</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"> init =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">centers =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">0</span>,<span class="dv">12</span>),<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">1</span>,<span class="dv">12</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">              <span class="dt">U =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">3</span>), <span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">3</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">              <span class="dt">V =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">4</span>), <span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">4</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">             )</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"> <span class="co"># fit model</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"> res&lt;-<span class="kw"><a href="../reference/matrixmixture.html">matrixmixture</a></span>(C, <span class="dt">init =</span> init, <span class="dt">prior =</span> prior, <span class="dt">nu =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">                    <span class="dt">model =</span> <span class="st">"t"</span>, <span class="dt">tolerance =</span> <span class="fl">1e-2</span>)</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"> <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(res<span class="op">$</span>centers) <span class="co"># the final centers</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt;              [,1]        [,2]        [,3]        [,4]</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; [1,] -0.005608544  0.01263007  0.03606995  0.02008999</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; [2,] -0.036807465 -0.00922546 -0.02606685 -0.03205214</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; [3,] -0.068637713 -0.06653189 -0.00752340 -0.04191753</span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">#&gt; [1,] 0.9785204 0.9459763 0.9561746 0.9857805</span></a>
-<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co">#&gt; [2,] 1.0928959 0.9807877 0.8435277 1.0341407</span></a>
-<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">#&gt; [3,] 1.1422649 1.0527232 0.9998141 1.0383794</span></a>
-<a class="sourceLine" id="cb2-29" data-line-number="29"> <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(res<span class="op">$</span>pi) <span class="co"># the final mixing proportion</span></a>
-<a class="sourceLine" id="cb2-30" data-line-number="30"><span class="co">#&gt; [1] 0.4999994 0.5000006</span></a>
-<a class="sourceLine" id="cb2-31" data-line-number="31"> <span class="kw"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(res)</a>
-<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="co">#&gt; 'log Lik.' -442.517 (df=54)</span></a>
-<a class="sourceLine" id="cb2-33" data-line-number="33"> <span class="kw"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(res))</a>
-<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; [1] 993.0339</span></a>
-<a class="sourceLine" id="cb2-35" data-line-number="35"> <span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(res) <span class="co"># the log likelihood by iteration</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MixMatrix</span>)
+ <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">20180221</span>)
+ <span class="no">A</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="fl">30</span>,<span class="kw">mean</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>,<span class="kw">nrow</span><span class="kw">=</span><span class="fl">3</span>,<span class="kw">ncol</span><span class="kw">=</span><span class="fl">4</span>), <span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>) <span class="co"># 3x4 matrices with mean 0</span>
+ <span class="no">B</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="fl">30</span>,<span class="kw">mean</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">1</span>,<span class="kw">nrow</span><span class="kw">=</span><span class="fl">3</span>,<span class="kw">ncol</span><span class="kw">=</span><span class="fl">4</span>), <span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>) <span class="co"># 3x4 matrices with mean 2</span>
+ <span class="no">C</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">A</span>,<span class="no">B</span>), <span class="kw">dim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">60</span>)) <span class="co"># combine into one array</span>
+ <span class="no">prior</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>,<span class="fl">.5</span>) <span class="co"># equal probability prior</span>
+ <span class="co"># create an intialization object, starts at the true parameters</span>
+ <span class="no">init</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">centers</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>,<span class="fl">12</span>),<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>,<span class="fl">12</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">2</span>)),
+              <span class="kw">U</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">3</span>), <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">3</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">2</span>)),
+              <span class="kw">V</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">4</span>), <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">4</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">2</span>))
+             )
+ <span class="co"># fit model</span>
+ <span class="no">res</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/matrixmixture.html">matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">init</span> <span class="kw">=</span> <span class="no">init</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="no">prior</span>, <span class="kw">nu</span> <span class="kw">=</span> <span class="fl">10</span>,
+                    <span class="kw">model</span> <span class="kw">=</span> <span class="st">"t"</span>, <span class="kw">tolerance</span> <span class="kw">=</span> <span class="fl">1e-2</span>)
+ <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">res</span>$<span class="no">centers</span>) <span class="co"># the final centers</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;              [,1]        [,2]        [,3]        [,4]</span>
+<span class="co">#&gt; [1,] -0.005608544  0.01263007  0.03606995  0.02008999</span>
+<span class="co">#&gt; [2,] -0.036807465 -0.00922546 -0.02606685 -0.03205214</span>
+<span class="co">#&gt; [3,] -0.068637713 -0.06653189 -0.00752340 -0.04191753</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span>
+<span class="co">#&gt; [1,] 0.9785204 0.9459763 0.9561746 0.9857805</span>
+<span class="co">#&gt; [2,] 1.0928959 0.9807877 0.8435277 1.0341407</span>
+<span class="co">#&gt; [3,] 1.1422649 1.0527232 0.9998141 1.0383794</span>
+ <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">res</span>$<span class="no">pi</span>) <span class="co"># the final mixing proportion</span>
+<span class="co">#&gt; [1] 0.4999994 0.5000006</span>
+ <span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(<span class="no">res</span>)
+<span class="co">#&gt; 'log Lik.' -442.517 (df=54)</span>
+ <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(<span class="no">res</span>))
+<span class="co">#&gt; [1] 993.0339</span>
+ <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">res</span>) <span class="co"># the log likelihood by iteration</span></pre></body></html></div>
 <p><img src="mixturemodel_files/figure-html/demo-1.png" width="700"></p>
 <p>The default method for determining convergence is based on Aitken acceleration of the log-likelihood. However, it can be set to stop based on changes in the log-likelihood instead.</p>
 </div>
@@ -163,211 +163,197 @@
 <h3 class="hasAnchor">
 <a href="#initialization-function" class="anchor"></a>Initialization function</h3>
 <p>The packages also provides a helper function <code><a href="../reference/init_matrixmixture.html">init_matrixmixture()</a></code> to provide the <code>init</code> object for you. At present, it can either use the <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> function on the vectorization of the input data to provide starting centers or select random points. The <code>...</code> arguments are passed to <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> (so <code>nstart</code> of other similar arguments can be set). If a partially formed <code>init</code> object is sent to the initializer, it will complete it. However, it will not validate that, for instance, the covariance matrices are valid. Partial supply of initial centers is also supported - that is, if fewer centers than groups are provided, the remainder will be chosen by whatever method selected.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(C, <span class="dt">prior =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.<span class="dv">5</span>,.<span class="dv">5</span>), <span class="dt">centermethod =</span> <span class="st">'kmeans'</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; $centers</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt;             [,1]       [,2]        [,3]         [,4]</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; [1,]  0.11412574 -0.1191619 -0.04078157  0.127204662</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; [2,] -0.09798116  0.1763393 -0.02998913  0.001676302</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; [3,]  0.16767860 -0.1738115 -0.20268828 -0.079679047</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; [1,] 1.0480976 1.0029779 1.0264273 1.0225414</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; [2,] 0.9755583 1.0876427 1.0131553 1.2830619</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; [3,] 0.9418708 0.9333342 0.8656007 0.9025196</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; $U</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; [1,]    1    0    0</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; [2,]    0    1    0</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; [3,]    0    0    1</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; [1,]    1    0    0</span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt; [2,]    0    1    0</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; [3,]    0    0    1</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt; $V</span></a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt;      [,1] [,2] [,3] [,4]</span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; [1,]    1    0    0    0</span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; [2,]    0    1    0    0</span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
-<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">#&gt; [4,]    0    0    0    1</span></a>
-<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">#&gt;      [,1] [,2] [,3] [,4]</span></a>
-<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">#&gt; [1,]    1    0    0    0</span></a>
-<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">#&gt; [2,]    0    1    0    0</span></a>
-<a class="sourceLine" id="cb3-49" data-line-number="49"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
-<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">#&gt; [4,]    0    0    0    1</span></a>
-<a class="sourceLine" id="cb3-51" data-line-number="51"></a>
-<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="kw"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(C, <span class="dt">K =</span> <span class="dv">2</span>, <span class="dt">centermethod =</span> <span class="st">'random'</span>)</a>
-<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">#&gt; $centers</span></a>
-<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">#&gt;          [,1]      [,2]      [,3]      [,4]</span></a>
-<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">#&gt; [1,] 1.678144 1.1288934 1.0701532 0.8945011</span></a>
-<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">#&gt; [2,] 1.452156 1.0876125 0.6176221 1.0579284</span></a>
-<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">#&gt; [3,] 1.271707 0.8391508 1.0755241 1.3799744</span></a>
-<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">#&gt;             [,1]        [,2]       [,3]        [,4]</span></a>
-<a class="sourceLine" id="cb3-64" data-line-number="64"><span class="co">#&gt; [1,] -0.13670235 -0.22542286 -0.1013062  0.08921306</span></a>
-<a class="sourceLine" id="cb3-65" data-line-number="65"><span class="co">#&gt; [2,]  0.02554019  0.07765350 -0.1971374 -0.09639281</span></a>
-<a class="sourceLine" id="cb3-66" data-line-number="66"><span class="co">#&gt; [3,] -0.47626926 -0.03061907  0.1719943 -0.17784713</span></a>
-<a class="sourceLine" id="cb3-67" data-line-number="67"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-68" data-line-number="68"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-69" data-line-number="69"><span class="co">#&gt; $U</span></a>
-<a class="sourceLine" id="cb3-70" data-line-number="70"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-71" data-line-number="71"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-72" data-line-number="72"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
-<a class="sourceLine" id="cb3-73" data-line-number="73"><span class="co">#&gt; [1,]    1    0    0</span></a>
-<a class="sourceLine" id="cb3-74" data-line-number="74"><span class="co">#&gt; [2,]    0    1    0</span></a>
-<a class="sourceLine" id="cb3-75" data-line-number="75"><span class="co">#&gt; [3,]    0    0    1</span></a>
-<a class="sourceLine" id="cb3-76" data-line-number="76"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-77" data-line-number="77"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-78" data-line-number="78"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-79" data-line-number="79"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
-<a class="sourceLine" id="cb3-80" data-line-number="80"><span class="co">#&gt; [1,]    1    0    0</span></a>
-<a class="sourceLine" id="cb3-81" data-line-number="81"><span class="co">#&gt; [2,]    0    1    0</span></a>
-<a class="sourceLine" id="cb3-82" data-line-number="82"><span class="co">#&gt; [3,]    0    0    1</span></a>
-<a class="sourceLine" id="cb3-83" data-line-number="83"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-84" data-line-number="84"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-85" data-line-number="85"><span class="co">#&gt; $V</span></a>
-<a class="sourceLine" id="cb3-86" data-line-number="86"><span class="co">#&gt; , , 1</span></a>
-<a class="sourceLine" id="cb3-87" data-line-number="87"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-88" data-line-number="88"><span class="co">#&gt;      [,1] [,2] [,3] [,4]</span></a>
-<a class="sourceLine" id="cb3-89" data-line-number="89"><span class="co">#&gt; [1,]    1    0    0    0</span></a>
-<a class="sourceLine" id="cb3-90" data-line-number="90"><span class="co">#&gt; [2,]    0    1    0    0</span></a>
-<a class="sourceLine" id="cb3-91" data-line-number="91"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
-<a class="sourceLine" id="cb3-92" data-line-number="92"><span class="co">#&gt; [4,]    0    0    0    1</span></a>
-<a class="sourceLine" id="cb3-93" data-line-number="93"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-94" data-line-number="94"><span class="co">#&gt; , , 2</span></a>
-<a class="sourceLine" id="cb3-95" data-line-number="95"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-96" data-line-number="96"><span class="co">#&gt;      [,1] [,2] [,3] [,4]</span></a>
-<a class="sourceLine" id="cb3-97" data-line-number="97"><span class="co">#&gt; [1,]    1    0    0    0</span></a>
-<a class="sourceLine" id="cb3-98" data-line-number="98"><span class="co">#&gt; [2,]    0    1    0    0</span></a>
-<a class="sourceLine" id="cb3-99" data-line-number="99"><span class="co">#&gt; [3,]    0    0    1    0</span></a>
-<a class="sourceLine" id="cb3-100" data-line-number="100"><span class="co">#&gt; [4,]    0    0    0    1</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r">
+<span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>,<span class="fl">.5</span>), <span class="kw">centermethod</span> <span class="kw">=</span> <span class="st">'kmeans'</span>)
+<span class="co">#&gt; $centers</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;             [,1]       [,2]        [,3]         [,4]</span>
+<span class="co">#&gt; [1,]  0.11412574 -0.1191619 -0.04078157  0.127204662</span>
+<span class="co">#&gt; [2,] -0.09798116  0.1763393 -0.02998913  0.001676302</span>
+<span class="co">#&gt; [3,]  0.16767860 -0.1738115 -0.20268828 -0.079679047</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]</span>
+<span class="co">#&gt; [1,] 1.0480976 1.0029779 1.0264273 1.0225414</span>
+<span class="co">#&gt; [2,] 0.9755583 1.0876427 1.0131553 1.2830619</span>
+<span class="co">#&gt; [3,] 0.9418708 0.9333342 0.8656007 0.9025196</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $U</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3]</span>
+<span class="co">#&gt; [1,]    1    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0</span>
+<span class="co">#&gt; [3,]    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3]</span>
+<span class="co">#&gt; [1,]    1    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0</span>
+<span class="co">#&gt; [3,]    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $V</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    1    0    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0    0</span>
+<span class="co">#&gt; [3,]    0    0    1    0</span>
+<span class="co">#&gt; [4,]    0    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    1    0    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0    0</span>
+<span class="co">#&gt; [3,]    0    0    1    0</span>
+<span class="co">#&gt; [4,]    0    0    0    1</span>
+
+<span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">K</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">centermethod</span> <span class="kw">=</span> <span class="st">'random'</span>)
+<span class="co">#&gt; $centers</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;          [,1]      [,2]      [,3]      [,4]</span>
+<span class="co">#&gt; [1,] 1.678144 1.1288934 1.0701532 0.8945011</span>
+<span class="co">#&gt; [2,] 1.452156 1.0876125 0.6176221 1.0579284</span>
+<span class="co">#&gt; [3,] 1.271707 0.8391508 1.0755241 1.3799744</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;             [,1]        [,2]       [,3]        [,4]</span>
+<span class="co">#&gt; [1,] -0.13670235 -0.22542286 -0.1013062  0.08921306</span>
+<span class="co">#&gt; [2,]  0.02554019  0.07765350 -0.1971374 -0.09639281</span>
+<span class="co">#&gt; [3,] -0.47626926 -0.03061907  0.1719943 -0.17784713</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $U</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3]</span>
+<span class="co">#&gt; [1,]    1    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0</span>
+<span class="co">#&gt; [3,]    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3]</span>
+<span class="co">#&gt; [1,]    1    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0</span>
+<span class="co">#&gt; [3,]    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $V</span>
+<span class="co">#&gt; , , 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    1    0    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0    0</span>
+<span class="co">#&gt; [3,]    0    0    1    0</span>
+<span class="co">#&gt; [4,]    0    0    0    1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    1    0    0    0</span>
+<span class="co">#&gt; [2,]    0    1    0    0</span>
+<span class="co">#&gt; [3,]    0    0    1    0</span>
+<span class="co">#&gt; [4,]    0    0    0    1</span></pre></body></html></div>
 </div>
 </div>
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session Information</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2017-01-27)</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; Running under: Ubuntu 16.04.6 LTS</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; BLAS:   /home/travis/R-bin/lib/R/lib/libRblas.so</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; LAPACK: /home/travis/R-bin/lib/R/lib/libRlapack.so</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
-<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; [1] MixMatrix_0.2.5</span></a>
-<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt;  [1] Rcpp_1.0.3        CholWishart_1.1.0 rprojroot_1.3-2   crayon_1.3.4     </span></a>
-<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt;  [5] digest_0.6.23     assertthat_0.2.1  MASS_7.3-51.4     R6_2.4.1         </span></a>
-<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt;  [9] backports_1.1.5   magrittr_1.5      evaluate_0.14     stringi_1.4.3    </span></a>
-<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="co">#&gt; [13] rlang_0.4.2       fs_1.3.1          rmarkdown_1.18    pkgdown_1.4.1    </span></a>
-<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt; [17] desc_1.2.0        tools_3.6.1       stringr_1.4.0     yaml_2.2.0       </span></a>
-<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; [21] xfun_0.11         compiler_3.6.1    memoise_1.1.0     htmltools_0.4.0  </span></a>
-<a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">#&gt; [25] knitr_1.26</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<span class="co">#&gt; R version 3.6.3 (2020-02-29)</span>
+<span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
+<span class="co">#&gt; Running under: macOS Catalina 10.15.3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Matrix products: default</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; locale:</span>
+<span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attached base packages:</span>
+<span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; other attached packages:</span>
+<span class="co">#&gt; [1] MixMatrix_0.2.5</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; loaded via a namespace (and not attached):</span>
+<span class="co">#&gt;  [1] Rcpp_1.0.4         CholWishart_1.1.0  rprojroot_1.3-2    crayon_1.3.4      </span>
+<span class="co">#&gt;  [5] digest_0.6.25      assertthat_0.2.1   MASS_7.3-51.5      R6_2.4.1          </span>
+<span class="co">#&gt;  [9] backports_1.1.5    magrittr_1.5       evaluate_0.14      stringi_1.4.6     </span>
+<span class="co">#&gt; [13] rlang_0.4.5        fs_1.4.0           rmarkdown_2.1      pkgdown_1.5.0.9000</span>
+<span class="co">#&gt; [17] desc_1.2.0         tools_3.6.3        stringr_1.4.0      yaml_2.2.1        </span>
+<span class="co">#&gt; [21] xfun_0.12          compiler_3.6.3     memoise_1.1.0      htmltools_0.4.0   </span>
+<span class="co">#&gt; [25] knitr_1.28</span></pre></body></html></div>
 </div>
 <div id="all-the-code-for-easy-copying" class="section level2">
 <h2 class="hasAnchor">
 <a href="#all-the-code-for-easy-copying" class="anchor"></a>All the code for easy copying</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">collapse =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">comment =</span> <span class="st">"#&gt;"</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MixMatrix)</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"> <span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">20180221</span>)</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"> A &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">0</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>) <span class="co"># 3x4 matrices with mean 0</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"> B &lt;-<span class="st"> </span><span class="kw"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="dv">30</span>,<span class="dt">mean=</span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">1</span>,<span class="dt">nrow=</span><span class="dv">3</span>,<span class="dt">ncol=</span><span class="dv">4</span>), <span class="dt">df =</span> <span class="dv">10</span>) <span class="co"># 3x4 matrices with mean 2</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"> C &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(A,B), <span class="dt">dim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">60</span>)) <span class="co"># combine into one array</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"> prior &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.<span class="dv">5</span>,.<span class="dv">5</span>) <span class="co"># equal probability prior</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"> <span class="co"># create an intialization object, starts at the true parameters</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"> init =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">centers =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">0</span>,<span class="dv">12</span>),<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">1</span>,<span class="dv">12</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">              <span class="dt">U =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">3</span>), <span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">3</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">              <span class="dt">V =</span> <span class="kw"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">4</span>), <span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="dv">4</span>)), <span class="dt">dim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">             )</a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"> <span class="co"># fit model</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"> res&lt;-<span class="kw"><a href="../reference/matrixmixture.html">matrixmixture</a></span>(C, <span class="dt">init =</span> init, <span class="dt">prior =</span> prior, <span class="dt">nu =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">                    <span class="dt">model =</span> <span class="st">"t"</span>, <span class="dt">tolerance =</span> <span class="fl">1e-2</span>)</a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"> <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(res<span class="op">$</span>centers) <span class="co"># the final centers</span></a>
-<a class="sourceLine" id="cb5-20" data-line-number="20"> <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(res<span class="op">$</span>pi) <span class="co"># the final mixing proportion</span></a>
-<a class="sourceLine" id="cb5-21" data-line-number="21"> <span class="kw"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(res)</a>
-<a class="sourceLine" id="cb5-22" data-line-number="22"> <span class="kw"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(res))</a>
-<a class="sourceLine" id="cb5-23" data-line-number="23"> <span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(res) <span class="co"># the log likelihood by iteration</span></a>
-<a class="sourceLine" id="cb5-24" data-line-number="24"></a>
-<a class="sourceLine" id="cb5-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="kw"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(C, <span class="dt">prior =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(.<span class="dv">5</span>,.<span class="dv">5</span>), <span class="dt">centermethod =</span> <span class="st">'kmeans'</span>)</a>
-<a class="sourceLine" id="cb5-27" data-line-number="27"></a>
-<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="kw"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(C, <span class="dt">K =</span> <span class="dv">2</span>, <span class="dt">centermethod =</span> <span class="st">'random'</span>)</a>
-<a class="sourceLine" id="cb5-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span>$<span class="fu">set</span>(
+  <span class="kw">collapse</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+  <span class="kw">comment</span> <span class="kw">=</span> <span class="st">"#&gt;"</span>
+)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">MixMatrix</span>)
+ <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">20180221</span>)
+ <span class="no">A</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="fl">30</span>,<span class="kw">mean</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>,<span class="kw">nrow</span><span class="kw">=</span><span class="fl">3</span>,<span class="kw">ncol</span><span class="kw">=</span><span class="fl">4</span>), <span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>) <span class="co"># 3x4 matrices with mean 0</span>
+ <span class="no">B</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span>(<span class="fl">30</span>,<span class="kw">mean</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">1</span>,<span class="kw">nrow</span><span class="kw">=</span><span class="fl">3</span>,<span class="kw">ncol</span><span class="kw">=</span><span class="fl">4</span>), <span class="kw">df</span> <span class="kw">=</span> <span class="fl">10</span>) <span class="co"># 3x4 matrices with mean 2</span>
+ <span class="no">C</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">A</span>,<span class="no">B</span>), <span class="kw">dim</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">60</span>)) <span class="co"># combine into one array</span>
+ <span class="no">prior</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>,<span class="fl">.5</span>) <span class="co"># equal probability prior</span>
+ <span class="co"># create an intialization object, starts at the true parameters</span>
+ <span class="no">init</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">centers</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>,<span class="fl">12</span>),<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>,<span class="fl">12</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">2</span>)),
+              <span class="kw">U</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">3</span>), <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">3</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">2</span>)),
+              <span class="kw">V</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">4</span>), <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fl">4</span>)), <span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">2</span>))
+             )
+ <span class="co"># fit model</span>
+ <span class="no">res</span><span class="kw">&lt;-</span><span class="fu"><a href="../reference/matrixmixture.html">matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">init</span> <span class="kw">=</span> <span class="no">init</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="no">prior</span>, <span class="kw">nu</span> <span class="kw">=</span> <span class="fl">10</span>,
+                    <span class="kw">model</span> <span class="kw">=</span> <span class="st">"t"</span>, <span class="kw">tolerance</span> <span class="kw">=</span> <span class="fl">1e-2</span>)
+ <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">res</span>$<span class="no">centers</span>) <span class="co"># the final centers</span>
+ <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">res</span>$<span class="no">pi</span>) <span class="co"># the final mixing proportion</span>
+ <span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(<span class="no">res</span>)
+ <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html">AIC</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span>(<span class="no">res</span>))
+ <span class="fu"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="no">res</span>) <span class="co"># the log likelihood by iteration</span>
+
+
+<span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">prior</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>,<span class="fl">.5</span>), <span class="kw">centermethod</span> <span class="kw">=</span> <span class="st">'kmeans'</span>)
+
+<span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span>(<span class="no">C</span>, <span class="kw">K</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">centermethod</span> <span class="kw">=</span> <span class="st">'random'</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
 <div id="ref-ANDREWS2011520">
-<p>Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011. “Model-Based Classification via Mixtures of Multivariate T-Distributions.” <em>Computational Statistics &amp; Data Analysis</em> 55 (1): 520–29. <a href="https://doi.org/10.1016/j.csda.2010.05.019" class="uri">https://doi.org/10.1016/j.csda.2010.05.019</a>.</p>
+<p>Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011. “Model-Based Classification via Mixtures of Multivariate T-Distributions.” <em>Computational Statistics &amp; Data Analysis</em> 55 (1): 520–29. <a href="https://doi.org/10.1016/j.csda.2010.05.019">https://doi.org/10.1016/j.csda.2010.05.019</a>.</p>
 </div>
 <div id="ref-fraley2002model">
-<p>Fraley, Chris, and Adrian E Raftery. 2002. “Model-Based Clustering, Discriminant Analysis, and Density Estimation.” <em>Journal of the American Statistical Association</em> 97 (458). Taylor &amp; Francis: 611–31. <a href="https://doi.org/10.1198/016214502760047131" class="uri">https://doi.org/10.1198/016214502760047131</a>.</p>
+<p>Fraley, Chris, and Adrian E Raftery. 2002. “Model-Based Clustering, Discriminant Analysis, and Density Estimation.” <em>Journal of the American Statistical Association</em> 97 (458): 611–31. <a href="https://doi.org/10.1198/016214502760047131">https://doi.org/10.1198/016214502760047131</a>.</p>
 </div>
 <div id="ref-mclachlan2019finite">
-<p>McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019. “Finite Mixture Models.” <em>Annual Review of Statistics and Its Application</em> 6. Annual Reviews: 355–78. <a href="https://doi.org/10.1146/annurev-statistics-031017-100325" class="uri">https://doi.org/10.1146/annurev-statistics-031017-100325</a>.</p>
+<p>McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019. “Finite Mixture Models.” <em>Annual Review of Statistics and Its Application</em> 6: 355–78. <a href="https://doi.org/10.1146/annurev-statistics-031017-100325">https://doi.org/10.1146/annurev-statistics-031017-100325</a>.</p>
 </div>
 <div id="ref-viroliclass2011">
-<p>Viroli, Cinzia. 2011. “Finite Mixtures of Matrix Normal Distributions for Classifying Three-Way Data.” <em>Statistics and Computing</em> 21 (4): 511–22. <a href="https://doi.org/10.1007/s11222-010-9188-x" class="uri">https://doi.org/10.1007/s11222-010-9188-x</a>.</p>
+<p>Viroli, Cinzia. 2011. “Finite Mixtures of Matrix Normal Distributions for Classifying Three-Way Data.” <em>Statistics and Computing</em> 21 (4): 511–22. <a href="https://doi.org/10.1007/s11222-010-9188-x">https://doi.org/10.1007/s11222-010-9188-x</a>.</p>
 </div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#matrix-variate-mixture-modeling-with-the-t-distribution">Matrix Variate Mixture Modeling with the <span class="math inline">\(t\)</span> Distribution</a></li>
-      <li><a href="#usage">Usage</a></li>
-      <li><a href="#session-information">Session Information</a></li>
-      <li><a href="#all-the-code-for-easy-copying">All the code for easy copying</a></li>
-      <li><a href="#references">References</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -378,7 +364,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
 </div>
 
       </footer>
