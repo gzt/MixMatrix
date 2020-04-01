@@ -108,23 +108,29 @@
 #'   L = matrix(c(2, 1, 0, .1), nrow = 2), list = TRUE, df = 5
 #' )
 #' # fitting maximum likelihood estimates
-#' results = MLmatrixt(A, tol = 1e-5, df = 5)
+#' results <- MLmatrixt(A, tol = 1e-5, df = 5)
 #' print(results)
 MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                       row.variance = "none", col.variance = "none",
                       df = 10, fixed = TRUE,
                       tol = .Machine$double.eps^0.5, max.iter = 5000, U, V, ...) {
-  if (is.null(df) || df == 0 || is.infinite(df)) return(MLmatrixnorm(data, row.mean, col.mean, row.variance, col.variance, tol, max.iter, U, V, ...))
-  if (class(data) == "list") data <- array(unlist(data),
-    dim = c(
-      nrow(data[[1]]),
-      ncol(data[[1]]), length(data)
+  if (is.null(df) || df == 0 || is.infinite(df)) {
+    return(MLmatrixnorm(data, row.mean, col.mean, row.variance, col.variance, tol, max.iter, U, V, ...))
+  }
+  if (class(data) == "list") {
+    data <- array(unlist(data),
+      dim = c(
+        nrow(data[[1]]),
+        ncol(data[[1]]), length(data)
+      )
     )
-  )
+  }
   if (!all(
     is.numeric(data), is.numeric(tol),
     is.numeric(max.iter)
-  )) stop("Non-numeric input. ")
+  )) {
+    stop("Non-numeric input. ")
+  }
   if (!(missing(U))) {
     if (!(is.numeric(U))) stop("Non-numeric input.")
   }
@@ -133,29 +139,32 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
 
   #  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
-  row.set.var = FALSE
+  row.set.var <- FALSE
 
   rowvarparse <- .varparse(row.variance)
-  row.set.var = rowvarparse$varflag
-  row.variance = rowvarparse$varopt
+  row.set.var <- rowvarparse$varflag
+  row.variance <- rowvarparse$varopt
 
-  col.set.var = FALSE
+  col.set.var <- FALSE
   #  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
 
   colvarparse <- .varparse(col.variance)
-  col.set.var = colvarparse$varflag
-  col.variance = colvarparse$varopt
+  col.set.var <- colvarparse$varflag
+  col.variance <- colvarparse$varopt
 
 
   dims <- dim(data)
 
-  if (max(dims[1] / dims[2], dims[2] / dims[1]) > (dims[3] - 1))
+  if (max(dims[1] / dims[2], dims[2] / dims[1]) > (dims[3] - 1)) {
     stop("Need more observations to estimate parameters.")
+  }
   # don't have initial starting point for U and V, start with diag.
-  if (missing(U))
+  if (missing(U)) {
     U <- diag(dims[1])
-  if (missing(V))
+  }
+  if (missing(V)) {
     V <- diag(dims[2])
+  }
   # mu <- apply(data, c(1, 2), mean)
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
@@ -178,14 +187,14 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       inter.V <- txax(swept.data, 0.5 * (U + t(U)))
       V <- rowSums(inter.V, dims = 2) / (dims[3] * dims[1])
       if (col.variance == "AR(1)") {
-        V = stats::cov2cor(V)
+        V <- stats::cov2cor(V)
         rho.col <- V[1, 2]
       }
       if (col.variance == "CS") {
-        V = stats::cov2cor(V)
+        V <- stats::cov2cor(V)
         rho.col <- mean(V[1, ] / V[1, 1])
       }
-      if (col.variance == "I") rho.col = 0
+      if (col.variance == "I") rho.col <- 0
       if (rho.col > .9) rho.col <- .9
       if (rho.col < 0) rho.col <- 0
       V <- varmatgenerate(dims[2], rho.col, col.variance)
@@ -197,67 +206,67 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       rho.row <- U[1, 2]
     } else {
       inter.U <- xatx(swept.data, 0.5 * (V + t(V)))
-      U = rowSums(inter.U, dims = 2) / (dims[3] * dims[2])
+      U <- rowSums(inter.U, dims = 2) / (dims[3] * dims[2])
       if (row.variance == "AR(1)") {
-        U = stats::cov2cor(U)
+        U <- stats::cov2cor(U)
         rho.row <- U[1, 2] / U[1, 1]
       }
       if (row.variance == "CS") {
-        U = stats::cov2cor(U)
+        U <- stats::cov2cor(U)
         rho.row <- mean(U[1, ] / U[1, 1])
       }
-      if (row.variance == "I") rho.row = 0
+      if (row.variance == "I") rho.row <- 0
       if (rho.row > .9) rho.row <- .9
-      if (rho.row < 0) rho.row = 0
+      if (rho.row < 0) rho.row <- 0
       U <- varmatgenerate(dims[1], rho.row, row.variance)
     }
   }
 
-  varflag = FALSE
-  logLikvec = numeric(0)
-  p = dims[1]
-  q = dims[2]
-  n = dims[3]
+  varflag <- FALSE
+  logLikvec <- numeric(0)
+  p <- dims[1]
+  q <- dims[2]
+  n <- dims[3]
   # Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error.term > tol && (!varflag)) {
-    dfmult = df + p + q - 1
+    dfmult <- df + p + q - 1
 
     ### E step
-    Slist = .SStep(data, mu, U, V, rep(1.0, n))
-    SS = Slist$SS
-    SSX = Slist$SSX
-    SSXX = Slist$SSXX
-    SSD = Slist$SSD
+    Slist <- .SStep(data, mu, U, V, rep(1.0, n))
+    SS <- Slist$SS
+    SSX <- Slist$SSX
+    SSXX <- Slist$SSXX
+    SSD <- Slist$SSD
 
 
     ### CM STEP
     ### MEANS:
-    new.Mu = .MeansFunction(data, V = V, SS, SSX, rep(1.0, n), row.mean, col.mean, "t")
+    new.Mu <- .MeansFunction(data, V = V, SS, SSX, rep(1.0, n), row.mean, col.mean, "t")
 
     ### VARS:
-    colvarlist = .colVars(
+    colvarlist <- .colVars(
       data, new.Mu, df, rep(1.0, n), SS, SSX, SSXX,
       col.variance, col.set.var, varflag
     )
-    varflag = colvarlist$varflag
-    if (!varflag) new.V = colvarlist$V
+    varflag <- colvarlist$varflag
+    if (!varflag) new.V <- colvarlist$V
 
-    rowvarlist = .rowVars(
+    rowvarlist <- .rowVars(
       data, new.Mu, df, rep(1, n), SS, SSX, SSXX,
       row.variance, row.set.var, varflag
     )
-    varflag = rowvarlist$varflag
-    if (!varflag) new.U = rowvarlist$U
+    varflag <- rowvarlist$varflag
+    if (!varflag) new.U <- rowvarlist$U
 
     ### IF NU UPDATE
     if (!fixed) {
-      new.df = df
+      new.df <- df
       ## insert E step for NU and M step for NU
-      SSDtmp = SSD
+      SSDtmp <- SSD
       # SSDtmp = detsum(Smatrix)
-      detSS = determinant(SS, logarithm = TRUE)$modulus[1]
-      nuLL = function(nu) {
+      detSS <- determinant(SS, logarithm = TRUE)$modulus[1]
+      nuLL <- function(nu) {
         (CholWishart::mvdigamma((nu + p - 1) / 2, p) -
           CholWishart::mvdigamma((nu + p + q - 1) / 2, p) -
           (SSDtmp / n - (detSS - p * log(n * (nu + p - 1)) + p * log(nu + p + q - 1))))
@@ -266,13 +275,15 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       }
       if (!isTRUE(sign(nuLL(1e-6)) * sign(nuLL(1000)) <= 0)) {
         warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
-        varflag = TRUE
+        varflag <- TRUE
       } else {
         fit0 <- stats::uniroot(nuLL, c(1e-6, 1000), ...)
-        new.df = fit0$root
+        new.df <- fit0$root
       }
       # print(new.df)
-    } else new.df = df
+    } else {
+      new.df <- df
+    }
     ### CHECK CONVERGENCE
     error.term <- sum((new.V - V)^2) / (q * q) + sum((new.U - U)^2) / (p * p) + sum((new.Mu - mu)^2) / (p * q) + (df - new.df)^2 / (n * p * q)
     ### check, force symmetry
@@ -288,10 +299,11 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 
     # logLikvec = c(logLikvec, logLik)
   }
-  if (iter >= max.iter || error.term > tol || varflag)
+  if (iter >= max.iter || error.term > tol || varflag) {
     warning("Failed to converge")
-  logLik = sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
-  converged = !(iter >= max.iter || error.term > tol || varflag)
+  }
+  logLik <- sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
+  converged <- !(iter >= max.iter || error.term > tol || varflag)
 
   return(list(
     mean = mu,

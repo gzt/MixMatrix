@@ -127,73 +127,79 @@
 matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter = 1000,
                           model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
                           tolerance = 1e-1, nu = NULL, ..., verbose = 0, miniter = 5, convergence = TRUE) {
-  if (class(x) == "list")
+  if (class(x) == "list") {
     x <- array(unlist(x),
       dim = c(
         nrow(x[[1]]),
         ncol(x[[1]]), length(x)
       )
     )
-  if (is.null(dim(x)))
+  }
+  if (is.null(dim(x))) {
     stop("'x' is not an array")
-  if (any(!is.finite(x)))
+  }
+  if (any(!is.finite(x))) {
     stop("infinite, NA or NaN values in 'x'")
-  if (is.null(nu) || nu == 0 || is.infinite(nu)) model = "normal"
+  }
+  if (is.null(nu) || nu == 0 || is.infinite(nu)) model <- "normal"
 
-  if (model == "normal") nu = 0
+  if (model == "normal") nu <- 0
   # if (model != "normal") {
   #    df = nu
   #
   # }
-  df = nu
-  dims = dim(x)
+  df <- nu
+  dims <- dim(x)
   ## x is a p * q * n array
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
   if (verbose > 0) cat("Dims: ", dims, "\n")
   if (!is.null(prior)) {
-    if ((length(prior) == 1) && (round(prior) == prior))
-      prior = rep(1, prior) / prior
+    if ((length(prior) == 1) && (round(prior) == prior)) {
+      prior <- rep(1, prior) / prior
+    }
 
-    if (any(prior < 0) || round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
+    }
     prior <- prior[prior > 0L]
-    K = length(prior)
+    K <- length(prior)
   } else {
     if (missing(K)) stop("No prior and no K")
 
-    prior = rep(1, K) / K
+    prior <- rep(1, K) / K
   }
-  if (is.null(init))
-    init = init_matrixmixture(x, prior = prior, ...)
+  if (is.null(init)) {
+    init <- init_matrixmixture(x, prior = prior, ...)
+  }
 
   ### extract initialization state
   ### should perhaps handle this by passing to init
-  nclass = length(prior)
+  nclass <- length(prior)
   ## if (model != "normal") {
   ## if df is not a vector of length K, take first element and fill out vec
   ## works for normal, too
-  if (length(df) != nclass) df = rep(df[1], nclass)
+  if (length(df) != nclass) df <- rep(df[1], nclass)
 
 
-  centers = init$centers
+  centers <- init$centers
   if (!is.null(init$U)) {
-    U = init$U
+    U <- init$U
   } else {
-    U = array(rep(diag(p), nclass), c(p, p, nclass))
-    if (model == "t") U = (df[1] - 2) * stats::var(x[1, 1, ]) * U
+    U <- array(rep(diag(p), nclass), c(p, p, nclass))
+    if (model == "t") U <- (df[1] - 2) * stats::var(x[1, 1, ]) * U
   }
   if (!is.null(init$V)) {
-    V = init$V
+    V <- init$V
   } else {
-    V = array(rep(diag(q), nclass), c(q, q, nclass))
+    V <- array(rep(diag(q), nclass), c(q, q, nclass))
   }
-  posterior = matrix(rep(prior, n), byrow = TRUE, nrow = n)
-  newposterior = posterior
-  eps = 1e40
-  pi = prior
-  logLikvec = numeric(0)
+  posterior <- matrix(rep(prior, n), byrow = TRUE, nrow = n)
+  newposterior <- posterior
+  eps <- 1e40
+  pi <- prior
+  logLikvec <- numeric(0)
   if (verbose > 1) {
     cat("\nInit centers: \n\n")
     print(init$centers)
@@ -203,29 +209,29 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     print(U)
     print(V)
   }
-  convergeflag = FALSE
-  Smatrix = array(0, c(p, p, n))
-  SS = array(0, c(p, p, nclass))
-  SSX = array(0, c(p, q, nclass))
-  SSXX = array(0, c(q, q, nclass))
-  SSD = rep(0, nclass)
-  newU = U
-  newV = V
-  new.df = df
-  newcenters = centers
-  logLik = 0
-  oldlogLik = 0
-  olderlogLik = 0
-  i = 0
+  convergeflag <- FALSE
+  Smatrix <- array(0, c(p, p, n))
+  SS <- array(0, c(p, p, nclass))
+  SSX <- array(0, c(p, q, nclass))
+  SSXX <- array(0, c(q, q, nclass))
+  SSD <- rep(0, nclass)
+  newU <- U
+  newV <- V
+  new.df <- df
+  newcenters <- centers
+  logLik <- 0
+  oldlogLik <- 0
+  olderlogLik <- 0
+  i <- 0
   while (i < iter && (((eps) > tolerance) || (i < miniter))) {
     if (verbose) cat("\nEntering iteration:", i)
     if (verbose > 1) print(pi)
-    centers = newcenters
-    newcenters = array(0, dim = c(p, q, nclass))
-    U = newU
-    V = newV
-    df = new.df
-    posterior = newposterior
+    centers <- newcenters
+    newcenters <- array(0, dim = c(p, q, nclass))
+    U <- newU
+    V <- newV
+    df <- new.df
+    posterior <- newposterior
 
     ####### E STEP
     ## update expectations of sufficient statistics
@@ -233,13 +239,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
 
     for (j in 1:nclass) {
       if (model == "normal") {
-        newposterior[, j] = log(pi[j]) +
+        newposterior[, j] <- log(pi[j]) +
           dmatnorm_calc(
             x = x, mean = centers[, , j],
             U = U[, , j], V = V[, , j]
           )
       } else {
-        newposterior[, j] = log(pi[j]) +
+        newposterior[, j] <- log(pi[j]) +
           dmat_t_calc(
             x = x,
             df = df[j], mean = centers[, , j],
@@ -249,63 +255,65 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     }
 
     newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
-    newposterior = exp(newposterior)
-    totalpost = rowSums(newposterior)
-    newposterior = newposterior / totalpost
+    newposterior <- exp(newposterior)
+    totalpost <- rowSums(newposterior)
+    newposterior <- newposterior / totalpost
     if (verbose > 1) print(newposterior[1:5, ])
 
     ## update S_ig - conditional weights, only if non-normal
 
     if (model == "t") {
-      dfmult = df + p + q - 1
+      dfmult <- df + p + q - 1
       for (j in 1:nclass) {
-        Slist = .SStep(x, centers[, , j], U[, , j], V[, , j], newposterior[, j])
-        SS[, , j] = Slist$SS
-        SSX[, , j] = Slist$SSX
-        SSXX[, , j] = Slist$SSXX
-        SSD[j] = Slist$SSD
+        Slist <- .SStep(x, centers[, , j], U[, , j], V[, , j], newposterior[, j])
+        SS[, , j] <- Slist$SS
+        SSX[, , j] <- Slist$SSX
+        SSXX[, , j] <- Slist$SSXX
+        SSD[j] <- Slist$SSD
       }
     }
 
     ### leave blank for now
 
     ####### CM STEPS
-    pi = colMeans(newposterior)
+    pi <- colMeans(newposterior)
     if (verbose) cat("\nNew pi: ", pi, "\n")
     ## max for centers, U, V
     ### max for centers
 
-    sumzig = colSums(newposterior)
+    sumzig <- colSums(newposterior)
     if (verbose > 1) cat("\n Column sums of posterior", sumzig)
-    for (j in 1:nclass) newcenters[, , j] = .MeansFunction(
-      x, V[, , j], SS[, , j], SSX[, , j],
-      newposterior[, j], row.mean, col.mean, model
-    )
+    for (j in 1:nclass) {
+      newcenters[, , j] <- .MeansFunction(
+        x, V[, , j], SS[, , j], SSX[, , j],
+        newposterior[, j], row.mean, col.mean, model
+      )
+    }
 
     ### max for U, V
     ## if normal
     if (model == "normal") {
       for (j in 1:nclass) {
         ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance) #### or do EEE, etc formulation
-        zigmult = rep(newposterior[, j], each = q * q)
+        zigmult <- rep(newposterior[, j], each = q * q)
         swept.data <- sweep(x, c(1, 2), newcenters[, , j])
         inter.V <- txax(swept.data, U[, , j]) * zigmult
         newV[, , j] <- rowSums(inter.V, dims = 2) / (sumzig[j] * p)
-        zigmult = rep(newposterior[, j], each = p * p)
+        zigmult <- rep(newposterior[, j], each = p * p)
         inter.U <- xatx(swept.data, newV[, , j]) * zigmult
-        new.U = rowSums(inter.U, dims = 2) / (sumzig[j] * q)
+        new.U <- rowSums(inter.U, dims = 2) / (sumzig[j] * q)
         newU[, , j] <- new.U / (new.U[1, 1])
       }
     } else {
       for (j in 1:nclass) {
-        newV[, , j] = .colVars(
+        newV[, , j] <- .colVars(
           x, newcenters[, , j], df[j], newposterior[, j],
           SS[, , j], SSX[, , j], SSXX[, , j], ...
         )$V
 
-        newU[, , j] = .rowVars(x, newcenters[, , j], df[j], newposterior[, j], SS[, , j], SSX[, , j], SSXX[, , j], ...)$U
-        newUinv = (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * SS[, , j]
-        newU[, , j] = solve(newUinv)
+        newU[, , j] <- .rowVars(x, newcenters[, , j], df[j], newposterior[, j], SS[, , j], SSX[, , j], SSXX[, , j], ...)$U
+        newUinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * SS[, , j]
+        newU[, , j] <- solve(newUinv)
       }
     }
 
@@ -313,7 +321,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
 
     ### Fit NU:
     ### doesn't work yet
-    new.df = df
+    new.df <- df
     ###       if(model == "t" && fixdf == FALSE && iter > 1){
     ###           ######## THIS DOES NOT WORK.
     ###           for(j in 1:nclass){
@@ -350,19 +358,19 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
       print(newV)
     }
 
-    olderlogLik = oldlogLik
-    oldlogLik = logLik
-    logLik = 0
+    olderlogLik <- oldlogLik
+    oldlogLik <- logLik
+    logLik <- 0
     # for(obs in 1:n){
     for (j in 1:nclass) {
       if (model == "normal" || new.df[j] == 0 || new.df[j] == Inf) {
-        logLik = logLik + sum(newposterior[, j] * (log(pi[j]) +
+        logLik <- logLik + sum(newposterior[, j] * (log(pi[j]) +
           newposterior[, j] * dmatnorm_calc(
             x = x, mean = newcenters[, , j],
             U = newU[, , j], V = newV[, , j]
           )))
       } else {
-        logLik = logLik + sum(newposterior[, j] * (log(pi[j]) +
+        logLik <- logLik + sum(newposterior[, j] * (log(pi[j]) +
           newposterior[, j] * dmat_t_calc(
             x = x, df = new.df[j], mean = newcenters[, , j],
             U = newU[, , j], V = newV[, , j]
@@ -372,32 +380,36 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     # }
     if (verbose) cat("\nLog likelihood:", logLik)
     if (i == 0) {
-      oldlogLik = logLik - .3 * abs(logLik)
+      oldlogLik <- logLik - .3 * abs(logLik)
       ## initialize to some not-so-bad values so that doesn't immediately "converge"
-      olderlogLik = oldlogLik - .2 * abs(oldlogLik)
+      olderlogLik <- oldlogLik - .2 * abs(oldlogLik)
     }
 
     if (convergence) {
-      aitken = (logLik - oldlogLik) / (oldlogLik - olderlogLik)
-      linf = oldlogLik + 1 / (1 - aitken) * (logLik - oldlogLik)
-      eps = linf - logLik
+      aitken <- (logLik - oldlogLik) / (oldlogLik - olderlogLik)
+      linf <- oldlogLik + 1 / (1 - aitken) * (logLik - oldlogLik)
+      eps <- linf - logLik
       if (verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
-    } else eps = logLik - oldlogLik
+    } else {
+      eps <- logLik - oldlogLik
+    }
 
-    i = i + 1
+    i <- i + 1
     #  print(new.df)
-    logLikvec = c(logLikvec, logLik)
+    logLikvec <- c(logLikvec, logLik)
   }
   if ((i == iter || eps > tolerance)) {
-    warning('failed to converge')
-  } else convergeflag <- TRUE
+    warning("failed to converge")
+  } else {
+    convergeflag <- TRUE
+  }
   if (verbose) cat("\nDone at iteration ", i - 1, "\n")
-  U = newU
-  V = newV
-  centers = newcenters
-  posterior = newposterior
-  pi = colMeans(posterior)
-  df = new.df
+  U <- newU
+  V <- newV
+  centers <- newcenters
+  posterior <- newposterior
+  pi <- colMeans(posterior)
+  df <- new.df
   if (verbose > 1) {
     print("Final centers:")
     print(centers)
@@ -431,8 +443,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
 
 #' @export
 print.MixMatrixModel <- function(x, ...) {
-  x[["posterior"]] = head(x[["posterior"]])
-  x[["init"]] = NULL
+  x[["posterior"]] <- head(x[["posterior"]])
+  x[["init"]] <- NULL
   print.default(x, ...)
 }
 
@@ -448,30 +460,30 @@ plot.MixMatrixModel <- function(x, ...) {
 
 #' @export
 logLik.MixMatrixModel <- function(object, ...) {
-  dims = dim(object$centers)
+  dims <- dim(object$centers)
   n <- object$call$N
   p <- dims[1]
   q <- dims[2]
-  numgroups = length(levels(grouping))
-  grouplist = levels(grouping)
-  meanpars = p * q
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
-  upars = (p + 1) * p / 2
-  vpars = (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
-  nupar = 0 # only fixed for now
-  numgroups = (object$K)
-  if (!is.null(object$call$fixdf) && !(object$call$fixdf)) nupar = numgroups
+  numgroups <- length(levels(grouping))
+  grouplist <- levels(grouping)
+  meanpars <- p * q
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
+  upars <- (p + 1) * p / 2
+  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  nupar <- 0 # only fixed for now
+  numgroups <- (object$K)
+  if (!is.null(object$call$fixdf) && !(object$call$fixdf)) nupar <- numgroups
 
   ### insert here logic for parsing out different values for this later
   ### as ways of restricting variances and means are added
 
-  df = numgroups * (vpars + upars + meanpars - 1) + nupar
-  logLik = object$logLik[length(object$logLik)]
+  df <- numgroups * (vpars + upars + meanpars - 1) + nupar
+  logLik <- object$logLik[length(object$logLik)]
 
-  class(logLik) = "logLik"
-  attr(logLik, 'df') <- df
-  attr(logLik, 'nobs') <- n
+  class(logLik) <- "logLik"
+  attr(logLik, "df") <- df
+  attr(logLik, "nobs") <- n
   logLik
 }
 
@@ -544,53 +556,56 @@ nobs.MixMatrixModel <- function(object, ...) {
 init_matrixmixture <- function(data, prior = NULL, K = length(prior), centers = NULL,
                                U = NULL, V = NULL, centermethod = "kmeans",
                                varmethod = "identity", model = "normal", init = NULL, ...) {
-  dims = dim(data)
-  p = dims[1]
-  q = dims[2]
-  n = dims[3]
+  dims <- dim(data)
+  p <- dims[1]
+  q <- dims[2]
+  n <- dims[3]
   if (is.null(prior) && is.null(K)) stop("No prior and no K")
-  remains = K
-  cenflag = FALSE
+  remains <- K
+  cenflag <- FALSE
   if (!is.null(centers)) {
-    cenflag = TRUE
-    initcenters = centers
+    cenflag <- TRUE
+    initcenters <- centers
   }
-  newcenters = array(dim = c(p, q, K))
-  if (length(prior) == 1) K = prior
-  if (!is.null(K)) prior = rep(1, K) / K
+  newcenters <- array(dim = c(p, q, K))
+  if (length(prior) == 1) K <- prior
+  if (!is.null(K)) prior <- rep(1, K) / K
   if (!is.null(init)) {
     if (!is.null(init$centers)) {
-      cenflag = TRUE
-      initcenters = init$centers
+      cenflag <- TRUE
+      initcenters <- init$centers
     }
-    if (is.null(U)) U = init$U
-    if (is.null(V)) V = init$V
+    if (is.null(U)) U <- init$U
+    if (is.null(V)) V <- init$V
   }
   if (cenflag) {
-    dimcen = dim(initcenters)
+    dimcen <- dim(initcenters)
     if (!((dimcen[1] == p) && (dimcen[2] == q))) stop("wrong dimension for provided centers")
-    if (length(dimcen) == 2) remains = K - 1
-    else remains = K - dimcen[3]
-    newcenters[, , (remains + 1):K] = initcenters
+    if (length(dimcen) == 2) {
+      remains <- K - 1
+    } else {
+      remains <- K - dimcen[3]
+    }
+    newcenters[, , (remains + 1):K] <- initcenters
   }
   if (centermethod == "random" && (remains > 0)) {
-    select = sample(n, remains, replace = FALSE)
-    newcenters[, , 1:remains] = data[, , select]
+    select <- sample(n, remains, replace = FALSE)
+    newcenters[, , 1:remains] <- data[, , select]
   }
   if ((remains > 0) && (centermethod == "kmeans" || centermethod == "k-means")) {
-    res = kmeans(matrix(data, nrow = n), centers = remains, ...)
-    newcenters = array(res$centers, dim = c(p, q, remains))
-    if (cenflag) newcenters = array(c(newcenters, initcenters), dim = c(p, q, K))
+    res <- kmeans(matrix(data, nrow = n), centers = remains, ...)
+    newcenters <- array(res$centers, dim = c(p, q, remains))
+    if (cenflag) newcenters <- array(c(newcenters, initcenters), dim = c(p, q, K))
   }
   if (!is.null(U)) {
-    if (length(dim(U) == 2)) U = array(rep(U, K), dim = c(p, p, K))
+    if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
   }
   if (!is.null(V)) {
-    if (length(dim(V) == 2)) V = array(rep(V, K), dim = c(q, q, K))
+    if (length(dim(V) == 2)) V <- array(rep(V, K), dim = c(q, q, K))
   }
   if (varmethod == "identity") {
-    if (is.null(U)) U = array(c(rep(diag(p), K)), dim = c(p, p, K))
-    if (is.null(V)) V = array(c(rep(diag(q), K)), dim = c(q, q, K))
+    if (is.null(U)) U <- array(c(rep(diag(p), K)), dim = c(p, p, K))
+    if (is.null(V)) V <- array(c(rep(diag(q), K)), dim = c(q, q, K))
   }
 
   list(
@@ -604,34 +619,40 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior), centers = 
 # S3 method for predict on class MixMatrixModel
 ##' @export
 predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
-  if (!inherits(object, "MixMatrixModel"))
+  if (!inherits(object, "MixMatrixModel")) {
     stop("object not of class \"MixMatrixModel\"")
+  }
 
   if (missing(newdata)) {
     newdata <- eval.parent(object$call$x)
   }
 
-  if (is.null(dim(newdata)))
+  if (is.null(dim(newdata))) {
     stop("'newdata' is not an array")
-  if (any(!is.finite(newdata)))
+  }
+  if (any(!is.finite(newdata))) {
     stop("infinite, NA or NaN values in 'newdata'")
+  }
   x <- (newdata)
 
 
   if (length(dim(x)) == 2) x <- array(x, dim = c(dim(x), 1))
 
-  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$centers[, , 1, drop = FALSE]))
+  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$centers[, , 1, drop = FALSE])) {
     stop("wrong column dimension of matrices")
-  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$centers[, , 1, drop = FALSE]))
+  }
+  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$centers[, , 1, drop = FALSE])) {
     stop("wrong row dimension of matrices")
+  }
   ng <- length(object$prior)
   if (!missing(prior)) {
     if (length(prior) != ng) stop("invalid prior length")
-    if (any(prior < 0) || round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
+    }
   }
 
-  dims = dim(x)
+  dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
@@ -639,21 +660,21 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
   df <- object$nu
 
 
-  dist = matrix(0, nrow = n, ncol = ng)
-  posterior = matrix(0, nrow = n, ncol = ng)
+  dist <- matrix(0, nrow = n, ncol = ng)
+  posterior <- matrix(0, nrow = n, ncol = ng)
 
 
   # for (i in seq(n)) {
   # Xi = matrix(x[, , i], p, q)
   for (j in seq(ng)) {
     if (object$model == "normal") {
-      dist[, j] = log(prior[j]) + dmatnorm_calc(x,
+      dist[, j] <- log(prior[j]) + dmatnorm_calc(x,
         mean = matrix(object$centers[, , j], nrow = p, ncol = q),
         U = matrix(object$U[, , j], nrow = p, ncol = p),
         V = matrix(object$V[, , j], nrow = q, ncol = q)
       )
     } else {
-      dist[, j] = log(prior[j]) + dmat_t_calc(x,
+      dist[, j] <- log(prior[j]) + dmat_t_calc(x,
         df = df[j],
         mean = matrix(object$centers[, , j], nrow = p, ncol = q),
         U = matrix(object$U[, , j], nrow = p, ncol = p),
@@ -661,9 +682,9 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
       )
     }
   }
-  posterior = exp((dist - apply(dist, 1L, max, na.rm = TRUE)))
-  totalpost = rowSums(posterior)
-  posterior = posterior / totalpost
+  posterior <- exp((dist - apply(dist, 1L, max, na.rm = TRUE)))
+  totalpost <- rowSums(posterior)
+  posterior <- posterior / totalpost
   nm <- names(object$prior)
   cl <- max.col(posterior)
   list(class = cl, posterior = posterior)

@@ -88,7 +88,7 @@
 #' summary(rmatrixt(n = 100, df = 10, matrix(0)))
 #' # demonstrating equivalence of 1x1 matrix t to usual t
 #' set.seed(20180204)
-#' x = rmatrixt(n = 1, mean = matrix(0), df = 1)
+#' x <- rmatrixt(n = 1, mean = matrix(0), df = 1)
 #' dt(x, 1)
 #' dmatrixt(x, df = 1)
 rmatrixt <- function(n, df, mean,
@@ -103,19 +103,24 @@ rmatrixt <- function(n, df, mean,
     is.numeric(n), is.numeric(df), is.numeric(mean),
     is.numeric(L), is.numeric(R),
     is.numeric(U), is.numeric(V)
-  ))) stop("Non-numeric input. ")
-  if (!(n > 0))
+  ))) {
+    stop("Non-numeric input. ")
+  }
+  if (!(n > 0)) {
     stop("n must be > 0. n =", n)
+  }
 
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
 
-  if (((is.null(df)) || is.na(df) || (df < 0)))
+  if (((is.null(df)) || is.na(df) || (df < 0))) {
     stop("df must be >= 0. df =", df)
-  if (df == 0 || is.infinite(df))
+  }
+  if (df == 0 || is.infinite(df)) {
     return(rmatrixnorm(
       n = n, mean = mean, U = U,
       V = V, list = list, array = array
     ))
+  }
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
@@ -155,8 +160,9 @@ rmatrixt <- function(n, df, mean,
     return(lapply(seq(dim(result)[3]), function(x) result[, , x]))
   }
   if (!(list) && !(is.null(array))) {
-    if (!(array))
+    if (!(array)) {
       warning("list FALSE and array FALSE, returning array")
+    }
   }
   return(result)
 }
@@ -177,10 +183,13 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
   if (!(all(
     is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
     is.numeric(U), is.numeric(V)
-  ))) stop("Non-numeric input. ")
+  ))) {
+    stop("Non-numeric input. ")
+  }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-  if (((is.null(df)) || is.na(df) || (df < 0)))
+  if (((is.null(df)) || is.na(df) || (df < 0))) {
     stop("df must be >= 0. df =", df)
+  }
 
   mean <- as.matrix(mean)
   U <- as.matrix(U)
@@ -192,8 +201,9 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
-  if ((df == 0 || is.infinite(df)))
+  if ((df == 0 || is.infinite(df))) {
     return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
+  }
 
   # gammas is constant
   # this could be shifted into C++ but I don't want to pull out of CholWishart
@@ -201,8 +211,8 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     0.5 * dims[1] * dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-  results = as.numeric(dmat_t_calc(x, df, mean, U, V))
-  results = results + gammas
+  results <- as.numeric(dmat_t_calc(x, df, mean, U, V))
+  results <- results + gammas
   if (log) {
     return(results)
   } else {
@@ -248,12 +258,16 @@ rmatrixinvt <- function(n, df, mean,
   if (!(all(
     is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
     is.numeric(U), is.numeric(V)
-  ))) stop("Non-numeric input. ")
+  ))) {
+    stop("Non-numeric input. ")
+  }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-  if (((is.null(df)) || is.na(df) || (df < 0)))
+  if (((is.null(df)) || is.na(df) || (df < 0))) {
     stop("df must be >= 0. df =", df)
-  if (!(n > 0))
+  }
+  if (!(n > 0)) {
     stop("n must be > 0.", n)
+  }
   mean <- as.matrix(mean)
   U <- as.matrix(U)
   V <- as.matrix(V)
@@ -271,7 +285,7 @@ rmatrixinvt <- function(n, df, mean,
 
   S <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
 
-  result = rmat_inv_t_calc(S, mat, U, V, mean)
+  result <- rmat_inv_t_calc(S, mat, U, V, mean)
 
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -282,8 +296,9 @@ rmatrixinvt <- function(n, df, mean,
     return(lapply(seq(dim(result)[3]), function(x) result[, , x]))
   }
   if (!(list) && !(is.null(array))) {
-    if (!(array))
+    if (!(array)) {
       warning("list FALSE and array FALSE, returning array")
+    }
   }
   return(result)
 }
@@ -306,10 +321,13 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
   if (!(all(
     is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
     is.numeric(U), is.numeric(V)
-  ))) stop("Non-numeric input. ")
+  ))) {
+    stop("Non-numeric input. ")
+  }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-  if (((is.null(df)) || is.na(df) || (df < 0)))
+  if (((is.null(df)) || is.na(df) || (df < 0))) {
     stop("df must be >= 0. df =", df)
+  }
 
   mean <- as.matrix(mean)
   U <- as.matrix(U)
@@ -324,7 +342,7 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
   gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
     0.5 * prod(dims[1:2]) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-  results = as.numeric(dmat_inv_t_calc(x, df, mean, U, V))
+  results <- as.numeric(dmat_inv_t_calc(x, df, mean, U, V))
   if (any(is.nan(results))) warning("warning: probability distribution undefined when det < 0.")
   results <- gammas + results
   if (log) {

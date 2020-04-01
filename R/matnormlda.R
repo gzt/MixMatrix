@@ -109,34 +109,39 @@
 #' print(D)
 matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
                       nu = 10, ..., subset) {
-  if (is.null(dim(x)))
+  if (is.null(dim(x))) {
     stop("'x' is not an array")
-  if (any(!is.finite(x)))
+  }
+  if (any(!is.finite(x))) {
     stop("infinite, NA or NaN values in 'x'")
-  if (nu == 0 || is.infinite(nu)) method = "normal"
+  }
+  if (nu == 0 || is.infinite(nu)) method <- "normal"
 
-  if (method == "normal") nu = NULL
+  if (method == "normal") nu <- NULL
   if (!missing(subset)) {
     x <- x[, , subset, drop = FALSE]
     grouping <- grouping[subset]
   }
 
-  dims = dim(x)
+  dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
 
-  if (n != length(grouping))
+  if (n != length(grouping)) {
     stop("nrow(x) and length(grouping) are different")
+  }
   g <- as.factor(grouping)
   lev <- lev1 <- levels(g)
   counts <- as.vector(table(g))
   if (!missing(prior)) {
-    if (any(prior < 0) || round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
-    if (length(prior) != nlevels(g))
+    }
+    if (length(prior) != nlevels(g)) {
       stop("'prior' is of incorrect length")
+    }
     prior <- prior[counts > 0L]
   }
   if (any(counts == 0L)) {
@@ -157,9 +162,9 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
 
-  group.means = array(0, dim = c(p, q, ng))
+  group.means <- array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] = .MeansFunction(x,
+    group.means[, , i] <- .MeansFunction(x,
       SS = NULL, SSX = NULL,
       weights = 1.0 * (g == levels(g)[i]), ...
     )
@@ -189,44 +194,45 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
   if (method == "t") {
     # for method t with df specified
-    Uresult = diag(p)
-    Vresult = diag(q)
-    varresult = 1
-    error = 1e6
-    itercount = 0
+    Uresult <- diag(p)
+    Vresult <- diag(q)
+    varresult <- 1
+    error <- 1e6
+    itercount <- 0
     while (error > 1e-7 && itercount < 1e4) {
       # this loop is somewhat inelegant
-      newUresult = matrix(0, p, p)
-      newVresult = matrix(0, q, q)
-      newvarresult = 0
+      newUresult <- matrix(0, p, p)
+      newVresult <- matrix(0, q, q)
+      newvarresult <- 0
       for (i in seq(ng)) {
         varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
           df = nu,
           U = Uresult, V = Vresult, ...
         )
         group.means[, , i] <- varfit$mean
-        newUresult = newUresult + prior[i] * varfit$U
-        newVresult = newVresult + prior[i] * varfit$V
-        newvarresult = newvarresult + prior[i] * varfit$var
-        if (varfit$convergence == FALSE)
+        newUresult <- newUresult + prior[i] * varfit$U
+        newVresult <- newVresult + prior[i] * varfit$V
+        newvarresult <- newvarresult + prior[i] * varfit$var
+        if (varfit$convergence == FALSE) {
           warning("ML fit failed for group ", i)
+        }
       }
 
-      error = sum((newUresult - Uresult)^2) + sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
-      Uresult = newUresult
-      Vresult = newVresult
-      varresult = newvarresult
-      itercount = itercount + 1
+      error <- sum((newUresult - Uresult)^2) + sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
+      Uresult <- newUresult
+      Vresult <- newVresult
+      varresult <- newvarresult
+      itercount <- itercount + 1
     }
   } else {
-    Uresult = matrix(0, p, p)
-    Vresult = matrix(0, q, q)
-    varresult = 0
+    Uresult <- matrix(0, p, p)
+    Vresult <- matrix(0, q, q)
+    varresult <- 0
     # for (i in seq(ng)) {
     varfit <- MLmatrixnorm(swept.group, ...)
-    Uresult = varfit$U
-    Vresult = varfit$V
-    varresult = varfit$var
+    Uresult <- varfit$U
+    Vresult <- varfit$V
+    varresult <- varfit$var
     # }
   }
   cl <- match.call()
@@ -292,11 +298,12 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 #'
 #' ## S3 method for class 'matrixlda'
 predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
-  if (!inherits(object, "matrixlda"))
+  if (!inherits(object, "matrixlda")) {
     stop("object not of class \"matrixlda\"")
+  }
 
   if (missing(newdata)) {
-    if (!is.null(sub <- object$call$subset))
+    if (!is.null(sub <- object$call$subset)) {
       newdata <-
         eval.parent(parse(text = paste(
           deparse(object$call$x,
@@ -306,43 +313,50 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
           deparse(sub, backtick = TRUE),
           ",drop = FALSE]"
         )))
-    else
+    } else {
       newdata <- eval.parent(object$call$x)
-    if (!is.null(nas <- object$call$na.action))
+    }
+    if (!is.null(nas <- object$call$na.action)) {
       newdata <- eval(call(nas, newdata))
+    }
   }
 
 
-  if (any(!is.finite(newdata)))
+  if (any(!is.finite(newdata))) {
     stop("infinite, NA or NaN values in 'newdata'")
+  }
 
   x <- (newdata)
-  if (is.null(dim(x)))
+  if (is.null(dim(x))) {
     stop("'newdata' is not an array")
+  }
 
   if (length(dim(x)) == 2) x <- array(x, dim = c(dim(x), 1))
 
 
-  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
+  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE])) {
     stop("wrong column dimension of matrices")
-  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE]))
+  }
+  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE])) {
     stop("wrong row dimension of matrices")
+  }
   ng <- length(object$prior)
   if (!missing(prior)) {
     if (length(prior) != ng) stop("invalid prior length")
-    if (any(prior < 0) || round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
+    }
   }
 
 
-  dims = dim(x)
+  dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
-  if (object$method == "t") df = object$nu
-  dist = matrix(0, nrow = n, ncol = ng)
-  posterior = matrix(0, nrow = n, ncol = ng)
+  if (object$method == "t") df <- object$nu
+  dist <- matrix(0, nrow = n, ncol = ng)
+  posterior <- matrix(0, nrow = n, ncol = ng)
   ## solveV = matrix(solve(object$V * object$scaling),q,q)
   ## solveU = matrix(solve(object$U),p,p)
   ## VMUM = vector("list", ng)
@@ -365,16 +379,16 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 
   for (j in seq(ng)) {
     if (object$method == "t") {
-      dist[, j] = dmat_t_calc(x, df, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
+      dist[, j] <- dmat_t_calc(x, df, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
     } else {
-      dist[, j] = dmatnorm_calc(x, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
+      dist[, j] <- dmatnorm_calc(x, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
     }
   }
 
   dist <- ((dist - apply(dist, 1L, max, na.rm = TRUE)))
-  posterior = exp(dist)
-  totalpost = rowSums(posterior)
-  posterior = posterior / totalpost
+  posterior <- exp(dist)
+  totalpost <- rowSums(posterior)
+  posterior <- posterior / totalpost
   nm <- names(object$prior)
   cl <- factor(nm[max.col(posterior)], levels = object$lev)
   list(class = cl, posterior = posterior)
@@ -436,33 +450,38 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' logLik(D)
 #' print(D)
 matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 10, ..., subset) {
-  if (is.null(dim(x)))
+  if (is.null(dim(x))) {
     stop("'x' is not an array")
-  if (any(!is.finite(x)))
+  }
+  if (any(!is.finite(x))) {
     stop("infinite, NA or NaN values in 'x'")
-  if (nu == 0 || is.infinite(nu)) method = "normal"
-  if (method == "normal") df = NULL
+  }
+  if (nu == 0 || is.infinite(nu)) method <- "normal"
+  if (method == "normal") df <- NULL
   if (!missing(subset)) {
     x <- x[, , subset, drop = FALSE]
     grouping <- grouping[subset]
   }
 
-  dims = dim(x)
+  dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
-  if (n != length(grouping))
+  if (n != length(grouping)) {
     stop("nrow(x) and length(grouping) are different")
+  }
   g <- as.factor(grouping)
   lev <- lev1 <- levels(g)
   counts <- as.vector(table(g))
   if (!missing(prior)) {
     if (any(prior < 0) ||
-      round(sum(prior), 5) != 1)
+      round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
-    if (length(prior) != nlevels(g))
+    }
+    if (length(prior) != nlevels(g)) {
       stop("'prior' is of incorrect length")
+    }
     prior <- prior[counts > 0L]
   }
   if (any(counts == 0L)) {
@@ -483,26 +502,28 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
   if (method == "t") {
-    if (length(nu) != ng)
-      df = rep_len(nu, ng) # if you mismatch lengths, you will not have a good time
+    if (length(nu) != ng) {
+      df <- rep_len(nu, ng)
+    } # if you mismatch lengths, you will not have a good time
   }
-  group.means = array(0, dim = c(p, q, ng))
-  groupU = array(0, dim = c(p, p, ng))
-  groupV = array(0, dim = c(q, q, ng))
+  group.means <- array(0, dim = c(p, q, ng))
+  groupU <- array(0, dim = c(p, p, ng))
+  groupV <- array(0, dim = c(q, q, ng))
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t") {
-      mlfit = MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
-      df[i] = mlfit$nu
+      mlfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
+      df[i] <- mlfit$nu
     } else {
-      mlfit = MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
+      mlfit <- MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
     }
-    if (mlfit$convergence == FALSE)
+    if (mlfit$convergence == FALSE) {
       warning("ML fit failed for group ", i)
+    }
 
-    group.means[, , i] = mlfit$mean
-    groupU[, , i] = mlfit$U
-    groupV[, , i] = mlfit$V * mlfit$var
+    group.means[, , i] <- mlfit$mean
+    groupU[, , i] <- mlfit$U
+    groupV[, , i] <- mlfit$V * mlfit$var
   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
@@ -546,7 +567,7 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 
 }
 
 #' @export
-logLik.matrixlda = function(object, ...) {
+logLik.matrixlda <- function(object, ...) {
   if (!is.null(sub <- object$call$subset)) {
     olddata <-
       eval.parent(parse(text = paste(
@@ -571,72 +592,78 @@ logLik.matrixlda = function(object, ...) {
     groups <- eval.parent(object$call$grouping)
   }
 
-  groups = factor(groups)
+  groups <- factor(groups)
   dims <- dim(olddata)
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
-  numgroups = length(levels(groups))
-  grouplist = levels(groups)
-  meanpars = p * q
-  upars = (p + 1) * p / 2
-  vpars = (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
-  nupar = 0 # if nu not fixed, becomes 1
+  numgroups <- length(levels(groups))
+  grouplist <- levels(groups)
+  meanpars <- p * q
+  upars <- (p + 1) * p / 2
+  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  nupar <- 0 # if nu not fixed, becomes 1
 
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
 
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
 
   if (!is.null(object$call$col.variance)) {
     Vvars <- object$call$col.variance
-    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars = 2
+    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars = 2
+    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars = 1
+    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars = (q - 1) * q / 2 + 1
+    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars <- (q - 1) * q / 2 + 1
   }
   if (!is.null(object$call$row.variance)) {
     Uvars <- object$call$row.variance
-    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars = 2
+    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars = 2
+    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars = 1
+    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars = (p - 1) * p / 2 + 1
+    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars <- (p - 1) * p / 2 + 1
   }
 
-  if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+  if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
 
-  df = vpars + upars + nupar + numgroups * meanpars - 1
-  logLik = 0
+  df <- vpars + upars + nupar + numgroups * meanpars - 1
+  logLik <- 0
   if (is.null(object$nu)) {
-    nu = 0
-  } else nu = object$nu
-  if (object$method == "normal") {
-    for (i in 1:numgroups) logLik = logLik + sum(dmatnorm_calc(
-      x = olddata[, , groups == grouplist[i], drop = FALSE],
-      mean = object$means[, , i],
-      U = object$U * object$scaling, V = object$V
-    ))
+    nu <- 0
   } else {
-    for (i in 1:numgroups) logLik = logLik + sum(dmat_t_calc(
-      x = olddata[, , groups == grouplist[i], drop = FALSE],
-      df = nu, mean = object$means[, , i],
-      U = object$U * object$scaling, V = object$V
-    ))
+    nu <- object$nu
+  }
+  if (object$method == "normal") {
+    for (i in 1:numgroups) {
+      logLik <- logLik + sum(dmatnorm_calc(
+        x = olddata[, , groups == grouplist[i], drop = FALSE],
+        mean = object$means[, , i],
+        U = object$U * object$scaling, V = object$V
+      ))
+    }
+  } else {
+    for (i in 1:numgroups) {
+      logLik <- logLik + sum(dmat_t_calc(
+        x = olddata[, , groups == grouplist[i], drop = FALSE],
+        df = nu, mean = object$means[, , i],
+        U = object$U * object$scaling, V = object$V
+      ))
+    }
   }
 
-  class(logLik) = "logLik"
-  attr(logLik, 'df') <- df
-  attr(logLik, 'nobs') <- n
+  class(logLik) <- "logLik"
+  attr(logLik, "df") <- df
+  attr(logLik, "nobs") <- n
   logLik
 }
 
 #' @export
-logLik.matrixqda = function(object, ...) {
+logLik.matrixqda <- function(object, ...) {
   if (!is.null(sub <- object$call$subset)) {
     data <-
       eval.parent(parse(text = paste(
@@ -661,71 +688,75 @@ logLik.matrixqda = function(object, ...) {
     data <- eval.parent(object$call$x)
     grouping <- eval.parent(object$call$grouping)
   }
-  if (!is.null(nas <- object$call$na.action))
+  if (!is.null(nas <- object$call$na.action)) {
     data <- eval(call(nas, data))
+  }
 
-  grouping = factor(grouping)
+  grouping <- factor(grouping)
   dims <- dim(data)
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
-  numgroups = length(levels(grouping))
-  grouplist = levels(grouping)
-  meanpars = p * q
-  upars = (p + 1) * p / 2
-  vpars = (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
-  nupar = 0 # if nu not fixed, becomes 1
+  numgroups <- length(levels(grouping))
+  grouplist <- levels(grouping)
+  meanpars <- p * q
+  upars <- (p + 1) * p / 2
+  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  nupar <- 0 # if nu not fixed, becomes 1
 
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars = meanpars / q
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
 
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars = meanpars / p
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
 
   if (!is.null(object$call$col.variance)) {
     Vvars <- object$call$col.variance
-    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars = 2
+    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars = 2
+    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars = 1
+    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars = (q - 1) * q / 2 + 1
+    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars <- (q - 1) * q / 2 + 1
   }
   if (!is.null(object$call$row.variance)) {
     Uvars <- object$call$row.variance
-    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars = 2
+    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars = 2
+    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars = 1
+    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars = (p - 1) * p / 2 + 1
+    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars <- (p - 1) * p / 2 + 1
   }
 
-  if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar = 1
+  if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
 
-  df = numgroups * (vpars + upars + nupar + meanpars - 1)
-  logLik = 0
-  if (is.null(object$nu)) nu = 0
-  else nu = object$nu
+  df <- numgroups * (vpars + upars + nupar + meanpars - 1)
+  logLik <- 0
+  if (is.null(object$nu)) {
+    nu <- 0
+  } else {
+    nu <- object$nu
+  }
 
   for (i in 1:numgroups) {
     if (object$method == "t") {
-      logLik = logLik + sum(dmat_t_calc(
+      logLik <- logLik + sum(dmat_t_calc(
         x = data[, , grouping == grouplist[i], drop = FALSE],
         df = nu[i], mean = object$means[, , i],
         U = object$U[, , i], V = object$V[, , i]
       ))
     } else {
-      logLik = logLik + sum(dmatnorm_calc(
+      logLik <- logLik + sum(dmatnorm_calc(
         x = data[, , grouping == grouplist[i], drop = FALSE],
         mean = object$means[, , i],
         U = object$U[, , i], V = object$V[, , i]
       ))
     }
   }
-  class(logLik) = "logLik"
-  attr(logLik, 'df') <- df
-  attr(logLik, 'nobs') <- n
+  class(logLik) <- "logLik"
+  attr(logLik, "df") <- df
+  attr(logLik, "nobs") <- n
   logLik
 }
 
@@ -786,11 +817,12 @@ nobs.matrixqda <- function(object, ...) {
 #' predict(D)$posterior[1:10, ] # predict, show results of first 10
 #' ## S3 method for class "matrixqda"
 predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
-  if (!inherits(object, "matrixqda"))
+  if (!inherits(object, "matrixqda")) {
     stop("object not of class \"matrixqda\"")
+  }
 
   if (missing(newdata)) {
-    if (!is.null(sub <- object$call$subset))
+    if (!is.null(sub <- object$call$subset)) {
       newdata <-
         eval.parent(parse(text = paste(
           deparse(object$call$x,
@@ -800,53 +832,60 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
           deparse(sub, backtick = TRUE),
           ",drop = FALSE]"
         )))
-    else
+    } else {
       newdata <- eval.parent(object$call$x)
-    if (!is.null(nas <- object$call$na.action))
+    }
+    if (!is.null(nas <- object$call$na.action)) {
       newdata <- eval(call(nas, newdata))
+    }
   }
 
-  if (is.null(dim(newdata)))
+  if (is.null(dim(newdata))) {
     stop("'newdata' is not an array")
-  if (any(!is.finite(newdata)))
+  }
+  if (any(!is.finite(newdata))) {
     stop("infinite, NA or NaN values in 'newdata'")
+  }
   x <- (newdata)
 
 
   if (length(dim(x)) == 2) x <- array(x, dim = c(dim(x), 1))
 
-  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE]))
+  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$means[, , 1, drop = FALSE])) {
     stop("wrong column dimension of matrices")
-  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE]))
+  }
+  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$means[, , 1, drop = FALSE])) {
     stop("wrong row dimension of matrices")
+  }
   ng <- length(object$prior)
   if (!missing(prior)) {
     if (length(prior) != ng) stop("invalid prior length")
-    if (any(prior < 0) || round(sum(prior), 5) != 1)
+    if (any(prior < 0) || round(sum(prior), 5) != 1) {
       stop("invalid 'prior'")
+    }
   }
 
-  dims = dim(x)
+  dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
   p <- dims[1]
   q <- dims[2]
   df <- object$nu
   ##### Here is where the work needs to be done.
-  dist = matrix(0, nrow = n, ncol = ng)
-  posterior = matrix(0, nrow = n, ncol = ng)
+  dist <- matrix(0, nrow = n, ncol = ng)
+  posterior <- matrix(0, nrow = n, ncol = ng)
 
   for (j in seq(ng)) {
     if (object$method == "t") {
-      dist[, j] = dmat_t_calc(x, df[j], object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
+      dist[, j] <- dmat_t_calc(x, df[j], object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
     } else {
-      dist[, j] = dmatnorm_calc(x, object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
+      dist[, j] <- dmatnorm_calc(x, object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
     }
   }
 
-  posterior = exp((dist - apply(dist, 1L, max, na.rm = TRUE)))
-  totalpost = rowSums(posterior)
-  posterior = posterior / totalpost
+  posterior <- exp((dist - apply(dist, 1L, max, na.rm = TRUE)))
+  totalpost <- rowSums(posterior)
+  posterior <- posterior / totalpost
   nm <- names(object$prior)
   cl <- factor(nm[max.col(posterior)], levels = object$lev)
   list(class = cl, posterior = posterior)
@@ -855,12 +894,12 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
 #' @export
 #' @importFrom utils head
 print.matrixlda <- function(x, ...) {
-  x[["posterior"]] = head(x[["posterior"]])
+  x[["posterior"]] <- head(x[["posterior"]])
   print.default(x, ...)
 }
 
 #' @export
 print.matrixqda <- function(x, ...) {
-  x[["posterior"]] = head(x[["posterior"]])
+  x[["posterior"]] <- head(x[["posterior"]])
   print.default(x, ...)
 }
