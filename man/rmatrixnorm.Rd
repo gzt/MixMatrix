@@ -75,17 +75,22 @@ Density and random generation for the matrix variate normal distribution
 set.seed(20180202)
 # a draw from a matrix variate normal with a certain mean
 # and row-wise covariance
-rmatrixnorm(n=1,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+rmatrixnorm(
+  n = 1, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  L = matrix(c(2, 1, 0, .1), nrow = 2), list = FALSE
+)
 set.seed(20180202)
 # another way of specifying this - note the output is equivalent
-A <- rmatrixnorm(n=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
+A <- rmatrixnorm(
+  n = 10, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  L = matrix(c(2, 1, 0, .1), nrow = 2), list = TRUE
+)
 A[[1]]
 # demonstrating the dmatrixnorm function
-dmatrixnorm(A[[1]],mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-  L=matrix(c(2,1,0,.1),nrow=2),log=TRUE )
-
+dmatrixnorm(A[[1]],
+  mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  L = matrix(c(2, 1, 0, .1), nrow = 2), log = TRUE
+)
 }
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.

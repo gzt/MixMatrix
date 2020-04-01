@@ -47,7 +47,7 @@ iterations and then converting back.
 By default, if \code{K} centers are provided, nothing will be done.}
 
 \item{varmethod}{what method to use to choose initial variance matrices.
-Currently only identity matrices are created. 
+Currently only identity matrices are created.
 By default, if \code{U} and \code{V} matrices are provided, nothing
 will be done.}
 

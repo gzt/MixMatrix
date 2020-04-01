@@ -84,13 +84,13 @@ they are inappropriate for the data, they may fail with a warning.
 \examples{
 set.seed(20180202)
 # simulating from a given density
-A <- rmatrixnorm(n=100,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=TRUE)
+A <- rmatrixnorm(
+  n = 100, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  L = matrix(c(2, 1, 0, .1), nrow = 2), list = TRUE
+)
 # finding the parameters by ML estimation
-results=MLmatrixnorm(A, tol = 1e-5)
+results = MLmatrixnorm(A, tol = 1e-5)
 print(results)
-
-
 }
 \references{
 Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.

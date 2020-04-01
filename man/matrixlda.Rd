@@ -63,7 +63,7 @@ Performs linear discriminant analysis on matrix variate data.
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution. 
+the data are from a matrix variate normal distribution.
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
@@ -74,12 +74,12 @@ distribution, presuming equal covariances between classes.
 \examples{
 set.seed(20180221)
 # construct two populations of 3x4 random matrices with different means
-A <- rmatrixnorm(30,mean=matrix(0,nrow=3,ncol=4))
-B <- rmatrixnorm(30,mean=matrix(1,nrow=3,ncol=4))
-C <- array(c(A,B), dim=c(3,4,60)) #combine together
-groups <- c(rep(1,30),rep(2,30)) # define groups
-prior <- c(.5,.5) # set prior
-D<-matrixlda(C, groups, prior) # fit model
+A <- rmatrixnorm(30, mean = matrix(0, nrow = 3, ncol = 4))
+B <- rmatrixnorm(30, mean = matrix(1, nrow = 3, ncol = 4))
+C <- array(c(A, B), dim = c(3, 4, 60)) # combine together
+groups <- c(rep(1, 30), rep(2, 30)) # define groups
+prior <- c(.5, .5) # set prior
+D <- matrixlda(C, groups, prior) # fit model
 logLik(D)
 print(D)
 }

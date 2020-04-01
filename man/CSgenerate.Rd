@@ -20,5 +20,5 @@ Generate a compound symmetric correlation matrix
 \examples{
 # generates a covariance matrix with 1 on the main diagonal
 # and 0.5 on the off-diagonal elements.
-CSgenerate(3,.5)
+CSgenerate(3, .5)
 }

@@ -94,17 +94,18 @@ The matrix \eqn{t}-distribution is parameterized slightly
 \examples{
 set.seed(20180202)
 # random matrix with df = 10 and the given mean and L matrix
-rmatrixt(n=1,df=10,mean=matrix(c(100,0,-100,0,25,-1000),nrow=2),
-   L=matrix(c(2,1,0,.1),nrow=2),list=FALSE)
+rmatrixt(
+  n = 1, df = 10, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2),
+  L = matrix(c(2, 1, 0, .1), nrow = 2), list = FALSE
+)
 # comparing 1-D distribution of t to matrix
-summary(rt(n=100,df=10))
-summary(rmatrixt(n=100,df=10,matrix(0)))
+summary(rt(n = 100, df = 10))
+summary(rmatrixt(n = 100, df = 10, matrix(0)))
 # demonstrating equivalence of 1x1 matrix t to usual t
 set.seed(20180204)
-x = rmatrixt(n=1,mean=matrix(0),df=1)
-dt(x,1)
-dmatrixt(x,df=1)
-
+x = rmatrixt(n = 1, mean = matrix(0), df = 1)
+dt(x, 1)
+dmatrixt(x, df = 1)
 }
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.

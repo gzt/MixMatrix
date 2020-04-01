@@ -20,7 +20,7 @@ Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \eqn{rho^k} o
 generate AR(1) correlation matrices
 }
 \examples{
-ARgenerate(6,.9)
+ARgenerate(6, .9)
 }
 \seealso{
 \code{\link[stats]{toeplitz}}

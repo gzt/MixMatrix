@@ -76,8 +76,8 @@ A list of class \code{MixMatrixModel} containing the following
 \describe{
      \item{\code{prior}}{the prior probabilities used.}
      \item{\code{init}}{the initialization used.}
-      \item{\code{K}}{the number of groups} 
-      \item{\code{N}}{the number of observations} 
+      \item{\code{K}}{the number of groups}
+      \item{\code{N}}{the number of observations}
       \item{\code{centers}}{the group means.}
       \item{\code{U}}{the between-row covariance matrices}
       \item{\code{V}}{the between-column covariance matrix}

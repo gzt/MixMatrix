@@ -76,8 +76,8 @@ Generate random samples from the inverted matrix
 }
 \examples{
 # an example of drawing from the distribution and computing the density.
-A<-rmatrixinvt(n = 2, df = 10, diag(4))
-dmatrixinvt(A[,,1], df = 10, mean = diag(4))
+A <- rmatrixinvt(n = 2, df = 10, diag(4))
+dmatrixinvt(A[, , 1], df = 10, mean = diag(4))
 }
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
