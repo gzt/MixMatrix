@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- badges: start --> [![R build
+<!-- badges: start -->
+
+[![R build
 status](https://github.com/gzt/MixMatrix/workflows/R-CMD-check/badge.svg)](https://github.com/gzt/MixMatrix/actions)
 [![Travis-CI Build
 Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-ci.org/gzt/MixMatrix)
