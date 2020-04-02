@@ -29,12 +29,24 @@ test_that("Equivalent outputs for different options:", {
   expect_equal(a_mat, b_mat[[1]])
   expect_equal(a_mat, c_mat[, , 1])
   expect_equal(
-    dmatrixnorm(a_mat, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
-    dmatrixnorm(b_mat[[1]], mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2))
+    dmatrixnorm(a_mat, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2)),
+    dmatrixnorm(b_mat[[1]], mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2))
   )
   expect_equal(
-    dmatrixnorm(a_mat, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
-    dmatrixnorm(c_mat, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2))[1]
+    dmatrixnorm(a_mat, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2)),
+    dmatrixnorm(c_mat, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2))[1]
   )
 
   set.seed(2018020202)
@@ -59,15 +71,24 @@ test_that("Equivalent outputs for different options:", {
   expect_equal(a_mat, b_mat[[1]])
   expect_equal(a_mat, c_mat[, , 1])
   expect_equal(
-    dmatrixt(a_mat, df = 2, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
+    dmatrixt(a_mat, df = 2, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2)),
     dmatrixt(b_mat[[1]],
       df = 2,
       mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)
     )
   )
   expect_equal(
-    dmatrixt(a_mat, df = 2, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2)),
-    dmatrixt(c_mat, df = 2, mean = matrix(c(100, 0, -100, 0, 25, -1000), nrow = 2))
+    dmatrixt(a_mat, df = 2, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2)),
+    dmatrixt(c_mat, df = 2, mean = matrix(c(
+      100, 0, -100,
+      0, 25, -1000
+    ), nrow = 2))
   )
 
   set.seed(2018020203)
@@ -268,7 +289,7 @@ test_that("Equivalent outputs for different functions:", {
   expect_equal(c_mat$V[1, 4], 0)
 })
 
-context("Testing LDA/QDa_mat output")
+context("Testing LDA/QDA output")
 test_that("Output of LDA/QDA/Predict", {
   set.seed(20190628)
   a_mat <- rmatrixnorm(4, mean = matrix(0, nrow = 2, ncol = 2))
@@ -365,7 +386,7 @@ test_that("Output of LDA/QDA/Predict", {
   expect_equal(class(logLik(qdamodel)), "logLik")
 })
 
-test_that("LDA/QDa_mat logLik works", {
+test_that("LDA/QDA logLik works", {
   set.seed(20190628)
   ntotal <- 25
   covmatrix <- matrix(c(1, .5, .5, 1), nrow = 2)

@@ -167,10 +167,14 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   # don't have initial starting point for U and V, start with diag.
   if (missing(U)) {
     est_u <- diag(dims[1])
-  } else est_u  <- U
+  } else {
+    est_u <- U
+  }
   if (missing(V)) {
     est_v <- diag(dims[2])
-  } else est_v <- V
+  } else {
+    est_v <- V
+  }
   # mu <- apply(data, c(1, 2), mean)
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
@@ -236,7 +240,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   # Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error_term > tol && (!varflag)) {
-     ### E step
+    ### E step
     s_list <- .sstep(data, mu, est_u, est_v, rep(1.0, n))
     ss <- s_list$ss
     ssx <- s_list$ssx

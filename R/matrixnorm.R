@@ -90,36 +90,23 @@ rmatrixnorm <- function(n, mean,
                         list = FALSE,
                         array = NULL,
                         force = FALSE) {
-  if (!(all(
-    is.numeric(n), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
-    stop("Non-numeric input. ")
-  }
+  if (!allnumeric_stop(n, mean, L, R, U, V)) stop("Non-numeric input. ")
   if (!(n > 0)) stop("n must be > 0. n = ", n)
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (missing(L)) {
-    if (!symm.check(U)) stop("U not symmetric.")
-  }
-  if (missing(R)) {
-    if (!symm.check(V)) stop("V not symmetric.")
-  }
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
+
   dims <- dim(mean)
 
   # checks for conformable matrix dimensions
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
-  if (force && !missing(L)) cholU <- L else cholU <- chol.default(U)
-  if (force && !missing(R)) cholV <- R else cholV <- chol.default(V)
+  dimcheck_stop(u_mat, v_mat, dims)
+  if (force && !missing(L)) chol_u <- L else chol_u <- chol.default(u_mat)
+  if (force && !missing(R)) chol_v <- R else chol_v <- chol.default(v_mat)
 
-  if (!force && (any(diag(cholU) < 1e-6) || any(diag(cholV) < 1e-6))) {
+  if (!force && (any(diag(chol_u) < 1e-6) || any(diag(chol_v) < 1e-6))) {
     stop(
       "Potentially singular covariance, use force = TRUE if intended. ",
-      min(diag(cholU)), min(diag(cholV))
+      min(diag(chol_u)), min(diag(chol_v))
     )
   }
   ## this is the point at which C++ would take over
@@ -128,7 +115,7 @@ rmatrixnorm <- function(n, mean,
 
   result <- array(apply(mat, 3, function(x) {
     mean +
-      crossprod(cholU, x) %*% (cholV)
+      crossprod(chol_u, x) %*% (chol_v)
   }),
   dim = c(dims, n)
   )
@@ -161,26 +148,12 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
   if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims, 1)))
   p <- dims[1]
   n <- dims[2]
-  if (!(all(
-    is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
-    stop("Non-numeric input. ")
-  }
-
+  if (!(allnumeric_stop(x, mean, L, R, U, V))) stop("Non-numeric input. ")
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
-
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
-
-  logresult <- as.numeric(dmatnorm_calc(x, mean, U, V))
-
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
+  dimcheck_stop(u_mat, v_mat, dims)
+  logresult <- as.numeric(dmatnorm_calc(x, mean, u_mat, v_mat))
   if (log) {
     return(logresult)
   } else {
@@ -222,44 +195,36 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
                                U = L %*% t(L), V = t(R) %*% R, log = FALSE,
                                unrolled = FALSE) {
   # results should equal other option - works by unrolling into MVN
-  if (!(all(
-    is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
+  if (!(allnumeric_stop((x), (mean), (L), (R), (U), (V)))) {
     stop("Non-numeric input. ")
   }
   x <- as.matrix(x)
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
   dims <- dim(mean)
   if (unrolled) {
-    dims <- c(dim(U)[1], dim(V)[1])
+    dims <- c(dim(u_mat)[1], dim(v_mat)[1])
   }
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions. ", dims, dim(U), dim(V))
-  }
+  dimcheck_stop(u_mat, v_mat, dims)
   if (!unrolled) {
     vecx <- as.vector(x)
   } else {
     vecx <- x
   }
   meanx <- as.vector(mean)
-  VU <- V %x% U
+  vu_mat <- v_mat %x% u_mat
   # you should be using small enough matrices that determinants aren't a pain
   # also presumes not using a singular matrix normal distribution
-  p <- dim(U)[1] # square matrices so only need first dimension
-  n <- dim(V)[1]
-  cholVU <- chol.default(VU)
-  detVU <- prod(diag(cholVU))^2
-  if (!(detVU > 1e-8)) stop("non-invertible matrix")
-  UVinv <- chol2inv(cholVU)
-  XM <- vecx - meanx
-  logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(detVU) -
-    0.5 * sum(diag(crossprod(XM, UVinv) %*% XM))
+  p <- dim(u_mat)[1] # square matrices so only need first dimension
+  n <- dim(v_mat)[1]
+  chol_vu <- chol.default(vu_mat)
+  det_vu <- prod(diag(chol_vu))^2
+  if (!(det_vu > 1e-8)) stop("non-invertible matrix")
+  uv_inv <- chol2inv(chol_vu)
+  xm_mat <- vecx - meanx
+  logresult <- -0.5 * n * p * log(2 * pi) - 0.5 * log(det_vu) -
+    0.5 * sum(diag(crossprod(xm_mat, uv_inv) %*% xm_mat))
   if (log) {
     return(logresult)
   } else {
@@ -354,10 +319,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       )
     )
   }
-  if (!all(
-    is.numeric(data), is.numeric(tol),
-    is.numeric(max.iter)
-  )) {
+  if (!allnumeric_stop((data), (tol), (max.iter))) {
     stop("Non-numeric input. ")
   }
   if (!(missing(U))) {
@@ -387,10 +349,14 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
   # don't have initial starting point for U and V, start with diag.
   if (missing(U)) {
-    U <- diag(dims[1])
+    u_mat <- diag(dims[1])
+  } else {
+    u_mat <- U
   }
   if (missing(V)) {
-    V <- diag(dims[2])
+    v_mat <- diag(dims[2])
+  } else {
+    v_mat <- V
   }
   # mu <- apply(data, c(1, 2), mean)
   mu <- rowMeans(data, dims = 2)
@@ -405,93 +371,90 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   # if both are true, this makes it so the mean is constant all over
   swept_data <- sweep(data, c(1, 2), mu)
   iter <- 0
-  error.term <- 1e+40
+  error_term <- 1e+40
   if (col_set_var) {
-    if (V[1, 2] > 0) {
-      rho_col <- V[1, 2] / max(V[1, 1], 1)
+    if (v_mat[1, 2] > 0) {
+      rho_col <- v_mat[1, 2] / max(v_mat[1, 1], 1)
     } else {
-      inter_v <- txax(swept_data, .5 * (U + t(U)))
-      V <- rowSums(inter_v, dims = 2) / (dims[3] * dims[1])
+      inter_v <- txax(swept_data, .5 * (u_mat + t(u_mat)))
+      v_mat <- rowSums(inter_v, dims = 2) / (dims[3] * dims[1])
       if (col.variance == "AR(1)") {
-        V <- stats::cov2cor(V)
-        rho_col <- V[1, 2] / V[1, 1]
+        v_mat <- stats::cov2cor(v_mat)
+        rho_col <- v_mat[1, 2] / v_mat[1, 1]
       }
       if (col.variance == "CS") {
-        V <- stats::cov2cor(V)
-        rho_col <- mean(V[1, ] / V[1, 1])
+        v_mat <- stats::cov2cor(v_mat)
+        rho_col <- mean(v_mat[1, ] / v_mat[1, 1])
       }
       if (col.variance == "I") rho_col <- 0
       if (rho_col > .9) rho_col <- .9
       if (rho_col < 0) rho_col <- 0
-      V <- varmatgenerate(dims[2], rho_col, col.variance)
+      v_mat <- varmatgenerate(dims[2], rho_col, col.variance)
     }
   }
 
   if (row_set_var) {
-    if (U[1, 2] > 0) {
-      rho_row <- U[1, 2] / max(U[1, 1], 1)
+    if (u_mat[1, 2] > 0) {
+      rho_row <- u_mat[1, 2] / max(u_mat[1, 1], 1)
     } else {
-      inter_u <- xatx(swept_data, 0.5 * (V + t(V)))
-      U <- rowSums(inter_u, dims = 2) / (dims[3] * dims[2])
+      inter_u <- xatx(swept_data, 0.5 * (v_mat + t(v_mat)))
+      u_mat <- rowSums(inter_u, dims = 2) / (dims[3] * dims[2])
       if (row.variance == "AR(1)") {
-        U <- stats::cov2cor(U)
-        rho_row <- U[1, 2] / U[1, 1]
+        u_mat <- stats::cov2cor(u_mat)
+        rho_row <- u_mat[1, 2] / u_mat[1, 1]
       }
       if (row.variance == "CS") {
-        U <- stats::cov2cor(U)
-        rho_row <- mean(U[1, ] / U[1, 1])
+        u_mat <- stats::cov2cor(u_mat)
+        rho_row <- mean(u_mat[1, ] / u_mat[1, 1])
       }
       if (row.variance == "I") rho_row <- 0
       if (rho_row > .9) rho_row <- .9
       if (rho_row < 0) rho_row <- 0
-      # if (row.variance == "cor") U = stats::cov2cor(U) else
-      U <- varmatgenerate(dims[1], rho_row, row.variance)
+      # if (row.variance == "cor") u_mat = stats::cov2cor(u_mat) else
+      u_mat <- varmatgenerate(dims[1], rho_row, row.variance)
     }
   }
 
   varflag <- FALSE
   log_lik_vec <- numeric(0)
-  while (iter < max.iter && error.term > tol && (!varflag)) {
+  while (iter < max.iter && error_term > tol && (!varflag)) {
 
     # make intermediate matrix, then collapse to final version
     if (col_set_var) {
-      var <- V[1, 1]
-      invV <- chol2inv(chol.default(V / var))
-      invU <- chol2inv(chol.default((U)))
+      var <- v_mat[1, 1]
+      inv_v <- chol2inv(chol.default(v_mat / var))
+      inv_u <- chol2inv(chol.default((u_mat)))
       var <- sum(apply(
         matrix(swept_data, ncol = dims[3]), 2,
-        # function(x) txax(x, invV %x% invU))) / (prod(dims))
+        # function(x) txax(x, inv_v %x% inv_u))) / (prod(dims))
         # not sure why txax() doesn't work here
         function(x) {
-          crossprod(
-            x,
-            invV %x% invU
-          ) %*% x
+          crossprod(x, inv_v %x% inv_u) %*% x
         }
       )) / (prod(dims))
       if (col.variance != "I") {
-        tmp <- txax(swept_data, 0.5 * (U + t(U)))
+        tmp <- txax(swept_data, 0.5 * (u_mat + t(u_mat)))
         tmpsummary <- matrix(rowSums(tmp, FALSE, dims = 2), nrow = dims[2])
-        nLL <- function(theta) {
-          Vmat <- varinv(dims[2], theta, TRUE, col.variance) / var # try it
-          B <- Vmat %*% tmpsummary
+        n_ll <- function(theta) {
+          v_matrix <- varinv(dims[2], theta, TRUE, col.variance) / var # try it
+          b_matrix <- v_matrix %*% tmpsummary
           # solved derivative, need to find where this is zero:
           0.5 * dims[1] * dims[3] * vardet(dims[2], theta, TRUE, col.variance) -
-            (.5) * sum(diag(B)) # problem was wrong constant
+            (.5) * sum(diag(b_matrix)) # problem was wrong constant
         }
-        if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
+        if (!isTRUE(sign(n_ll(0)) * sign(n_ll(.999)) <= 0)) {
           warning("Endpoints of derivative of likelihood do not have
                    opposite sign. Check variance specification.")
           rho_col <- 0
           varflag <- TRUE
         } else {
-          fit0 <- stats::uniroot(nLL, c(0, .999), ...)
+          fit0 <- stats::uniroot(n_ll, c(0, .999), ...)
           rho_col <- fit0$root
         }
       }
       new_v <- var * varmatgenerate(dims[2], rho_col, col.variance)
     } else {
-      inter_v <- txax(swept_data, 0.5 * (U + t(U)))
+      inter_v <- txax(swept_data, 0.5 * (u_mat + t(u_mat)))
       new_v <- rowSums(inter_v, dims = 2) / (dims[3] * dims[1])
       if (col.variance == "cor") {
         vartmp <- exp(mean(log(diag(new_v)))) # matrix should be pos definite
@@ -507,22 +470,22 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (row.variance == "I") {
       new_u <- diag(dims[1])
     } else if (row_set_var) {
-      tmp <- xatx(swept_data, 0.5 * (V + t(V)))
+      tmp <- xatx(swept_data, 0.5 * (v_mat + t(v_mat)))
       tmpsummary <- matrix(rowSums(tmp, dims = 2), nrow = dims[1])
-      nLL <- function(theta) {
-        Umat <- varinv(dims[1], theta, TRUE, row.variance)
-        B <- Umat %*% tmpsummary
+      n_ll <- function(theta) {
+        u_matrix <- varinv(dims[1], theta, TRUE, row.variance)
+        b_matrix <- u_matrix %*% tmpsummary
         # solved derivative, need to find where this is zero:
         0.5 * dims[2] * dims[3] * vardet(dims[1], theta, TRUE, row.variance) -
-          (.5) * sum(diag(B)) # problem was wrong constant
+          (.5) * sum(diag(b_matrix)) # problem was wrong constant
       }
-      if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
+      if (!isTRUE(sign(n_ll(0)) * sign(n_ll(.999)) <= 0)) {
         warning("Endpoints of derivative of likelihood do not have
                  opposite sign.  Check variance specification.")
         rho_row <- 0
         varflag <- TRUE
       } else {
-        fit0 <- stats::uniroot(nLL, c(0, .999), ...)
+        fit0 <- stats::uniroot(n_ll, c(0, .999), ...)
         rho_row <- fit0$root
       }
       new_u <- varmatgenerate(dims[1], rho_row, row.variance)
@@ -534,28 +497,28 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     }
     # only identifiable up to a constant, so have to fix something at 1
 
-    error.term <- sum((new_v - V)^2) + sum((new_u - U)^2)
-    V <- new_v
-    U <- new_u
-    log_lik <- sum(dmatrixnorm(data, mu, U = U, V = V, log = TRUE))
+    error_term <- sum((new_v - v_mat)^2) + sum((new_u - u_mat)^2)
+    v_mat <- new_v
+    u_mat <- new_u
+    log_lik <- sum(dmatrixnorm(data, mu, U = u_mat, V = v_mat, log = TRUE))
     log_lik_vec <- c(log_lik_vec, log_lik)
     iter <- iter + 1
   }
-  if (iter >= max.iter || error.term > tol || varflag) {
+  if (iter >= max.iter || error_term > tol || varflag) {
     warning("Failed to converge")
   }
 
-  converged <- !(iter >= max.iter || error.term > tol || varflag)
+  converged <- !(iter >= max.iter || error_term > tol || varflag)
   log_lik <- 0
 
-  log_lik <- sum(dmatrixnorm(data, mu, U = U, V = V, log = TRUE))
+  log_lik <- sum(dmatrixnorm(data, mu, U = u_mat, V = v_mat, log = TRUE))
   return(list(
     mean = mu,
-    U = U,
-    V = V / V[1, 1],
-    var = V[1, 1],
+    U = u_mat,
+    V = v_mat / v_mat[1, 1],
+    var = v_mat[1, 1],
     iter = iter,
-    tol = error.term,
+    tol = error_term,
     logLik = log_lik_vec,
     convergence = converged,
     call = match.call()

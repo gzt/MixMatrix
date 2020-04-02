@@ -97,17 +97,12 @@
 #' dmatrixt(x, df = 1)
 rmatrixt <- function(n, df, mean,
                      L = diag(dim(as.matrix(mean))[1]),
-                     R = diag(dim(as.matrix(mean))[2]),
-                     U = L %*% t(L),
+                     R = diag(dim(as.matrix(mean))[2]), U = L %*% t(L),
                      V = t(R) %*% R,
                      list = FALSE,
                      array = NULL,
                      force = FALSE) {
-  if (!(all(
-    is.numeric(n), is.numeric(df), is.numeric(mean),
-    is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
+  if (!(allnumeric_stop(n, df, mean, L, R, U, V))) {
     stop("Non-numeric input. ")
   }
   if (!(n > 0)) {
@@ -126,34 +121,29 @@ rmatrixt <- function(n, df, mean,
     ))
   }
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
-  dims <- dim(mean)
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
+   dims <- dim(mean)
+  dimcheck_stop(u_mat, v_mat, dims)
 
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
-  if (force && !missing(R)) cholV <- R else cholV <- chol(V)
+  if (force && !missing(R)) chol_v <- R else chol_v <- chol(v_mat)
 
-  if (min(diag(cholV)) < 1e-6 && !force) {
+  if (min(diag(chol_v)) < 1e-6 && !force) {
     stop(
       "Potentially singular covariance, use force = TRUE if intended. ",
-      min(diag(cholV))
+      min(diag(chol_v))
     )
   }
 
   nobs <- prod(dims) * n
   mat <- array(stats::rnorm(nobs), dim = c(dims, n))
 
-  cholU <- CholWishart::rInvCholWishart(n, df + dims[1] - 1, U)
+  chol_u <- CholWishart::rInvCholWishart(n, df + dims[1] - 1, u_mat)
 
   result <- array(dim = c(dims, n))
 
   for (i in seq(n)) {
-    result[, , i] <- mean + (crossprod(cholU[, , i], mat[, , i])) %*% (cholV)
+    result[, , i] <- mean + (crossprod(chol_u[, , i], mat[, , i])) %*% (chol_v)
   }
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -184,10 +174,7 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
   if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims, 1)))
   p <- dims[1]
   n <- dims[2]
-  if (!(all(
-    is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
+  if (!(allnumeric_stop((x), df, (mean), (L), (R), (U), (V)))) {
     stop("Non-numeric input. ")
   }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
@@ -196,17 +183,11 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
   }
 
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
-
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
+  dimcheck_stop(u_mat, v_mat, dims)
   if ((df == 0 || is.infinite(df))) {
-    return(dmatrixnorm(x, mean = mean, U = U, V = V, log = log))
+    return(dmatrixnorm(x, mean = mean, U = u_mat, V = v_mat, log = log))
   }
 
   # gammas is constant
@@ -218,7 +199,7 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
     0.5 * dims[1] * dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
-  results <- as.numeric(dmat_t_calc(x, df, mean, U, V))
+  results <- as.numeric(dmat_t_calc(x, df, mean, u_mat, v_mat))
   results <- results + gammas
   if (log) {
     return(results)
@@ -264,37 +245,30 @@ rmatrixinvt <- function(n, df, mean,
                         R = diag(dim(as.matrix(mean))[2]),
                         U = L %*% t(L), V = t(R) %*% R,
                         list = FALSE, array = NULL) {
-  if (!(all(
-    is.numeric(df), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
-    stop("Non-numeric input. ")
-  }
-  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-  if (((is.null(df)) || is.na(df) || (df < 0))) {
-    stop("df must be >= 0. df =", df)
-  }
-  if (!(n > 0)) {
-    stop("n must be > 0.", n)
-  }
-  mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
+    if (!(allnumeric_stop(n, df, (mean), (L), (R), (U), (V)))) {
+        stop("Non-numeric input. ")
+    }
+    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+    if (((is.null(df)) || is.na(df) || (df < 0))) {
+        stop("df must be >= 0. df =", df)
+    }
+    if (!(n > 0)) {
+        stop("n must be > 0.", n)
+    }
+    mean <- as.matrix(mean)
+    u_mat <- as.matrix(U)
+    v_mat <- as.matrix(V)
+
   dims <- dim(mean)
   # checks for conformable matrix dimensions
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
+  dimcheck_stop(u_mat, v_mat, dims)
 
   nobs <- prod(dims) * n
   mat <- array(stats::rnorm(nobs), dim = c(dims, n))
 
-  S <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
+  s_mat <- stats::rWishart(n, df + dims[1] - 1, diag(dims[1]))
 
-  result <- rmat_inv_t_calc(S, mat, U, V, mean)
+  result <- rmat_inv_t_calc(s_mat, mat, u_mat, v_mat, mean)
 
 
   if (n == 1 && list == FALSE && is.null(array)) {
@@ -309,17 +283,16 @@ rmatrixinvt <- function(n, df, mean,
       warning("list FALSE and array FALSE, returning array")
     }
   }
-  return(result)
+  (result)
 }
 
 
 
 #' @rdname rmatrixinvt
 #' @export
-dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
-                        L = diag(p),
-                        R = diag(n), U = L %*% t(L),
-                        V = t(R) %*% R, log = FALSE) {
+dmatrixinvt <- function(x, df, mean = matrix(0, p, n), L = diag(p),
+                        R = diag(n), U = L %*% t(L), V = t(R) %*% R,
+                        log = FALSE) {
   dims <- dim(x)
   if (is.null(dims) || length(dims) == 1) x <- matrix(x)
 
@@ -327,10 +300,7 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
   if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims, 1)))
   p <- dims[1]
   n <- dims[2]
-  if (!(all(
-    is.numeric(x), is.numeric(mean), is.numeric(L), is.numeric(R),
-    is.numeric(U), is.numeric(V)
-  ))) {
+   if (!(allnumeric_stop((x), df, (mean), (L), (R), (U), (V)))) {
     stop("Non-numeric input. ")
   }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
@@ -339,22 +309,16 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
   }
 
   mean <- as.matrix(mean)
-  U <- as.matrix(U)
-  V <- as.matrix(V)
-  if (!symm.check(U)) stop("U not symmetric.")
-  if (!symm.check(V)) stop("V not symmetric.")
-
-  if (!(dims[1] == dim(U)[2] && dim(U)[1] == dim(U)[2] &&
-    dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
-    stop("Non-conforming dimensions.", dims, dim(U), dim(V))
-  }
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
+  dimcheck_stop(u_mat, v_mat, dims)
   gammas <- as.numeric(
     CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
       0.5 * prod(dims[1:2]) * log(pi) -
       CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
   )
 
-  results <- as.numeric(dmat_inv_t_calc(x, df, mean, U, V))
+  results <- as.numeric(dmat_inv_t_calc(x, df, mean, u_mat, v_mat))
   if (any(is.nan(results))) {
     warning("warning: probability distribution undefined when det < 0.")
   }

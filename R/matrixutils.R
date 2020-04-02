@@ -50,8 +50,7 @@ ARgenerate <- function(n, rho) {
   if (rho > 0.999) {
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
   }
-  X <- stats::toeplitz(c(1, rho^(1:(n - 1))))
-  return(X)
+  stats::toeplitz(c(1, rho^(1:(n - 1))))
 }
 
 
@@ -85,9 +84,9 @@ CSgenerate <- function(n, rho) {
   if (rho > 0.999) {
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
   }
-  A <- matrix(rho, nrow = n, ncol = n)
-  diag(A) <- 1
-  A
+  mat <- matrix(rho, nrow = n, ncol = n)
+  diag(mat) <- 1
+  mat
 }
 
 
@@ -98,28 +97,27 @@ CSgenerate <- function(n, rho) {
 #' as well as dimensions. Not robust, so only an
 #' internal function to be used with known safe input.
 #'
-#' @param A Numeric real matrix. Does not check if real.
+#' @param mat Numeric real matrix. Does not check if real.
 #' @param tol tolerance - note that if you have a big matrix
 #'    it may need to be specified as it's a sum of entries.
 #' @noRd
 #' @return logical TRUE if symmetric FALSE otherwise.
 #'     Not as robust as \code{isSymmetric()}.
 #' @keywords internal
-symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
-  if (!is.matrix(A)) {
+symm_check <- function(mat, tol = (.Machine$double.eps)^.5) {
+  if (!is.matrix(mat)) {
     return(FALSE)
   }
-  if (!is.numeric(A)) {
+  if (!is.numeric(mat)) {
     return(FALSE)
   }
-  # commented those out because it is always checked before running symm.check.
-  dims <- dim(A)
+  # commented those out because it is always checked before running symm_check.
+  dims <- dim(mat)
   if (dims[1] != dims[2]) {
     return(FALSE)
   }
   # tol = prod(dims) * tol
-  testsymmetric(A, tol)
-  #  return(sum(abs(A - t(A))) < prod(dims)*tol)
+  testsymmetric(mat, tol)
 }
 
 
@@ -163,11 +161,11 @@ varmatgenerate <- function(n, rho, variance) {
 #' @keywords internal
 vardet <- function(n, rho, deriv, variance) {
   if (variance == "AR(1)") {
-    return(ARdet(n, rho, deriv))
+    return(ar_det(n, rho, deriv))
   }
 
   if (variance == "CS") {
-    return(CSdet(n, rho, deriv))
+    return(cs_det(n, rho, deriv))
   }
 
   if (variance == "I") {
@@ -190,11 +188,11 @@ vardet <- function(n, rho, deriv, variance) {
 #' @keywords internal
 varinv <- function(n, rho, deriv, variance) {
   if (variance == "AR(1)") {
-    return(invAR(n, rho, deriv))
+    return(inv_ar(n, rho, deriv))
   }
 
   if (variance == "CS") {
-    return(invCS(n, rho, deriv))
+    return(inv_cs(n, rho, deriv))
   }
 
   if (variance == "I") {
@@ -216,7 +214,7 @@ varinv <- function(n, rho, deriv, variance) {
 #'     If \code{deriv} is specified,
 #'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
-ARdet <- function(n, rho, deriv = FALSE) {
+ar_det <- function(n, rho, deriv = FALSE) {
   if (!deriv) {
     return((1 - rho^2)^(n - 1))
   } else {
@@ -234,13 +232,12 @@ ARdet <- function(n, rho, deriv = FALSE) {
 #' @noRd
 #' @return determinant of an CS covariance matrix
 #' @keywords internal
-CSdet <- function(n, rho, deriv = FALSE) {
+cs_det <- function(n, rho, deriv = FALSE) {
   if (!deriv) {
     return((1 + rho * (n - 1)) * (1 - rho)^(n - 1))
   } else {
     (n - 1) * n * rho / ((1 - rho) * ((n - 1) * rho + 1))
   }
-  # -n*(n - 1) * rho * (1 - rho)^(n - 2)
 }
 
 
@@ -253,23 +250,23 @@ CSdet <- function(n, rho, deriv = FALSE) {
 #' @noRd
 #' @return Matrix of the inverse of the AR(1) covariance matrix (or its inverse)
 #' @keywords internal
-invAR <- function(n, rho, deriv = FALSE) {
+inv_ar <- function(n, rho, deriv = FALSE) {
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
   if (deriv) {
     #-(rho^2+1)/(1-rho^2)^2  , 4*rho/((1-rho^2)^2), 2*rho/((1-rho^2)^2)
-    X <- stats::toeplitz(c(
+    mat <- stats::toeplitz(c(
       4 * rho,
       -(rho^2 + 1),
       rep(0, n - 2)
     ))
-    X[1, 1] <- 2 * rho
-    X[n, n] <- 2 * rho
-    return((1 / (1 - rho^2)^2) * X)
+    mat[1, 1] <- 2 * rho
+    mat[n, n] <- 2 * rho
+    return((1 / (1 - rho^2)^2) * mat)
   }
-  X <- stats::toeplitz(c(1 + rho^2, -rho, rep(0, n - 2)))
-  X[1, 1] <- X[n, n] <- 1
-  return((1 / (1 - rho^2)) * X)
+  mat <- stats::toeplitz(c(1 + rho^2, -rho, rep(0, n - 2)))
+  mat[1, 1] <- mat[n, n] <- 1
+  ((1 / (1 - rho^2)) * mat)
 }
 
 #' Inverse of Compound Symmetric Matrix.
@@ -281,23 +278,22 @@ invAR <- function(n, rho, deriv = FALSE) {
 #' @return inverse matrix or derivative of the inverse matrix.
 #' @keywords internal
 #'
-invCS <- function(n, rho, deriv = FALSE) {
+inv_cs <- function(n, rho, deriv = FALSE) {
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
   alpha <- sqrt(1 - rho)
 
   if (deriv) {
-    X <- diag(1 / alpha^4, n) -
+    mat <- diag(1 / alpha^4, n) -
       matrix(((n - 1) * rho^2 + 1) / ((1 - rho)^2 * ((n - 1) * rho + 1)^2),
         nrow = n, ncol = n
       )
-    return(X)
+    return(mat)
   }
 
-  X <- diag(1 / alpha^2, n) - matrix(rho / (alpha^2 * (alpha^2 + n * rho)),
+  diag(1 / alpha^2, n) - matrix(rho / (alpha^2 * (alpha^2 + n * rho)),
     nrow = n, ncol = n
   )
-  return(X)
 }
 
 
@@ -312,11 +308,11 @@ invCS <- function(n, rho, deriv = FALSE) {
 #' @keywords internal
 varderiv <- function(n, rho, variance) {
   if (variance == "AR(1)") {
-    return(derivAR(n, rho))
+    return(deriv_ar(n, rho))
   }
 
   if (variance == "CS") {
-    return(derivCS(n, rho))
+    return(deriv_cs(n, rho))
   }
 
   if (variance == "I") {
@@ -333,13 +329,12 @@ varderiv <- function(n, rho, variance) {
 #' @return matrix derivative of an AR(1) matrix
 #' @noRd
 #' @keywords internal
-derivAR <- function(n, rho) {
+deriv_ar <- function(n, rho) {
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
   x <- 0:(n - 1)
   y <- rho^(-1:(n - 2))
-  A <- stats::toeplitz(x * y)
-  return(A)
+  stats::toeplitz(x * y)
 }
 
 
@@ -348,27 +343,27 @@ derivAR <- function(n, rho) {
 #' @param n dimensions
 #' @param rho off-diagonal parameter
 #' @return matrix derivative of a CS matrix with unit diagonal
+#' @noRd
 #' @keywords internal
-derivCS <- function(n, rho) {
+deriv_cs <- function(n, rho) {
   if (!(n > 1)) stop("n needs to be greater than 1")
   if (!(rho < 1 && rho > -1)) stop("rho needs to be < 1")
 
-  A <- stats::toeplitz(c(0, rep(1, (n - 1))))
-  return(A)
+  stats::toeplitz(c(0, rep(1, (n - 1))))
 }
 
 
 
 #' Trace of a matrix
 #'
-#' @param A square numeric matrix
+#' @param mat square numeric matrix
 #' @noRd
 #' @return trace of a matrix
 #' @keywords internal
-matrixtrace <- function(A) {
-  b <- dim(A)
+matrixtrace <- function(mat) {
+  b <- dim(mat)
   if (b[1] != b[2]) warning("non-conformable dimensions")
-  result <- sum(diag(A))
+  result <- sum(diag(mat))
   return(result)
 }
 
