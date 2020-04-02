@@ -190,15 +190,15 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
 
   centers <- init$centers
   if (!is.null(init$U)) {
-    U <- init$U
+    fit_u <- init$U
   } else {
-    U <- array(rep(diag(p), nclass), c(p, p, nclass))
-    if (model == "t") U <- (df[1] - 2) * stats::var(x[1, 1, ]) * U
+    fit_u <- array(rep(diag(p), nclass), c(p, p, nclass))
+    if (model == "t") fit_u <- (df[1] - 2) * stats::var(x[1, 1, ]) * fit_u
   }
   if (!is.null(init$V)) {
-    V <- init$V
+    fit_v <- init$V
   } else {
-    V <- array(rep(diag(q), nclass), c(q, q, nclass))
+    fit_v <- array(rep(diag(q), nclass), c(q, q, nclass))
   }
   posterior <- matrix(rep(prior, n), byrow = TRUE, nrow = n)
   newposterior <- posterior
@@ -211,8 +211,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
   }
   if (verbose > 2) {
     print("Initial U and V")
-    print(U)
-    print(V)
+    print(fit_u)
+    print(fit_v)
   }
   convergeflag <- FALSE
   # Smatrix <- array(0, c(p, p, n))
@@ -220,8 +220,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
   ssx <- array(0, c(p, q, nclass))
   ssxx <- array(0, c(q, q, nclass))
   ssd <- rep(0, nclass)
-  new_u <- U
-  new_v <- V
+  new_u <- fit_u
+  new_v <- fit_v
   new_df <- df
   newcenters <- centers
   log_lik <- 0
@@ -233,8 +233,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     if (verbose > 1) print(pi)
     centers <- newcenters
     newcenters <- array(0, dim = c(p, q, nclass))
-    U <- new_u
-    V <- new_v
+    fit_u <- new_u
+    fit_v <- new_v
     df <- new_df
     posterior <- newposterior
 
@@ -247,14 +247,14 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
         newposterior[, j] <- log(pi[j]) +
           dmatnorm_calc(
             x = x, mean = centers[, , j],
-            U = U[, , j], V = V[, , j]
+            U = fit_u[, , j], V = fit_v[, , j]
           )
       } else {
         newposterior[, j] <- log(pi[j]) +
           dmat_t_calc(
             x = x,
             df = df[j], mean = centers[, , j],
-            U = U[, , j], V = V[, , j]
+            U = fit_u[, , j], V = fit_v[, , j]
           )
       }
     }
@@ -274,7 +274,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
       dfmult <- df + p + q - 1
       for (j in 1:nclass) {
         s_list <- .sstep(
-          x, centers[, , j], U[, , j], V[, , j],
+          x, centers[, , j], fit_u[, , j], fit_v[, , j],
           newposterior[, j])
         ss[, , j] <- s_list$ss
         ssx[, , j] <- s_list$ssx
@@ -295,7 +295,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     if (verbose > 1) cat("\n Column sums of posterior", sumzig)
     for (j in 1:nclass) {
       newcenters[, , j] <- .means_function(
-        x, V[, , j], ss[, , j], ssx[, , j],
+        x, fit_v[, , j], ss[, , j], ssx[, , j],
         newposterior[, j], row.mean, col.mean, model)
     }
 
@@ -307,7 +307,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
 #### or do EEE, etc formulation
         zigmult <- rep(newposterior[, j], each = q * q)
         swept_data <- sweep(x, c(1, 2), newcenters[, , j])
-        inter_v <- txax(swept_data, U[, , j]) * zigmult
+        inter_v <- txax(swept_data, fit_u[, , j]) * zigmult
         new_v[, , j] <- rowSums(inter_v, dims = 2) / (sumzig[j] * p)
         zigmult <- rep(newposterior[, j], each = p * p)
         inter_u <- xatx(swept_data, new_v[, , j]) * zigmult
@@ -338,21 +338,21 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     ###           ######## THIS DOES NOT WORK.
     ###           for (j in 1:nclass) {
     ###               detss = determinant(ss[,,j], logarithm = TRUE)$modulus[1]
-    ###               nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
+    ###               nu_ll = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
     ###                                     CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
     ###                                    # (ssd[j]/sumzig[j] - (detss - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
     ###                                       # this latest ECME-ish one gives SLIGHTLY different results but is faster
     ###                                       (ssd[j]/sumzig[j] +  determinant(new_u[,,j], logarithm = TRUE)$modulus[1]))
     ###
     ###               }
-    ###               if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
+    ###               if (!isTRUE(sign(nu_ll(2)) * sign(nu_ll(1000)) <= 0)) {
     ###                   warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
     ###                   varflag = TRUE
-    ###                   ## print(nuLL(3))
+    ###                   ## print(nu_ll(3))
     ###                   ## print(ssd[j])
     ###
     ###               } else {
-    ###                   fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
+    ###                   fit0 <- stats::uniroot(nu_ll, c(2, 1000),...)
     ###                   new_df[j] = fit0$root
     ###               }
     ###
@@ -417,8 +417,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     convergeflag <- TRUE
   }
   if (verbose) cat("\nDone at iteration ", i - 1, "\n")
-  U <- new_u
-  V <- new_v
+  fit_u <- new_u
+  fit_v <- new_v
   centers <- newcenters
   posterior <- newposterior
   pi <- colMeans(posterior)
@@ -438,8 +438,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
       K = nclass,
       N = n,
       centers = centers,
-      U = U,
-      V = V,
+      U = fit_u,
+      V = fit_v,
       posterior = posterior,
       pi = pi,
       nu = df,
@@ -598,8 +598,8 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
       cenflag <- TRUE
       initcenters <- init$centers
     }
-    if (is.null(U)) U <- init$U
-    if (is.null(V)) V <- init$V
+    if (is.null(U)) u_array <- init$U
+    if (is.null(V)) v_array <- init$V
   }
   if (cenflag) {
     dimcen <- dim(initcenters)
@@ -615,7 +615,7 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
   }
   if (centermethod == "random" && (remains > 0)) {
     select <- sample(n, remains, replace = FALSE)
-    newcenters[, , 1:remains] <- data[, , select]
+    newcenters[, , seq_len(remains)] <- data[, , select]
   }
   if ((remains > 0) && (centermethod == "kmeans" ||
     centermethod == "k-means")) {
@@ -628,20 +628,20 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
     }
   }
   if (!is.null(U)) {
-    if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
+    if (length(dim(U) == 2)) u_array <- array(rep(U, K), dim = c(p, p, K))
   }
   if (!is.null(V)) {
-    if (length(dim(V) == 2)) V <- array(rep(V, K), dim = c(q, q, K))
+    if (length(dim(V) == 2)) v_array <- array(rep(V, K), dim = c(q, q, K))
   }
   if (varmethod == "identity") {
-    if (is.null(U)) U <- array(c(rep(diag(p), K)), dim = c(p, p, K))
-    if (is.null(V)) V <- array(c(rep(diag(q), K)), dim = c(q, q, K))
+    if (is.null(U)) u_array <- array(c(rep(diag(p), K)), dim = c(p, p, K))
+    if (is.null(V)) v_array <- array(c(rep(diag(q), K)), dim = c(q, q, K))
   }
 
   list(
     centers = newcenters,
-    U = U,
-    V = V
+    U = u_array,
+    V = v_array
   )
 }
 

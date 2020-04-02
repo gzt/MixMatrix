@@ -274,7 +274,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       ssdtmp <- ssd
       # ssdtmp = detsum(Smatrix)
       detss <- determinant(ss, logarithm = TRUE)$modulus[1]
-      nuLL <- function(nu) {
+      nu_ll <- function(nu) {
         (CholWishart::mvdigamma((nu + p - 1) / 2, p) -
           CholWishart::mvdigamma((nu + p + q - 1) / 2, p) -
           (ssdtmp / n - (detss - p * log(n * (nu + p - 1)) +
@@ -282,13 +282,13 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
         # this latest ECME-ish one gives SLIGHTLY different results but is faster
         # (ssdtmp/n +  determinant(new_u, logarithm = TRUE)$modulus[1]))
       }
-      if (!isTRUE(sign(nuLL(1e-6)) * sign(nuLL(1000)) <= 0)) {
+      if (!isTRUE(sign(nu_ll(1e-6)) * sign(nu_ll(1000)) <= 0)) {
         warning("Endpoints of derivative of df likelihood do not have
 opposite sign.
                  Check df specification.")
         varflag <- TRUE
       } else {
-        fit0 <- stats::uniroot(nuLL, c(1e-6, 1000), ...)
+        fit0 <- stats::uniroot(nu_ll, c(1e-6, 1000), ...)
         new_df <- fit0$root
       }
       # print(new_df)
