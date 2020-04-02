@@ -164,8 +164,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
   group.means <- array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] <- .MeansFunction(x,
-      SS = NULL, SSX = NULL,
+    group.means[, , i] <- .means_function(x,
+      ss = NULL, ssx = NULL,
       weights = 1.0 * (g == levels(g)[i]), ...
     )
   }
@@ -199,8 +199,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
     itercount <- 0
     while (error > 1e-7 && itercount < 1e4) {
       # this loop is somewhat inelegant
-      newUresult <- matrix(0, p, p)
-      newVresult <- matrix(0, q, q)
+      new_uresult <- matrix(0, p, p)
+      new_vresult <- matrix(0, q, q)
       newvarresult <- 0
       for (i in seq(ng)) {
         varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
@@ -208,18 +208,18 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
           U = Uresult, V = Vresult, ...
         )
         group.means[, , i] <- varfit$mean
-        newUresult <- newUresult + prior[i] * varfit$U
-        newVresult <- newVresult + prior[i] * varfit$V
+        new_uresult <- new_uresult + prior[i] * varfit$U
+        new_vresult <- new_vresult + prior[i] * varfit$V
         newvarresult <- newvarresult + prior[i] * varfit$var
         if (varfit$convergence == FALSE) {
           warning("ML fit failed for group ", i)
         }
       }
 
-      error <- sum((newUresult - Uresult)^2) +
-        sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
-      Uresult <- newUresult
-      Vresult <- newVresult
+      error <- sum((new_uresult - Uresult)^2) +
+        sum((new_vresult - Vresult)^2) + (varresult - newvarresult)^2
+      Uresult <- new_uresult
+      Vresult <- new_vresult
       varresult <- newvarresult
       itercount <- itercount + 1
     }
@@ -648,7 +648,7 @@ logLik.matrixlda <- function(object, ...) {
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
 
   df <- vpars + upars + nupar + numgroups * meanpars - 1
-  logLik <- 0
+  log_lik <- 0
   if (is.null(object$nu)) {
     nu <- 0
   } else {
@@ -656,7 +656,7 @@ logLik.matrixlda <- function(object, ...) {
   }
   if (object$method == "normal") {
     for (i in 1:numgroups) {
-      logLik <- logLik + sum(dmatnorm_calc(
+      log_lik <- log_lik + sum(dmatnorm_calc(
         x = olddata[, , groups == grouplist[i], drop = FALSE],
         mean = object$means[, , i],
         U = object$U * object$scaling, V = object$V
@@ -664,7 +664,7 @@ logLik.matrixlda <- function(object, ...) {
     }
   } else {
     for (i in 1:numgroups) {
-      logLik <- logLik + sum(dmat_t_calc(
+      log_lik <- log_lik + sum(dmat_t_calc(
         x = olddata[, , groups == grouplist[i], drop = FALSE],
         df = nu, mean = object$means[, , i],
         U = object$U * object$scaling, V = object$V
@@ -672,10 +672,10 @@ logLik.matrixlda <- function(object, ...) {
     }
   }
 
-  class(logLik) <- "logLik"
-  attr(logLik, "df") <- df
-  attr(logLik, "nobs") <- n
-  logLik
+  class(log_lik) <- "logLik"
+  attr(log_lik, "df") <- df
+  attr(log_lik, "nobs") <- n
+  log_lik
 }
 
 #' @export
@@ -756,7 +756,7 @@ logLik.matrixqda <- function(object, ...) {
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
 
   df <- numgroups * (vpars + upars + nupar + meanpars - 1)
-  logLik <- 0
+  log_lik <- 0
   if (is.null(object$nu)) {
     nu <- 0
   } else {
@@ -765,23 +765,23 @@ logLik.matrixqda <- function(object, ...) {
 
   for (i in 1:numgroups) {
     if (object$method == "t") {
-      logLik <- logLik + sum(dmat_t_calc(
+      log_lik <- log_lik + sum(dmat_t_calc(
         x = data[, , grouping == grouplist[i], drop = FALSE],
         df = nu[i], mean = object$means[, , i],
         U = object$U[, , i], V = object$V[, , i]
       ))
     } else {
-      logLik <- logLik + sum(dmatnorm_calc(
+      log_lik <- log_lik + sum(dmatnorm_calc(
         x = data[, , grouping == grouplist[i], drop = FALSE],
         mean = object$means[, , i],
         U = object$U[, , i], V = object$V[, , i]
       ))
     }
   }
-  class(logLik) <- "logLik"
-  attr(logLik, "df") <- df
-  attr(logLik, "nobs") <- n
-  logLik
+  class(log_lik) <- "logLik"
+  attr(log_lik, "df") <- df
+  attr(log_lik, "nobs") <- n
+  log_lik
 }
 
 #' @importFrom stats nobs

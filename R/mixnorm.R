@@ -204,7 +204,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
   newposterior <- posterior
   eps <- 1e40
   pi <- prior
-  logLikvec <- numeric(0)
+  log_lik_vec <- numeric(0)
   if (verbose > 1) {
     cat("\nInit centers: \n\n")
     print(init$centers)
@@ -216,26 +216,26 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
   }
   convergeflag <- FALSE
   # Smatrix <- array(0, c(p, p, n))
-  SS <- array(0, c(p, p, nclass))
-  SSX <- array(0, c(p, q, nclass))
-  SSXX <- array(0, c(q, q, nclass))
-  SSD <- rep(0, nclass)
-  newU <- U
-  newV <- V
-  new.df <- df
+  ss <- array(0, c(p, p, nclass))
+  ssx <- array(0, c(p, q, nclass))
+  ssxx <- array(0, c(q, q, nclass))
+  ssd <- rep(0, nclass)
+  new_u <- U
+  new_v <- V
+  new_df <- df
   newcenters <- centers
-  logLik <- 0
-  oldlogLik <- 0
-  olderlogLik <- 0
+  log_lik <- 0
+  oldlog_lik <- 0
+  olderlog_lik <- 0
   i <- 0
   while (i < iter && (((eps) > tolerance) || (i < miniter))) {
     if (verbose) cat("\nEntering iteration:", i)
     if (verbose > 1) print(pi)
     centers <- newcenters
     newcenters <- array(0, dim = c(p, q, nclass))
-    U <- newU
-    V <- newV
-    df <- new.df
+    U <- new_u
+    V <- new_v
+    df <- new_df
     posterior <- newposterior
 
     ####### E STEP
@@ -273,14 +273,13 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     if (model == "t") {
       dfmult <- df + p + q - 1
       for (j in 1:nclass) {
-        Slist <- .SStep(
+        s_list <- .sstep(
           x, centers[, , j], U[, , j], V[, , j],
-          newposterior[, j]
-        )
-        SS[, , j] <- Slist$SS
-        SSX[, , j] <- Slist$SSX
-        SSXX[, , j] <- Slist$SSXX
-        SSD[j] <- Slist$SSD
+          newposterior[, j])
+        ss[, , j] <- s_list$ss
+        ssx[, , j] <- s_list$ssx
+        ssxx[, , j] <- s_list$ssxx
+        ssd[j] <- s_list$ssd
       }
     }
 
@@ -295,39 +294,38 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     sumzig <- colSums(newposterior)
     if (verbose > 1) cat("\n Column sums of posterior", sumzig)
     for (j in 1:nclass) {
-      newcenters[, , j] <- .MeansFunction(
-        x, V[, , j], SS[, , j], SSX[, , j],
-        newposterior[, j], row.mean, col.mean, model
-      )
+      newcenters[, , j] <- .means_function(
+        x, V[, , j], ss[, , j], ssx[, , j],
+        newposterior[, j], row.mean, col.mean, model)
     }
 
     ### max for U, V
     ## if normal
     if (model == "normal") {
       for (j in 1:nclass) {
-        ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance) #### or do EEE, etc formulation
+### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance)
+#### or do EEE, etc formulation
         zigmult <- rep(newposterior[, j], each = q * q)
-        swept.data <- sweep(x, c(1, 2), newcenters[, , j])
-        inter.V <- txax(swept.data, U[, , j]) * zigmult
-        newV[, , j] <- rowSums(inter.V, dims = 2) / (sumzig[j] * p)
+        swept_data <- sweep(x, c(1, 2), newcenters[, , j])
+        inter_v <- txax(swept_data, U[, , j]) * zigmult
+        new_v[, , j] <- rowSums(inter_v, dims = 2) / (sumzig[j] * p)
         zigmult <- rep(newposterior[, j], each = p * p)
-        inter.U <- xatx(swept.data, newV[, , j]) * zigmult
-        new.U <- rowSums(inter.U, dims = 2) / (sumzig[j] * q)
-        newU[, , j] <- new.U / (new.U[1, 1])
+        inter_u <- xatx(swept_data, new_v[, , j]) * zigmult
+        newu <- rowSums(inter_u, dims = 2) / (sumzig[j] * q)
+        new_u[, , j] <- newu / (newu[1, 1])
       }
     } else {
       for (j in 1:nclass) {
-        newV[, , j] <- .colVars(
+        new_v[, , j] <- .col_vars(
           x, newcenters[, , j], df[j], newposterior[, j],
-          SS[, , j], SSX[, , j], SSXX[, , j], ...
+          ss[, , j], ssx[, , j], ssxx[, , j], ...
         )$V
 
-        newU[, , j] <- .rowVars(
+        new_u[, , j] <- .row_vars(
           x, newcenters[, , j], df[j], newposterior[, j],
-          SS[, , j], SSX[, , j], SSXX[, , j], ...
-        )$U
-        newUinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * SS[, , j]
-        newU[, , j] <- solve(newUinv)
+          ss[, , j], ssx[, , j], ssxx[, , j], ...)$U
+        new_uinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * ss[, , j]
+        new_u[, , j] <- solve(new_uinv)
       }
     }
 
@@ -335,27 +333,27 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
 
     ### Fit NU:
     ### doesn't work yet
-    new.df <- df
+    new_df <- df
     ###       if (model == "t" && fixdf == FALSE && iter > 1) {
     ###           ######## THIS DOES NOT WORK.
     ###           for (j in 1:nclass) {
-    ###               detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
+    ###               detss = determinant(ss[,,j], logarithm = TRUE)$modulus[1]
     ###               nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
     ###                                     CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
-    ###                                    # (SSD[j]/sumzig[j] - (detSS - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
+    ###                                    # (ssd[j]/sumzig[j] - (detss - p*log(sumzig[j]*(nus + p - 1))+p*log(nus + p + q - 1))))
     ###                                       # this latest ECME-ish one gives SLIGHTLY different results but is faster
-    ###                                       (SSD[j]/sumzig[j] +  determinant(newU[,,j], logarithm = TRUE)$modulus[1]))
+    ###                                       (ssd[j]/sumzig[j] +  determinant(new_u[,,j], logarithm = TRUE)$modulus[1]))
     ###
     ###               }
     ###               if (!isTRUE(sign(nuLL(2)) * sign(nuLL(1000)) <= 0)) {
     ###                   warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
     ###                   varflag = TRUE
     ###                   ## print(nuLL(3))
-    ###                   ## print(SSD[j])
+    ###                   ## print(ssd[j])
     ###
     ###               } else {
     ###                   fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
-    ###                   new.df[j] = fit0$root
+    ###                   new_df[j] = fit0$root
     ###               }
     ###
     ###           }
@@ -367,51 +365,51 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
       print("New centers:")
       print(newcenters)
       print("New U:")
-      print(newU)
+      print(new_u)
       print("New V:")
-      print(newV)
+      print(new_v)
     }
 
-    olderlogLik <- oldlogLik
-    oldlogLik <- logLik
-    logLik <- 0
+    olderlog_lik <- oldlog_lik
+    oldlog_lik <- log_lik
+    log_lik <- 0
     # for(obs in 1:n) {
     for (j in 1:nclass) {
-      if (model == "normal" || new.df[j] == 0 || new.df[j] == Inf) {
-        logLik <- logLik + sum(newposterior[, j] * (log(pi[j]) +
+      if (model == "normal" || new_df[j] == 0 || new_df[j] == Inf) {
+        log_lik <- log_lik + sum(newposterior[, j] * (log(pi[j]) +
           newposterior[, j] * dmatnorm_calc(
             x = x, mean = newcenters[, , j],
-            U = newU[, , j], V = newV[, , j]
+            U = new_u[, , j], V = new_v[, , j]
           )))
       } else {
-        logLik <- logLik + sum(newposterior[, j] * (log(pi[j]) +
+        log_lik <- log_lik + sum(newposterior[, j] * (log(pi[j]) +
           newposterior[, j] * dmat_t_calc(
-            x = x, df = new.df[j], mean = newcenters[, , j],
-            U = newU[, , j], V = newV[, , j]
+            x = x, df = new_df[j], mean = newcenters[, , j],
+            U = new_u[, , j], V = new_v[, , j]
           )))
       }
     }
     # }
-    if (verbose) cat("\nLog likelihood:", logLik)
+    if (verbose) cat("\nLog likelihood:", log_lik)
     if (i == 0) {
-      oldlogLik <- logLik - .3 * abs(logLik)
+      oldlog_lik <- log_lik - .3 * abs(log_lik)
       ## initialize to some not-so-bad values
       ## so that doesn't immediately "converge"
-      olderlogLik <- oldlogLik - .2 * abs(oldlogLik)
+      olderlog_lik <- oldlog_lik - .2 * abs(oldlog_lik)
     }
 
     if (convergence) {
-      aitken <- (logLik - oldlogLik) / (oldlogLik - olderlogLik)
-      linf <- oldlogLik + 1 / (1 - aitken) * (logLik - oldlogLik)
-      eps <- linf - logLik
+      aitken <- (log_lik - oldlog_lik) / (oldlog_lik - olderlog_lik)
+      linf <- oldlog_lik + 1 / (1 - aitken) * (log_lik - oldlog_lik)
+      eps <- linf - log_lik
       if (verbose) cat("\nAitken, l_infinity, epsilon:", aitken, linf, eps)
     } else {
-      eps <- logLik - oldlogLik
+      eps <- log_lik - oldlog_lik
     }
 
     i <- i + 1
-    #  print(new.df)
-    logLikvec <- c(logLikvec, logLik)
+    #  print(new_df)
+    log_lik_vec <- c(log_lik_vec, log_lik)
   }
   if ((i == iter || eps > tolerance)) {
     warning("failed to converge")
@@ -419,17 +417,17 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     convergeflag <- TRUE
   }
   if (verbose) cat("\nDone at iteration ", i - 1, "\n")
-  U <- newU
-  V <- newV
+  U <- new_u
+  V <- new_v
   centers <- newcenters
   posterior <- newposterior
   pi <- colMeans(posterior)
-  df <- new.df
+  df <- new_df
   if (verbose > 1) {
     print("Final centers:")
     print(centers)
   }
-  if (verbose) cat("\nLog Likelihood Trace: \n", logLikvec, "\n")
+  if (verbose) cat("\nLog Likelihood Trace: \n", log_lik_vec, "\n")
   cl <- match.call()
   cl[[1L]] <- as.name("matrixmixture")
 
@@ -447,7 +445,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
       nu = df,
       convergence = convergeflag,
       iter = i,
-      logLik = logLikvec,
+      logLik = log_lik_vec,
       model = model,
       method = method,
       call = cl
@@ -498,12 +496,12 @@ logLik.MixMatrixModel <- function(object, ...) {
   ### as ways of restricting variances and means are added
 
   df <- numgroups * (vpars + upars + meanpars - 1) + nupar
-  logLik <- object$logLik[length(object$logLik)]
+  log_lik <- object$logLik[length(object$logLik)]
 
-  class(logLik) <- "logLik"
-  attr(logLik, "df") <- df
-  attr(logLik, "nobs") <- n
-  logLik
+  class(log_lik) <- "logLik"
+  attr(log_lik, "df") <- df
+  attr(log_lik, "nobs") <- n
+  log_lik
 }
 
 #' @export
