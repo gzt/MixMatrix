@@ -44,7 +44,7 @@
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution. 
+the data are from a matrix variate normal distribution.
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
@@ -152,7 +152,7 @@ distribution, presuming equal covariances between classes." />
 This works slightly differently from the LDA function in MASS:
 it does not sphere the data or otherwise normalize it. It presumes
 equal variance matrices and probabilities are given as if
-the data are from a matrix variate normal distribution. 
+the data are from a matrix variate normal distribution.
 The estimated variance matrices are weighted by the prior. However,
 if there are not enough members of a class to estimate a variance,
 this may be a problem.
@@ -260,12 +260,12 @@ named.)</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180221</span>)
 <span class='co'># construct two populations of 3x4 random matrices with different means</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>))
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>))
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'>#combine together</span>
-<span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>,<span class='fl'>30</span>),<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>,<span class='fl'>30</span>)) <span class='co'># define groups</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># set prior</span>
-<span class='no'>D</span><span class='kw'>&lt;-</span><span class='fu'>matrixlda</span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>) <span class='co'># fit model</span>
+<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
+<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
+<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>, <span class='no'>B</span>), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>60</span>)) <span class='co'># combine together</span>
+<span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>, <span class='fl'>30</span>)) <span class='co'># define groups</span>
+<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.5</span>) <span class='co'># set prior</span>
+<span class='no'>D</span> <span class='kw'>&lt;-</span> <span class='fu'>matrixlda</span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>) <span class='co'># fit model</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; 'log Lik.' -962.6539 (df=39)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; $prior
 #&gt;   1   2 
 #&gt; 0.5 0.5 
