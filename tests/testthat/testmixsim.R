@@ -51,7 +51,8 @@ test_that("Bad results warn or stop", {
   ))
   expect_warning(matrixmixture(c_mat,
     K = 2, model = "t",
-    nu = 10, iter = 1))
+    nu = 10, iter = 1
+  ))
 })
 
 test_that("Mean restrictions work", {
@@ -66,7 +67,8 @@ test_that("Mean restrictions work", {
   expect_true(test_allequal(c(matrixmixture(c_mat,
     prior = c(.5, .5),
     col.mean = TRUE,
-    row.mean = TRUE)$centers[, , 1])))
+    row.mean = TRUE
+  )$centers[, , 1])))
   expect_true(test_allequal(c(matrixmixture(c_mat,
     prior = c(.5, .5),
     col.mean = FALSE,

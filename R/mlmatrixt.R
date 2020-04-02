@@ -166,11 +166,11 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
   # don't have initial starting point for U and V, start with diag.
   if (missing(U)) {
-    U <- diag(dims[1])
-  }
+    est_u <- diag(dims[1])
+  } else est_u  <- U
   if (missing(V)) {
-    V <- diag(dims[2])
-  }
+    est_v <- diag(dims[2])
+  } else est_v <- V
   # mu <- apply(data, c(1, 2), mean)
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
@@ -187,44 +187,44 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   error_term <- 1e+40
 
   if (col_set_var) {
-    if (V[1, 2] > 0) {
-      rho_col <- V[1, 2]
+    if (est_v[1, 2] > 0) {
+      rho_col <- est_v[1, 2]
     } else {
-      inter_v <- txax(swept_data, 0.5 * (U + t(U)))
-      V <- rowSums(inter_v, dims = 2) / (dims[3] * dims[1])
+      inter_v <- txax(swept_data, 0.5 * (est_u + t(est_u)))
+      est_v <- rowSums(inter_v, dims = 2) / (dims[3] * dims[1])
       if (col.variance == "AR(1)") {
-        V <- stats::cov2cor(V)
-        rho_col <- V[1, 2]
+        est_v <- stats::cov2cor(est_v)
+        rho_col <- est_v[1, 2]
       }
       if (col.variance == "CS") {
-        V <- stats::cov2cor(V)
-        rho_col <- mean(V[1, ] / V[1, 1])
+        est_v <- stats::cov2cor(est_v)
+        rho_col <- mean(est_v[1, ] / est_v[1, 1])
       }
       if (col.variance == "I") rho_col <- 0
       if (rho_col > .9) rho_col <- .9
       if (rho_col < 0) rho_col <- 0
-      V <- varmatgenerate(dims[2], rho_col, col.variance)
+      est_v <- varmatgenerate(dims[2], rho_col, col.variance)
     }
   }
 
   if (row_set_var) {
-    if (U[1, 2] > 0) {
-      rho_row <- U[1, 2]
+    if (est_u[1, 2] > 0) {
+      rho_row <- est_u[1, 2]
     } else {
-      inter_u <- xatx(swept_data, 0.5 * (V + t(V)))
-      U <- rowSums(inter_u, dims = 2) / (dims[3] * dims[2])
+      inter_u <- xatx(swept_data, 0.5 * (est_v + t(est_v)))
+      est_u <- rowSums(inter_u, dims = 2) / (dims[3] * dims[2])
       if (row.variance == "AR(1)") {
-        U <- stats::cov2cor(U)
-        rho_row <- U[1, 2] / U[1, 1]
+        est_u <- stats::cov2cor(est_u)
+        rho_row <- est_u[1, 2] / est_u[1, 1]
       }
       if (row.variance == "CS") {
-        U <- stats::cov2cor(U)
-        rho_row <- mean(U[1, ] / U[1, 1])
+        est_u <- stats::cov2cor(est_u)
+        rho_row <- mean(est_u[1, ] / est_u[1, 1])
       }
       if (row.variance == "I") rho_row <- 0
       if (rho_row > .9) rho_row <- .9
       if (rho_row < 0) rho_row <- 0
-      U <- varmatgenerate(dims[1], rho_row, row.variance)
+      est_u <- varmatgenerate(dims[1], rho_row, row.variance)
     }
   }
 
@@ -236,10 +236,8 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   # Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error_term > tol && (!varflag)) {
-    # dfmult <- df + p + q - 1
-
-    ### E step
-    s_list <- .sstep(data, mu, U, V, rep(1.0, n))
+     ### E step
+    s_list <- .sstep(data, mu, est_u, est_v, rep(1.0, n))
     ss <- s_list$ss
     ssx <- s_list$ssx
     ssxx <- s_list$ssxx
@@ -249,8 +247,9 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     ### CM STEP
     ### MEANS:
     new_mu <- .means_function(data,
-      V = V, ss, ssx, rep(1.0, n),
-      row.mean, col.mean, "t")
+      v = est_v, ss, ssx, rep(1.0, n),
+      row.mean, col.mean, "t"
+    )
 
     ### VARS:
     colvarlist <- .col_vars(
@@ -296,8 +295,8 @@ opposite sign.
       new_df <- df
     }
     ### CHECK CONVERGENCE
-    error_term <- sum((new_v - V)^2) / (q * q) +
-      sum((new_u - U)^2) / (p * p) +
+    error_term <- sum((new_v - est_v)^2) / (q * q) +
+      sum((new_u - est_u)^2) / (p * p) +
       sum((new_mu - mu)^2) / (p * q) + (df - new_df)^2 / (n * p * q)
     ### check, force symmetry
     if (max(abs(new_v - t(new_v)) > tol)) {
@@ -307,26 +306,24 @@ opposite sign.
     if (max(abs(new_u - t(new_u)) > tol)) {
       warning("U matrix may not be symmetric")
     }
-    V <- .5 * (new_v + t(new_v))
-    U <- .5 * (new_u + t(new_u))
+    est_v <- .5 * (new_v + t(new_v))
+    est_u <- .5 * (new_u + t(new_u))
     mu <- new_mu
     df <- new_df
 
     iter <- iter + 1
-
-    # log_lik_vec = c(log_lik_vec, logLik)
   }
   if (iter >= max.iter || error_term > tol || varflag) {
     warning("Failed to converge")
   }
-  log_lik <- sum(dmatrixt(data, mu, U = U, V = V, df = df, log = TRUE))
+  log_lik <- sum(dmatrixt(data, mu, U = est_u, V = est_v, df = df, log = TRUE))
   converged <- !(iter >= max.iter || error_term > tol || varflag)
 
   return(list(
     mean = mu,
-    U = U / U[1, 1],
-    V = V,
-    var = U[1, 1],
+    U = est_u / est_u[1, 1],
+    V = est_v,
+    var = est_u[1, 1],
     nu = df,
     iter = iter,
     tol = error_term,

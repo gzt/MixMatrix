@@ -275,7 +275,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
       for (j in 1:nclass) {
         s_list <- .sstep(
           x, centers[, , j], fit_u[, , j], fit_v[, , j],
-          newposterior[, j])
+          newposterior[, j]
+        )
         ss[, , j] <- s_list$ss
         ssx[, , j] <- s_list$ssx
         ssxx[, , j] <- s_list$ssxx
@@ -296,15 +297,16 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     for (j in 1:nclass) {
       newcenters[, , j] <- .means_function(
         x, fit_v[, , j], ss[, , j], ssx[, , j],
-        newposterior[, j], row.mean, col.mean, model)
+        newposterior[, j], row.mean, col.mean, model
+      )
     }
 
     ### max for U, V
     ## if normal
     if (model == "normal") {
       for (j in 1:nclass) {
-### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance)
-#### or do EEE, etc formulation
+        ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance)
+        #### or do EEE, etc formulation
         zigmult <- rep(newposterior[, j], each = q * q)
         swept_data <- sweep(x, c(1, 2), newcenters[, , j])
         inter_v <- txax(swept_data, fit_u[, , j]) * zigmult
@@ -323,7 +325,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
 
         new_u[, , j] <- .row_vars(
           x, newcenters[, , j], df[j], newposterior[, j],
-          ss[, , j], ssx[, , j], ssxx[, , j], ...)$U
+          ss[, , j], ssx[, , j], ssxx[, , j], ...
+        )$U
         new_uinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * ss[, , j]
         new_u[, , j] <- solve(new_uinv)
       }
@@ -598,8 +601,8 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
       cenflag <- TRUE
       initcenters <- init$centers
     }
-    if (is.null(U)) u_array <- init$U
-    if (is.null(V)) v_array <- init$V
+    if (is.null(U)) U <- init$U
+    if (is.null(V)) V <- init$V
   }
   if (cenflag) {
     dimcen <- dim(initcenters)
@@ -628,20 +631,20 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
     }
   }
   if (!is.null(U)) {
-    if (length(dim(U) == 2)) u_array <- array(rep(U, K), dim = c(p, p, K))
+    if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
   }
   if (!is.null(V)) {
-    if (length(dim(V) == 2)) v_array <- array(rep(V, K), dim = c(q, q, K))
+    if (length(dim(V) == 2)) V <- array(rep(V, K), dim = c(q, q, K))
   }
   if (varmethod == "identity") {
-    if (is.null(U)) u_array <- array(c(rep(diag(p), K)), dim = c(p, p, K))
-    if (is.null(V)) v_array <- array(c(rep(diag(q), K)), dim = c(q, q, K))
+    if (is.null(U)) U <- array(c(rep(diag(p), K)), dim = c(p, p, K))
+    if (is.null(V)) V <- array(c(rep(diag(q), K)), dim = c(q, q, K))
   }
 
   list(
     centers = newcenters,
-    U = u_array,
-    V = v_array
+    U = U,
+    V = V
   )
 }
 

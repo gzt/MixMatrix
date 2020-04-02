@@ -162,18 +162,18 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
   ng <- length(proportions)
   names(prior) <- names(counts) <- lev1
 
-  group.means <- array(0, dim = c(p, q, ng))
+  group_means <- array(0, dim = c(p, q, ng))
   for (i in seq(ng)) {
-    group.means[, , i] <- .means_function(x,
+    group_means[, , i] <- .means_function(x,
       ss = NULL, ssx = NULL,
       weights = 1.0 * (g == levels(g)[i]), ...
     )
   }
-  swept.group <- array(0, dims)
+  swept_group <- array(0, dims)
   for (i in seq(n)) {
-    swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]
+    swept_group[, , i] <- x[, , i] - group_means[, , as.numeric(g[i])]
   }
-  f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
+  f1 <- sqrt((apply(swept_group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
     # this should be caught before this in the MLmatrixnorm stage
     const <- format((1L:(p * q)[f1 < tol]))
@@ -192,8 +192,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
   if (method == "t") {
     # for method t with df specified
-    Uresult <- diag(p)
-    Vresult <- diag(q)
+    u_result <- diag(p)
+    v_result <- diag(q)
     varresult <- 1
     error <- 1e6
     itercount <- 0
@@ -205,9 +205,9 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
       for (i in seq(ng)) {
         varfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
           df = nu,
-          U = Uresult, V = Vresult, ...
+          U = u_result, V = v_result, ...
         )
-        group.means[, , i] <- varfit$mean
+        group_means[, , i] <- varfit$mean
         new_uresult <- new_uresult + prior[i] * varfit$U
         new_vresult <- new_vresult + prior[i] * varfit$V
         newvarresult <- newvarresult + prior[i] * varfit$var
@@ -216,21 +216,21 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
         }
       }
 
-      error <- sum((new_uresult - Uresult)^2) +
-        sum((new_vresult - Vresult)^2) + (varresult - newvarresult)^2
-      Uresult <- new_uresult
-      Vresult <- new_vresult
+      error <- sum((new_uresult - u_result)^2) +
+        sum((new_vresult - v_result)^2) + (varresult - newvarresult)^2
+      u_result <- new_uresult
+      v_result <- new_vresult
       varresult <- newvarresult
       itercount <- itercount + 1
     }
   } else {
-    Uresult <- matrix(0, p, p)
-    Vresult <- matrix(0, q, q)
+    u_result <- matrix(0, p, p)
+    v_result <- matrix(0, q, q)
     varresult <- 0
     # for (i in seq(ng)) {
-    varfit <- MLmatrixnorm(swept.group, ...)
-    Uresult <- varfit$U
-    Vresult <- varfit$V
+    varfit <- MLmatrixnorm(swept_group, ...)
+    u_result <- varfit$U
+    v_result <- varfit$V
     varresult <- varfit$var
     # }
   }
@@ -240,10 +240,10 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
     list(
       prior = prior,
       counts = counts,
-      means = group.means,
+      means = group_means,
       scaling = varresult,
-      U = Uresult,
-      V = Vresult,
+      U = u_result,
+      V = v_result,
       lev = lev,
       N = n,
       method = method,
@@ -514,9 +514,9 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
       df <- rep_len(nu, ng)
     } # if you mismatch lengths, you will not have a good time
   }
-  group.means <- array(0, dim = c(p, q, ng))
-  groupU <- array(0, dim = c(p, p, ng))
-  groupV <- array(0, dim = c(q, q, ng))
+  group_means <- array(0, dim = c(p, q, ng))
+  group_u <- array(0, dim = c(p, p, ng))
+  group_v <- array(0, dim = c(q, q, ng))
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t") {
@@ -529,15 +529,15 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
       warning("ML fit failed for group ", i)
     }
 
-    group.means[, , i] <- mlfit$mean
-    groupU[, , i] <- mlfit$U
-    groupV[, , i] <- mlfit$V * mlfit$var
+    group_means[, , i] <- mlfit$mean
+    group_u[, , i] <- mlfit$U
+    group_v[, , i] <- mlfit$V * mlfit$var
   }
-  swept.group <- array(0, dims)
+  swept_group <- array(0, dims)
   for (i in seq(n)) {
-    swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]
+    swept_group[, , i] <- x[, , i] - group_means[, , as.numeric(g[i])]
   }
-  f1 <- sqrt((apply(swept.group, c(1, 2), stats::var)))
+  f1 <- sqrt((apply(swept_group, c(1, 2), stats::var)))
   if (any(f1 < tol)) {
     # this should be caught before this in the MLmatrixnorm stage
     const <- format((1L:(p * q)[f1 < tol]))
@@ -561,9 +561,9 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
     list(
       prior = prior,
       counts = counts,
-      means = group.means,
-      U = groupU,
-      V = groupV,
+      means = group_means,
+      U = group_u,
+      V = group_v,
       lev = lev,
       N = n,
       method = method,
@@ -621,26 +621,26 @@ logLik.matrixlda <- function(object, ...) {
   }
 
   if (!is.null(object$call$col.variance)) {
-    Vvars <- object$call$col.variance
-    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars <- 2
+    v_vars <- object$call$col.variance
+    if (grepl("^ar", x = v_vars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars <- 2
+    if (grepl("^cs", x = v_vars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
+    if (grepl("^i", x = v_vars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) {
+    if (grepl("^cor", x = v_vars, ignore.case = TRUE)) {
       vpars <- (q - 1) * q / 2 + 1
     }
   }
   if (!is.null(object$call$row.variance)) {
-    Uvars <- object$call$row.variance
-    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars <- 2
+    u_vars <- object$call$row.variance
+    if (grepl("^ar", x = u_vars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars <- 2
+    if (grepl("^cs", x = u_vars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
+    if (grepl("^i", x = u_vars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) {
+    if (grepl("^cor", x = u_vars, ignore.case = TRUE)) {
       upars <- (p - 1) * p / 2 + 1
     }
   }
@@ -729,26 +729,26 @@ logLik.matrixqda <- function(object, ...) {
   }
 
   if (!is.null(object$call$col.variance)) {
-    Vvars <- object$call$col.variance
-    if (grepl("^ar", x = Vvars, ignore.case = TRUE)) vpars <- 2
+    v_vars <- object$call$col.variance
+    if (grepl("^ar", x = v_vars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^cs", x = Vvars, ignore.case = TRUE)) vpars <- 2
+    if (grepl("^cs", x = v_vars, ignore.case = TRUE)) vpars <- 2
 
-    if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
+    if (grepl("^i", x = v_vars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) {
+    if (grepl("^cor", x = v_vars, ignore.case = TRUE)) {
       vpars <- (q - 1) * q / 2 + 1
     }
   }
   if (!is.null(object$call$row.variance)) {
-    Uvars <- object$call$row.variance
-    if (grepl("^ar", x = Uvars, ignore.case = TRUE)) upars <- 2
+    u_vars <- object$call$row.variance
+    if (grepl("^ar", x = u_vars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^cs", x = Uvars, ignore.case = TRUE)) upars <- 2
+    if (grepl("^cs", x = u_vars, ignore.case = TRUE)) upars <- 2
 
-    if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
+    if (grepl("^i", x = u_vars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) {
+    if (grepl("^cor", x = u_vars, ignore.case = TRUE)) {
       upars <- (p - 1) * p / 2 + 1
     }
   }

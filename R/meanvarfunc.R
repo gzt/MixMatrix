@@ -1,6 +1,6 @@
 
 
-.sstep <- function(data, centers, U, V, weights) {
+.sstep <- function(data, centers, u, v, weights) {
   dims <- dim(data)
   p <- dims[1]
   # q <- dims[2]
@@ -10,26 +10,26 @@
   zigmult <- rep(weights, each = p * p)
   swept_data <- sweep(data, c(1, 2), centers)
 
-  Stmp <- xatx(swept_data, V)
-  for (obs in 1:n) Stmp[, , obs] <- Stmp[, , obs] + U
-  Smatrix <- cubeinv(Stmp)
+  stmp <- xatx(swept_data, v)
+  for (obs in 1:n) stmp[, , obs] <- stmp[, , obs] + u
+  smatrix <- cubeinv(stmp)
 
-  ss <- rowSums(Smatrix * zigmult, FALSE, 2)
+  ss <- rowSums(smatrix * zigmult, FALSE, 2)
 
-  ssxtmp <- cubemult(Smatrix * zigmult, data)
+  ssxtmp <- cubemult(smatrix * zigmult, data)
   ssx <- rowSums(ssxtmp, FALSE, 2)
 
   ssxxtmp <- cubemult(data, ssxtmp)
   ssxx <- rowSums(ssxxtmp, FALSE, 2)
-  ssd <- detsum(Smatrix, weights)
+  ssd <- detsum(smatrix, weights)
 
   list(ss = ss, ssx = ssx, ssxx = ssxx, ssd = ssd)
 }
 
 
-.means_function <- function(data, V = NULL, ss = NULL, ssx = NULL, weights,
-                           row.mean = FALSE, col.mean = FALSE,
-                           model = "normal", ...) {
+.means_function <- function(data, v = NULL, ss = NULL, ssx = NULL, weights,
+                            row_mean = FALSE, col_mean = FALSE,
+                            model = "normal", ...) {
   dims <- dim(data)
   p <- dims[1]
   q <- dims[2]
@@ -43,13 +43,13 @@
     }
 
     newcenters <- newcenters / sumzig
-    if (row.mean) {
+    if (row_mean) {
       # make it so that the mean is constant within a row
       newcenters <- matrix(rowMeans(newcenters),
         nrow = dims[1], ncol = dims[2]
       )
     }
-    if (col.mean) {
+    if (col_mean) {
       # make it so that the mean is constant within a column
       newcenters <- matrix(colMeans(newcenters),
         nrow = dims[1],
@@ -57,20 +57,20 @@
       )
     }
   } else {
-    if (row.mean && col.mean) {
+    if (row_mean && col_mean) {
       # make it so that the mean is constant within a row
-      scalarmu <- matrixtrace(ssx %*% solve(V) %*% ones(q, p)) /
-        matrixtrace(ss %*% ones(p, q) %*% solve(V) %*% ones(q, p))
+      scalarmu <- matrixtrace(ssx %*% solve(v) %*% ones(q, p)) /
+        matrixtrace(ss %*% ones(p, q) %*% solve(v) %*% ones(q, p))
       newcenters <- scalarmu * ones(p, q)
-    } else if (col.mean) {
+    } else if (col_mean) {
       # make it so that the mean is constant within a column
       # ie mu = p x 1, times ones 1 x q
       newcenters <- ones(p, p) %*% ssx / sum(ss)
-    } else if (row.mean) {
+    } else if (row_mean) {
       # make it so that the mean is constant within a row
       # ie  ones p x 1 times mu = 1 x q
       newcenters <- solve(ss) %*% ssx %*%
-        (solve(V) %*% ones(q, q)) / sum(solve(V))
+        (solve(v) %*% ones(q, q)) / sum(solve(v))
     } else {
       newcenters <- solve(ss) %*% ssx
     }
@@ -84,8 +84,8 @@
 
 
 .col_vars <- function(data, center, df = 0, weights, ss, ssx, ssxx,
-                     col.variance = "none", col_set_var = FALSE,
-                     varflag = FALSE, ...) {
+                      col.variance = "none", col_set_var = FALSE,
+                      varflag = FALSE, ...) {
   n <- sum(weights)
   p <- dim(data)[1]
   q <- dim(data)[2]
@@ -93,24 +93,24 @@
   if (col.variance == "I") {
     new_v <- diag(q)
   } else if (col_set_var) {
-    nLL <- function(theta) {
+    n_ll <- function(theta) {
       vardetmat <- vardet(q, theta, TRUE, col.variance)
       varinvmat <- varinv(q, theta, TRUE, col.variance)
-      # SXOX = rowSums(axbt(ssxtmp,varinvmat,data ), dims = 2)
-      SXOX <- ssx %*% varinvmat %*% t(rowSums(data, dims = 2))
+      # sxox = rowSums(axbt(ssxtmp,varinvmat,data ), dims = 2)
+      sxox <- ssx %*% varinvmat %*% t(rowSums(data, dims = 2))
       return(-n * p * vardetmat +
-        dfmult * matrixtrace(SXOX +
+        dfmult * matrixtrace(sxox +
           ss %*% center %*% varinvmat %*% t(center) -
           ssx %*% varinvmat %*% t(center) -
           center %*% varinvmat %*% t(ssx)))
     }
-    if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.99)) <= 0)) {
+    if (!isTRUE(sign(n_ll(0.01)) * sign(n_ll(.99)) <= 0)) {
       warning("Endpoints of derivative of likelihood do not have opposite
                  sign. Check variance specification.")
       rho_col <- 0
       varflag <- TRUE
     } else {
-      fit0 <- stats::uniroot(nLL, c(0.01, .999), ...)
+      fit0 <- stats::uniroot(n_ll, c(0.01, .999), ...)
       rho_col <- fit0$root
     }
     new_v <- varmatgenerate(q, rho_col, col.variance)
@@ -134,8 +134,8 @@
 
 
 .row_vars <- function(data, center, df = 0, weights, ss, ssx, ssxx,
-                     row.variance = "none", row_set_var = FALSE,
-                     varflag = FALSE, ...) {
+                      row.variance = "none", row_set_var = FALSE,
+                      varflag = FALSE, ...) {
   n <- sum(weights)
   p <- dim(data)[1]
   q <- dim(data)[2]
@@ -144,21 +144,21 @@
   if (row.variance == "I") {
     new_u <- diag(p) * n * (df + p - 1) * p / matrixtrace(ss * dfmult)
   } else if (row_set_var) {
-    nLL <- function(theta) {
+    n_ll <- function(theta) {
       vardetmat <- vardet(p, theta, TRUE, row.variance)
-      Sigma <- varmatgenerate(p, theta, row.variance)
-      var <- n * (df + p - 1) * p / matrixtrace(Sigma %*% ss * dfmult)
+      sigma <- varmatgenerate(p, theta, row.variance)
+      var <- n * (df + p - 1) * p / matrixtrace(sigma %*% ss * dfmult)
       varderivative <- varderiv(p, theta, row.variance)
       return(var * dfmult * matrixtrace(varderivative %*% ss) +
         n * (df + p - 1) * vardetmat)
     }
-    if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
+    if (!isTRUE(sign(n_ll(0.01)) * sign(n_ll(.999)) <= 0)) {
       warning("Endpoints of derivative of likelihood do not have opposite sign.
                Check variance specification.")
       rho_row <- 0
       varflag <- TRUE
     } else {
-      fit0 <- stats::uniroot(nLL, c(0.01, .998), ...)
+      fit0 <- stats::uniroot(n_ll, c(0.01, .998), ...)
       rho_row <- fit0$root
     }
 
