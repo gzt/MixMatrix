@@ -49,5 +49,6 @@ predict(D)$posterior[1:10, ] # predict, show results of first 10
 ## S3 method for class "matrixqda"
 }
 \seealso{
-\code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+\code{\link{matrixlda}}, \code{\link{matrixqda}},
+and \code{\link{matrixmixture}}
 }

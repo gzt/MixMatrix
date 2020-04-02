@@ -121,8 +121,10 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                       tol = .Machine$double.eps^0.5, max.iter = 5000, U, V,
                       ...) {
   if (is.null(df) || df == 0 || is.infinite(df)) {
-      return(MLmatrixnorm(data, row.mean, col.mean, row.variance,
-                          col.variance, tol, max.iter, U, V, ...))
+    return(MLmatrixnorm(
+      data, row.mean, col.mean, row.variance,
+      col.variance, tol, max.iter, U, V, ...
+    ))
   }
   if (class(data) == "list") {
     data <- array(unlist(data),
@@ -246,8 +248,10 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 
     ### CM STEP
     ### MEANS:
-      new.Mu <- .MeansFunction(data, V = V, SS, SSX, rep(1.0, n),
-                               row.mean, col.mean, "t")
+    new.Mu <- .MeansFunction(data,
+      V = V, SS, SSX, rep(1.0, n),
+      row.mean, col.mean, "t"
+    )
 
     ### VARS:
     colvarlist <- .colVars(
@@ -275,7 +279,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
         (CholWishart::mvdigamma((nu + p - 1) / 2, p) -
           CholWishart::mvdigamma((nu + p + q - 1) / 2, p) -
           (SSDtmp / n - (detSS - p * log(n * (nu + p - 1)) +
-                         p * log(nu + p + q - 1))))
+            p * log(nu + p + q - 1))))
         # this latest ECME-ish one gives SLIGHTLY different results but is faster
         # (SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
       }
@@ -293,15 +297,17 @@ opposite sign.
       new.df <- df
     }
     ### CHECK CONVERGENCE
-      error.term <- sum((new.V - V)^2) / (q * q) +
-          sum((new.U - U)^2) / (p * p) +
-          sum((new.Mu - mu)^2) / (p * q) + (df - new.df)^2 / (n * p * q)
+    error.term <- sum((new.V - V)^2) / (q * q) +
+      sum((new.U - U)^2) / (p * p) +
+      sum((new.Mu - mu)^2) / (p * q) + (df - new.df)^2 / (n * p * q)
     ### check, force symmetry
-      if (max(abs(new.V - t(new.V)) > tol))
-          warning("V matrix may not be symmetric")
+    if (max(abs(new.V - t(new.V)) > tol)) {
+      warning("V matrix may not be symmetric")
+    }
 
-      if (max(abs(new.U - t(new.U)) > tol))
-          warning("U matrix may not be symmetric")
+    if (max(abs(new.U - t(new.U)) > tol)) {
+      warning("U matrix may not be symmetric")
+    }
     V <- .5 * (new.V + t(new.V))
     U <- .5 * (new.U + t(new.U))
     mu <- new.Mu

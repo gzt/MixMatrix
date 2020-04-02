@@ -17,7 +17,8 @@ the log of the determinant}
 \item{variance}{variance structure - AR(1) or CS.}
 }
 \value{
-Determinant or derivative of log-inverse for the specified matrix structure.
+Determinant or derivative of log-inverse for the
+specified matrix structure.
 }
 \description{
 Determinant selector for chosen covariance matrix.

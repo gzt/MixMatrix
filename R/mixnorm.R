@@ -260,7 +260,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     }
 
     newposterior <- ((newposterior - apply(newposterior, 1L,
-                                           min, na.rm = TRUE)))
+      min,
+      na.rm = TRUE
+    )))
     newposterior <- exp(newposterior)
     totalpost <- rowSums(newposterior)
     newposterior <- newposterior / totalpost
@@ -269,15 +271,17 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     ## update S_ig - conditional weights, only if non-normal
 
     if (model == "t") {
-        dfmult <- df + p + q - 1
-        for (j in 1:nclass) {
-            Slist <- .SStep(x, centers[, , j], U[, , j], V[, , j],
-                            newposterior[, j])
-            SS[, , j] <- Slist$SS
-            SSX[, , j] <- Slist$SSX
-            SSXX[, , j] <- Slist$SSXX
-            SSD[j] <- Slist$SSD
-        }
+      dfmult <- df + p + q - 1
+      for (j in 1:nclass) {
+        Slist <- .SStep(
+          x, centers[, , j], U[, , j], V[, , j],
+          newposterior[, j]
+        )
+        SS[, , j] <- Slist$SS
+        SSX[, , j] <- Slist$SSX
+        SSXX[, , j] <- Slist$SSXX
+        SSD[j] <- Slist$SSD
+      }
     }
 
     ### leave blank for now
@@ -318,8 +322,10 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
           SS[, , j], SSX[, , j], SSXX[, , j], ...
         )$V
 
-        newU[, , j] <- .rowVars(x, newcenters[, , j], df[j], newposterior[, j],
-                                SS[, , j], SSX[, , j], SSXX[, , j], ...)$U
+        newU[, , j] <- .rowVars(
+          x, newcenters[, , j], df[j], newposterior[, j],
+          SS[, , j], SSX[, , j], SSXX[, , j], ...
+        )$U
         newUinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * SS[, , j]
         newU[, , j] <- solve(newUinv)
       }
@@ -474,12 +480,14 @@ logLik.MixMatrixModel <- function(object, ...) {
   p <- dims[1]
   q <- dims[2]
   numgroups <- length(levels(grouping))
- # grouplist <- levels(grouping)
+  # grouplist <- levels(grouping)
   meanpars <- p * q
-  if (!is.null(object$call$row.mean) && (object$call$row.mean))
-      meanpars <- meanpars / q
-  if (!is.null(object$call$col.mean) && (object$call$col.mean))
-      meanpars <- meanpars / p
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) {
+    meanpars <- meanpars / q
+  }
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) {
+    meanpars <- meanpars / p
+  }
   upars <- (p + 1) * p / 2
   vpars <- (q + 1) * q / 2 # there's one par that will get subbed off variance
   nupar <- 0 # only fixed for now
@@ -597,8 +605,9 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
   }
   if (cenflag) {
     dimcen <- dim(initcenters)
-    if (!((dimcen[1] == p) && (dimcen[2] == q)))
-        stop("wrong dimension for provided centers")
+    if (!((dimcen[1] == p) && (dimcen[2] == q))) {
+      stop("wrong dimension for provided centers")
+    }
     if (length(dimcen) == 2) {
       remains <- K - 1
     } else {
@@ -611,11 +620,14 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
     newcenters[, , 1:remains] <- data[, , select]
   }
   if ((remains > 0) && (centermethod == "kmeans" ||
-                        centermethod == "k-means")) {
+    centermethod == "k-means")) {
     res <- kmeans(matrix(data, nrow = n), centers = remains, ...)
     newcenters <- array(res$centers, dim = c(p, q, remains))
-    if (cenflag) newcenters <- array(c(newcenters, initcenters),
-                                     dim = c(p, q, K))
+    if (cenflag) {
+      newcenters <- array(c(newcenters, initcenters),
+        dim = c(p, q, K)
+      )
+    }
   }
   if (!is.null(U)) {
     if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
@@ -659,11 +671,11 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
   if (length(dim(x)) == 2) x <- array(x, dim = c(dim(x), 1))
 
   if (ncol(x[, , 1, drop = FALSE]) !=
-      ncol(object$centers[, , 1, drop = FALSE])) {
+    ncol(object$centers[, , 1, drop = FALSE])) {
     stop("wrong column dimension of matrices")
   }
   if (nrow(x[, , 1, drop = FALSE]) !=
-      nrow(object$centers[, , 1, drop = FALSE])) {
+    nrow(object$centers[, , 1, drop = FALSE])) {
     stop("wrong row dimension of matrices")
   }
   ng <- length(object$prior)

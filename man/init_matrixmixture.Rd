@@ -21,23 +21,25 @@ init_matrixmixture(
 \arguments{
 \item{data}{data, \eqn{p \times q \times n}{p * q * n} array}
 
-\item{prior}{prior probability. One of \code{prior} and \code{K} must be
-provided. They must be consistent if both provided.}
+\item{prior}{prior probability. One of \code{prior} and \code{K}
+must be  provided. They must be consistent if both provided.}
 
 \item{K}{number of groups}
 
-\item{centers}{(optional) either a matrix or an array of \eqn{p \times p}{p * p}
+\item{centers}{(optional) either a matrix or an array of
+\eqn{p \times p}{p * p}
 matrices for use as the \code{centers} argument.
 If fewer than \code{K} are provided, the
 remainder are chosen by \code{centermethod}.}
 
-\item{U}{(optional) either a matrix or an array of  \eqn{q \times q}{q * q}
-matrices for use as the \code{U}
-argument. If a matrix is provided, it is duplicated to provide an array.
-If an array is provided, it should have \code{K} slices.}
+\item{U}{(optional) either a matrix or an array of
+\eqn{p \times p}{p * p} matrices for use as the \code{U}
+argument. If a matrix is provided, it is duplicated to provide an
+array. If an array is provided, it should have \code{K} slices.}
 
-\item{V}{(optional) either a matrix or an array of matrices for use as the \code{U}
-argument. If a matrix is provided, it is duplicated to provide an array.
+\item{V}{(optional) either a matrix or an array of matrices
+for use as the \code{V} argument. If a matrix is provided,
+it is duplicated to provide an array.
 If an array is provided, it should have \code{K} slices.}
 
 \item{centermethod}{what method to use to generate initial centers.
@@ -54,9 +56,10 @@ will be done.}
 \item{model}{whether to use a normal distribution or a t-distribution, not
 relevant for more initialization methods.}
 
-\item{init}{(optional) a (possibly partially-formed) list with some of the components
-\code{centers}, \code{U}, and \code{V}. The function will complete the
-list and fill out missing entries.}
+\item{init}{(optional) a (possibly partially-formed) list
+with some of the components
+    \code{centers}, \code{U}, and \code{V}. The function will complete the
+    list and fill out missing entries.}
 
 \item{...}{Additional arguments to pass to \code{kmeans()} if that is
 \code{centermethod}.}
@@ -67,8 +70,10 @@ a list suitable to use as the \code{init} argument in
 \describe{
       \item{\code{centers}}{the group means,
             a \eqn{p \times q \times K}{p * q * K} array.}
-      \item{\code{U}}{the between-row covariance matrices, a \eqn{p \times p \times K}{p * p * K}  array}
-      \item{\code{V}}{the between-column covariance matrix, a \eqn{q \times q \times K}{q * q * K} array}
+      \item{\code{U}}{the between-row covariance matrices, a
+      \eqn{p \times p \times K}{p * p * K}  array}
+      \item{\code{V}}{the between-column covariance matrix, a
+      \eqn{q \times q \times K}{q * q * K} array}
    }
 }
 \description{

@@ -52,7 +52,8 @@ Returns a list of class \code{matrixqda} containing
       \item{\code{lev}}{levels of the grouping factor}
       \item{\code{N}}{The number of observations used.}
       \item{\code{method}}{The method used.}
-      \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
+      \item{\code{nu}}{The degrees of freedom parameter
+     if the t-distribution was used.}
       \item{\code{call}}{The (matched) function call.}
    }
 }

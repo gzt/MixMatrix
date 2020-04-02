@@ -60,17 +60,17 @@ if using restrictions on the variance.}
 \value{
 Returns a list with a the following elements:
 \describe{
-      \item{\code{mean}}{the mean matrix}
-      \item{\code{scaling}}{the scalar variance parameter
-           (the first entry of the covariances are restricted to unity)}
-      \item{\code{U}}{the between-row covariance matrix}
-      \item{\code{V}}{the between-column covariance matrix}
-      \item{\code{iter}}{the number of iterations}
-      \item{\code{tol}}{the squared difference between iterations of
-           the variance matrices at the time of stopping}
-      \item{\code{logLik}}{vector of log likelihoods at each iteration.}
-      \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
-      \item{\code{call}}{The (matched) function call.}
+    \item{\code{mean}}{the mean matrix}
+    \item{\code{scaling}}{the scalar variance parameter
+         (the first entry of the covariances are restricted to unity)}
+    \item{\code{U}}{the between-row covariance matrix}
+    \item{\code{V}}{the between-column covariance matrix}
+    \item{\code{iter}}{the number of iterations}
+    \item{\code{tol}}{the squared difference between iterations of
+         the variance matrices at the time of stopping}
+    \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+    \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+    \item{\code{call}}{The (matched) function call.}
    }
 }
 \description{
@@ -89,11 +89,12 @@ A <- rmatrixnorm(
   L = matrix(c(2, 1, 0, .1), nrow = 2), list = TRUE
 )
 # finding the parameters by ML estimation
-results = MLmatrixnorm(A, tol = 1e-5)
+results <- MLmatrixnorm(A, tol = 1e-5)
 print(results)
 }
 \references{
-Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+Pierre Dutilleul.  The MLE algorithm for the matrix normal
+distribution.
     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 
     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.

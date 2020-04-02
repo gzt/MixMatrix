@@ -9,10 +9,12 @@ CSgenerate(n, rho)
 \arguments{
 \item{n}{number of dimensions}
 
-\item{rho}{off-diagonal element - a correlation between -1 and 1. Will warn if less than 0.}
+\item{rho}{off-diagonal element - a correlation between -1 and 1.
+Will warn if less than 0.}
 }
 \value{
-returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \code{rho} on the off-diagonal.
+returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and
+\code{rho} on the off-diagonal.
 }
 \description{
 Generate a compound symmetric correlation matrix

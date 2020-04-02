@@ -49,7 +49,8 @@ AR(1) and CS.}
 \item{df}{Starting value for the degrees of freedom. If \code{fixed = TRUE},
 then this is required and not updated. By default, set to 10.}
 
-\item{fixed}{Whether \code{df} is estimated or fixed. By default, \code{TRUE}.}
+\item{fixed}{Whether \code{df} is estimated or fixed.
+By default, \code{TRUE}.}
 
 \item{tol}{Convergence criterion. Measured against square deviation
 between iterations of the two variance-covariance matrices.}
@@ -78,7 +79,8 @@ Returns a list with the following elements:
       \item{\code{tol}}{the squared difference between iterations of
            the variance matrices at the time of stopping}
       \item{\code{logLik}}{log likelihood of result.}
-      \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+      \item{\code{convergence}}{a convergence flag,
+      \code{TRUE} if converged.}
       \item{\code{call}}{The (matched) function call.}
    }
 }
@@ -100,7 +102,7 @@ A <- rmatrixt(
   L = matrix(c(2, 1, 0, .1), nrow = 2), list = TRUE, df = 5
 )
 # fitting maximum likelihood estimates
-results = MLmatrixt(A, tol = 1e-5, df = 5)
+results <- MLmatrixt(A, tol = 1e-5, df = 5)
 print(results)
 }
 \references{
@@ -108,20 +110,24 @@ Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
     "Classification with the matrix-variate-t distribution", arXiv
     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
 
-    Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
-       Distribution and the Inverted Multivariate t
-       Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+    Dickey, James M. 1967. “Matricvariate Generalizations of the
+    Multivariate t Distribution and the Inverted Multivariate t
+    Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+    \doi{10.1214/aoms/1177698967}
 
-    Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm: A Simple Extension of
-          EM and ECM with Faster Monotone Convergence.” Biometrika 81 (4): 633–48.
+    Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm:
+    A Simple Extension of EM and ECM with Faster Monotone Convergence.”
+    Biometrika 81 (4): 633–48.
           \doi{10.2307/2337067}
 
-   Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation via the ECM
-            Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
+   Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation
+   via the ECM Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
             \doi{10.1093/biomet/80.2.267}
 
-    Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed., 272–5. John Wiley.
+    Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed.,
+      272–5. John Wiley.
 }
 \seealso{
-\code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
+\code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
+\code{\link{MLmatrixnorm}}
 }

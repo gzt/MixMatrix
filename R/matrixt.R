@@ -211,8 +211,10 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 
   # gammas is constant
   # this could be shifted into C++ but I don't want to pull out of CholWishart
-gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1),
-                                             dims[1]) -
+  gammas <- as.numeric(CholWishart::lmvgamma(
+    (0.5) * (df + dims[1] + dims[2] - 1),
+    dims[1]
+  ) -
     0.5 * dims[1] * dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
@@ -347,13 +349,15 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
   gammas <- as.numeric(
-      CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+    CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
       0.5 * prod(dims[1:2]) * log(pi) -
-      CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
+      CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1])
+  )
 
   results <- as.numeric(dmat_inv_t_calc(x, df, mean, U, V))
-  if (any(is.nan(results)))
-      warning("warning: probability distribution undefined when det < 0.")
+  if (any(is.nan(results))) {
+    warning("warning: probability distribution undefined when det < 0.")
+  }
   results <- gammas + results
   if (log) {
     return(results)

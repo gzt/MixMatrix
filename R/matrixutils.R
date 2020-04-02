@@ -133,8 +133,10 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
 #'
 #' @keywords internal
 varmatgenerate <- function(n, rho, variance) {
-    if (variance == "I" || variance == "independence" ||
-        variance == "Independence") variance <- "I"
+  if (variance == "I" || variance == "independence" ||
+    variance == "Independence") {
+    variance <- "I"
+  }
   if (variance == "AR(1)") {
     return(ARgenerate(n, rho))
   }

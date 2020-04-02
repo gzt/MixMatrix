@@ -25,13 +25,13 @@ matrixmixture(
 \arguments{
 \item{x}{data, \eqn{p \times q \times n}{p * q * n} array}
 
-\item{init}{a list containing an array of \code{K} of \eqn{p \times q}{p * q} means labeled
-\code{centers},
-and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q} positive definite variance
-matrices labeled \code{U} and \code{V}.
+\item{init}{a list containing an array of \code{K} of
+\eqn{p \times q}{p * q} means labeled \code{centers},
+and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q}
+positive definite variance matrices labeled \code{U} and \code{V}.
 By default, those are presumed to be identity if not provided.
-If \code{init} is missing, it will be provided using the \code{prior} or \code{K} by
-\code{init_matrixmix}.}
+If \code{init} is missing, it will be provided using the \code{prior}
+or \code{K} by \code{init_matrixmix}.}
 
 \item{prior}{prior for the \code{K} classes, a vector that adds to unity}
 
@@ -42,7 +42,8 @@ provided, the prior will be of uniform distribution among the classes.}
 
 \item{model}{whether to use the \code{normal} or \code{t} distribution.}
 
-\item{method}{what method to use to fit the distribution. Currently no options.}
+\item{method}{what method to use to fit the distribution.
+Currently no options.}
 
 \item{row.mean}{By default, \code{FALSE}. If \code{TRUE}, will fit a
 common mean within each row. If both this and \code{col.mean} are
@@ -57,18 +58,19 @@ log-likelihood by default.}
 
 \item{nu}{degrees of freedom parameter. Can be a vector of length \code{K}.}
 
-\item{...}{pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}}
+\item{...}{pass additional arguments to \code{MLmatrixnorm} or
+\code{MLmatrixt}}
 
-\item{verbose}{whether to print diagnostic output, by default \code{0}. Higher
-numbers output more results.}
+\item{verbose}{whether to print diagnostic output, by default \code{0}.
+Higher  numbers output more results.}
 
 \item{miniter}{minimum number of iterations}
 
-\item{convergence}{By default, \code{TRUE}. Whether to use Aitken acceleration to
-determine convergence. If false, it instead checks if the change in
+\item{convergence}{By default, \code{TRUE}, using Aitken acceleration
+to determine convergence. If false, it instead checks if the change in
 log-likelihood is less than \code{tolerance}. Aitken acceleration may
-prematurely end in the first few steps, so you may wish to set \code{miniter}
-or select \code{FALSE} if this is an issue.}
+prematurely end in the first few steps, so you may wish to set
+\code{miniter} or select \code{FALSE} if this is an issue.}
 }
 \value{
 A list of class \code{MixMatrixModel} containing the following
@@ -81,7 +83,8 @@ A list of class \code{MixMatrixModel} containing the following
       \item{\code{centers}}{the group means.}
       \item{\code{U}}{the between-row covariance matrices}
       \item{\code{V}}{the between-column covariance matrix}
-      \item{\code{posterior}}{the posterior probabilities for each observation}
+      \item{\code{posterior}}{the posterior probabilities for each
+            observation}
       \item{\code{pi}}{ the final proportions}
       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
            was used.}

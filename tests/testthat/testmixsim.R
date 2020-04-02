@@ -18,10 +18,14 @@ test_that("Testing bad input", {
   expect_error(matrixmixture(C, init, prior = c(5, .1)))
   expect_error(matrixmixture(C, init, prior = c(-1, .1)))
   expect_error(matrixmixture(C, init))
-  expect_error(matrixmixture(list(), prior = c(.5, .5),
-                             model = "t", nu = 10))
-  expect_error(matrixmixture(numeric(0), prior = c(.5, .5),
-                             model = "t", nu = 10))
+  expect_error(matrixmixture(list(),
+    prior = c(.5, .5),
+    model = "t", nu = 10
+  ))
+  expect_error(matrixmixture(numeric(0),
+    prior = c(.5, .5),
+    model = "t", nu = 10
+  ))
 })
 
 test_that("Bad results warn or stop", {
@@ -36,14 +40,19 @@ test_that("Bad results warn or stop", {
     V = array(c(diag(4), diag(4)), dim = c(4, 4, 2))
   )
   expect_warning(capture.output(matrixmixture(C, init,
-                                              prior = c(.5, .5),
-                                              iter = 1, verbose = 100),
-    type = "output"
+    prior = c(.5, .5),
+    iter = 1, verbose = 100
+  ),
+  type = "output"
   ))
-  expect_warning(matrixmixture(C, init, prior = 2,
-                               model = "t", nu = 10, iter = 1))
-  expect_warning(matrixmixture(C, K = 2, model = "t",
-                               nu = 10, iter = 1))
+  expect_warning(matrixmixture(C, init,
+    prior = 2,
+    model = "t", nu = 10, iter = 1
+  ))
+  expect_warning(matrixmixture(C,
+    K = 2, model = "t",
+    nu = 10, iter = 1
+  ))
 })
 
 test_that("Mean restrictions work", {
@@ -55,18 +64,26 @@ test_that("Mean restrictions work", {
   C <- array(c(A, B), dim = c(3, 4, 30))
   prior <- c(.5, .5)
 
-  expect_true(test_allequal(c(matrixmixture(C, prior = c(.5, .5),
-                                            col.mean = TRUE,
-                                            row.mean = TRUE)$centers[, , 1])))
-  expect_true(test_allequal(c(matrixmixture(C, prior = c(.5, .5),
-                                            col.mean = FALSE,
-                                            row.mean = TRUE)$centers[1, , 1])))
-  expect_true(test_allequal(matrixmixture(C, prior = c(.5, .5),
-                                          col.mean = TRUE,
-                                          row.mean = FALSE)$centers[, 1, 1]))
-  expect_true(!test_allequal(matrixmixture(C, prior = c(.5, .5),
-                                           col.mean = FALSE,
-                                           row.mean = FALSE)$centers[1, , 1]))
+  expect_true(test_allequal(c(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = TRUE,
+    row.mean = TRUE
+  )$centers[, , 1])))
+  expect_true(test_allequal(c(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = FALSE,
+    row.mean = TRUE
+  )$centers[1, , 1])))
+  expect_true(test_allequal(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = TRUE,
+    row.mean = FALSE
+  )$centers[, 1, 1]))
+  expect_true(!test_allequal(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = FALSE,
+    row.mean = FALSE
+  )$centers[1, , 1]))
 
 
   expect_true(test_allequal(matrixmixture(C,
@@ -87,14 +104,22 @@ test_that("Mean restrictions work", {
   )$centers[, 1, 1]))
 
 
-  llrcmix <- logLik(matrixmixture(C, prior = c(.5, .5),
-                                  col.mean = TRUE, row.mean = TRUE))
-  llrmix <- logLik(matrixmixture(C, prior = c(.5, .5),
-                                 col.mean = FALSE, row.mean = TRUE))
-  llcmix <- logLik(matrixmixture(C, prior = c(.5, .5),
-                                 col.mean = TRUE, row.mean = FALSE))
-  llmix <- logLik(matrixmixture(C, prior = c(.5, .5),
-                                col.mean = FALSE, row.mean = FALSE))
+  llrcmix <- logLik(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = TRUE, row.mean = TRUE
+  ))
+  llrmix <- logLik(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = FALSE, row.mean = TRUE
+  ))
+  llcmix <- logLik(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = TRUE, row.mean = FALSE
+  ))
+  llmix <- logLik(matrixmixture(C,
+    prior = c(.5, .5),
+    col.mean = FALSE, row.mean = FALSE
+  ))
 
 
   lltrcmix <- logLik(matrixmixture(C,
@@ -161,12 +186,18 @@ test_that("Init function works", {
   C <- array(c(A, B), dim = c(3, 4, 30))
   prior <- c(.5, .5)
 
-  testinit <- init_matrixmixture(C, K = 2, centers = matrix(7, 3, 4),
-                                 U = 4 * diag(3), V = 3 * diag(4))
-  testinit_two <- init_matrixmixture(C, K = 2,
-                                     init = list(centers = matrix(7, 3, 4),
-                                                 U = 4 * diag(3),
-                                                 V = 3 * diag(4)))
+  testinit <- init_matrixmixture(C,
+    K = 2, centers = matrix(7, 3, 4),
+    U = 4 * diag(3), V = 3 * diag(4)
+  )
+  testinit_two <- init_matrixmixture(C,
+    K = 2,
+    init = list(
+      centers = matrix(7, 3, 4),
+      U = 4 * diag(3),
+      V = 3 * diag(4)
+    )
+  )
   expect_equal(testinit$U[1, 1, 1], 4)
   expect_equal(testinit$U[2, 2, 2], 4)
   expect_equal(testinit$V[2, 2, 2], 3)

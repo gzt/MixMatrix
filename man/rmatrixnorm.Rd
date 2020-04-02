@@ -32,17 +32,20 @@ dmatrixnorm(
 
 \item{mean}{\eqn{p \times q}{p * q}  matrix of means}
 
-\item{L}{\eqn{p \times p}{p * p}  matrix specifying relations among the rows.
-By default, an identity matrix.}
+\item{L}{\eqn{p \times p}{p * p}  matrix specifying relations
+among the rows.
+   By default, an identity matrix.}
 
-\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the columns.
-By default, an identity matrix.}
+\item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the
+columns.  By default, an identity matrix.}
 
-\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}  positive definite variance-covariance
-matrix for rows, computed from \eqn{L} if not specified.}
+\item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}
+positive definite variance-covariance
+   matrix for rows, computed from \eqn{L} if not specified.}
 
-\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite variance-covariance
-matrix for columns, computed from \eqn{R}  if not specified.}
+\item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}
+positive definite variance-covariance
+   matrix for columns, computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -63,13 +66,15 @@ unless they are not, in fact, invertible.}
 \item{log}{logical; if TRUE, probabilities p are given as log(p).}
 }
 \value{
-\code{rmatrixnorm} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+\code{rmatrixnorm} returns either a list of
+\eqn{n}  \eqn{p \times q}{p * q}  matrices or
    a \eqn{p \times q \times n}{p * q * n}  array.
 
    \code{dmatrixnorm} returns the density at \code{x}.
 }
 \description{
-Density and random generation for the matrix variate normal distribution
+Density and random generation for the matrix variate
+normal distribution
 }
 \examples{
 set.seed(20180202)
@@ -93,7 +98,8 @@ dmatrixnorm(A[[1]],
 )
 }
 \references{
-Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+Gupta, Arjun K, and Daya K Nagar. 1999.
+Matrix Variate Distributions.
     Vol. 104. CRC Press. ISBN:978-1584880462
 }
 \seealso{

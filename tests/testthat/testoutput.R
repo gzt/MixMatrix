@@ -4,7 +4,6 @@ context("Checking outputs match")
 
 
 test_that("Testing helper functions:", {
-
   C <- matrix(c(1, .5, .25, .5, 1, .5, .25, .5, 1), nrow = 3)
   expect_equal(ARgenerate(3, .5), C)
 })
@@ -166,7 +165,7 @@ test_that("Equivalent outputs for different functions:", {
   U.two <- V.one <- ARgenerate(6, .7)
   df <- 5
 
-    expect_equal(dmatrixt(x, df, U = U.one, V = df * V.one, log = T),
+  expect_equal(dmatrixt(x, df, U = U.one, V = df * V.one, log = T),
     dmatrixt(t(x), df, U = U.two, V = df * V.two, log = T),
     tolerance = .000001
   )

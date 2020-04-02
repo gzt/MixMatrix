@@ -12,8 +12,9 @@ ARgenerate(n, rho)
 \item{rho}{correlation parameter}
 }
 \value{
-Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \eqn{rho^k} on
-   the other diagonals, where \eqn{k} is distance from the main diagonal.
+Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal
+and \eqn{rho^k} on the other diagonals, where \eqn{k} is distance from the
+main diagonal.
    Used internally but it is useful for generating your own random matrices.
 }
 \description{

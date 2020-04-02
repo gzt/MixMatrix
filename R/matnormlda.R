@@ -168,7 +168,7 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
       SS = NULL, SSX = NULL,
       weights = 1.0 * (g == levels(g)[i]), ...
     )
-   }
+  }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
     swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]

@@ -16,30 +16,40 @@ test_that("trying wrong type of input", {
     n = 1, mean = matrix(c(0, 0)),
     U = matrix(c("A", 0, 0, 1), nrow = 2)
   ), "non-numeric", ignore.case = TRUE)
-  expect_error(rmatrixt(n = 1, df = 1, mean = matrix(c(0, 0)),
-                        U = matrix(c("A", 0, 0, 1), nrow = 2)),
-    "non-numeric",
-    ignore.case = TRUE
+  expect_error(rmatrixt(
+    n = 1, df = 1, mean = matrix(c(0, 0)),
+    U = matrix(c("A", 0, 0, 1), nrow = 2)
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
-  expect_error(rmatrixinvt(n = 1, df = 1, mean = matrix(c(0, 0)),
-                           U = matrix(c("A", 0, 0, 1), nrow = 2)),
-    "non-numeric",
-    ignore.case = TRUE
+  expect_error(rmatrixinvt(
+    n = 1, df = 1, mean = matrix(c(0, 0)),
+    U = matrix(c("A", 0, 0, 1), nrow = 2)
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
-  expect_error(dmatrixnorm(x = matrix(c(0, 0)),
-                           U = matrix(c("A", 0, 0, 1), nrow = 2)),
-    "non-numeric",
-    ignore.case = TRUE
+  expect_error(dmatrixnorm(
+    x = matrix(c(0, 0)),
+    U = matrix(c("A", 0, 0, 1), nrow = 2)
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
-  expect_error(dmatrixt(x = matrix(c(0, 0)), df = 1,
-                        U = matrix(c("A", 0, 0, 1), nrow = 2)),
-    "non-numeric",
-    ignore.case = TRUE
+  expect_error(dmatrixt(
+    x = matrix(c(0, 0)), df = 1,
+    U = matrix(c("A", 0, 0, 1), nrow = 2)
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
-  expect_error(dmatrixinvt(x = mean(matrix(c(0, 0))), df = 1,
-                           U = matrix(c("A", 0, 0, 1), nrow = 2)),
-    "non-numeric",
-    ignore.case = TRUE
+  expect_error(dmatrixinvt(
+    x = mean(matrix(c(0, 0))), df = 1,
+    U = matrix(c("A", 0, 0, 1), nrow = 2)
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
 
 
@@ -150,9 +160,10 @@ test_that("trying wrong type of input", {
     ignore.case = TRUE
   )
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)),
-                            max.iter = "Q"),
-    "non-numeric",
-    ignore.case = TRUE
+    max.iter = "Q"
+  ),
+  "non-numeric",
+  ignore.case = TRUE
   )
   expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = diag(5)),
     U = matrix("Q", nrow = 5, ncol = 5)
