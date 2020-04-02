@@ -3,7 +3,7 @@
 .SStep <- function(data, centers, U, V, weights) {
   dims <- dim(data)
   p <- dims[1]
-  q <- dims[2]
+  # q <- dims[2]
   n <- dims[3]
 
 
@@ -26,8 +26,10 @@
   list(SS = SS, SSX = SSX, SSXX = SSXX, SSD = SSD)
 }
 
-# if 'normal', require only data and weights. if otherwise, require U, V, SS, SSX.
-.MeansFunction <- function(data, V = NULL, SS = NULL, SSX = NULL, weights, row.mean = FALSE, col.mean = FALSE, model = "normal", ...) {
+
+.MeansFunction <- function(data, V = NULL, SS = NULL, SSX = NULL, weights,
+                           row.mean = FALSE, col.mean = FALSE,
+                           model = "normal", ...) {
   dims <- dim(data)
   p <- dims[1]
   q <- dims[2]
@@ -43,16 +45,19 @@
     newcenters <- newcenters / sumzig
     if (row.mean) {
       # make it so that the mean is constant within a row
-      newcenters <- matrix(rowMeans(newcenters), nrow = dims[1], ncol = dims[2])
+        newcenters <- matrix(rowMeans(newcenters),
+                             nrow = dims[1], ncol = dims[2])
     }
     if (col.mean) {
       # make it so that the mean is constant within a column
-      newcenters <- matrix(colMeans(newcenters), nrow = dims[1], ncol = dims[2], byrow = TRUE)
+        newcenters <- matrix(colMeans(newcenters), nrow = dims[1],
+                             ncol = dims[2], byrow = TRUE)
     }
   } else {
     if (row.mean && col.mean) {
       # make it so that the mean is constant within a row
-      scalarmu <- matrixtrace(SSX %*% solve(V) %*% ones(q, p)) / matrixtrace(SS %*% ones(p, q) %*% solve(V) %*% ones(q, p))
+        scalarmu <- matrixtrace(SSX %*% solve(V) %*% ones(q, p)) /
+                    matrixtrace(SS %*% ones(p, q) %*% solve(V) %*% ones(q, p))
       newcenters <- scalarmu * ones(p, q)
     } else if (col.mean) {
       # make it so that the mean is constant within a column
@@ -61,7 +66,8 @@
     } else if (row.mean) {
       # make it so that the mean is constant within a row
       # ie  ones p x 1 times mu = 1 x q
-      newcenters <- solve(SS) %*% SSX %*% (solve(V) %*% ones(q, q)) / sum(solve(V))
+        newcenters <- solve(SS) %*% SSX %*%
+            (solve(V) %*% ones(q, q)) / sum(solve(V))
     } else {
       newcenters <- solve(SS) %*% SSX
     }
@@ -75,7 +81,8 @@
 
 
 .colVars <- function(data, center, df = 0, weights, SS, SSX, SSXX,
-                     col.variance = "none", col.set.var = FALSE, varflag = FALSE, ...) {
+                     col.variance = "none", col.set.var = FALSE,
+                     varflag = FALSE, ...) {
   n <- sum(weights)
   p <- dim(data)[1]
   q <- dim(data)[2]
@@ -87,37 +94,45 @@
       vardetmat <- vardet(q, theta, TRUE, col.variance)
       varinvmat <- varinv(q, theta, TRUE, col.variance)
       # SXOX = rowSums(axbt(SSXtmp,varinvmat,data ), dims = 2)
-      SXOX <- SSX %*% varinvmat %*% t(rowSums(data, dims = 2)) # only need trace to be equal
-      return(-n * p * vardetmat + dfmult * matrixtrace(SXOX + SS %*% center %*% varinvmat %*% t(center) - SSX %*% varinvmat %*% t(center) - center %*% varinvmat %*% t(SSX)))
+      SXOX <- SSX %*% varinvmat %*% t(rowSums(data, dims = 2)) 
+      return(-n * p * vardetmat +
+             dfmult * matrixtrace(SXOX +
+                                  SS %*% center %*% varinvmat %*% t(center) -
+                                  SSX %*% varinvmat %*% t(center) -
+                                  center %*% varinvmat %*% t(SSX)))
     }
     if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.99)) <= 0)) {
-      warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+        warning("Endpoints of derivative of likelihood do not have opposite
+                 sign. Check variance specification.")
       rho.col <- 0
       varflag <- TRUE
     } else {
-      fit0 <- stats::uniroot(nLL, c(0.01, .999), ...)
+        fit0 <- stats::uniroot(nLL, c(0.01, .999), ...)
       rho.col <- fit0$root
     }
     new.V <- varmatgenerate(q, rho.col, col.variance)
   } else {
-    new.V <- (dfmult / (n * p)) * (SSXX - t(SSX) %*% center - t(center) %*% SSX + t(center) %*% SS %*% center)
-    if (col.variance == "cor") {
-      new.V <- stats::cov2cor(new.V)
-      if (!all(is.finite(new.V))) {
-        varflag <- TRUE
-        new.V <- diag(q)
+      new.V <- (dfmult / (n * p)) * (SSXX - t(SSX) %*% center -
+                                     t(center) %*% SSX +
+                                     t(center) %*% SS %*% center)
+      if (col.variance == "cor") {
+          new.V <- stats::cov2cor(new.V)
+          if (!all(is.finite(new.V))) {
+              varflag <- TRUE
+              new.V <- diag(q)
+          }
+      } else {
+          new.V <- new.V / new.V[1, 1]
       }
-    } else {
-      new.V <- new.V / new.V[1, 1]
-    }
   }
-  # Fix V to have unit variance on first component
+ ## Fix V to have unit variance on first component
   list(V = new.V, varflag = varflag)
 }
 
 
 .rowVars <- function(data, center, df = 0, weights, SS, SSX, SSXX,
-                     row.variance = "none", row.set.var = FALSE, varflag = FALSE, ...) {
+                     row.variance = "none", row.set.var = FALSE,
+                     varflag = FALSE, ...) {
   n <- sum(weights)
   p <- dim(data)[1]
   q <- dim(data)[2]
@@ -131,10 +146,12 @@
       Sigma <- varmatgenerate(p, theta, row.variance)
       var <- n * (df + p - 1) * p / matrixtrace(Sigma %*% SS * dfmult)
       varderivative <- varderiv(p, theta, row.variance)
-      return(var * dfmult * matrixtrace(varderivative %*% SS) + n * (df + p - 1) * vardetmat)
+      return(var * dfmult * matrixtrace(varderivative %*% SS) +
+             n * (df + p - 1) * vardetmat)
     }
     if (!isTRUE(sign(nLL(0.01)) * sign(nLL(.999)) <= 0)) {
-      warning("Endpoints of derivative of likelihood do not have opposite sign. Check variance specification.")
+      warning("Endpoints of derivative of likelihood do not have opposite sign.
+               Check variance specification.")
       rho.row <- 0
       varflag <- TRUE
     } else {
@@ -153,7 +170,8 @@
       if (!is.finite(vartmp)) {
         vartmp <- 1
         varflag <- TRUE
-        warning("Variance estimate for correlation matrix not positive definite.")
+        warning("Variance estimate for correlation matrix not
+                 positive definite.")
       }
       new.U <- vartmp * stats::cov2cor(new.U)
       # this cute trick preserves the determinant of the matrix

@@ -50,16 +50,19 @@
 #' @param log logical; in \code{dmatrixt}, if \code{TRUE}, probabilities
 #'    \code{p} are given as \code{log(p)}.
 #' @return \code{rmatrixt} returns either a list of \eqn{n}
-#'    \eqn{p \times q}{p * q}  matrices or a \eqn{p \times q \times n}{p * q * n}
+#'    \eqn{p \times q}{p * q}  matrices or a
+#' \eqn{p \times q \times n}{p * q * n}
 #'    array.
 #'
 #'    \code{dmatrixt} returns the density at \code{x}.
-#' @references  Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#' @references  Gupta, Arjun K, and Daya K Nagar. 1999.
+#' Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 #'
-#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#' Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
 #'        Distribution and the Inverted Multivariate t
-#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+#' \doi{10.1214/aoms/1177698967}
 #' @details
 #' The matrix \eqn{t}-distribution is parameterized slightly
 #'  differently from the univariate and multivariate \eqn{t}-distributions
@@ -72,7 +75,8 @@
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
 #' @seealso \code{\link{rmatrixnorm}},
-#'     \code{\link{rmatrixinvt}},\code{\link{rt}} and \code{\link[stats]{Distributions}}.
+#'     \code{\link{rmatrixinvt}},\code{\link{rt}} and
+#' \code{\link[stats]{Distributions}}.
 #'
 #' @export
 #'
@@ -207,7 +211,8 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 
   # gammas is constant
   # this could be shifted into C++ but I don't want to pull out of CholWishart
-  gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1),
+                                             dims[1]) -
     0.5 * dims[1] * dims[2] * log(pi) -
     CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
@@ -238,12 +243,14 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
 #'    and \code{\link[stats]{Distributions}}.
 #'
-#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999.
+#' Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 #'
-#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+#'   Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
 #'        Distribution and the Inverted Multivariate t
-#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+#' \doi{10.1214/aoms/1177698967}
 
 #' @export
 #' @examples
@@ -339,11 +346,14 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n),
     dims[2] == dim(V)[1] && dim(V)[1] == dim(V)[2])) {
     stop("Non-conforming dimensions.", dims, dim(U), dim(V))
   }
-  gammas <- as.numeric(CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
-    0.5 * prod(dims[1:2]) * log(pi) - CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
+  gammas <- as.numeric(
+      CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
+      0.5 * prod(dims[1:2]) * log(pi) -
+      CholWishart::lmvgamma(0.5 * (df + dims[1] - 1), dims[1]))
 
   results <- as.numeric(dmat_inv_t_calc(x, df, mean, U, V))
-  if (any(is.nan(results))) warning("warning: probability distribution undefined when det < 0.")
+  if (any(is.nan(results)))
+      warning("warning: probability distribution undefined when det < 0.")
   results <- gammas + results
   if (log) {
     return(results)

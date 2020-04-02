@@ -19,19 +19,23 @@
 
 #' Matrix variate Normal distribution functions
 #'
-#' @description  Density and random generation for the matrix variate normal distribution
+#' @description  Density and random generation for the matrix variate
+#' normal distribution
 #'
 #' @name rmatrixnorm
 #' @param n number of observations to generate - must be a positive integer.
 #' @param x quantile for density
 #' @param mean \eqn{p \times q}{p * q}  matrix of means
-#' @param L  \eqn{p \times p}{p * p}  matrix specifying relations among the rows.
+#' @param L  \eqn{p \times p}{p * p}  matrix specifying relations
+#' among the rows.
 #'    By default, an identity matrix.
-#' @param R \eqn{q \times q}{q * q}  matrix specifying relations among the columns.
-#'    By default, an identity matrix.
-#' @param U \eqn{LL^T}  - \eqn{p \times p}{p * p}  positive definite variance-covariance
+#' @param R \eqn{q \times q}{q * q}  matrix specifying relations among the
+#' columns.  By default, an identity matrix.
+#' @param U \eqn{LL^T}  - \eqn{p \times p}{p * p}
+#' positive definite variance-covariance
 #'    matrix for rows, computed from \eqn{L} if not specified.
-#' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite variance-covariance
+#' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}
+#' positive definite variance-covariance
 #'    matrix for columns, computed from \eqn{R}  if not specified.
 #' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 #'    output will be a list of matrices.
@@ -45,12 +49,14 @@
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
 #' @param log logical; if TRUE, probabilities p are given as log(p).
-#' @return \code{rmatrixnorm} returns either a list of \eqn{n}  \eqn{p \times q}{p * q}  matrices or
+#' @return \code{rmatrixnorm} returns either a list of
+#' \eqn{n}  \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
 #'    \code{dmatrixnorm} returns the density at \code{x}.
 #'
-#' @references Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+#' @references Gupta, Arjun K, and Daya K Nagar. 1999.
+#' Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 
 #' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
@@ -120,8 +126,11 @@ rmatrixnorm <- function(n, mean,
   nobs <- prod(dims) * n
   mat <- array(stats::rnorm(nobs), dim = c(dims, n))
 
-  result <- array(apply(mat, 3, function(x) mean + crossprod(cholU, x) %*% (cholV)),
-    dim = c(dims, n)
+  result <- array(apply(mat, 3, function(x) {
+    mean +
+      crossprod(cholU, x) %*% (cholV)
+  }),
+  dim = c(dims, n)
   )
   if (n == 1 && list == FALSE && is.null(array)) {
     return(result[, , 1])
@@ -277,13 +286,13 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'    common mean within each row. If both this and \code{row.mean} are
 #'    \code{TRUE}, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
-#'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
-#'     correlation matrix, or 'Independence' for
-#'     independent and identical variance across the rows.
-#'     Only positive correlations are allowed for AR(1) and CS covariances.
-#'     Note that while maximum likelihood estimators are available (and used) for
-#'     the unconstrained variance matrices, \code{optim} is used for any
-#'     constraints so it may be considerably slower.
+#'    'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
+#'    correlation matrix, or 'Independence' for
+#'    independent and identical variance across the rows.
+#'    Only positive correlations are allowed for AR(1) and CS covariances.
+#'    Note that while maximum likelihood estimators are available (and used) for
+#'    the unconstrained variance matrices, \code{optim} is used for any
+#'    constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
 #'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 #'     Only positive correlations are allowed for
@@ -300,20 +309,22 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 #' @return Returns a list with a the following elements:
 #' \describe{
-#'       \item{\code{mean}}{the mean matrix}
-#'       \item{\code{scaling}}{the scalar variance parameter
-#'            (the first entry of the covariances are restricted to unity)}
-#'       \item{\code{U}}{the between-row covariance matrix}
-#'       \item{\code{V}}{the between-column covariance matrix}
-#'       \item{\code{iter}}{the number of iterations}
-#'       \item{\code{tol}}{the squared difference between iterations of
-#'            the variance matrices at the time of stopping}
-#'       \item{\code{logLik}}{vector of log likelihoods at each iteration.}
-#'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
-#'       \item{\code{call}}{The (matched) function call.}
+#'     \item{\code{mean}}{the mean matrix}
+#'     \item{\code{scaling}}{the scalar variance parameter
+#'          (the first entry of the covariances are restricted to unity)}
+#'     \item{\code{U}}{the between-row covariance matrix}
+#'     \item{\code{V}}{the between-column covariance matrix}
+#'     \item{\code{iter}}{the number of iterations}
+#'     \item{\code{tol}}{the squared difference between iterations of
+#'          the variance matrices at the time of stopping}
+#'     \item{\code{logLik}}{vector of log likelihoods at each iteration.}
+#'     \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+#'     \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
-#' @references   Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+#' @references
+#' Pierre Dutilleul.  The MLE algorithm for the matrix normal
+#' distribution.
 #'     Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 #'
 #'     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
@@ -333,7 +344,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' print(results)
 MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
-                         tol = 10 * .Machine$double.eps^0.5, max.iter = 100, U, V, ...) {
+                         tol = 10 * .Machine$double.eps^0.5, max.iter = 100,
+                         U, V, ...) {
   if (class(data) == "list") {
     data <- array(unlist(data),
       dim = c(
@@ -355,13 +367,13 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
   row.set.var <- FALSE
-  #  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
+
 
   rowvarparse <- .varparse(row.variance)
   row.set.var <- rowvarparse$varflag
   row.variance <- rowvarparse$varopt
   col.set.var <- FALSE
-  #  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
+
 
 
   colvarparse <- .varparse(col.variance)
@@ -468,8 +480,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
             (.5) * sum(diag(B)) # problem was wrong constant
         }
         if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
-          warning("Endpoints of derivative of likelihood do not have opposite sign.
-                   Check variance specification.")
+          warning("Endpoints of derivative of likelihood do not have
+                   opposite sign. Check variance specification.")
           rho.col <- 0
           varflag <- TRUE
         } else {
@@ -482,11 +494,12 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
       inter.V <- txax(swept.data, 0.5 * (U + t(U)))
       new.V <- rowSums(inter.V, dims = 2) / (dims[3] * dims[1])
       if (col.variance == "cor") {
-        vartmp <- exp(mean(log(diag(new.V)))) # matrix should be pos definite, so not a prob
+        vartmp <- exp(mean(log(diag(new.V)))) # matrix should be pos definite
         if (!is.finite(vartmp)) {
           vartmp <- 1
           varflag <- TRUE
-          warning("Variance estimate for correlation matrix not positive definite.")
+          warning("Variance estimate for correlation matrix
+                        not positive definite.")
         }
         new.V <- vartmp * stats::cov2cor(new.V)
       }
@@ -504,8 +517,8 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
           (.5) * sum(diag(B)) # problem was wrong constant
       }
       if (!isTRUE(sign(nLL(0)) * sign(nLL(.999)) <= 0)) {
-        warning("Endpoints of derivative of likelihood do not have opposite sign.
-                 Check variance specification.")
+        warning("Endpoints of derivative of likelihood do not have
+                 opposite sign.  Check variance specification.")
         rho.row <- 0
         varflag <- TRUE
       } else {

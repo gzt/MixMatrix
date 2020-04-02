@@ -23,20 +23,21 @@
 ##' matrix variate t distribution (with specified degrees of freedom \code{nu}).
 ##'
 ##' @param x data, \eqn{p \times q \times n}{p * q * n} array
-##' @param init a list containing an array of \code{K} of \eqn{p \times q}{p * q} means labeled
-##'     \code{centers},
-##'     and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q} positive definite variance
-##'     matrices labeled \code{U} and \code{V}.
+##' @param init a list containing an array of \code{K} of
+##'     \eqn{p \times q}{p * q} means labeled \code{centers},
+##'     and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q}
+##'     positive definite variance matrices labeled \code{U} and \code{V}.
 ##'     By default, those are presumed to be identity if not provided.
-##'     If \code{init} is missing, it will be provided using the \code{prior} or \code{K} by
-##'     \code{init_matrixmix}.
+##'     If \code{init} is missing, it will be provided using the \code{prior}
+##'     or \code{K} by \code{init_matrixmix}.
 ##' @param prior prior for the \code{K} classes, a vector that adds to unity
 ##' @param K number of classes - provide either this or the prior. If this is
 ##'     provided, the prior will be of uniform distribution among the classes.
 ##' @param iter maximum number of iterations.
 ##' @param model whether to use the \code{normal} or \code{t} distribution.
 ##'
-##' @param method what method to use to fit the distribution. Currently no options.
+##' @param method what method to use to fit the distribution.
+##'     Currently no options.
 ##' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
 ##'    common mean within each row. If both this and \code{col.mean} are
 ##'    \code{TRUE}, there will be a common mean for the entire matrix.
@@ -46,15 +47,16 @@
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood by default.
 ##' @param nu degrees of freedom parameter. Can be a vector of length \code{K}.
-##' @param ... pass additional arguments to \code{MLmatrixnorm} or \code{MLmatrixt}
-##' @param verbose whether to print diagnostic output, by default \code{0}. Higher
-##'     numbers output more results.
+##' @param ... pass additional arguments to \code{MLmatrixnorm} or
+##'     \code{MLmatrixt}
+##' @param verbose whether to print diagnostic output, by default \code{0}.
+##'     Higher  numbers output more results.
 ##' @param miniter minimum number of iterations
-##' @param convergence By default, \code{TRUE}. Whether to use Aitken acceleration to
-##'     determine convergence. If false, it instead checks if the change in
+##' @param convergence By default, \code{TRUE}, using Aitken acceleration
+##'     to determine convergence. If false, it instead checks if the change in
 ##'     log-likelihood is less than \code{tolerance}. Aitken acceleration may
-##'     prematurely end in the first few steps, so you may wish to set \code{miniter}
-##'     or select \code{FALSE} if this is an issue.
+##'     prematurely end in the first few steps, so you may wish to set
+##'     \code{miniter} or select \code{FALSE} if this is an issue.
 ##' @return A list of class \code{MixMatrixModel} containing the following
 ##'     components:
 ##' \describe{
@@ -65,7 +67,8 @@
 #'       \item{\code{centers}}{the group means.}
 #'       \item{\code{U}}{the between-row covariance matrices}
 #'       \item{\code{V}}{the between-column covariance matrix}
-#'       \item{\code{posterior}}{the posterior probabilities for each observation}
+#'       \item{\code{posterior}}{the posterior probabilities for each
+#'             observation}
 #'       \item{\code{pi}}{ the final proportions}
 #'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
 #'            was used.}
@@ -124,9 +127,11 @@
 ##' logLik(res) # log likelihood of final result
 ##' BIC(res) # BIC of final result
 ##' predict(res, newdata = C[,,c(1,21)]) # predicted class membership
-matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter = 1000,
-                          model = "normal", method = NULL, row.mean = FALSE, col.mean = FALSE,
-                          tolerance = 1e-1, nu = NULL, ..., verbose = 0, miniter = 5, convergence = TRUE) {
+matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
+                          iter = 1000, model = "normal", method = NULL,
+                          row.mean = FALSE, col.mean = FALSE,
+                          tolerance = 1e-1, nu = NULL, ..., verbose = 0,
+                          miniter = 5, convergence = TRUE) {
   if (class(x) == "list") {
     x <- array(unlist(x),
       dim = c(
@@ -210,7 +215,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     print(V)
   }
   convergeflag <- FALSE
-  Smatrix <- array(0, c(p, p, n))
+  # Smatrix <- array(0, c(p, p, n))
   SS <- array(0, c(p, p, nclass))
   SSX <- array(0, c(p, q, nclass))
   SSXX <- array(0, c(q, q, nclass))
@@ -254,7 +259,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
       }
     }
 
-    newposterior <- ((newposterior - apply(newposterior, 1L, min, na.rm = TRUE)))
+    newposterior <- ((newposterior - apply(newposterior, 1L,
+                                           min, na.rm = TRUE)))
     newposterior <- exp(newposterior)
     totalpost <- rowSums(newposterior)
     newposterior <- newposterior / totalpost
@@ -263,14 +269,15 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     ## update S_ig - conditional weights, only if non-normal
 
     if (model == "t") {
-      dfmult <- df + p + q - 1
-      for (j in 1:nclass) {
-        Slist <- .SStep(x, centers[, , j], U[, , j], V[, , j], newposterior[, j])
-        SS[, , j] <- Slist$SS
-        SSX[, , j] <- Slist$SSX
-        SSXX[, , j] <- Slist$SSXX
-        SSD[j] <- Slist$SSD
-      }
+        dfmult <- df + p + q - 1
+        for (j in 1:nclass) {
+            Slist <- .SStep(x, centers[, , j], U[, , j], V[, , j],
+                            newposterior[, j])
+            SS[, , j] <- Slist$SS
+            SSX[, , j] <- Slist$SSX
+            SSXX[, , j] <- Slist$SSXX
+            SSD[j] <- Slist$SSD
+        }
     }
 
     ### leave blank for now
@@ -311,7 +318,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
           SS[, , j], SSX[, , j], SSXX[, , j], ...
         )$V
 
-        newU[, , j] <- .rowVars(x, newcenters[, , j], df[j], newposterior[, j], SS[, , j], SSX[, , j], SSXX[, , j], ...)$U
+        newU[, , j] <- .rowVars(x, newcenters[, , j], df[j], newposterior[, j],
+                                SS[, , j], SSX[, , j], SSXX[, , j], ...)$U
         newUinv <- (dfmult[j] / (sumzig[j] * (df[j] + p - 1))) * SS[, , j]
         newU[, , j] <- solve(newUinv)
       }
@@ -322,9 +330,9 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     ### Fit NU:
     ### doesn't work yet
     new.df <- df
-    ###       if(model == "t" && fixdf == FALSE && iter > 1){
+    ###       if (model == "t" && fixdf == FALSE && iter > 1) {
     ###           ######## THIS DOES NOT WORK.
-    ###           for(j in 1:nclass){
+    ###           for (j in 1:nclass) {
     ###               detSS = determinant(SS[,,j], logarithm = TRUE)$modulus[1]
     ###               nuLL = function(nus) {(CholWishart::mvdigamma((nus + p - 1)/2, p) -
     ###                                     CholWishart::mvdigamma((nus + p + q - 1)/2, p) -
@@ -339,7 +347,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     ###                   ## print(nuLL(3))
     ###                   ## print(SSD[j])
     ###
-    ###               }else{
+    ###               } else {
     ###                   fit0 <- stats::uniroot(nuLL, c(2, 1000),...)
     ###                   new.df[j] = fit0$root
     ###               }
@@ -361,7 +369,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     olderlogLik <- oldlogLik
     oldlogLik <- logLik
     logLik <- 0
-    # for(obs in 1:n){
+    # for(obs in 1:n) {
     for (j in 1:nclass) {
       if (model == "normal" || new.df[j] == 0 || new.df[j] == Inf) {
         logLik <- logLik + sum(newposterior[, j] * (log(pi[j]) +
@@ -381,7 +389,8 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior), iter 
     if (verbose) cat("\nLog likelihood:", logLik)
     if (i == 0) {
       oldlogLik <- logLik - .3 * abs(logLik)
-      ## initialize to some not-so-bad values so that doesn't immediately "converge"
+      ## initialize to some not-so-bad values
+      ## so that doesn't immediately "converge"
       olderlogLik <- oldlogLik - .2 * abs(oldlogLik)
     }
 
@@ -452,7 +461,7 @@ print.MixMatrixModel <- function(x, ...) {
 #' @importFrom graphics plot
 plot.MixMatrixModel <- function(x, ...) {
   plot(
-    x = 1:length(x$logLik), y = x$logLik,
+    x = seq_len(length(x$logLik)), y = x$logLik,
     ylab = "Log Likelihood", xlab = "iteration", ...
   )
 }
@@ -465,12 +474,14 @@ logLik.MixMatrixModel <- function(object, ...) {
   p <- dims[1]
   q <- dims[2]
   numgroups <- length(levels(grouping))
-  grouplist <- levels(grouping)
+ # grouplist <- levels(grouping)
   meanpars <- p * q
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
+  if (!is.null(object$call$row.mean) && (object$call$row.mean))
+      meanpars <- meanpars / q
+  if (!is.null(object$call$col.mean) && (object$call$col.mean))
+      meanpars <- meanpars / p
   upars <- (p + 1) * p / 2
-  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  vpars <- (q + 1) * q / 2 # there's one par that will get subbed off variance
   nupar <- 0 # only fixed for now
   numgroups <- (object$K)
   if (!is.null(object$call$fixdf) && !(object$call$fixdf)) nupar <- numgroups
@@ -500,19 +511,21 @@ nobs.MixMatrixModel <- function(object, ...) {
 ##' provide initial values and it will format them as expected for the function.
 ##'
 ##' @param data  data, \eqn{p \times q \times n}{p * q * n} array
-##' @param prior prior probability. One of \code{prior} and \code{K} must be
-##'      provided. They must be consistent if both provided.
+##' @param prior prior probability. One of \code{prior} and \code{K}
+##'      must be  provided. They must be consistent if both provided.
 ##' @param K number of groups
-##' @param centers (optional) either a matrix or an array of \eqn{p \times p}{p * p}
+##' @param centers (optional) either a matrix or an array of
+##'      \eqn{p \times p}{p * p}
 ##'      matrices for use as the \code{centers} argument.
 ##'      If fewer than \code{K} are provided, the
 ##'      remainder are chosen by \code{centermethod}.
-##' @param U (optional) either a matrix or an array of  \eqn{q \times q}{q * q}
-##'      matrices for use as the \code{U}
-##'      argument. If a matrix is provided, it is duplicated to provide an array.
-##'      If an array is provided, it should have \code{K} slices.
-##' @param V  (optional) either a matrix or an array of matrices for use as the \code{U}
-##'      argument. If a matrix is provided, it is duplicated to provide an array.
+##' @param U (optional) either a matrix or an array of
+##'      \eqn{p \times p}{p * p} matrices for use as the \code{U}
+##'      argument. If a matrix is provided, it is duplicated to provide an
+##'      array. If an array is provided, it should have \code{K} slices.
+##' @param V  (optional) either a matrix or an array of matrices
+##'      for use as the \code{V} argument. If a matrix is provided,
+##'      it is duplicated to provide an array.
 ##'      If an array is provided, it should have \code{K} slices.
 ##' @param centermethod what method to use to generate initial centers.
 ##'      Currently support random start (\code{random}) or performing k-means
@@ -525,7 +538,8 @@ nobs.MixMatrixModel <- function(object, ...) {
 ##'      will be done.
 ##' @param model whether to use a normal distribution or a t-distribution, not
 ##'      relevant for more initialization methods.
-##' @param init (optional) a (possibly partially-formed) list with some of the components
+##' @param init (optional) a (possibly partially-formed) list
+##' with some of the components
 ##'     \code{centers}, \code{U}, and \code{V}. The function will complete the
 ##'     list and fill out missing entries.
 ##' @param ... Additional arguments to pass to \code{kmeans()} if that is
@@ -535,8 +549,10 @@ nobs.MixMatrixModel <- function(object, ...) {
 ##' \describe{
 #'       \item{\code{centers}}{the group means,
 #'             a \eqn{p \times q \times K}{p * q * K} array.}
-#'       \item{\code{U}}{the between-row covariance matrices, a \eqn{p \times p \times K}{p * p * K}  array}
-#'       \item{\code{V}}{the between-column covariance matrix, a \eqn{q \times q \times K}{q * q * K} array}
+#'       \item{\code{U}}{the between-row covariance matrices, a
+#'       \eqn{p \times p \times K}{p * p * K}  array}
+#'       \item{\code{V}}{the between-column covariance matrix, a
+#'       \eqn{q \times q \times K}{q * q * K} array}
 ##'    }
 ##'
 ##' @export
@@ -553,9 +569,10 @@ nobs.MixMatrixModel <- function(object, ...) {
 ##' prior <- c(.5,.5) # equal probability prior
 ##' init = init_matrixmixture(C, prior = prior)
 ##' # will find two centers using the "kmeans" method on the vectorized matrices
-init_matrixmixture <- function(data, prior = NULL, K = length(prior), centers = NULL,
-                               U = NULL, V = NULL, centermethod = "kmeans",
-                               varmethod = "identity", model = "normal", init = NULL, ...) {
+init_matrixmixture <- function(data, prior = NULL, K = length(prior),
+                               centers = NULL, U = NULL, V = NULL,
+                               centermethod = "kmeans", varmethod = "identity",
+                               model = "normal", init = NULL, ...) {
   dims <- dim(data)
   p <- dims[1]
   q <- dims[2]
@@ -580,7 +597,8 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior), centers = 
   }
   if (cenflag) {
     dimcen <- dim(initcenters)
-    if (!((dimcen[1] == p) && (dimcen[2] == q))) stop("wrong dimension for provided centers")
+    if (!((dimcen[1] == p) && (dimcen[2] == q)))
+        stop("wrong dimension for provided centers")
     if (length(dimcen) == 2) {
       remains <- K - 1
     } else {
@@ -592,10 +610,12 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior), centers = 
     select <- sample(n, remains, replace = FALSE)
     newcenters[, , 1:remains] <- data[, , select]
   }
-  if ((remains > 0) && (centermethod == "kmeans" || centermethod == "k-means")) {
+  if ((remains > 0) && (centermethod == "kmeans" ||
+                        centermethod == "k-means")) {
     res <- kmeans(matrix(data, nrow = n), centers = remains, ...)
     newcenters <- array(res$centers, dim = c(p, q, remains))
-    if (cenflag) newcenters <- array(c(newcenters, initcenters), dim = c(p, q, K))
+    if (cenflag) newcenters <- array(c(newcenters, initcenters),
+                                     dim = c(p, q, K))
   }
   if (!is.null(U)) {
     if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
@@ -638,10 +658,12 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
 
   if (length(dim(x)) == 2) x <- array(x, dim = c(dim(x), 1))
 
-  if (ncol(x[, , 1, drop = FALSE]) != ncol(object$centers[, , 1, drop = FALSE])) {
+  if (ncol(x[, , 1, drop = FALSE]) !=
+      ncol(object$centers[, , 1, drop = FALSE])) {
     stop("wrong column dimension of matrices")
   }
-  if (nrow(x[, , 1, drop = FALSE]) != nrow(object$centers[, , 1, drop = FALSE])) {
+  if (nrow(x[, , 1, drop = FALSE]) !=
+      nrow(object$centers[, , 1, drop = FALSE])) {
     stop("wrong row dimension of matrices")
   }
   ng <- length(object$prior)

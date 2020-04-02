@@ -25,8 +25,9 @@
 #' @param n number of columns/rows
 #' @param rho correlation parameter
 #'
-#' @return Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \eqn{rho^k} on
-#'    the other diagonals, where \eqn{k} is distance from the main diagonal.
+#' @return Toeplitz \eqn{n \times n}{n * n} matrix with 1 on the diagonal
+#' and \eqn{rho^k} on the other diagonals, where \eqn{k} is distance from the
+#' main diagonal.
 #'    Used internally but it is useful for generating your own random matrices.
 #' @seealso \code{\link[stats]{toeplitz}}
 #' @export
@@ -57,9 +58,11 @@ ARgenerate <- function(n, rho) {
 #' Generate a compound symmetric correlation matrix
 #'
 #' @param n number of dimensions
-#' @param rho off-diagonal element - a correlation between -1 and 1. Will warn if less than 0.
+#' @param rho off-diagonal element - a correlation between -1 and 1.
+#' Will warn if less than 0.
 #'
-#' @return returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and \code{rho} on the off-diagonal.
+#' @return returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and
+#' \code{rho} on the off-diagonal.
 #' @export
 #'
 #' @examples
@@ -115,7 +118,7 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
     return(FALSE)
   }
   # tol = prod(dims) * tol
-  return(testsymmetric(A, tol))
+  testsymmetric(A, tol)
   #  return(sum(abs(A - t(A))) < prod(dims)*tol)
 }
 
@@ -130,7 +133,8 @@ symm.check <- function(A, tol = (.Machine$double.eps)^.5) {
 #'
 #' @keywords internal
 varmatgenerate <- function(n, rho, variance) {
-  if (variance == "I" || variance == "independence" || variance == "Independence") variance <- "I"
+    if (variance == "I" || variance == "independence" ||
+        variance == "Independence") variance <- "I"
   if (variance == "AR(1)") {
     return(ARgenerate(n, rho))
   }
@@ -152,7 +156,8 @@ varmatgenerate <- function(n, rho, variance) {
 #'     the log of the determinant
 #' @param variance  variance structure - AR(1) or CS.
 #'
-#' @return Determinant or derivative of log-inverse for the specified matrix structure.
+#' @return Determinant or derivative of log-inverse for the
+#' specified matrix structure.
 #' @keywords internal
 vardet <- function(n, rho, deriv, variance) {
   if (variance == "AR(1)") {
@@ -178,7 +183,8 @@ vardet <- function(n, rho, deriv, variance) {
 #'     the inverse
 #' @param variance  variance structure - AR(1) or CS.
 #' @noRd
-#' @return The inverse or derivative of the inverse of the selected matrix structure.
+#' @return The inverse or derivative of the inverse of the
+#' selected matrix structure.
 #' @keywords internal
 varinv <- function(n, rho, deriv, variance) {
   if (variance == "AR(1)") {
@@ -204,7 +210,8 @@ varinv <- function(n, rho, deriv, variance) {
 #' @param deriv logical whether to return the determinant or the derivative of
 #'     the log of the determinant
 #' @noRd
-#' @return determinant of an AR(1) covariance matrix. If \code{deriv} is specified,
+#' @return determinant of an AR(1) covariance matrix.
+#'     If \code{deriv} is specified,
 #'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
 ARdet <- function(n, rho, deriv = FALSE) {
@@ -239,7 +246,8 @@ CSdet <- function(n, rho, deriv = FALSE) {
 #'
 #' @param n dimensions of matrix
 #' @param rho correlation parameter
-#' @param deriv logical. if TRUE will output the derivative of the inverse matrix.
+#' @param deriv logical. if TRUE will output the derivative of the
+#' inverse matrix.
 #' @noRd
 #' @return Matrix of the inverse of the AR(1) covariance matrix (or its inverse)
 #' @keywords internal

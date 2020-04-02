@@ -50,7 +50,8 @@
 #'     AR(1) and CS.
 #' @param df Starting value for the degrees of freedom. If \code{fixed = TRUE},
 #'     then this is required and not updated. By default, set to 10.
-#' @param fixed Whether \code{df} is estimated or fixed. By default, \code{TRUE}.
+#' @param fixed Whether \code{df} is estimated or fixed.
+#'     By default, \code{TRUE}.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
@@ -73,32 +74,36 @@
 #'       \item{\code{tol}}{the squared difference between iterations of
 #'            the variance matrices at the time of stopping}
 #'       \item{\code{logLik}}{log likelihood of result.}
-#'       \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
+#'       \item{\code{convergence}}{a convergence flag,
+#'       \code{TRUE} if converged.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
 #' @export
-#' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}}, \code{\link{MLmatrixnorm}}
+#' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
+#' \code{\link{MLmatrixnorm}}
 #'
 #' @references
 #'     Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
 #'     "Classification with the matrix-variate-t distribution", arXiv
 #'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
 #'
-#'     Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
-#'        Distribution and the Inverted Multivariate t
-#'        Distribution.” Ann. Math. Statist. 38 (2): 511–18. \doi{10.1214/aoms/1177698967}
+#'     Dickey, James M. 1967. “Matricvariate Generalizations of the
+#'     Multivariate t Distribution and the Inverted Multivariate t
+#'     Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+#'     \doi{10.1214/aoms/1177698967}
 #'
-#'     Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm: A Simple Extension of
-#'           EM and ECM with Faster Monotone Convergence.” Biometrika 81 (4): 633–48.
+#'     Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm:
+#'     A Simple Extension of EM and ECM with Faster Monotone Convergence.”
+#'     Biometrika 81 (4): 633–48.
 #'           \doi{10.2307/2337067}
 #'
-#'    Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation via the ECM
-#'             Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
+#'    Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation
+#'    via the ECM Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
 #'             \doi{10.1093/biomet/80.2.267}
 #'
-#'     Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed., 272–5. John Wiley.
-
+#'     Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed.,
+#'       272–5. John Wiley.
 #'
 #' @examples
 #' set.seed(20180202)
@@ -113,9 +118,11 @@
 MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
                       row.variance = "none", col.variance = "none",
                       df = 10, fixed = TRUE,
-                      tol = .Machine$double.eps^0.5, max.iter = 5000, U, V, ...) {
+                      tol = .Machine$double.eps^0.5, max.iter = 5000, U, V,
+                      ...) {
   if (is.null(df) || df == 0 || is.infinite(df)) {
-    return(MLmatrixnorm(data, row.mean, col.mean, row.variance, col.variance, tol, max.iter, U, V, ...))
+      return(MLmatrixnorm(data, row.mean, col.mean, row.variance,
+                          col.variance, tol, max.iter, U, V, ...))
   }
   if (class(data) == "list") {
     data <- array(unlist(data),
@@ -138,7 +145,6 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
     if (!(is.numeric(V))) stop("Non-numeric input.")
   }
 
-  #  if (length(row.variance) > 1) stop("Invalid input length for variance: ", row.variance)
   row.set.var <- FALSE
 
   rowvarparse <- .varparse(row.variance)
@@ -146,8 +152,6 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   row.variance <- rowvarparse$varopt
 
   col.set.var <- FALSE
-  #  if (length(col.variance) > 1) stop("Invalid input length for variance: ", col.variance)
-
   colvarparse <- .varparse(col.variance)
   col.set.var <- colvarparse$varflag
   col.variance <- colvarparse$varopt
@@ -223,14 +227,14 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
 
   varflag <- FALSE
-  logLikvec <- numeric(0)
+  # logLikvec <- numeric(0)
   p <- dims[1]
   q <- dims[2]
   n <- dims[3]
   # Smatrix = array(0,c(p,p,n))
 
   while (iter < max.iter && error.term > tol && (!varflag)) {
-    dfmult <- df + p + q - 1
+    # dfmult <- df + p + q - 1
 
     ### E step
     Slist <- .SStep(data, mu, U, V, rep(1.0, n))
@@ -242,7 +246,8 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
 
     ### CM STEP
     ### MEANS:
-    new.Mu <- .MeansFunction(data, V = V, SS, SSX, rep(1.0, n), row.mean, col.mean, "t")
+      new.Mu <- .MeansFunction(data, V = V, SS, SSX, rep(1.0, n),
+                               row.mean, col.mean, "t")
 
     ### VARS:
     colvarlist <- .colVars(
@@ -269,12 +274,15 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       nuLL <- function(nu) {
         (CholWishart::mvdigamma((nu + p - 1) / 2, p) -
           CholWishart::mvdigamma((nu + p + q - 1) / 2, p) -
-          (SSDtmp / n - (detSS - p * log(n * (nu + p - 1)) + p * log(nu + p + q - 1))))
+          (SSDtmp / n - (detSS - p * log(n * (nu + p - 1)) +
+                         p * log(nu + p + q - 1))))
         # this latest ECME-ish one gives SLIGHTLY different results but is faster
         # (SSDtmp/n +  determinant(new.U, logarithm = TRUE)$modulus[1]))
       }
       if (!isTRUE(sign(nuLL(1e-6)) * sign(nuLL(1000)) <= 0)) {
-        warning("Endpoints of derivative of df likelihood do not have opposite sign. Check df specification.")
+        warning("Endpoints of derivative of df likelihood do not have
+opposite sign.
+                 Check df specification.")
         varflag <- TRUE
       } else {
         fit0 <- stats::uniroot(nuLL, c(1e-6, 1000), ...)
@@ -285,11 +293,15 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       new.df <- df
     }
     ### CHECK CONVERGENCE
-    error.term <- sum((new.V - V)^2) / (q * q) + sum((new.U - U)^2) / (p * p) + sum((new.Mu - mu)^2) / (p * q) + (df - new.df)^2 / (n * p * q)
+      error.term <- sum((new.V - V)^2) / (q * q) +
+          sum((new.U - U)^2) / (p * p) +
+          sum((new.Mu - mu)^2) / (p * q) + (df - new.df)^2 / (n * p * q)
     ### check, force symmetry
-    if (max(abs(new.V - t(new.V)) > tol)) warning("V matrix may not be symmetric")
+      if (max(abs(new.V - t(new.V)) > tol))
+          warning("V matrix may not be symmetric")
 
-    if (max(abs(new.U - t(new.U)) > tol)) warning("U matrix may not be symmetric")
+      if (max(abs(new.U - t(new.U)) > tol))
+          warning("U matrix may not be symmetric")
     V <- .5 * (new.V + t(new.V))
     U <- .5 * (new.U + t(new.U))
     mu <- new.Mu

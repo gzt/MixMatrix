@@ -168,9 +168,7 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
       SS = NULL, SSX = NULL,
       weights = 1.0 * (g == levels(g)[i]), ...
     )
-    # group.means[, , i] = suppressWarnings(MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE],
-    #                                                  max.iter = 1, ...)$mean)
-  }
+   }
   swept.group <- array(0, dims)
   for (i in seq(n)) {
     swept.group[, , i] <- x[, , i] - group.means[, , as.numeric(g[i])]
@@ -218,7 +216,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
         }
       }
 
-      error <- sum((newUresult - Uresult)^2) + sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
+      error <- sum((newUresult - Uresult)^2) +
+        sum((newVresult - Vresult)^2) + (varresult - newvarresult)^2
       Uresult <- newUresult
       Vresult <- newVresult
       varresult <- newvarresult
@@ -273,7 +272,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 #'     proportions in the training set or what was set in the call to
 #'     \code{matrixlda}.
 #' @param ... arguments based from or to other methods
-#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}},
+#'    and \code{\link{matrixmixture}}
 
 #' @return
 #' Returns a list containing
@@ -352,8 +352,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
   dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
-  p <- dims[1]
-  q <- dims[2]
+  # p <- dims[1]
+  # q <- dims[2]
   if (object$method == "t") df <- object$nu
   dist <- matrix(0, nrow = n, ncol = ng)
   posterior <- matrix(0, nrow = n, ncol = ng)
@@ -379,9 +379,15 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 
   for (j in seq(ng)) {
     if (object$method == "t") {
-      dist[, j] <- dmat_t_calc(x, df, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
+      dist[, j] <- dmat_t_calc(
+        x, df, object$means[, , j], object$U,
+        object$V * object$scaling
+      ) + log(prior[j])
     } else {
-      dist[, j] <- dmatnorm_calc(x, object$means[, , j], object$U, object$V * object$scaling) + log(prior[j])
+      dist[, j] <- dmatnorm_calc(
+        x, object$means[, , j], object$U,
+        object$V * object$scaling
+      ) + log(prior[j])
     }
   }
 
@@ -416,7 +422,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #'       \item{\code{lev}}{levels of the grouping factor}
 #'       \item{\code{N}}{The number of observations used.}
 #'       \item{\code{method}}{The method used.}
-#'       \item{\code{nu}}{The degrees of freedom parameter if the t-distribution was used.}
+#'       \item{\code{nu}}{The degrees of freedom parameter
+#'      if the t-distribution was used.}
 #'       \item{\code{call}}{The (matched) function call.}
 #'    }
 #'
@@ -449,7 +456,8 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' D <- matrixqda(C, groups, prior)
 #' logLik(D)
 #' print(D)
-matrixqda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal", nu = 10, ..., subset) {
+matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
+                      method = "normal", nu = 10, ..., subset) {
   if (is.null(dim(x))) {
     stop("'x' is not an array")
   }
@@ -601,12 +609,16 @@ logLik.matrixlda <- function(object, ...) {
   grouplist <- levels(groups)
   meanpars <- p * q
   upars <- (p + 1) * p / 2
-  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  vpars <- (q + 1) * q / 2 # there's one par that will get subbed off variance
   nupar <- 0 # if nu not fixed, becomes 1
 
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) {
+    meanpars <- meanpars / q
+  }
 
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) {
+    meanpars <- meanpars / p
+  }
 
   if (!is.null(object$call$col.variance)) {
     Vvars <- object$call$col.variance
@@ -616,7 +628,9 @@ logLik.matrixlda <- function(object, ...) {
 
     if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars <- (q - 1) * q / 2 + 1
+    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) {
+      vpars <- (q - 1) * q / 2 + 1
+    }
   }
   if (!is.null(object$call$row.variance)) {
     Uvars <- object$call$row.variance
@@ -626,7 +640,9 @@ logLik.matrixlda <- function(object, ...) {
 
     if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars <- (p - 1) * p / 2 + 1
+    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) {
+      upars <- (p - 1) * p / 2 + 1
+    }
   }
 
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
@@ -701,12 +717,16 @@ logLik.matrixqda <- function(object, ...) {
   grouplist <- levels(grouping)
   meanpars <- p * q
   upars <- (p + 1) * p / 2
-  vpars <- (q + 1) * q / 2 # note of course that there's one par that will get subbed off variance
+  vpars <- (q + 1) * q / 2 #  there's one par that will get subbed off variance
   nupar <- 0 # if nu not fixed, becomes 1
 
-  if (!is.null(object$call$row.mean) && (object$call$row.mean)) meanpars <- meanpars / q
+  if (!is.null(object$call$row.mean) && (object$call$row.mean)) {
+    meanpars <- meanpars / q
+  }
 
-  if (!is.null(object$call$col.mean) && (object$call$col.mean)) meanpars <- meanpars / p
+  if (!is.null(object$call$col.mean) && (object$call$col.mean)) {
+    meanpars <- meanpars / p
+  }
 
   if (!is.null(object$call$col.variance)) {
     Vvars <- object$call$col.variance
@@ -716,7 +736,9 @@ logLik.matrixqda <- function(object, ...) {
 
     if (grepl("^i", x = Vvars, ignore.case = TRUE)) vpars <- 1
 
-    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) vpars <- (q - 1) * q / 2 + 1
+    if (grepl("^cor", x = Vvars, ignore.case = TRUE)) {
+      vpars <- (q - 1) * q / 2 + 1
+    }
   }
   if (!is.null(object$call$row.variance)) {
     Uvars <- object$call$row.variance
@@ -726,7 +748,9 @@ logLik.matrixqda <- function(object, ...) {
 
     if (grepl("^i", x = Uvars, ignore.case = TRUE)) upars <- 1
 
-    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) upars <- (p - 1) * p / 2 + 1
+    if (grepl("^cor", x = Uvars, ignore.case = TRUE)) {
+      upars <- (p - 1) * p / 2 + 1
+    }
   }
 
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
@@ -800,7 +824,8 @@ nobs.matrixqda <- function(object, ...) {
 #'       \item{\code{posterior}}{posterior probabilities for the classes}
 #'    }
 #'
-#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+#' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}},
+#' and \code{\link{matrixmixture}}
 #' @export
 #'
 
@@ -868,8 +893,8 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
   dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
-  p <- dims[1]
-  q <- dims[2]
+  # p <- dims[1]
+  # q <- dims[2]
   df <- object$nu
   ##### Here is where the work needs to be done.
   dist <- matrix(0, nrow = n, ncol = ng)
@@ -877,9 +902,15 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
 
   for (j in seq(ng)) {
     if (object$method == "t") {
-      dist[, j] <- dmat_t_calc(x, df[j], object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
+      dist[, j] <- dmat_t_calc(
+        x, df[j], object$means[, , j], object$U[, , j],
+        object$V[, , j]
+      ) + log(prior[j])
     } else {
-      dist[, j] <- dmatnorm_calc(x, object$means[, , j], object$U[, , j], object$V[, , j]) + log(prior[j])
+      dist[, j] <- dmatnorm_calc(
+        x, object$means[, , j], object$U[, , j],
+        object$V[, , j]
+      ) + log(prior[j])
     }
   }
 
