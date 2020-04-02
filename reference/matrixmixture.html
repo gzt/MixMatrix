@@ -172,13 +172,13 @@ matrix variate t distribution (with specified degrees of freedom <code>nu</code>
     </tr>
     <tr>
       <th>init</th>
-      <td><p>a list containing an array of <code>K</code> of \(p \times q\) means labeled
-<code>centers</code>,
-and optionally \(p \times p\) and \(q \times q\) positive definite variance
-matrices labeled <code>U</code> and <code>V</code>.
+      <td><p>a list containing an array of <code>K</code> of
+\(p \times q\) means labeled <code>centers</code>,
+and optionally \(p \times p\) and \(q \times q\)
+positive definite variance matrices labeled <code>U</code> and <code>V</code>.
 By default, those are presumed to be identity if not provided.
-If <code>init</code> is missing, it will be provided using the <code>prior</code> or <code>K</code> by
-<code>init_matrixmix</code>.</p></td>
+If <code>init</code> is missing, it will be provided using the <code>prior</code>
+or <code>K</code> by <code>init_matrixmix</code>.</p></td>
     </tr>
     <tr>
       <th>prior</th>
@@ -199,7 +199,8 @@ provided, the prior will be of uniform distribution among the classes.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>what method to use to fit the distribution. Currently no options.</p></td>
+      <td><p>what method to use to fit the distribution.
+Currently no options.</p></td>
     </tr>
     <tr>
       <th>row.mean</th>
@@ -224,12 +225,13 @@ log-likelihood by default.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>pass additional arguments to <code>MLmatrixnorm</code> or <code>MLmatrixt</code></p></td>
+      <td><p>pass additional arguments to <code>MLmatrixnorm</code> or
+<code>MLmatrixt</code></p></td>
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>whether to print diagnostic output, by default <code>0</code>. Higher
-numbers output more results.</p></td>
+      <td><p>whether to print diagnostic output, by default <code>0</code>.
+Higher  numbers output more results.</p></td>
     </tr>
     <tr>
       <th>miniter</th>
@@ -237,11 +239,11 @@ numbers output more results.</p></td>
     </tr>
     <tr>
       <th>convergence</th>
-      <td><p>By default, <code>TRUE</code>. Whether to use Aitken acceleration to
-determine convergence. If false, it instead checks if the change in
+      <td><p>By default, <code>TRUE</code>, using Aitken acceleration
+to determine convergence. If false, it instead checks if the change in
 log-likelihood is less than <code>tolerance</code>. Aitken acceleration may
-prematurely end in the first few steps, so you may wish to set <code>miniter</code>
-or select <code>FALSE</code> if this is an issue.</p></td>
+prematurely end in the first few steps, so you may wish to set
+<code>miniter</code> or select <code>FALSE</code> if this is an issue.</p></td>
     </tr>
     </table>
 
@@ -256,7 +258,8 @@ or select <code>FALSE</code> if this is an issue.</p></td>
       <dt><code>centers</code></dt><dd><p>the group means.</p></dd>
       <dt><code>U</code></dt><dd><p>the between-row covariance matrices</p></dd>
       <dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
-      <dt><code>posterior</code></dt><dd><p>the posterior probabilities for each observation</p></dd>
+      <dt><code>posterior</code></dt><dd><p>the posterior probabilities for each
+            observation</p></dd>
       <dt><code>pi</code></dt><dd><p>the final proportions</p></dd>
       <dt><code>nu</code></dt><dd><p>The degrees of freedom parameter if the t distribution
            was used.</p></dd>

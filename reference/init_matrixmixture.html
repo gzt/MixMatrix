@@ -170,8 +170,8 @@ provide initial values and it will format them as expected for the function.</p>
     </tr>
     <tr>
       <th>prior</th>
-      <td><p>prior probability. One of <code>prior</code> and <code>K</code> must be
-provided. They must be consistent if both provided.</p></td>
+      <td><p>prior probability. One of <code>prior</code> and <code>K</code>
+must be  provided. They must be consistent if both provided.</p></td>
     </tr>
     <tr>
       <th>K</th>
@@ -179,22 +179,24 @@ provided. They must be consistent if both provided.</p></td>
     </tr>
     <tr>
       <th>centers</th>
-      <td><p>(optional) either a matrix or an array of \(p \times p\)
+      <td><p>(optional) either a matrix or an array of
+\(p \times p\)
 matrices for use as the <code>centers</code> argument.
 If fewer than <code>K</code> are provided, the
 remainder are chosen by <code>centermethod</code>.</p></td>
     </tr>
     <tr>
       <th>U</th>
-      <td><p>(optional) either a matrix or an array of  \(q \times q\)
-matrices for use as the <code>U</code>
-argument. If a matrix is provided, it is duplicated to provide an array.
-If an array is provided, it should have <code>K</code> slices.</p></td>
+      <td><p>(optional) either a matrix or an array of
+\(p \times p\) matrices for use as the <code>U</code>
+argument. If a matrix is provided, it is duplicated to provide an
+array. If an array is provided, it should have <code>K</code> slices.</p></td>
     </tr>
     <tr>
       <th>V</th>
-      <td><p>(optional) either a matrix or an array of matrices for use as the <code>U</code>
-argument. If a matrix is provided, it is duplicated to provide an array.
+      <td><p>(optional) either a matrix or an array of matrices
+for use as the <code>V</code> argument. If a matrix is provided,
+it is duplicated to provide an array.
 If an array is provided, it should have <code>K</code> slices.</p></td>
     </tr>
     <tr>
@@ -219,9 +221,10 @@ relevant for more initialization methods.</p></td>
     </tr>
     <tr>
       <th>init</th>
-      <td><p>(optional) a (possibly partially-formed) list with some of the components
-<code>centers</code>, <code>U</code>, and <code>V</code>. The function will complete the
-list and fill out missing entries.</p></td>
+      <td><p>(optional) a (possibly partially-formed) list
+with some of the components
+    <code>centers</code>, <code>U</code>, and <code>V</code>. The function will complete the
+    list and fill out missing entries.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -236,8 +239,10 @@ list and fill out missing entries.</p></td>
      <code>matrixmixture</code>:</p><dl'>
       <dt><code>centers</code></dt><dd><p>the group means,
             a \(p \times q \times K\) array.</p></dd>
-      <dt><code>U</code></dt><dd><p>the between-row covariance matrices, a \(p \times p \times K\)  array</p></dd>
-      <dt><code>V</code></dt><dd><p>the between-column covariance matrix, a \(q \times q \times K\) array</p></dd>
+      <dt><code>U</code></dt><dd><p>the between-row covariance matrices, a
+      \(p \times p \times K\)  array</p></dd>
+      <dt><code>V</code></dt><dd><p>the between-column covariance matrix, a
+      \(q \times q \times K\) array</p></dd>
    
 </dl>
 
