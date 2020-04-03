@@ -123,7 +123,7 @@ rmatrixt <- function(n, df, mean,
   mean <- as.matrix(mean)
   u_mat <- as.matrix(U)
   v_mat <- as.matrix(V)
-   dims <- dim(mean)
+  dims <- dim(mean)
   dimcheck_stop(u_mat, v_mat, dims)
 
   if (force && !missing(R)) chol_v <- R else chol_v <- chol(v_mat)
@@ -245,19 +245,19 @@ rmatrixinvt <- function(n, df, mean,
                         R = diag(dim(as.matrix(mean))[2]),
                         U = L %*% t(L), V = t(R) %*% R,
                         list = FALSE, array = NULL) {
-    if (!(allnumeric_stop(n, df, (mean), (L), (R), (U), (V)))) {
-        stop("Non-numeric input. ")
-    }
-    if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
-    if (((is.null(df)) || is.na(df) || (df < 0))) {
-        stop("df must be >= 0. df =", df)
-    }
-    if (!(n > 0)) {
-        stop("n must be > 0.", n)
-    }
-    mean <- as.matrix(mean)
-    u_mat <- as.matrix(U)
-    v_mat <- as.matrix(V)
+  if (!(allnumeric_stop(n, df, (mean), (L), (R), (U), (V)))) {
+    stop("Non-numeric input. ")
+  }
+  if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))
+  if (((is.null(df)) || is.na(df) || (df < 0))) {
+    stop("df must be >= 0. df =", df)
+  }
+  if (!(n > 0)) {
+    stop("n must be > 0.", n)
+  }
+  mean <- as.matrix(mean)
+  u_mat <- as.matrix(U)
+  v_mat <- as.matrix(V)
 
   dims <- dim(mean)
   # checks for conformable matrix dimensions
@@ -300,7 +300,7 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n), L = diag(p),
   if (length(dims) == 2) x <- array(x, dim = (dims <- c(dims, 1)))
   p <- dims[1]
   n <- dims[2]
-   if (!(allnumeric_stop((x), df, (mean), (L), (R), (U), (V)))) {
+  if (!(allnumeric_stop((x), df, (mean), (L), (R), (U), (V)))) {
     stop("Non-numeric input. ")
   }
   if (length(df) != 1) stop("Length of df must be 1. length = ", length(df))

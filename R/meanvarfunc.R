@@ -3,7 +3,6 @@
 .sstep <- function(data, centers, u, v, weights) {
   dims <- dim(data)
   p <- dims[1]
-  # q <- dims[2]
   n <- dims[3]
 
 
@@ -96,7 +95,6 @@
     n_ll <- function(theta) {
       vardetmat <- vardet(q, theta, TRUE, col.variance)
       varinvmat <- varinv(q, theta, TRUE, col.variance)
-      # sxox = rowSums(axbt(ssxtmp,varinvmat,data ), dims = 2)
       sxox <- ssx %*% varinvmat %*% t(rowSums(data, dims = 2))
       return(-n * p * vardetmat +
         dfmult * matrixtrace(sxox +

@@ -58,28 +58,34 @@ test_that("Testing bad matrix dimension input", {
   )
 
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, L = b_mat, R = a_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  L = b_mat, R = a_mat, list = FALSE),
     "Non-conforming"
   )
 
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, L = a_mat, R = b_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  L = a_mat, R = b_mat, list = FALSE),
     "Non-conforming"
   )
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, U = b_mat, R = a_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  U = b_mat, R = a_mat, list = FALSE),
     "Non-conforming"
   )
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, L = a_mat, V = b_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  L = a_mat, V = b_mat, list = FALSE),
     "Non-conforming"
   )
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, U = a_mat, V = b_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  U = a_mat, V = b_mat, list = FALSE),
     "Non-conforming"
   )
   expect_error(
-    rmatrixinvt(n = 1, df = 1, mean = a_mat, U = a_mat, R = b_mat, list = FALSE),
+      rmatrixinvt(n = 1, df = 1, mean = a_mat,
+                  U = a_mat, R = b_mat, list = FALSE),
     "Non-conforming"
   )
 
@@ -158,11 +164,16 @@ test_that("Testing bad matrix dimension input", {
     "Non-conforming"
   )
 
-  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = a_mat), U = b_mat, V = a_mat))
-  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = a_mat), U = a_mat, V = b_mat))
-  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat), df = 0, U = a_mat, V = b_mat))
-  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat), U = b_mat, V = a_mat))
-  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat), U = a_mat, V = b_mat))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = a_mat),
+                            U = b_mat, V = a_mat))
+  expect_error(MLmatrixnorm(rmatrixnorm(n = 100, mean = a_mat),
+                            U = a_mat, V = b_mat))
+  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat),
+                         df = 0, U = a_mat, V = b_mat))
+  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat),
+                         U = b_mat, V = a_mat))
+  expect_error(MLmatrixt(rmatrixnorm(n = 100, mean = a_mat),
+                         U = a_mat, V = b_mat))
 })
 
 

@@ -175,7 +175,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   } else {
     est_v <- V
   }
-  # mu <- apply(data, c(1, 2), mean)
+
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
     # make it so that the mean is constant within a row
@@ -233,11 +233,11 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   }
 
   varflag <- FALSE
-  # log_lik_vec <- numeric(0)
+
   p <- dims[1]
   q <- dims[2]
   n <- dims[3]
-  # Smatrix = array(0,c(p,p,n))
+
 
   while (iter < max.iter && error_term > tol && (!varflag)) {
     ### E step
@@ -275,7 +275,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       new_df <- df
       ## insert E step for NU and M step for NU
       ssdtmp <- ssd
-      # ssdtmp = detsum(Smatrix)
+
       detss <- determinant(ss, logarithm = TRUE)$modulus[1]
       nu_ll <- function(nu) {
         (CholWishart::mvdigamma((nu + p - 1) / 2, p) -
@@ -294,7 +294,6 @@ opposite sign.
         fit0 <- stats::uniroot(nu_ll, c(1e-6, 1000), ...)
         new_df <- fit0$root
       }
-      # print(new_df)
     } else {
       new_df <- df
     }

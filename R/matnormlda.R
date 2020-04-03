@@ -352,8 +352,6 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
   dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
-  # p <- dims[1]
-  # q <- dims[2]
   if (object$method == "t") df <- object$nu
   dist <- matrix(0, nrow = n, ncol = ng)
   posterior <- matrix(0, nrow = n, ncol = ng)
@@ -520,7 +518,8 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t") {
-      mlfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE], df = df[i], ...)
+        mlfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
+                           df = df[i], ...)
       df[i] <- mlfit$nu
     } else {
       mlfit <- MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
@@ -893,8 +892,6 @@ predict.matrixqda <- function(object, newdata, prior = object$prior, ...) {
   dims <- dim(x)
   # x is a p x q x n array
   n <- dims[3]
-  # p <- dims[1]
-  # q <- dims[2]
   df <- object$nu
   ##### Here is where the work needs to be done.
   dist <- matrix(0, nrow = n, ncol = ng)

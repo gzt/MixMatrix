@@ -141,7 +141,7 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
                         L = diag(p),
                         R = diag(n), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
-  # x <- as.matrix(x)
+
   dims <- dim(x)
   if (is.null(dims) || length(dims) == 1) x <- matrix(x)
   dims <- dim(x)
@@ -358,7 +358,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
   } else {
     v_mat <- V
   }
-  # mu <- apply(data, c(1, 2), mean)
+
   mu <- rowMeans(data, dims = 2)
   if (row.mean) {
     # make it so that the mean is constant within a row

@@ -215,7 +215,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     print(fit_v)
   }
   convergeflag <- FALSE
-  # Smatrix <- array(0, c(p, p, n))
+
   ss <- array(0, c(p, p, nclass))
   ssx <- array(0, c(p, q, nclass))
   ssxx <- array(0, c(q, q, nclass))
@@ -411,7 +411,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     }
 
     i <- i + 1
-    #  print(new_df)
+
     log_lik_vec <- c(log_lik_vec, log_lik)
   }
   if ((i == iter || eps > tolerance)) {
@@ -481,7 +481,7 @@ logLik.MixMatrixModel <- function(object, ...) {
   p <- dims[1]
   q <- dims[2]
   numgroups <- length(levels(grouping))
-  # grouplist <- levels(grouping)
+
   meanpars <- p * q
   if (!is.null(object$call$row.mean) && (object$call$row.mean)) {
     meanpars <- meanpars / q
@@ -699,8 +699,8 @@ predict.MixMatrixModel <- function(object, newdata, prior = object$pi, ...) {
   posterior <- matrix(0, nrow = n, ncol = ng)
 
 
-  # for (i in seq(n)) {
-  # Xi = matrix(x[, , i], p, q)
+
+
   for (j in seq(ng)) {
     if (object$model == "normal") {
       dist[, j] <- log(prior[j]) + dmatnorm_calc(x,

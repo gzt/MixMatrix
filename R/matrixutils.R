@@ -50,7 +50,7 @@ ARgenerate <- function(n, rho) {
   if (rho > 0.999) {
     warning("Rho = ", rho, " high correlation may cause numerical problems.")
   }
-  stats::toeplitz(c(1, rho^(1:(n - 1))))
+  stats::toeplitz(c(1, rho^(1 : (n - 1))))
 }
 
 
@@ -116,7 +116,7 @@ symm_check <- function(mat, tol = (.Machine$double.eps)^.5) {
   if (dims[1] != dims[2]) {
     return(FALSE)
   }
-  # tol = prod(dims) * tol
+
   testsymmetric(mat, tol)
 }
 
