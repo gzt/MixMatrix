@@ -305,7 +305,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
     ## if normal
     if (model == "normal") {
       for (j in 1:nclass) {
-        ### .NormVarFunc(data,centers,U,V,weights,row.variance,col.variance)
+
         #### or do EEE, etc formulation
         zigmult <- rep(newposterior[, j], each = q * q)
         swept_data <- sweep(x, c(1, 2), newcenters[, , j])

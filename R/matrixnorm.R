@@ -141,7 +141,6 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
                         L = diag(p),
                         R = diag(n), U = L %*% t(L),
                         V = t(R) %*% R, log = FALSE) {
-
   dims <- dim(x)
   if (is.null(dims) || length(dims) == 1) x <- matrix(x)
   dims <- dim(x)

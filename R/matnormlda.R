@@ -518,8 +518,9 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
   for (i in seq(ng)) {
     # hiding this there: , ...
     if (method == "t") {
-        mlfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
-                           df = df[i], ...)
+      mlfit <- MLmatrixt(x[, , g == levels(g)[i], drop = FALSE],
+        df = df[i], ...
+      )
       df[i] <- mlfit$nu
     } else {
       mlfit <- MLmatrixnorm(x[, , g == levels(g)[i], drop = FALSE], ...)
