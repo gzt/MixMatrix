@@ -124,8 +124,8 @@ rmatrixt <- function(n, df, mean,
   u_mat <- as.matrix(U)
   v_mat <- as.matrix(V)
   dims <- dim(mean)
-  dimcheck_stop(u_mat, v_mat, dims)
-
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   if (force && !missing(R)) chol_v <- R else chol_v <- chol(v_mat)
 
   if (min(diag(chol_v)) < 1e-6 && !force) {
@@ -185,7 +185,8 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
   mean <- as.matrix(mean)
   u_mat <- as.matrix(U)
   v_mat <- as.matrix(V)
-  dimcheck_stop(u_mat, v_mat, dims)
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   if ((df == 0 || is.infinite(df))) {
     return(dmatrixnorm(x, mean = mean, U = u_mat, V = v_mat, log = log))
   }
@@ -261,8 +262,8 @@ rmatrixinvt <- function(n, df, mean,
 
   dims <- dim(mean)
   # checks for conformable matrix dimensions
-  dimcheck_stop(u_mat, v_mat, dims)
-
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   nobs <- prod(dims) * n
   mat <- array(stats::rnorm(nobs), dim = c(dims, n))
 
@@ -311,7 +312,8 @@ dmatrixinvt <- function(x, df, mean = matrix(0, p, n), L = diag(p),
   mean <- as.matrix(mean)
   u_mat <- as.matrix(U)
   v_mat <- as.matrix(V)
-  dimcheck_stop(u_mat, v_mat, dims)
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   gammas <- as.numeric(
     CholWishart::lmvgamma((0.5) * (df + dims[1] + dims[2] - 1), dims[1]) -
       0.5 * prod(dims[1:2]) * log(pi) -

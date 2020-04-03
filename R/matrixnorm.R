@@ -99,7 +99,8 @@ rmatrixnorm <- function(n, mean,
   dims <- dim(mean)
 
   # checks for conformable matrix dimensions
-  dimcheck_stop(u_mat, v_mat, dims)
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   if (force && !missing(L)) chol_u <- L else chol_u <- chol.default(u_mat)
   if (force && !missing(R)) chol_v <- R else chol_v <- chol.default(v_mat)
 
@@ -151,7 +152,8 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
   mean <- as.matrix(mean)
   u_mat <- as.matrix(U)
   v_mat <- as.matrix(V)
-  dimcheck_stop(u_mat, v_mat, dims)
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   logresult <- as.numeric(dmatnorm_calc(x, mean, u_mat, v_mat))
   if (log) {
     return(logresult)
@@ -205,7 +207,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
   if (unrolled) {
     dims <- c(dim(u_mat)[1], dim(v_mat)[1])
   }
-  dimcheck_stop(u_mat, v_mat, dims)
+    dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+    if (!(dim_result == "ok")) stop(dim_result)
   if (!unrolled) {
     vecx <- as.vector(x)
   } else {
