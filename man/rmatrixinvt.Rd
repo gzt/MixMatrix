@@ -32,7 +32,7 @@ dmatrixinvt(
 \item{n}{number of observations for generation}
 
 \item{df}{degrees of freedom (\eqn{>0}, may be non-integer),
-\code{df = 0, Inf} is allowed and will return a normal distribution.}
+\verb{df = 0, Inf} is allowed and will return a normal distribution.}
 
 \item{mean}{\eqn{p \times q}{p * q} This is really a 'shift' rather than a
 mean, though the expected value will be equal to this if

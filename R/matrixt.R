@@ -24,7 +24,7 @@
 #' @param n number of observations for generation
 #' @param x quantile for density
 #' @param df  degrees of freedom (\eqn{>0}, may be non-integer),
-#'    \code{df = 0, Inf} is allowed and will return a normal distribution.
+#'    `df = 0, Inf` is allowed and will return a normal distribution.
 #' @param mean \eqn{p \times q}{p * q} This is really a 'shift' rather than a
 #'    mean, though the expected value will be equal to this if
 #'    \eqn{df > 2}
@@ -36,25 +36,25 @@
 #'    rows, computed from \eqn{L} if not specified.
 #' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}  positive definite matrix for
 #'    columns, computed from \eqn{R}  if not specified.
-#' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
+#' @param list Defaults to `FALSE` . If this is `TRUE` , then the
 #'    output will be a list of matrices.
-#' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
-#'    \code{FALSE} , the function will return a matrix containing the one
-#'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
-#'    If \code{list}  is \code{TRUE} , this will be ignored.
-#' @param force In \code{rmatrix}: if \code{TRUE}, will take the input of
-#'    \code{R} directly - otherwise uses \code{V} and uses Cholesky
+#' @param array If \eqn{n = 1}  and this is not specified and `list`  is
+#'    `FALSE` , the function will return a matrix containing the one
+#'    observation. If \eqn{n > 1} , should be the opposite of `list` .
+#'    If `list`  is `TRUE` , this will be ignored.
+#' @param force In `rmatrix`: if `TRUE`, will take the input of
+#'    `R` directly - otherwise uses `V` and uses Cholesky
 #'    decompositions. Useful for generating degenerate t-distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
-#' @param log logical; in \code{dmatrixt}, if \code{TRUE}, probabilities
-#'    \code{p} are given as \code{log(p)}.
-#' @return \code{rmatrixt} returns either a list of \eqn{n}
+#' @param log logical; in `dmatrixt`, if `TRUE`, probabilities
+#'    `p` are given as `log(p)`.
+#' @return `rmatrixt` returns either a list of \eqn{n}
 #'    \eqn{p \times q}{p * q}  matrices or a
 #' \eqn{p \times q \times n}{p * q * n}
 #'    array.
 #'
-#'    \code{dmatrixt} returns the density at \code{x}.
+#'    `dmatrixt` returns the density at `x`.
 #' @references  Gupta, Arjun K, and Daya K Nagar. 1999.
 #' Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
@@ -66,11 +66,11 @@
 #' @details
 #' The matrix \eqn{t}-distribution is parameterized slightly
 #'  differently from the univariate and multivariate \eqn{t}-distributions
-#'  - the variance is scaled by a factor of \code{1/df}.
+#'  - the variance is scaled by a factor of `1/df`.
 #'  In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix
 #'  variate \eqn{t}-distributed random variable with identity variance matrices
 #'  is \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
-#'  for the matrix variate \eqn{T} is then that as \code{df} goes to
+#'  for the matrix variate \eqn{T} is then that as `df` goes to
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
@@ -218,11 +218,11 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #' @name rmatrixinvt
 #' @rdname rmatrixinvt
 #' @inheritParams rmatrixt
-#' @return \code{rmatrixinvt} returns either a list of \eqn{n}
+#' @return `rmatrixinvt` returns either a list of \eqn{n}
 #'    \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
-#'    \code{dmatrixinvt} returns the density at  \code{x}.
+#'    `dmatrixinvt` returns the density at  `x`.
 #'
 #' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
 #'    and \code{\link[stats]{Distributions}}.

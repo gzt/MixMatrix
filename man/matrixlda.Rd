@@ -86,7 +86,7 @@ print(D)
 \references{
 \preformatted{G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
-e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 
 Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
   analysis for image matrix", Pattern Recognition Letters, Volume 26,

@@ -29,12 +29,12 @@
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 1 and 2, indexed by dimension 3.
-#' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{col.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
-#' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{row.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
+#' @param row.mean By default, `FALSE`. If `TRUE`, will fit a
+#'    common mean within each row. If both this and `col.mean` are
+#'    `TRUE`, there will be a common mean for the entire matrix.
+#' @param col.mean By default, `FALSE`. If `TRUE`, will fit a
+#'    common mean within each row. If both this and `row.mean` are
+#'    `TRUE`, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
 #'     'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 #'     correlation matrix, or 'Independence' for
@@ -42,16 +42,16 @@
 #'     Only positive correlations are allowed for AR(1) and CS and these
 #'     restrictions may not be guaranteed to converge.
 #'     Note that while maximum likelihood estimators are available (and used)
-#'     for the unconstrained variance matrices, \code{optim} is used for any
+#'     for the unconstrained variance matrices, `optim` is used for any
 #'     constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
 #'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
 #'     Only positive correlations are allowed for
 #'     AR(1) and CS.
-#' @param df Starting value for the degrees of freedom. If \code{fixed = TRUE},
+#' @param df Starting value for the degrees of freedom. If `fixed = TRUE`,
 #'     then this is required and not updated. By default, set to 10.
-#' @param fixed Whether \code{df} is estimated or fixed.
-#'     By default, \code{TRUE}.
+#' @param fixed Whether `df` is estimated or fixed.
+#'     By default, `TRUE`.
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
@@ -59,24 +59,24 @@
 #'    By default, an identity matrix.
 #' @param V (optional) Can provide a starting point for the V matrix.
 #'    By default, an identity matrix.
-#' @param ... (optional) additional arguments can be passed to \code{optim}
+#' @param ... (optional) additional arguments can be passed to `optim`
 #'    if using restrictions on the variance.
 #'
 #' @return Returns a list with the following elements:
 #' \describe{
-#'       \item{\code{mean}}{the mean matrix}
-#'       \item{\code{U}}{the between-row covariance matrix}
-#'       \item{\code{V}}{the between-column covariance matrix}
-#'       \item{\code{var}}{the scalar variance parameter
+#'       \item{`mean`}{the mean matrix}
+#'       \item{`U`}{the between-row covariance matrix}
+#'       \item{`V`}{the between-column covariance matrix}
+#'       \item{`var`}{the scalar variance parameter
 #'            (the first entry of the covariances are restricted to unity)}
-#'       \item{\code{nu}}{the degrees of freedom parameter}
-#'       \item{\code{iter}}{the number of iterations}
-#'       \item{\code{tol}}{the squared difference between iterations of
+#'       \item{`nu`}{the degrees of freedom parameter}
+#'       \item{`iter`}{the number of iterations}
+#'       \item{`tol`}{the squared difference between iterations of
 #'            the variance matrices at the time of stopping}
-#'       \item{\code{logLik}}{log likelihood of result.}
-#'       \item{\code{convergence}}{a convergence flag,
-#'       \code{TRUE} if converged.}
-#'       \item{\code{call}}{The (matched) function call.}
+#'       \item{`logLik`}{log likelihood of result.}
+#'       \item{`convergence`}{a convergence flag,
+#'       `TRUE` if converged.}
+#'       \item{`call`}{The (matched) function call.}
 #'    }
 #'
 #' @export
@@ -86,7 +86,7 @@
 #' @references
 #'     Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
 #'     "Classification with the matrix-variate-t distribution", arXiv
-#'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+#'     e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 #'
 #'     Dickey, James M. 1967. “Matricvariate Generalizations of the
 #'     Multivariate t Distribution and the Inverted Multivariate t

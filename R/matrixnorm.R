@@ -37,23 +37,23 @@
 #' @param V \eqn{R^T R}  - \eqn{q \times q}{q * q}
 #' positive definite variance-covariance
 #'    matrix for columns, computed from \eqn{R}  if not specified.
-#' @param list Defaults to \code{FALSE} . If this is \code{TRUE} , then the
+#' @param list Defaults to `FALSE` . If this is `TRUE` , then the
 #'    output will be a list of matrices.
-#' @param array If \eqn{n = 1}  and this is not specified and \code{list}  is
-#'    \code{FALSE} , the function will return a matrix containing the one
-#'    observation. If \eqn{n > 1} , should be the opposite of \code{list} .
-#'    If \code{list}  is \code{TRUE} , this will be ignored.
-#' @param force If TRUE, will take the input of \code{L} and/or \code{R}
-#'    directly - otherwise computes \code{U} and \code{V} and uses Cholesky
+#' @param array If \eqn{n = 1}  and this is not specified and `list`  is
+#'    `FALSE` , the function will return a matrix containing the one
+#'    observation. If \eqn{n > 1} , should be the opposite of `list` .
+#'    If `list`  is `TRUE` , this will be ignored.
+#' @param force If TRUE, will take the input of `L` and/or `R`
+#'    directly - otherwise computes `U` and `V` and uses Cholesky
 #'    decompositions. Useful for generating degenerate normal distributions.
 #'    Will also override concerns about potentially singular matrices
 #'    unless they are not, in fact, invertible.
 #' @param log logical; if TRUE, probabilities p are given as log(p).
-#' @return \code{rmatrixnorm} returns either a list of
+#' @return `rmatrixnorm` returns either a list of
 #' \eqn{n}  \eqn{p \times q}{p * q}  matrices or
 #'    a \eqn{p \times q \times n}{p * q * n}  array.
 #'
-#'    \code{dmatrixnorm} returns the density at \code{x}.
+#'    `dmatrixnorm` returns the density at `x`.
 #'
 #' @references Gupta, Arjun K, and Daya K Nagar. 1999.
 #' Matrix Variate Distributions.
@@ -166,7 +166,7 @@ dmatrixnorm <- function(x, mean = matrix(0, p, n),
 #' @description Equivalent to dmatrixnorm except it works by unrolling
 #'     to a vector. Alternatively, it can work on a matrix that has
 #'     already been unrolled in the default R method (using
-#'     \code{as.vector}), as data may be stored in that fashion.
+#'     `as.vector`), as data may be stored in that fashion.
 #'
 #'
 #' @inheritParams rmatrixnorm
@@ -246,19 +246,19 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'
 #' @param data Either a list of matrices or a 3-D array with matrices in
 #'    dimensions 1 and 2, indexed by dimension 3.
-#' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{col.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
-#' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-#'    common mean within each row. If both this and \code{row.mean} are
-#'    \code{TRUE}, there will be a common mean for the entire matrix.
+#' @param row.mean By default, `FALSE`. If `TRUE`, will fit a
+#'    common mean within each row. If both this and `col.mean` are
+#'    `TRUE`, there will be a common mean for the entire matrix.
+#' @param col.mean By default, `FALSE`. If `TRUE`, will fit a
+#'    common mean within each row. If both this and `row.mean` are
+#'    `TRUE`, there will be a common mean for the entire matrix.
 #' @param row.variance Imposes a variance structure on the rows. Either
 #'    'none', 'AR(1)', 'CS' for 'compound symmetry', 'Correlation' for a
 #'    correlation matrix, or 'Independence' for
 #'    independent and identical variance across the rows.
 #'    Only positive correlations are allowed for AR(1) and CS covariances.
 #'    Note that while maximum likelihood estimators are available (and used) for
-#'    the unconstrained variance matrices, \code{optim} is used for any
+#'    the unconstrained variance matrices, `optim` is used for any
 #'    constraints so it may be considerably slower.
 #' @param col.variance  Imposes a variance structure on the columns.
 #'     Either 'none', 'AR(1)', 'CS', 'Correlation', or 'Independence'.
@@ -267,26 +267,26 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #' @param tol Convergence criterion. Measured against square deviation
 #'    between iterations of the two variance-covariance matrices.
 #' @param max.iter Maximum possible iterations of the algorithm.
-#' @param U (optional) Can provide a starting point for the \code{U} matrix.
+#' @param U (optional) Can provide a starting point for the `U` matrix.
 #'    By default, an identity matrix.
-#' @param V (optional) Can provide a starting point for the \code{V} matrix.
+#' @param V (optional) Can provide a starting point for the `V` matrix.
 #'    By default, an identity matrix.
-#' @param ... (optional) additional arguments can be passed to \code{optim}
+#' @param ... (optional) additional arguments can be passed to `optim`
 #'    if using restrictions on the variance.
 #'
 #' @return Returns a list with a the following elements:
 #' \describe{
-#'     \item{\code{mean}}{the mean matrix}
-#'     \item{\code{scaling}}{the scalar variance parameter
+#'     \item{`mean`}{the mean matrix}
+#'     \item{`scaling`}{the scalar variance parameter
 #'          (the first entry of the covariances are restricted to unity)}
-#'     \item{\code{U}}{the between-row covariance matrix}
-#'     \item{\code{V}}{the between-column covariance matrix}
-#'     \item{\code{iter}}{the number of iterations}
-#'     \item{\code{tol}}{the squared difference between iterations of
+#'     \item{`U`}{the between-row covariance matrix}
+#'     \item{`V`}{the between-column covariance matrix}
+#'     \item{`iter`}{the number of iterations}
+#'     \item{`tol`}{the squared difference between iterations of
 #'          the variance matrices at the time of stopping}
-#'     \item{\code{logLik}}{vector of log likelihoods at each iteration.}
-#'     \item{\code{convergence}}{a convergence flag, \code{TRUE} if converged.}
-#'     \item{\code{call}}{The (matched) function call.}
+#'     \item{`logLik`}{vector of log likelihoods at each iteration.}
+#'     \item{`convergence`}{a convergence flag, `TRUE` if converged.}
+#'     \item{`call`}{The (matched) function call.}
 #'    }
 #'
 #' @references

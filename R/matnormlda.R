@@ -34,7 +34,7 @@
 #' The estimated variance matrices are weighted by the prior. However,
 #' if there are not enough members of a class to estimate a variance,
 #' this may be a problem.
-#' The function does not take the formula interface. If \code{method = 't'}
+#' The function does not take the formula interface. If `method = 't'`
 #' is selected, this performs discrimination using the matrix variate t
 #' distribution, presuming equal covariances between classes.
 #'
@@ -43,34 +43,34 @@
 #' @param grouping vector
 #' @param prior a vector of prior probabilities of the same length
 #'    as the number of classes
-#' @param tol by default, \code{1e-4}. Tolerance parameter checks
+#' @param tol by default, `1e-4`. Tolerance parameter checks
 #'    for 0 variance.
-#' @param method whether to use the normal distribution (\code{normal}) or the
-#'    t distribution (\code{t}). By default, normal.
+#' @param method whether to use the normal distribution (`normal`) or the
+#'    t distribution (`t`). By default, normal.
 #' @param nu If using the t-distribution, the degrees of freedom parameter. By
 #'    default, 10.
 #' @param ... Arguments passed to or from other methods, such
-#'    as additional parameters to pass to \code{MLmatrixnorm} (e.g.,
-#'    \code{row.mean})
+#'    as additional parameters to pass to `MLmatrixnorm` (e.g.,
+#'    `row.mean`)
 #' @param subset An index vector specifying the cases to be used in the
 #'          training sample.  (NOTE: If given, this argument must be
 #'          named.)
 #'
-#' @return Returns a list of class \code{matrixlda} containing
+#' @return Returns a list of class `matrixlda` containing
 #'    the following components:
 #'    \describe{
-#'       \item{\code{prior}}{the prior probabilities used.}
-#'       \item{\code{counts}}{the counts of group membership}
-#'       \item{\code{means}}{the group means.}
-#'       \item{\code{scaling}}{the scalar variance parameter}
-#'       \item{\code{U}}{the between-row covariance matrix}
-#'       \item{\code{V}}{the between-column covariance matrix}
-#'       \item{\code{lev}}{levels of the grouping factor}
-#'       \item{\code{N}}{The number of observations used.}
-#'       \item{\code{method}}{The method used.}
-#'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
+#'       \item{`prior`}{the prior probabilities used.}
+#'       \item{`counts`}{the counts of group membership}
+#'       \item{`means`}{the group means.}
+#'       \item{`scaling`}{the scalar variance parameter}
+#'       \item{`U`}{the between-row covariance matrix}
+#'       \item{`V`}{the between-column covariance matrix}
+#'       \item{`lev`}{levels of the grouping factor}
+#'       \item{`N`}{The number of observations used.}
+#'       \item{`method`}{The method used.}
+#'       \item{`nu`}{The degrees of freedom parameter if the t distribution
 #'            was used.}
-#'       \item{\code{call}}{The (matched) function call.}
+#'       \item{`call`}{The (matched) function call.}
 #'    }
 #'
 #' @seealso  \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
@@ -80,7 +80,7 @@
 #' @references
 #'     G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
 #'     "Classification with the matrix-variate-t distribution", arXiv
-#'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+#'     e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 #'
 #'     Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
 #'       analysis for image matrix", Pattern Recognition Letters, Volume 26,
@@ -257,20 +257,20 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 
 #' Classify Matrix Variate Observations by Linear Discrimination
 #'
-#' Classify matrix variate observations in conjunction with \code{matrixlda}.
+#' Classify matrix variate observations in conjunction with `matrixlda`.
 #'
-#' This function is a method for the generic function \code{predict()} for
-#' class "\code{matrixlda}". It can be invoked by calling \code{predict(x)} for
-#' an object \code{x} of the appropriate class.
+#' This function is a method for the generic function `predict()` for
+#' class "`matrixlda`". It can be invoked by calling `predict(x)` for
+#' an object `x` of the appropriate class.
 #'
 #'
-#' @param object object of class \code{matrixlda}
+#' @param object object of class `matrixlda`
 #' @param newdata array or list of new observations to be classified.
 #'     If newdata is missing, an attempt will be made to retrieve the
-#'     data used to fit the \code{matrixlda} object.
+#'     data used to fit the `matrixlda` object.
 #' @param prior The prior probabilities of the classes, by default the
 #'     proportions in the training set or what was set in the call to
-#'     \code{matrixlda}.
+#'     `matrixlda`.
 #' @param ... arguments based from or to other methods
 #' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}},
 #'    and \code{\link{matrixmixture}}
@@ -279,8 +279,8 @@ matrixlda <- function(x, grouping, prior, tol = 1.0e-4, method = "normal",
 #' Returns a list containing
 #'    the following components:
 #'    \describe{
-#'       \item{\code{class}}{The MAP classification (a factor)}
-#'       \item{\code{posterior}}{posterior probabilities for the classes}
+#'       \item{`class`}{The MAP classification (a factor)}
+#'       \item{`posterior`}{posterior probabilities for the classes}
 #'    }
 #'
 #' @export
@@ -401,28 +401,28 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 
 #' Quadratic Discriminant Analysis for Matrix Variate Observations
 #'
-#' See \code{matrixlda}: quadratic discriminant analysis for matrix
+#' See `matrixlda`: quadratic discriminant analysis for matrix
 #' variate observations.
 #'
-#' This uses \code{MLmatrixnorm} or \code{MLmatrixt} to find the means and
+#' This uses `MLmatrixnorm` or `MLmatrixt` to find the means and
 #' variances for the case when different groups have different variances.
 #'
 #' @inheritParams matrixlda
 #'
-#' @return Returns a list of class \code{matrixqda} containing
+#' @return Returns a list of class `matrixqda` containing
 #'    the following components:
 #'    \describe{
-#'       \item{\code{prior}}{the prior probabilities used.}
-#'       \item{\code{counts}}{the counts of group membership}
-#'       \item{\code{means}}{the group means.}
-#'       \item{\code{U}}{the between-row covariance matrices}
-#'       \item{\code{V}}{the between-column covariance matrices}
-#'       \item{\code{lev}}{levels of the grouping factor}
-#'       \item{\code{N}}{The number of observations used.}
-#'       \item{\code{method}}{The method used.}
-#'       \item{\code{nu}}{The degrees of freedom parameter
+#'       \item{`prior`}{the prior probabilities used.}
+#'       \item{`counts`}{the counts of group membership}
+#'       \item{`means`}{the group means.}
+#'       \item{`U`}{the between-row covariance matrices}
+#'       \item{`V`}{the between-column covariance matrices}
+#'       \item{`lev`}{levels of the grouping factor}
+#'       \item{`N`}{The number of observations used.}
+#'       \item{`method`}{The method used.}
+#'       \item{`nu`}{The degrees of freedom parameter
 #'      if the t-distribution was used.}
-#'       \item{\code{call}}{The (matched) function call.}
+#'       \item{`call`}{The (matched) function call.}
 #'    }
 #'
 #' @seealso \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
@@ -433,7 +433,7 @@ predict.matrixlda <- function(object, newdata, prior = object$prior, ...) {
 #' @references
 #'     G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
 #'     "Classification with the matrix-variate-t distribution", arXiv
-#'     e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+#'     e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 #'
 #'   Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
 #'   S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
@@ -799,29 +799,29 @@ nobs.matrixqda <- function(object, ...) {
 
 #' Classify Matrix Variate Observations by Quadratic Discrimination
 #'
-#' Classify matrix variate observations in conjunction with \code{matrixqda}.
+#' Classify matrix variate observations in conjunction with `matrixqda`.
 #'
-#' This function is a method for the generic function \code{predict()} for
-#' class "\code{matrixqda}". It can be invoked by calling \code{predict(x)} for
-#' an object \code{x} of the appropriate class.
+#' This function is a method for the generic function `predict()` for
+#' class "`matrixqda`". It can be invoked by calling `predict(x)` for
+#' an object `x` of the appropriate class.
 #'
 #'
 #'
-#' @param object object of class \code{matrixqda}
+#' @param object object of class `matrixqda`
 #' @param newdata array or list of new observations to be classified.
 #'     If newdata is missing, an attempt will be made to retrieve the
-#'     data used to fit the \code{matrixqda} object.
+#'     data used to fit the `matrixqda` object.
 #' @param prior The prior probabilities of the classes, by default the
 #'     proportions in the training set or what was set in the call to
-#'     \code{matrixqda}.
+#'     `matrixqda`.
 #' @param ... arguments based from or to other methods
 #'
 #' @return
 #' Returns a list containing
 #'    the following components:
 #'    \describe{
-#'       \item{\code{class}}{The MAP classification (a factor)}
-#'       \item{\code{posterior}}{posterior probabilities for the classes}
+#'       \item{`class`}{The MAP classification (a factor)}
+#'       \item{`posterior`}{posterior probabilities for the classes}
 #'    }
 #'
 #' @seealso \code{\link{matrixlda}}, \code{\link{matrixqda}},

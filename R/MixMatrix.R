@@ -6,7 +6,7 @@
 #' using the EM algorithm, including some restrictions on the parameters;
 #' and classification by linear and quadratic discriminant
 #' analysis for matrix variate normal and t distributions described
-#' in \href{https://arxiv.org/abs/1907.09565}{Thompson et al. (2019)}.
+#' in [Thompson et al. (2019)](https://arxiv.org/abs/1907.09565).
 #' Performs clustering with matrix variate normal and t mixture models.
 #'
 #' @docType package

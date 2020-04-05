@@ -61,7 +61,7 @@ ARgenerate <- function(n, rho) {
 #' Will warn if less than 0.
 #'
 #' @return returns an \eqn{n \times n}{n * n} matrix with 1 on the diagonal and
-#' \code{rho} on the off-diagonal.
+#' `rho` on the off-diagonal.
 #' @export
 #'
 #' @examples
@@ -102,7 +102,7 @@ CSgenerate <- function(n, rho) {
 #'    it may need to be specified as it's a sum of entries.
 #' @noRd
 #' @return logical TRUE if symmetric FALSE otherwise.
-#'     Not as robust as \code{isSymmetric()}.
+#'     Not as robust as `isSymmetric()`.
 #' @keywords internal
 symm_check <- function(mat, tol = (.Machine$double.eps)^.5) {
   if (!is.matrix(mat)) {
@@ -211,7 +211,7 @@ varinv <- function(n, rho, deriv, variance) {
 #'     the log of the determinant
 #' @noRd
 #' @return determinant of an AR(1) covariance matrix.
-#'     If \code{deriv} is specified,
+#'     If `deriv` is specified,
 #'     will return the derivative of \eqn{\log |\Sigma^{-1}|}.
 #' @keywords internal
 ar_det <- function(n, rho, deriv = FALSE) {

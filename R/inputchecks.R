@@ -3,7 +3,7 @@
 ##' @title Dimension check
 ##' @param mat_1 the U matrix
 ##' @param mat_2 the V matrix
-##' @param dims the output of \code{dim(X)}
+##' @param dims the output of `dim(X)`
 ##' @return TRUE if it works, will error if it doesn't.
 ##' @keywords internal
 ##' @noRd

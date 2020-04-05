@@ -18,67 +18,67 @@
 
 ##' Fit a matrix variate mixture model
 ##'
-##' Clustering by fitting a mixture model using EM with \code{K} groups
+##' Clustering by fitting a mixture model using EM with `K` groups
 ##' and unconstrained covariance matrices for a matrix variate normal or
-##' matrix variate t distribution (with specified degrees of freedom \code{nu}).
+##' matrix variate t distribution (with specified degrees of freedom `nu`).
 ##'
 ##' @param x data, \eqn{p \times q \times n}{p * q * n} array
-##' @param init a list containing an array of \code{K} of
-##'     \eqn{p \times q}{p * q} means labeled \code{centers},
+##' @param init a list containing an array of `K` of
+##'     \eqn{p \times q}{p * q} means labeled `centers`,
 ##'     and optionally \eqn{p \times p}{p * p} and \eqn{q \times q}{q * q}
-##'     positive definite variance matrices labeled \code{U} and \code{V}.
+##'     positive definite variance matrices labeled `U` and `V`.
 ##'     By default, those are presumed to be identity if not provided.
-##'     If \code{init} is missing, it will be provided using the \code{prior}
-##'     or \code{K} by \code{init_matrixmix}.
-##' @param prior prior for the \code{K} classes, a vector that adds to unity
+##'     If `init` is missing, it will be provided using the `prior`
+##'     or `K` by `init_matrixmix`.
+##' @param prior prior for the `K` classes, a vector that adds to unity
 ##' @param K number of classes - provide either this or the prior. If this is
 ##'     provided, the prior will be of uniform distribution among the classes.
 ##' @param iter maximum number of iterations.
-##' @param model whether to use the \code{normal} or \code{t} distribution.
+##' @param model whether to use the `normal` or `t` distribution.
 ##'
 ##' @param method what method to use to fit the distribution.
 ##'     Currently no options.
-##' @param row.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-##'    common mean within each row. If both this and \code{col.mean} are
-##'    \code{TRUE}, there will be a common mean for the entire matrix.
-##' @param col.mean By default, \code{FALSE}. If \code{TRUE}, will fit a
-##'    common mean within each row. If both this and \code{row.mean} are
-##'    \code{TRUE}, there will be a common mean for the entire matrix.
+##' @param row.mean By default, `FALSE`. If `TRUE`, will fit a
+##'    common mean within each row. If both this and `col.mean` are
+##'    `TRUE`, there will be a common mean for the entire matrix.
+##' @param col.mean By default, `FALSE`. If `TRUE`, will fit a
+##'    common mean within each row. If both this and `row.mean` are
+##'    `TRUE`, there will be a common mean for the entire matrix.
 ##' @param tolerance convergence criterion, using Aitken acceleration of the
 ##'     log-likelihood by default.
-##' @param nu degrees of freedom parameter. Can be a vector of length \code{K}.
-##' @param ... pass additional arguments to \code{MLmatrixnorm} or
-##'     \code{MLmatrixt}
-##' @param verbose whether to print diagnostic output, by default \code{0}.
+##' @param nu degrees of freedom parameter. Can be a vector of length `K`.
+##' @param ... pass additional arguments to `MLmatrixnorm` or
+##'     `MLmatrixt`
+##' @param verbose whether to print diagnostic output, by default `0`.
 ##'     Higher  numbers output more results.
 ##' @param miniter minimum number of iterations
-##' @param convergence By default, \code{TRUE}, using Aitken acceleration
+##' @param convergence By default, `TRUE`, using Aitken acceleration
 ##'     to determine convergence. If false, it instead checks if the change in
-##'     log-likelihood is less than \code{tolerance}. Aitken acceleration may
+##'     log-likelihood is less than `tolerance`. Aitken acceleration may
 ##'     prematurely end in the first few steps, so you may wish to set
-##'     \code{miniter} or select \code{FALSE} if this is an issue.
-##' @return A list of class \code{MixMatrixModel} containing the following
+##'     `miniter` or select `FALSE` if this is an issue.
+##' @return A list of class `MixMatrixModel` containing the following
 ##'     components:
 ##' \describe{
-##'      \item{\code{prior}}{the prior probabilities used.}
-##'      \item{\code{init}}{the initialization used.}
-#'       \item{\code{K}}{the number of groups}
-#'       \item{\code{N}}{the number of observations}
-#'       \item{\code{centers}}{the group means.}
-#'       \item{\code{U}}{the between-row covariance matrices}
-#'       \item{\code{V}}{the between-column covariance matrix}
-#'       \item{\code{posterior}}{the posterior probabilities for each
+##'      \item{`prior`}{the prior probabilities used.}
+##'      \item{`init`}{the initialization used.}
+#'       \item{`K`}{the number of groups}
+#'       \item{`N`}{the number of observations}
+#'       \item{`centers`}{the group means.}
+#'       \item{`U`}{the between-row covariance matrices}
+#'       \item{`V`}{the between-column covariance matrix}
+#'       \item{`posterior`}{the posterior probabilities for each
 #'             observation}
-#'       \item{\code{pi}}{ the final proportions}
-#'       \item{\code{nu}}{The degrees of freedom parameter if the t distribution
+#'       \item{`pi`}{ the final proportions}
+#'       \item{`nu`}{The degrees of freedom parameter if the t distribution
 #'            was used.}
-#'       \item{\code{convergence }}{whether the model converged}
-#'       \item{\code{logLik}}{a vector of the log-likelihoods
+#'       \item{`convergence `}{whether the model converged}
+#'       \item{`logLik`}{a vector of the log-likelihoods
 #'               of each iteration ending in
 #'               the final log-likelihood of the model}
-#'       \item{\code{model}}{the model used}
-#'       \item{\code{method}}{the method used}
-#'       \item{\code{call}}{The (matched) function call.}
+#'       \item{`model`}{the model used}
+#'       \item{`method`}{the method used}
+#'       \item{`call`}{The (matched) function call.}
 ##'    }
 ##'
 ##'
@@ -514,53 +514,53 @@ nobs.MixMatrixModel <- function(object, ...) {
 
 ##' Initializing settings for Matrix Mixture Models
 ##'
-##' Providing this will generate a list suitable for use as the \code{init}
-##' argument in the \code{matrixmixture} function. Either provide data
+##' Providing this will generate a list suitable for use as the `init`
+##' argument in the `matrixmixture` function. Either provide data
 ##' and it will select centers and variance matrices to initialize or
 ##' provide initial values and it will format them as expected for the function.
 ##'
 ##' @param data  data, \eqn{p \times q \times n}{p * q * n} array
-##' @param prior prior probability. One of \code{prior} and \code{K}
+##' @param prior prior probability. One of `prior` and `K`
 ##'      must be  provided. They must be consistent if both provided.
 ##' @param K number of groups
 ##' @param centers (optional) either a matrix or an array of
 ##'      \eqn{p \times p}{p * p}
-##'      matrices for use as the \code{centers} argument.
-##'      If fewer than \code{K} are provided, the
-##'      remainder are chosen by \code{centermethod}.
+##'      matrices for use as the `centers` argument.
+##'      If fewer than `K` are provided, the
+##'      remainder are chosen by `centermethod`.
 ##' @param U (optional) either a matrix or an array of
-##'      \eqn{p \times p}{p * p} matrices for use as the \code{U}
+##'      \eqn{p \times p}{p * p} matrices for use as the `U`
 ##'      argument. If a matrix is provided, it is duplicated to provide an
-##'      array. If an array is provided, it should have \code{K} slices.
+##'      array. If an array is provided, it should have `K` slices.
 ##' @param V  (optional) either a matrix or an array of matrices
-##'      for use as the \code{V} argument. If a matrix is provided,
+##'      for use as the `V` argument. If a matrix is provided,
 ##'      it is duplicated to provide an array.
-##'      If an array is provided, it should have \code{K} slices.
+##'      If an array is provided, it should have `K` slices.
 ##' @param centermethod what method to use to generate initial centers.
-##'      Currently support random start (\code{random}) or performing k-means
-##'      (\code{kmeans}) on the vectorized version for a small number of
+##'      Currently support random start (`random`) or performing k-means
+##'      (`kmeans`) on the vectorized version for a small number of
 ##'      iterations and then converting back.
-##'      By default, if \code{K} centers are provided, nothing will be done.
+##'      By default, if `K` centers are provided, nothing will be done.
 ##' @param varmethod what method to use to choose initial variance matrices.
 ##'      Currently only identity matrices are created.
-##'      By default, if \code{U} and \code{V} matrices are provided, nothing
+##'      By default, if `U` and `V` matrices are provided, nothing
 ##'      will be done.
 ##' @param model whether to use a normal distribution or a t-distribution, not
 ##'      relevant for more initialization methods.
 ##' @param init (optional) a (possibly partially-formed) list
 ##' with some of the components
-##'     \code{centers}, \code{U}, and \code{V}. The function will complete the
+##'     `centers`, `U`, and `V`. The function will complete the
 ##'     list and fill out missing entries.
-##' @param ... Additional arguments to pass to \code{kmeans()} if that is
-##'     \code{centermethod}.
-##' @return a list suitable to use as the \code{init} argument in
-##'      \code{matrixmixture}:
+##' @param ... Additional arguments to pass to `kmeans()` if that is
+##'     `centermethod`.
+##' @return a list suitable to use as the `init` argument in
+##'      `matrixmixture`:
 ##' \describe{
-#'       \item{\code{centers}}{the group means,
+#'       \item{`centers`}{the group means,
 #'             a \eqn{p \times q \times K}{p * q * K} array.}
-#'       \item{\code{U}}{the between-row covariance matrices, a
+#'       \item{`U`}{the between-row covariance matrices, a
 #'       \eqn{p \times p \times K}{p * p * K}  array}
-#'       \item{\code{V}}{the between-column covariance matrix, a
+#'       \item{`V`}{the between-column covariance matrix, a
 #'       \eqn{q \times q \times K}{q * q * K} array}
 ##'    }
 ##'

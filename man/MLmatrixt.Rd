@@ -108,7 +108,7 @@ print(results)
 \references{
 \preformatted{Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
-e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 
 Dickey, James M. 1967. “Matricvariate Generalizations of the
 Multivariate t Distribution and the Inverted Multivariate t
