@@ -207,8 +207,8 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
   if (unrolled) {
     dims <- c(dim(u_mat)[1], dim(v_mat)[1])
   }
-    dim_result <- dimcheck_stop(u_mat, v_mat, dims)
-    if (!(dim_result == "ok")) stop(dim_result)
+  dim_result <- dimcheck_stop(u_mat, v_mat, dims)
+  if (!(dim_result == "ok")) stop(dim_result)
   if (!unrolled) {
     vecx <- as.vector(x)
   } else {

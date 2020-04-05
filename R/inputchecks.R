@@ -8,11 +8,15 @@
 ##' @keywords internal
 ##' @noRd
 dimcheck_stop <- function(mat_1, mat_2, dims) {
-  if (!symm_check(mat_1)) return("U must be symmetric.")
-  if (!symm_check(mat_2)) return("V must be symmetric.")
+  if (!symm_check(mat_1)) {
+    return("U must be symmetric.")
+  }
+  if (!symm_check(mat_2)) {
+    return("V must be symmetric.")
+  }
   if (!(dims[1] == dim(mat_1)[2] && dim(mat_1)[1] == dim(mat_1)[2] &&
     dims[2] == dim(mat_2)[1] && dim(mat_2)[1] == dim(mat_2)[2])) {
-      return("Non-conforming dimensions: U and V must have compatible dimensions with x.")
+    return("Non-conforming dimensions: U and V must have compatible dimensions with x.")
   }
   "ok"
 }
