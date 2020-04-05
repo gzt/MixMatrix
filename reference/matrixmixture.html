@@ -250,53 +250,55 @@ prematurely end in the first few steps, so you may wish to set
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of class <code>MixMatrixModel</code> containing the following
-    components:</p><dl'>
-     <dt><code>prior</code></dt><dd><p>the prior probabilities used.</p></dd>
-     <dt><code>init</code></dt><dd><p>the initialization used.</p></dd>
-      <dt><code>K</code></dt><dd><p>the number of groups</p></dd>
-      <dt><code>N</code></dt><dd><p>the number of observations</p></dd>
-      <dt><code>centers</code></dt><dd><p>the group means.</p></dd>
-      <dt><code>U</code></dt><dd><p>the between-row covariance matrices</p></dd>
-      <dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
-      <dt><code>posterior</code></dt><dd><p>the posterior probabilities for each
-            observation</p></dd>
-      <dt><code>pi</code></dt><dd><p>the final proportions</p></dd>
-      <dt><code>nu</code></dt><dd><p>The degrees of freedom parameter if the t distribution
-           was used.</p></dd>
-      <dt><code>convergence </code></dt><dd><p>whether the model converged</p></dd>
-      <dt><code>logLik</code></dt><dd><p>a vector of the log-likelihoods
-              of each iteration ending in
-              the final log-likelihood of the model</p></dd>
-      <dt><code>model</code></dt><dd><p>the model used</p></dd>
-      <dt><code>method</code></dt><dd><p>the method used</p></dd>
-      <dt><code>call</code></dt><dd><p>The (matched) function call.</p></dd>
-   
+components:</p><dl'>
+<dt><code>prior</code></dt><dd><p>the prior probabilities used.</p></dd>
+<dt><code>init</code></dt><dd><p>the initialization used.</p></dd>
+<dt><code>K</code></dt><dd><p>the number of groups</p></dd>
+<dt><code>N</code></dt><dd><p>the number of observations</p></dd>
+<dt><code>centers</code></dt><dd><p>the group means.</p></dd>
+<dt><code>U</code></dt><dd><p>the between-row covariance matrices</p></dd>
+<dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
+<dt><code>posterior</code></dt><dd><p>the posterior probabilities for each
+observation</p></dd>
+<dt><code>pi</code></dt><dd><p>the final proportions</p></dd>
+<dt><code>nu</code></dt><dd><p>The degrees of freedom parameter if the t distribution
+was used.</p></dd>
+<dt><code>convergence </code></dt><dd><p>whether the model converged</p></dd>
+<dt><code>logLik</code></dt><dd><p>a vector of the log-likelihoods
+of each iteration ending in
+the final log-likelihood of the model</p></dd>
+<dt><code>model</code></dt><dd><p>the model used</p></dd>
+<dt><code>method</code></dt><dd><p>the method used</p></dd>
+<dt><code>call</code></dt><dd><p>The (matched) function call.</p></dd>
+
 </dl>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
-      "Model-Based Classification via Mixtures of Multivariate
-      T-Distributions." Computational Statistics &amp; Data Analysis 55 (1):
-      520–29. doi: <a href='https://doi.org/10.1016/j.csda.2010.05.019'>10.1016/j.csda.2010.05.019</a>
-.</p>
-<p>Fraley, Chris, and Adrian E Raftery. 2002. "Model-Based Clustering,
-       Discriminant Analysis, and Density Estimation." Journal of the
-       American Statistical Association 97 (458). Taylor &amp; Francis: 611–31.
-       doi: <a href='https://doi.org/10.1198/016214502760047131'>10.1198/016214502760047131</a>
-.</p>
-<p>McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019.
-          "Finite Mixture Models." Annual Review of Statistics and Its
-          Application 6. Annual Reviews: 355–78.
-          doi: <a href='https://doi.org/10.1146/annurev-statistics-031017-100325'>10.1146/annurev-statistics-031017-100325</a>
-.</p>
-<p>Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
-          for Classifying Three-Way Data." Statistics and Computing 21 (4):
-          511–22. doi: <a href='https://doi.org/10.1007/s11222-010-9188-x'>10.1007/s11222-010-9188-x</a>
-.</p>
+    
+<pre>Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
+  "Model-Based Classification via Mixtures of Multivariate
+  T-Distributions." Computational Statistics &amp; Data Analysis 55 (1):
+  520–29. \doi{10.1016/j.csda.2010.05.019}.
+
+Fraley, Chris, and Adrian E Raftery. 2002. "Model-Based Clustering,
+   Discriminant Analysis, and Density Estimation." Journal of the
+   American Statistical Association 97 (458). Taylor &amp; Francis: 611–31.
+   \doi{10.1198/016214502760047131}.
+
+McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019.
+      "Finite Mixture Models." Annual Review of Statistics and Its
+      Application 6. Annual Reviews: 355–78.
+      \doi{10.1146/annurev-statistics-031017-100325}.
+
+Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
+      for Classifying Three-Way Data." Statistics and Computing 21 (4):
+      511–22. \doi{10.1007/s11222-010-9188-x}.
+</pre>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='init_matrixmixture.html'>init_matrixmixture</a></code></p></div>
+    <div class='dont-index'><p><code><a href='init_matrixmixture.html'>init_matrixmixture()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180221</span>)

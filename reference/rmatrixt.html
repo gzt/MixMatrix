@@ -237,35 +237,37 @@ unless they are not, in fact, invertible.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>rmatrixt</code> returns either a list of \(n\)
-   \(p \times q\)  matrices or a
+\(p \times q\)  matrices or a
 \(p \times q \times n\)
-   array.</p>
+array.</p>
 <p><code>dmatrixt</code> returns the density at <code>x</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The matrix \(t\)-distribution is parameterized slightly
- differently from the univariate and multivariate \(t\)-distributions
- - the variance is scaled by a factor of <code>1/df</code>.
- In this parameterization, the variance for a \(1 \times 1\) matrix
- variate \(t\)-distributed random variable with identity variance matrices
- is \(1/(df-2)\) instead of \(df/(df-2)\). A Central Limit Theorem
- for the matrix variate \(T\) is then that as <code>df</code> goes to
- infinity, \(MVT(0, df, I_p, df*I_q)\) converges to
- \(MVN(0,I_p,I_q)\).</p>
+differently from the univariate and multivariate \(t\)-distributions</p><ul>
+<li><p>the variance is scaled by a factor of <code>1/df</code>.
+In this parameterization, the variance for a \(1 \times 1\) matrix
+variate \(t\)-distributed random variable with identity variance matrices
+is \(1/(df-2)\) instead of \(df/(df-2)\). A Central Limit Theorem
+for the matrix variate \(T\) is then that as <code>df</code> goes to
+infinity, \(MVT(0, df, I_p, df*I_q)\) converges to
+\(MVN(0,I_p,I_q)\).</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gupta, Arjun K, and Daya K Nagar. 1999.
 Matrix Variate Distributions.
-    Vol. 104. CRC Press. ISBN:978-1584880462</p>
+Vol. 104. CRC Press. ISBN:978-1584880462</p>
 <p>Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
-       Distribution and the Inverted Multivariate t
-       Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+Distribution and the Inverted Multivariate t
+Distribution.” Ann. Math. Statist. 38 (2): 511–18.
 doi: <a href='https://doi.org/10.1214/aoms/1177698967'>10.1214/aoms/1177698967</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='rmatrixnorm.html'>rmatrixnorm</a></code>,
-    <code><a href='rmatrixinvt.html'>rmatrixinvt</a></code>,<code><a href='https://rdrr.io/r/stats/TDist.html'>rt</a></code> and
-<code><a href='https://rdrr.io/r/stats/Distributions.html'>Distributions</a></code>.</p></div>
+    <div class='dont-index'><p><code><a href='rmatrixnorm.html'>rmatrixnorm()</a></code>,
+<code><a href='rmatrixinvt.html'>rmatrixinvt()</a></code>,<code><a href='https://rdrr.io/r/stats/TDist.html'>rt()</a></code> and
+<code><a href='https://rdrr.io/r/stats/Distributions.html'>stats::Distributions()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180202</span>)
