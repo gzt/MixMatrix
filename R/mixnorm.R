@@ -586,6 +586,8 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
   p <- dims[1]
   q <- dims[2]
   n <- dims[3]
+  u_mat <- U
+  v_mat  <- V
   if (is.null(prior) && is.null(K)) stop("No prior and no K")
   remains <- K
   cenflag <- FALSE
@@ -601,8 +603,8 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
       cenflag <- TRUE
       initcenters <- init$centers
     }
-    if (is.null(U)) U <- init$U
-    if (is.null(V)) V <- init$V
+    if (is.null(u_mat)) u_mat <- init$U
+    if (is.null(v_mat)) v_mat <- init$V
   }
   if (cenflag) {
     dimcen <- dim(initcenters)
@@ -630,21 +632,21 @@ init_matrixmixture <- function(data, prior = NULL, K = length(prior),
       )
     }
   }
-  if (!is.null(U)) {
-    if (length(dim(U) == 2)) U <- array(rep(U, K), dim = c(p, p, K))
+  if (!is.null(u_mat)) {
+    if (length(dim(u_mat)) == 2) u_mat <- array(rep(u_mat, K), dim = c(p, p, K))
   }
-  if (!is.null(V)) {
-    if (length(dim(V) == 2)) V <- array(rep(V, K), dim = c(q, q, K))
+  if (!is.null(v_mat)) {
+    if (length(dim(v_mat) == 2)) v_mat <- array(rep(v_mat, K), dim = c(q, q, K))
   }
   if (varmethod == "identity") {
-    if (is.null(U)) U <- array(c(rep(diag(p), K)), dim = c(p, p, K))
-    if (is.null(V)) V <- array(c(rep(diag(q), K)), dim = c(q, q, K))
+    if (is.null(u_mat)) u_mat <- array(c(rep(diag(p), K)), dim = c(p, p, K))
+    if (is.null(u_mat)) v_mat <- array(c(rep(diag(q), K)), dim = c(q, q, K))
   }
 
   list(
     centers = newcenters,
-    U = U,
-    V = V
+    U = u_mat,
+    V = v_mat
   )
 }
 
