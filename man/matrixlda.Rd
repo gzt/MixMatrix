@@ -102,7 +102,7 @@ Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
 S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0 \CRANpkg{MASS}
 }
 \seealso{
-\code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
-\code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
-\code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+\code{\link[=predict.matrixlda]{predict.matrixlda()}}, \code{\link[MASS:lda]{MASS::lda()}},
+\code{\link[=MLmatrixnorm]{MLmatrixnorm()}} and \code{\link[=MLmatrixt]{MLmatrixt()}}
+\code{\link[=matrixqda]{matrixqda()}}, and \code{\link[=matrixmixture]{matrixmixture()}}
 }

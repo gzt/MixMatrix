@@ -147,5 +147,5 @@ Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
 }
 }
 \seealso{
-\code{\link{init_matrixmixture}}
+\code{\link[=init_matrixmixture]{init_matrixmixture()}}
 }

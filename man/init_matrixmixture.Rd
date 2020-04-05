@@ -94,5 +94,5 @@ init = init_matrixmixture(C, prior = prior)
 # will find two centers using the "kmeans" method on the vectorized matrices
 }
 \seealso{
-\code{\link{matrixmixture}}
+\code{\link[=matrixmixture]{matrixmixture()}}
 }

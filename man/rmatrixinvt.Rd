@@ -90,6 +90,6 @@ Distribution.” Ann. Math. Statist. 38 (2): 511–18.
 \doi{10.1214/aoms/1177698967}
 }
 \seealso{
-\code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-and \code{\link[stats]{Distributions}}.
+\code{\link[=rmatrixnorm]{rmatrixnorm()}}, \code{\link[=rmatrixt]{rmatrixt()}},
+and \code{\link[stats:Distributions]{stats::Distributions()}}.
 }

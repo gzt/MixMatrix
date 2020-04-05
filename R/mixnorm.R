@@ -83,7 +83,7 @@
 ##'
 ##'
 ##' @export
-##' @seealso \code{\link{init_matrixmixture}}
+##' @seealso [init_matrixmixture()]
 ##'
 ##' @references
 ##'     Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
@@ -566,7 +566,7 @@ nobs.MixMatrixModel <- function(object, ...) {
 ##'
 ##' @export
 ##' @importFrom stats kmeans
-##' @seealso \code{\link{matrixmixture}}
+##' @seealso [matrixmixture()]
 ##'
 ##' @examples
 ##'  set.seed(20180221)

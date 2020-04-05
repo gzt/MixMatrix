@@ -80,8 +80,8 @@
 #'    }
 #'
 #' @export
-#' @seealso \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-#' \code{\link{MLmatrixnorm}}
+#' @seealso [rmatrixnorm()], [rmatrixt()],
+#' [MLmatrixnorm()]
 #'
 #' @references
 #'     Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),

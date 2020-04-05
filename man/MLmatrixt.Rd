@@ -128,6 +128,6 @@ via the ECM Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
 }
 }
 \seealso{
-\code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-\code{\link{MLmatrixnorm}}
+\code{\link[=rmatrixnorm]{rmatrixnorm()}}, \code{\link[=rmatrixt]{rmatrixt()}},
+\code{\link[=MLmatrixnorm]{MLmatrixnorm()}}
 }

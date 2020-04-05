@@ -59,8 +59,8 @@
 #' Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 
-#' @seealso \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-#'     \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
+#' @seealso [rmatrixt()], [rmatrixinvt()],
+#'     [rnorm()] and [stats::Distributions()]
 #' @export
 #' @examples
 #' set.seed(20180202)
@@ -297,7 +297,7 @@ dmatrixnorm.unroll <- function(x, mean = array(0L, dim(as.matrix(x))),
 #'     Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
 #'     Vol. 104. CRC Press. ISBN:978-1584880462
 #' @export
-#' @seealso \code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
+#' @seealso [rmatrixnorm()] and [MLmatrixt()]
 #'
 #' @examples
 #' set.seed(20180202)

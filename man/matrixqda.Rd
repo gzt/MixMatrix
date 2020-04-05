@@ -89,7 +89,7 @@ Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 }
 }
 \seealso{
-\code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
-\code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
-\code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+\code{\link[=predict.matrixqda]{predict.matrixqda()}}, \code{\link[MASS:qda]{MASS::qda()}},
+\code{\link[=MLmatrixnorm]{MLmatrixnorm()}}, \code{\link[=MLmatrixt]{MLmatrixt()}},
+\code{\link[=matrixlda]{matrixlda()}}, and \code{\link[=matrixmixture]{matrixmixture()}}
 }

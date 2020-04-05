@@ -29,7 +29,7 @@
 #' and \eqn{rho^k} on the other diagonals, where \eqn{k} is distance from the
 #' main diagonal.
 #'    Used internally but it is useful for generating your own random matrices.
-#' @seealso \code{\link[stats]{toeplitz}}
+#' @seealso [stats::toeplitz()]
 #' @export
 #'
 #' @examples

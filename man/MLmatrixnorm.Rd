@@ -100,5 +100,5 @@ Vol. 104. CRC Press. ISBN:978-1584880462
 }
 }
 \seealso{
-\code{\link{rmatrixnorm}} and \code{\link{MLmatrixt}}
+\code{\link[=rmatrixnorm]{rmatrixnorm()}} and \code{\link[=MLmatrixt]{MLmatrixt()}}
 }

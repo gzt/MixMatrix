@@ -103,6 +103,6 @@ Matrix Variate Distributions.
 Vol. 104. CRC Press. ISBN:978-1584880462
 }
 \seealso{
-\code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-\code{\link{rnorm}} and \code{\link[stats]{Distributions}}
+\code{\link[=rmatrixt]{rmatrixt()}}, \code{\link[=rmatrixinvt]{rmatrixinvt()}},
+\code{\link[=rnorm]{rnorm()}} and \code{\link[stats:Distributions]{stats::Distributions()}}
 }

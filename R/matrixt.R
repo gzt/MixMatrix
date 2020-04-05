@@ -74,9 +74,9 @@
 #'  infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
 #'  \eqn{MVN(0,I_p,I_q)}.
 #'
-#' @seealso \code{\link{rmatrixnorm}},
-#'     \code{\link{rmatrixinvt}},\code{\link{rt}} and
-#' \code{\link[stats]{Distributions}}.
+#' @seealso [rmatrixnorm()],
+#'     [rmatrixinvt()],[rt()] and
+#' [stats::Distributions()].
 #'
 #' @export
 #'
@@ -224,8 +224,8 @@ dmatrixt <- function(x, df, mean = matrix(0, p, n),
 #'
 #'    `dmatrixinvt` returns the density at  `x`.
 #'
-#' @seealso  \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-#'    and \code{\link[stats]{Distributions}}.
+#' @seealso  [rmatrixnorm()], [rmatrixt()],
+#'    and [stats::Distributions()].
 #'
 #' @references Gupta, Arjun K, and Daya K Nagar. 1999.
 #' Matrix Variate Distributions.
