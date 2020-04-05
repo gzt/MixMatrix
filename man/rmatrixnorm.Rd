@@ -34,18 +34,18 @@ dmatrixnorm(
 
 \item{L}{\eqn{p \times p}{p * p}  matrix specifying relations
 among the rows.
-   By default, an identity matrix.}
+By default, an identity matrix.}
 
 \item{R}{\eqn{q \times q}{q * q}  matrix specifying relations among the
 columns.  By default, an identity matrix.}
 
 \item{U}{\eqn{LL^T}  - \eqn{p \times p}{p * p}
 positive definite variance-covariance
-   matrix for rows, computed from \eqn{L} if not specified.}
+matrix for rows, computed from \eqn{L} if not specified.}
 
 \item{V}{\eqn{R^T R}  - \eqn{q \times q}{q * q}
 positive definite variance-covariance
-   matrix for columns, computed from \eqn{R}  if not specified.}
+matrix for columns, computed from \eqn{R}  if not specified.}
 
 \item{list}{Defaults to \code{FALSE} . If this is \code{TRUE} , then the
 output will be a list of matrices.}
@@ -68,9 +68,9 @@ unless they are not, in fact, invertible.}
 \value{
 \code{rmatrixnorm} returns either a list of
 \eqn{n}  \eqn{p \times q}{p * q}  matrices or
-   a \eqn{p \times q \times n}{p * q * n}  array.
+a \eqn{p \times q \times n}{p * q * n}  array.
 
-   \code{dmatrixnorm} returns the density at \code{x}.
+\code{dmatrixnorm} returns the density at \code{x}.
 }
 \description{
 Density and random generation for the matrix variate
@@ -100,9 +100,9 @@ dmatrixnorm(A[[1]],
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999.
 Matrix Variate Distributions.
-    Vol. 104. CRC Press. ISBN:978-1584880462
+Vol. 104. CRC Press. ISBN:978-1584880462
 }
 \seealso{
 \code{\link{rmatrixt}}, \code{\link{rmatrixinvt}},
-    \code{\link{rnorm}} and \code{\link[stats]{Distributions}}
+\code{\link{rnorm}} and \code{\link[stats]{Distributions}}
 }

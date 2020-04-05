@@ -72,25 +72,27 @@ unless they are not, in fact, invertible.}
 }
 \value{
 \code{rmatrixt} returns either a list of \eqn{n}
-   \eqn{p \times q}{p * q}  matrices or a
+\eqn{p \times q}{p * q}  matrices or a
 \eqn{p \times q \times n}{p * q * n}
-   array.
+array.
 
-   \code{dmatrixt} returns the density at \code{x}.
+\code{dmatrixt} returns the density at \code{x}.
 }
 \description{
 Density and random generation for the matrix variate t distribution.
 }
 \details{
 The matrix \eqn{t}-distribution is parameterized slightly
- differently from the univariate and multivariate \eqn{t}-distributions
- - the variance is scaled by a factor of \code{1/df}.
- In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix
- variate \eqn{t}-distributed random variable with identity variance matrices
- is \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
- for the matrix variate \eqn{T} is then that as \code{df} goes to
- infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
- \eqn{MVN(0,I_p,I_q)}.
+differently from the univariate and multivariate \eqn{t}-distributions
+\itemize{
+\item the variance is scaled by a factor of \code{1/df}.
+In this parameterization, the variance for a \eqn{1 \times 1}{1 * 1} matrix
+variate \eqn{t}-distributed random variable with identity variance matrices
+is \eqn{1/(df-2)} instead of \eqn{df/(df-2)}. A Central Limit Theorem
+for the matrix variate \eqn{T} is then that as \code{df} goes to
+infinity, \eqn{MVT(0, df, I_p, df*I_q)} converges to
+\eqn{MVN(0,I_p,I_q)}.
+}
 }
 \examples{
 set.seed(20180202)
@@ -111,15 +113,15 @@ dmatrixt(x, df = 1)
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999.
 Matrix Variate Distributions.
-    Vol. 104. CRC Press. ISBN:978-1584880462
+Vol. 104. CRC Press. ISBN:978-1584880462
 
 Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
-       Distribution and the Inverted Multivariate t
-       Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+Distribution and the Inverted Multivariate t
+Distribution.” Ann. Math. Statist. 38 (2): 511–18.
 \doi{10.1214/aoms/1177698967}
 }
 \seealso{
 \code{\link{rmatrixnorm}},
-    \code{\link{rmatrixinvt}},\code{\link{rt}} and
+\code{\link{rmatrixinvt}},\code{\link{rt}} and
 \code{\link[stats]{Distributions}}.
 }

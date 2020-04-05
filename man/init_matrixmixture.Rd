@@ -58,23 +58,23 @@ relevant for more initialization methods.}
 
 \item{init}{(optional) a (possibly partially-formed) list
 with some of the components
-    \code{centers}, \code{U}, and \code{V}. The function will complete the
-    list and fill out missing entries.}
+\code{centers}, \code{U}, and \code{V}. The function will complete the
+list and fill out missing entries.}
 
 \item{...}{Additional arguments to pass to \code{kmeans()} if that is
 \code{centermethod}.}
 }
 \value{
 a list suitable to use as the \code{init} argument in
-     \code{matrixmixture}:
+\code{matrixmixture}:
 \describe{
-      \item{\code{centers}}{the group means,
-            a \eqn{p \times q \times K}{p * q * K} array.}
-      \item{\code{U}}{the between-row covariance matrices, a
-      \eqn{p \times p \times K}{p * p * K}  array}
-      \item{\code{V}}{the between-column covariance matrix, a
-      \eqn{q \times q \times K}{q * q * K} array}
-   }
+\item{\code{centers}}{the group means,
+a \eqn{p \times q \times K}{p * q * K} array.}
+\item{\code{U}}{the between-row covariance matrices, a
+\eqn{p \times p \times K}{p * p * K}  array}
+\item{\code{V}}{the between-column covariance matrix, a
+\eqn{q \times q \times K}{q * q * K} array}
+}
 }
 \description{
 Providing this will generate a list suitable for use as the \code{init}

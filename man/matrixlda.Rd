@@ -42,21 +42,21 @@ named.)}
 }
 \value{
 Returns a list of class \code{matrixlda} containing
-   the following components:
-   \describe{
-      \item{\code{prior}}{the prior probabilities used.}
-      \item{\code{counts}}{the counts of group membership}
-      \item{\code{means}}{the group means.}
-      \item{\code{scaling}}{the scalar variance parameter}
-      \item{\code{U}}{the between-row covariance matrix}
-      \item{\code{V}}{the between-column covariance matrix}
-      \item{\code{lev}}{levels of the grouping factor}
-      \item{\code{N}}{The number of observations used.}
-      \item{\code{method}}{The method used.}
-      \item{\code{nu}}{The degrees of freedom parameter if the t distribution
-           was used.}
-      \item{\code{call}}{The (matched) function call.}
-   }
+the following components:
+\describe{
+\item{\code{prior}}{the prior probabilities used.}
+\item{\code{counts}}{the counts of group membership}
+\item{\code{means}}{the group means.}
+\item{\code{scaling}}{the scalar variance parameter}
+\item{\code{U}}{the between-row covariance matrix}
+\item{\code{V}}{the between-column covariance matrix}
+\item{\code{lev}}{levels of the grouping factor}
+\item{\code{N}}{The number of observations used.}
+\item{\code{method}}{The method used.}
+\item{\code{nu}}{The degrees of freedom parameter if the t distribution
+was used.}
+\item{\code{call}}{The (matched) function call.}
+}
 }
 \description{
 Performs linear discriminant analysis on matrix variate data.
@@ -84,24 +84,25 @@ logLik(D)
 print(D)
 }
 \references{
-G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
-    "Classification with the matrix-variate-t distribution", arXiv
-    e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+\preformatted{G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+"Classification with the matrix-variate-t distribution", arXiv
+e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
 
-    Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
-      analysis for image matrix", Pattern Recognition Letters, Volume 26,
-      Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+Ming Li, Baozong Yuan, "2D-LDA: A statistical linear discriminant
+  analysis for image matrix", Pattern Recognition Letters, Volume 26,
+  Issue 5, 2005, Pages 527-532, ISSN 0167-8655.
+}
 
-  Aaron Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
-       Method for Classification With Matrix-Valued Predictors", Journal of
-       Computational and Graphical Statistics, 28:1, 11-22,
-       \doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
+Aaron Molstad & Adam J. Rothman (2019), "A Penalized Likelihood
+Method for Classification With Matrix-Valued Predictors", Journal of
+Computational and Graphical Statistics, 28:1, 11-22,
+\doi{10.1080/10618600.2018.1476249}  \CRANpkg{MatrixLDA}
 
-  Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
-  S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0 \CRANpkg{MASS}
+Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
+S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0 \CRANpkg{MASS}
 }
 \seealso{
 \code{\link{predict.matrixlda}}, \code{\link[MASS]{lda}},
-    \code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
-    \code{\link{matrixqda}}, and \code{\link{matrixmixture}}
+\code{\link{MLmatrixnorm}} and \code{\link{MLmatrixt}}
+\code{\link{matrixqda}}, and \code{\link{matrixmixture}}
 }

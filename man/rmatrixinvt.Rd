@@ -65,14 +65,14 @@ If \code{list}  is \code{TRUE} , this will be ignored.}
 }
 \value{
 \code{rmatrixinvt} returns either a list of \eqn{n}
-   \eqn{p \times q}{p * q}  matrices or
-   a \eqn{p \times q \times n}{p * q * n}  array.
+\eqn{p \times q}{p * q}  matrices or
+a \eqn{p \times q \times n}{p * q * n}  array.
 
-   \code{dmatrixinvt} returns the density at  \code{x}.
+\code{dmatrixinvt} returns the density at  \code{x}.
 }
 \description{
 Generate random samples from the inverted matrix
-   variate t distribution or compute densities.
+variate t distribution or compute densities.
 }
 \examples{
 # an example of drawing from the distribution and computing the density.
@@ -82,14 +82,14 @@ dmatrixinvt(A[, , 1], df = 10, mean = diag(4))
 \references{
 Gupta, Arjun K, and Daya K Nagar. 1999.
 Matrix Variate Distributions.
-    Vol. 104. CRC Press. ISBN:978-1584880462
+Vol. 104. CRC Press. ISBN:978-1584880462
 
-  Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
-       Distribution and the Inverted Multivariate t
-       Distribution.” Ann. Math. Statist. 38 (2): 511–18.
+Dickey, James M. 1967. “Matricvariate Generalizations of the Multivariate t
+Distribution and the Inverted Multivariate t
+Distribution.” Ann. Math. Statist. 38 (2): 511–18.
 \doi{10.1214/aoms/1177698967}
 }
 \seealso{
 \code{\link{rmatrixnorm}}, \code{\link{rmatrixt}},
-   and \code{\link[stats]{Distributions}}.
+and \code{\link[stats]{Distributions}}.
 }

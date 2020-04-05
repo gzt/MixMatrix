@@ -21,11 +21,11 @@ proportions in the training set or what was set in the call to
 }
 \value{
 Returns a list containing
-   the following components:
-   \describe{
-      \item{\code{class}}{The MAP classification (a factor)}
-      \item{\code{posterior}}{posterior probabilities for the classes}
-   }
+the following components:
+\describe{
+\item{\code{class}}{The MAP classification (a factor)}
+\item{\code{posterior}}{posterior probabilities for the classes}
+}
 }
 \description{
 Classify matrix variate observations in conjunction with \code{matrixlda}.
@@ -50,5 +50,5 @@ predict(D)$posterior[1:10, ]
 }
 \seealso{
 \code{\link{matrixlda}}, \code{\link{matrixqda}},
-   and \code{\link{matrixmixture}}
+and \code{\link{matrixmixture}}
 }

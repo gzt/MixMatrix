@@ -42,20 +42,20 @@ named.)}
 }
 \value{
 Returns a list of class \code{matrixqda} containing
-   the following components:
-   \describe{
-      \item{\code{prior}}{the prior probabilities used.}
-      \item{\code{counts}}{the counts of group membership}
-      \item{\code{means}}{the group means.}
-      \item{\code{U}}{the between-row covariance matrices}
-      \item{\code{V}}{the between-column covariance matrices}
-      \item{\code{lev}}{levels of the grouping factor}
-      \item{\code{N}}{The number of observations used.}
-      \item{\code{method}}{The method used.}
-      \item{\code{nu}}{The degrees of freedom parameter
-     if the t-distribution was used.}
-      \item{\code{call}}{The (matched) function call.}
-   }
+the following components:
+\describe{
+\item{\code{prior}}{the prior probabilities used.}
+\item{\code{counts}}{the counts of group membership}
+\item{\code{means}}{the group means.}
+\item{\code{U}}{the between-row covariance matrices}
+\item{\code{V}}{the between-column covariance matrices}
+\item{\code{lev}}{levels of the grouping factor}
+\item{\code{N}}{The number of observations used.}
+\item{\code{method}}{The method used.}
+\item{\code{nu}}{The degrees of freedom parameter
+if the t-distribution was used.}
+\item{\code{call}}{The (matched) function call.}
+}
 }
 \description{
 See \code{matrixlda}: quadratic discriminant analysis for matrix
@@ -78,18 +78,18 @@ logLik(D)
 print(D)
 }
 \references{
-G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
-    "Classification with the matrix-variate-t distribution", arXiv
-    e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+\preformatted{G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+"Classification with the matrix-variate-t distribution", arXiv
+e-prints arXiv:1907.09565 \url{https://arxiv.org/abs/1907.09565}
+}
 
-  Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
-  S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
-
-    Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
-    Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
+S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0\preformatted{Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+}
 }
 \seealso{
 \code{\link{predict.matrixqda}}, \code{\link[MASS]{qda}},
-    \code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
-    \code{\link{matrixlda}}, and \code{\link{matrixmixture}}
+\code{\link{MLmatrixnorm}}, \code{\link{MLmatrixt}},
+\code{\link{matrixlda}}, and \code{\link{matrixmixture}}
 }
