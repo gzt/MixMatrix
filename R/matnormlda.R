@@ -574,6 +574,28 @@ matrixqda <- function(x, grouping, prior, tol = 1.0e-4,
   )
 }
 
+#' Variance parser for DF
+#'
+#' Parses out how many DF are involved with the variance choices.
+#' @keywords internal
+#' @noRd
+#' @param var variance flag (col.variance or row.variance)
+#' @param dim p or q depending on above
+.var_parse_df <- function(var, dim) {
+    vpars  <-  (dim + 1) * dim / 2
+    if (grepl("^ar", x = var, ignore.case = TRUE)) vpars <- 2
+
+    if (grepl("^cs", x = var, ignore.case = TRUE)) vpars <- 2
+
+    if (grepl("^i", x = var, ignore.case = TRUE)) vpars <- 1
+
+    if (grepl("^cor", x = var, ignore.case = TRUE)) {
+      vpars <- (dim - 1) * dim / 2 + 1
+    }
+    vpars
+}
+
+
 #' @export
 logLik.matrixlda <- function(object, ...) {
   if (!is.null(sub <- object$call$subset)) {
@@ -620,29 +642,12 @@ logLik.matrixlda <- function(object, ...) {
     meanpars <- meanpars / p
   }
 
+ 
   if (!is.null(object$call$col.variance)) {
-    v_vars <- object$call$col.variance
-    if (grepl("^ar", x = v_vars, ignore.case = TRUE)) vpars <- 2
-
-    if (grepl("^cs", x = v_vars, ignore.case = TRUE)) vpars <- 2
-
-    if (grepl("^i", x = v_vars, ignore.case = TRUE)) vpars <- 1
-
-    if (grepl("^cor", x = v_vars, ignore.case = TRUE)) {
-      vpars <- (q - 1) * q / 2 + 1
-    }
+      vpars  <- .var_parse_df(object$call$col.variance, q)
   }
   if (!is.null(object$call$row.variance)) {
-    u_vars <- object$call$row.variance
-    if (grepl("^ar", x = u_vars, ignore.case = TRUE)) upars <- 2
-
-    if (grepl("^cs", x = u_vars, ignore.case = TRUE)) upars <- 2
-
-    if (grepl("^i", x = u_vars, ignore.case = TRUE)) upars <- 1
-
-    if (grepl("^cor", x = u_vars, ignore.case = TRUE)) {
-      upars <- (p - 1) * p / 2 + 1
-    }
+      upars  <- .var_parse_df(object$call$row.variance, p)
   }
 
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
@@ -729,28 +734,10 @@ logLik.matrixqda <- function(object, ...) {
   }
 
   if (!is.null(object$call$col.variance)) {
-    v_vars <- object$call$col.variance
-    if (grepl("^ar", x = v_vars, ignore.case = TRUE)) vpars <- 2
-
-    if (grepl("^cs", x = v_vars, ignore.case = TRUE)) vpars <- 2
-
-    if (grepl("^i", x = v_vars, ignore.case = TRUE)) vpars <- 1
-
-    if (grepl("^cor", x = v_vars, ignore.case = TRUE)) {
-      vpars <- (q - 1) * q / 2 + 1
-    }
+      vpars  <- .var_parse_df(object$call$col.variance, q)
   }
   if (!is.null(object$call$row.variance)) {
-    u_vars <- object$call$row.variance
-    if (grepl("^ar", x = u_vars, ignore.case = TRUE)) upars <- 2
-
-    if (grepl("^cs", x = u_vars, ignore.case = TRUE)) upars <- 2
-
-    if (grepl("^i", x = u_vars, ignore.case = TRUE)) upars <- 1
-
-    if (grepl("^cor", x = u_vars, ignore.case = TRUE)) {
-      upars <- (p - 1) * p / 2 + 1
-    }
+      upars  <- .var_parse_df(object$call$row.variance, p)
   }
 
   if (!is.null(object$call$fixed) && !(object$call$fixed)) nupar <- 1
