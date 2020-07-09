@@ -190,7 +190,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
   iter <- 0
   error_term <- 1e+40
 
-  if (col_set_var) {
+  if (col_set_var) { #set var, est_v, swept_data, dims, col_var
     if (est_v[1, 2] > 0) {
       rho_col <- est_v[1, 2]
     } else {

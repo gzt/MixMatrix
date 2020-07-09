@@ -1,13 +1,17 @@
 linters: with_defaults(
-    object_name_linter = NULL, # 403
-    line_length_linter = NULL, # 262
-    commented_code_linter = NULL, # 46
+    #object_name_linter = NULL, # 52
+    #commented_code_linter = NULL, # 37
+    #line_length_linter = NULL, # 22
+    #cyclocomp_linter = NULL, # 16
+    spaces_left_parentheses_linter = NULL, # 7
+    #commas_linter = NULL, # 2
+    #object_usage_linter = NULL, # 1
+    #trailing_whitespace_linter = NULL, # 1
     dummy_linter = NULL
   )
 exclusions: list(
     "man/ARgenerate.Rd",
     "man/CSgenerate.Rd",
-    "man/derivCS.Rd",
     "man/init_matrixmixture.Rd",
     "man/matrixlda.Rd",
     "man/matrixmixture.Rd",
@@ -20,5 +24,20 @@ exclusions: list(
     "man/rmatrixinvt.Rd",
     "man/rmatrixnorm.Rd",
     "man/rmatrixt.Rd",
-    "man/vardet.Rd"
-    )
+    "man/vardet.Rd",
+    "vignettes/discriminant-analysis.Rmd",
+    "vignettes/matrix-t-estimation.html",
+    "vignettes/matrix-t-estimation.Rmd",
+    "vignettes/matrixnormal_cache/html/__packages",
+    "vignettes/matrixnormal_cache/html/mleone_a422efdfcbaf4e7ad50355d33913f3c5.RData",
+    "vignettes/matrixnormal_cache/html/mleone_a422efdfcbaf4e7ad50355d33913f3c5.rdb",
+    "vignettes/matrixnormal_cache/html/mleone_a422efdfcbaf4e7ad50355d33913f3c5.rdx",
+    "vignettes/matrixnormal_cache/html/mlerow_fa054f7fd96c602ef5f9cebdaa5c681f.RData",
+    "vignettes/matrixnormal_cache/html/mlerow_fa054f7fd96c602ef5f9cebdaa5c681f.rdb",
+    "vignettes/matrixnormal_cache/html/mlerow_fa054f7fd96c602ef5f9cebdaa5c681f.rdx",
+    "vignettes/matrixnormal.bib",
+    "vignettes/matrixnormal.Rmd",
+    "vignettes/matrixpaper.bib",
+    "vignettes/mixture.bib",
+    "vignettes/mixturemodel.Rmd"
+  )

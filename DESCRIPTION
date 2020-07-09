@@ -1,7 +1,7 @@
 Package: MixMatrix
 Type: Package
 Title: Classification with Matrix Variate Normal and t Distributions
-Version: 0.2.5
+Version: 0.2.6
 Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')),
 	  person(c("B. D.", "Ripley",
