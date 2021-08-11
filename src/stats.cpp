@@ -86,7 +86,7 @@ arma::colvec dmatnorm_calc(arma::cube& x, arma::mat& mean, arma::mat& U,
   arma::colvec logresult(x.n_slices);
   for (int i = 0; i < numslices; i++) {
     arma::mat XM = x.slice(i) - mean;
-    logresult(i) = -0.5 * n * p * log(2 * PI) - 0.5 * p * logdetU -
+    logresult(i) = -0.5 * n * p * log(2 * M_PI) - 0.5 * p * logdetU -
                    0.5 * n * logdetV -
                    0.5 * trace(Vinv * trans(XM) * Uinv * XM);
   }
