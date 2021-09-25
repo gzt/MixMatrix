@@ -83,7 +83,7 @@ provide initial values and it will format them as expected for the function." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -118,7 +118,7 @@ provide initial values and it will format them as expected for the function." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -147,19 +147,19 @@ and it will select centers and variance matrices to initialize or
 provide initial values and it will format them as expected for the function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>init_matrixmixture</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>prior</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>K</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>prior</span>),
-  <span class='kw'>centers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>U</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>V</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>centermethod</span> <span class='kw'>=</span> <span class='st'>"kmeans"</span>,
-  <span class='kw'>varmethod</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
-  <span class='kw'>init</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>init_matrixmixture</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  prior <span class='op'>=</span> <span class='cn'>NULL</span>,
+  K <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>prior</span><span class='op'>)</span>,
+  centers <span class='op'>=</span> <span class='cn'>NULL</span>,
+  U <span class='op'>=</span> <span class='cn'>NULL</span>,
+  V <span class='op'>=</span> <span class='cn'>NULL</span>,
+  centermethod <span class='op'>=</span> <span class='st'>"kmeans"</span>,
+  varmethod <span class='op'>=</span> <span class='st'>"identity"</span>,
+  model <span class='op'>=</span> <span class='st'>"normal"</span>,
+  init <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -236,7 +236,7 @@ list and fill out missing entries.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a list suitable to use as the <code>init</code> argument in
-<code>matrixmixture</code>:</p><dl'>
+<code>matrixmixture</code>:</p><dl>
 <dt><code>centers</code></dt><dd><p>the group means,
 a \(p \times q \times K\) array.</p></dd>
 <dt><code>U</code></dt><dd><p>the between-row covariance matrices, a
@@ -251,15 +251,16 @@ a \(p \times q \times K\) array.</p></dd>
     <div class='dont-index'><p><code><a href='matrixmixture.html'>matrixmixture()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180221</span>)
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180221</span><span class='op'>)</span>
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span><span class='op'>(</span><span class='fl'>30</span>,mean<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>,nrow<span class='op'>=</span><span class='fl'>3</span>,ncol<span class='op'>=</span><span class='fl'>4</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 <span class='co'># 3x4 matrices with mean 0</span>
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(<span class='fl'>30</span>,<span class='kw'>mean</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>2</span>,<span class='kw'>nrow</span><span class='kw'>=</span><span class='fl'>3</span>,<span class='kw'>ncol</span><span class='kw'>=</span><span class='fl'>4</span>), <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+<span class='va'>B</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span><span class='op'>(</span><span class='fl'>30</span>,mean<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>2</span>,nrow<span class='op'>=</span><span class='fl'>3</span>,ncol<span class='op'>=</span><span class='fl'>4</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
 <span class='co'># 3x4 matrices with mean 2</span>
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>,<span class='no'>B</span>), <span class='kw'>dim</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span>)) <span class='co'># combine into one array</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>,<span class='fl'>.5</span>) <span class='co'># equal probability prior</span>
-<span class='no'>init</span> <span class='kw'>=</span> <span class='fu'>init_matrixmixture</span>(<span class='no'>C</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>prior</span>)
-<span class='co'># will find two centers using the "kmeans" method on the vectorized matrices</span></div></pre>
+<span class='va'>C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>A</span>,<span class='va'>B</span><span class='op'>)</span>, dim<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># combine into one array</span>
+<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>,<span class='fl'>.5</span><span class='op'>)</span> <span class='co'># equal probability prior</span>
+<span class='va'>init</span> <span class='op'>=</span> <span class='fu'>init_matrixmixture</span><span class='op'>(</span><span class='va'>C</span>, prior <span class='op'>=</span> <span class='va'>prior</span><span class='op'>)</span>
+<span class='co'># will find two centers using the "kmeans" method on the vectorized matrices</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -275,7 +276,7 @@ a \(p \times q \times K\) array.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

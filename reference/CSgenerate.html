@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +115,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,7 +141,7 @@
     <p>Generate a compound symmetric correlation matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CSgenerate</span>(<span class='no'>n</span>, <span class='no'>rho</span>)</pre>
+    <pre class="usage"><span class='fu'>CSgenerate</span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>rho</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,7 +165,8 @@ Will warn if less than 0.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># generates a covariance matrix with 1 on the main diagonal</span>
 <span class='co'># and 0.5 on the off-diagonal elements.</span>
-<span class='fu'>CSgenerate</span>(<span class='fl'>3</span>, <span class='fl'>.5</span>)</div><div class='output co'>#&gt;      [,1] [,2] [,3]
+<span class='fu'>CSgenerate</span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>.5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      [,1] [,2] [,3]
 #&gt; [1,]  1.0  0.5  0.5
 #&gt; [2,]  0.5  1.0  0.5
 #&gt; [3,]  0.5  0.5  1.0</div></pre>
@@ -184,7 +185,7 @@ Will warn if less than 0.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

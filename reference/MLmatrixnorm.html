@@ -85,7 +85,7 @@ they are inappropriate for the data, they may fail with a warning." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@ they are inappropriate for the data, they may fail with a warning." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -151,18 +151,18 @@ restriction can be proposed for either or both variance matrices. However, if
 they are inappropriate for the data, they may fail with a warning.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>MLmatrixnorm</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>row.variance</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>col.variance</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>10</span> * <span class='no'>.Machine</span>$<span class='no'>double.eps</span>^<span class='fl'>0.5</span>,
-  <span class='kw'>max.iter</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='no'>U</span>,
-  <span class='no'>V</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>MLmatrixnorm</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  row.mean <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  col.mean <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  row.variance <span class='op'>=</span> <span class='st'>"none"</span>,
+  col.variance <span class='op'>=</span> <span class='st'>"none"</span>,
+  tol <span class='op'>=</span> <span class='fl'>10</span> <span class='op'>*</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.5</span>,
+  max.iter <span class='op'>=</span> <span class='fl'>100</span>,
+  <span class='va'>U</span>,
+  <span class='va'>V</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -230,7 +230,7 @@ if using restrictions on the variance.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list with a the following elements:</p><dl'>
+    <p>Returns a list with a the following elements:</p><dl>
 <dt><code>mean</code></dt><dd><p>the mean matrix</p></dd>
 <dt><code>scaling</code></dt><dd><p>the scalar variance parameter
 (the first entry of the covariances are restricted to unity)</p></dd>
@@ -258,15 +258,16 @@ Vol. 104. CRC Press. ISBN:978-1584880462
     <div class='dont-index'><p><code><a href='rmatrixnorm.html'>rmatrixnorm()</a></code> and <code><a href='MLmatrixt.html'>MLmatrixt()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180202</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
 <span class='co'># simulating from a given density</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>0</span>, -<span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, -<span class='fl'>1000</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>list</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span><span class='op'>(</span>
+  n <span class='op'>=</span> <span class='fl'>100</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 <span class='co'># finding the parameters by ML estimation</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>MLmatrixnorm</span>(<span class='no'>A</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-5</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>results</span>)</div><div class='output co'>#&gt; $mean
+<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>MLmatrixnorm</span><span class='op'>(</span><span class='va'>A</span>, tol <span class='op'>=</span> <span class='fl'>1e-5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>results</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $mean
 #&gt;            [,1]         [,2]      [,3]
 #&gt; [1,] 99.7692446 -100.2587675   25.0921
 #&gt; [2,] -0.1010964   -0.1537989 -999.9448
@@ -315,7 +316,7 @@ Vol. 104. CRC Press. ISBN:978-1584880462
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

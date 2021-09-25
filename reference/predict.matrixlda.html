@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,7 +115,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,7 +142,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for matrixlda</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>object</span>, <span class='no'>newdata</span>, <span class='kw'>prior</span> <span class='kw'>=</span> <span class='no'>object</span>$<span class='no'>prior</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>newdata</span>, prior <span class='op'>=</span> <span class='va'>object</span><span class='op'>$</span><span class='va'>prior</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,7 @@ proportions in the training set or what was set in the call to
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a list containing
-the following components:</p><dl'>
+the following components:</p><dl>
 <dt><code>class</code></dt><dd><p>The MAP classification (a factor)</p></dd>
 <dt><code>posterior</code></dt><dd><p>posterior probabilities for the classes</p></dd>
 
@@ -189,15 +189,16 @@ an object <code>x</code> of the appropriate class.</p>
 and <code><a href='matrixmixture.html'>matrixmixture()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180221</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180221</span><span class='op'>)</span>
 <span class='co'># construct two populations of 3x4 random matrices with different means</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>, <span class='no'>B</span>), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>60</span>)) <span class='co'># combine together</span>
-<span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>, <span class='fl'>30</span>)) <span class='co'># define groups</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.5</span>) <span class='co'># set prior</span>
-<span class='no'>D</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='matrixlda.html'>matrixlda</a></span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>)
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>D</span>)$<span class='no'>posterior</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, ]</div><div class='output co'>#&gt;            [,1]         [,2]
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='fl'>3</span>, ncol <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>B</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span>, nrow <span class='op'>=</span> <span class='fl'>3</span>, ncol <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span><span class='op'>)</span>, dim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># combine together</span>
+<span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>30</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># define groups</span>
+<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.5</span><span class='op'>)</span> <span class='co'># set prior</span>
+<span class='va'>D</span> <span class='op'>&lt;-</span> <span class='fu'><a href='matrixlda.html'>matrixlda</a></span><span class='op'>(</span><span class='va'>C</span>, <span class='va'>groups</span>, <span class='va'>prior</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span><span class='op'>$</span><span class='va'>posterior</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='op'>]</span>
+</div><div class='output co'>#&gt;            [,1]         [,2]
 #&gt;  [1,] 0.9999948 5.224846e-06
 #&gt;  [2,] 0.6942637 3.057363e-01
 #&gt;  [3,] 0.9999813 1.869044e-05
@@ -208,7 +209,7 @@ and <code><a href='matrixmixture.html'>matrixmixture()</a></code></p></div>
 #&gt;  [8,] 0.9999997 2.543128e-07
 #&gt;  [9,] 0.7600474 2.399526e-01
 #&gt; [10,] 0.9535620 4.643805e-02</div><div class='input'>
-## S3 method for class 'matrixlda'
+<span class='co'>## S3 method for class 'matrixlda'</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -225,7 +226,7 @@ and <code><a href='matrixmixture.html'>matrixmixture()</a></code></p></div>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

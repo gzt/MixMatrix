@@ -81,7 +81,7 @@ variate observations." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -116,7 +116,7 @@ variate observations." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,16 +143,16 @@ variate observations." />
 variate observations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>matrixqda</span>(
-  <span class='no'>x</span>,
-  <span class='no'>grouping</span>,
-  <span class='no'>prior</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-04</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"normal"</span>,
-  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='no'>...</span>,
-  <span class='no'>subset</span>
-)</pre>
+    <pre class="usage"><span class='fu'>matrixqda</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>grouping</span>,
+  <span class='va'>prior</span>,
+  tol <span class='op'>=</span> <span class='fl'>1e-04</span>,
+  method <span class='op'>=</span> <span class='st'>"normal"</span>,
+  nu <span class='op'>=</span> <span class='fl'>10</span>,
+  <span class='va'>...</span>,
+  <span class='va'>subset</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -202,7 +202,7 @@ named.)</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a list of class <code>matrixqda</code> containing
-the following components:</p><dl'>
+the following components:</p><dl>
 <dt><code>prior</code></dt><dd><p>the prior probabilities used.</p></dd>
 <dt><code>counts</code></dt><dd><p>the counts of group membership</p></dd>
 <dt><code>means</code></dt><dd><p>the group means.</p></dd>
@@ -226,7 +226,7 @@ variances for the case when different groups have different variances.</p>
     
 <pre>G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
-e-prints arXiv:1907.09565 &amp;lt;https://arxiv.org/abs/1907.09565&amp;gt;
+e-prints arXiv:1907.09565 &lt;https://arxiv.org/abs/1907.09565&gt;
 </pre>
 
 <p>Venables, W. N. &amp; Ripley, B. D. (2002) Modern Applied Statistics with
@@ -241,15 +241,17 @@ Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 <code><a href='matrixlda.html'>matrixlda()</a></code>, and <code><a href='matrixmixture.html'>matrixmixture()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180221</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180221</span><span class='op'>)</span>
 <span class='co'># construct two populations of 3x4 random matrices with different means</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='no'>B</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span>(<span class='fl'>30</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>1</span>, <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>4</span>))
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>A</span>, <span class='no'>B</span>), <span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>60</span>)) <span class='co'># combine together</span>
-<span class='no'>groups</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>2</span>, <span class='fl'>30</span>)) <span class='co'># define groups</span>
-<span class='no'>prior</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.5</span>, <span class='fl'>.5</span>) <span class='co'># set prior</span>
-<span class='no'>D</span> <span class='kw'>&lt;-</span> <span class='fu'>matrixqda</span>(<span class='no'>C</span>, <span class='no'>groups</span>, <span class='no'>prior</span>)
-<span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; 'log Lik.' -958.9359 (df=54)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>D</span>)</div><div class='output co'>#&gt; $prior
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, nrow <span class='op'>=</span> <span class='fl'>3</span>, ncol <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>B</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixnorm.html'>rmatrixnorm</a></span><span class='op'>(</span><span class='fl'>30</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span>, nrow <span class='op'>=</span> <span class='fl'>3</span>, ncol <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>A</span>, <span class='va'>B</span><span class='op'>)</span>, dim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># combine together</span>
+<span class='va'>groups</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>30</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>30</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># define groups</span>
+<span class='va'>prior</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>.5</span><span class='op'>)</span> <span class='co'># set prior</span>
+<span class='va'>D</span> <span class='op'>&lt;-</span> <span class='fu'>matrixqda</span><span class='op'>(</span><span class='va'>C</span>, <span class='va'>groups</span>, <span class='va'>prior</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/logLik.html'>logLik</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 'log Lik.' -958.9359 (df=54)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>D</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $prior
 #&gt;   1   2 
 #&gt; 0.5 0.5 
 #&gt; 
@@ -339,7 +341,7 @@ Journal of Statistical Computation and Simulation, (64):105–123, 1999.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

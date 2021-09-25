@@ -81,7 +81,7 @@ variate t distribution or compute densities." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -116,7 +116,7 @@ variate t distribution or compute densities." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,28 +143,28 @@ variate t distribution or compute densities." />
 variate t distribution or compute densities.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rmatrixinvt</span>(
-  <span class='no'>n</span>,
-  <span class='no'>df</span>,
-  <span class='no'>mean</span>,
-  <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>mean</span>))[<span class='fl'>1</span>]),
-  <span class='kw'>R</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>mean</span>))[<span class='fl'>2</span>]),
-  <span class='kw'>U</span> <span class='kw'>=</span> <span class='no'>L</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>L</span>),
-  <span class='kw'>V</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>R</span>) <span class='kw'>%*%</span> <span class='no'>R</span>,
-  <span class='kw'>list</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>array</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)
+    <pre class="usage"><span class='fu'>rmatrixinvt</span><span class='op'>(</span>
+  <span class='va'>n</span>,
+  <span class='va'>df</span>,
+  <span class='va'>mean</span>,
+  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>,
+  R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  list <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  array <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>dmatrixinvt</span>(
-  <span class='no'>x</span>,
-  <span class='no'>df</span>,
-  <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fl'>0</span>, <span class='no'>p</span>, <span class='no'>n</span>),
-  <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='no'>p</span>),
-  <span class='kw'>R</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='no'>n</span>),
-  <span class='kw'>U</span> <span class='kw'>=</span> <span class='no'>L</span> <span class='kw'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>L</span>),
-  <span class='kw'>V</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>R</span>) <span class='kw'>%*%</span> <span class='no'>R</span>,
-  <span class='kw'>log</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+<span class='fu'>dmatrixinvt</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>df</span>,
+  mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>p</span>, <span class='va'>n</span><span class='op'>)</span>,
+  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>,
+  R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  log <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -249,8 +249,9 @@ and <code><a href='https://rdrr.io/r/stats/Distributions.html'>stats::Distributi
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># an example of drawing from the distribution and computing the density.</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'>rmatrixinvt</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fl'>4</span>))
-<span class='fu'>dmatrixinvt</span>(<span class='no'>A</span>[, , <span class='fl'>1</span>], <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span>(<span class='fl'>4</span>))</div><div class='output co'>#&gt; [1] 193350.9</div></pre>
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'>rmatrixinvt</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>2</span>, df <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>dmatrixinvt</span><span class='op'>(</span><span class='va'>A</span><span class='op'>[</span>, , <span class='fl'>1</span><span class='op'>]</span>, df <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 193350.9</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -266,7 +267,7 @@ and <code><a href='https://rdrr.io/r/stats/Distributions.html'>stats::Distributi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

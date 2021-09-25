@@ -87,7 +87,7 @@ fail with a warning." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -122,7 +122,7 @@ fail with a warning." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/gzt/MixMatrix/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -155,20 +155,20 @@ variance matrices. However, if they are inappropriate for the data, they may
 fail with a warning.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>MLmatrixt</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>row.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.mean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>row.variance</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>col.variance</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tol</span> <span class='kw'>=</span> <span class='no'>.Machine</span>$<span class='no'>double.eps</span>^<span class='fl'>0.5</span>,
-  <span class='kw'>max.iter</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
-  <span class='no'>U</span>,
-  <span class='no'>V</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>MLmatrixt</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  row.mean <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  col.mean <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  row.variance <span class='op'>=</span> <span class='st'>"none"</span>,
+  col.variance <span class='op'>=</span> <span class='st'>"none"</span>,
+  df <span class='op'>=</span> <span class='fl'>10</span>,
+  fixed <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.5</span>,
+  max.iter <span class='op'>=</span> <span class='fl'>5000</span>,
+  <span class='va'>U</span>,
+  <span class='va'>V</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -247,7 +247,7 @@ if using restrictions on the variance.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list with the following elements:</p><dl'>
+    <p>Returns a list with the following elements:</p><dl>
 <dt><code>mean</code></dt><dd><p>the mean matrix</p></dd>
 <dt><code>U</code></dt><dd><p>the between-row covariance matrix</p></dd>
 <dt><code>V</code></dt><dd><p>the between-column covariance matrix</p></dd>
@@ -269,7 +269,7 @@ the variance matrices at the time of stopping</p></dd>
     
 <pre>Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
-e-prints arXiv:1907.09565 &amp;lt;https://arxiv.org/abs/1907.09565&amp;gt;
+e-prints arXiv:1907.09565 &lt;https://arxiv.org/abs/1907.09565&gt;
 
 Dickey, James M. 1967. “Matricvariate Generalizations of the
 Multivariate t Distribution and the Inverted Multivariate t
@@ -294,15 +294,16 @@ doi: <a href='https://doi.org/10.1093/biomet/80.2.267'>10.1093/biomet/80.2.267</
 <code><a href='MLmatrixnorm.html'>MLmatrixnorm()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>20180202</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
 <span class='co'># drawing from a distribution with specified mean and covariance</span>
-<span class='no'>A</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span>(
-  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>mean</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>0</span>, -<span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, -<span class='fl'>1000</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>),
-  <span class='kw'>L</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span>), <span class='kw'>nrow</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='kw'>list</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>
-)
+<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span><span class='op'>(</span>
+  n <span class='op'>=</span> <span class='fl'>100</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span>, df <span class='op'>=</span> <span class='fl'>5</span>
+<span class='op'>)</span>
 <span class='co'># fitting maximum likelihood estimates</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>MLmatrixt</span>(<span class='no'>A</span>, <span class='kw'>tol</span> <span class='kw'>=</span> <span class='fl'>1e-5</span>, <span class='kw'>df</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>results</span>)</div><div class='output co'>#&gt; $mean
+<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>MLmatrixt</span><span class='op'>(</span><span class='va'>A</span>, tol <span class='op'>=</span> <span class='fl'>1e-5</span>, df <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>results</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $mean
 #&gt;             [,1]          [,2]        [,3]
 #&gt; [1,] 99.86681274 -100.08579303    24.96235
 #&gt; [2,] -0.05923668   -0.05035992 -1000.01499
@@ -354,7 +355,7 @@ doi: <a href='https://doi.org/10.1093/biomet/80.2.267'>10.1093/biomet/80.2.267</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
