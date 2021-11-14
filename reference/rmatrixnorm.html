@@ -73,7 +73,7 @@ normal distribution" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -148,8 +148,8 @@ normal distribution</p>
   <span class='va'>mean</span>,
   L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>,
   R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>,
-  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
-  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='va'>R</span>,
   list <span class='op'>=</span> <span class='cn'>FALSE</span>,
   array <span class='op'>=</span> <span class='cn'>NULL</span>,
   force <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -160,8 +160,8 @@ normal distribution</p>
   mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>p</span>, <span class='va'>n</span><span class='op'>)</span>,
   L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>,
   R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span>,
-  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
-  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='va'>R</span>,
   log <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -246,30 +246,33 @@ Vol. 104. CRC Press. ISBN:978-1584880462</p>
 <code><a href='https://rdrr.io/r/stats/Normal.html'>rnorm()</a></code> and <code><a href='https://rdrr.io/r/stats/Distributions.html'>stats::Distributions()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
-<span class='co'># a draw from a matrix variate normal with a certain mean</span>
-<span class='co'># and row-wise covariance</span>
-<span class='fu'>rmatrixnorm</span><span class='op'>(</span>
-  n <span class='op'>=</span> <span class='fl'>1</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;            [,1]        [,2]       [,3]
-#&gt; [1,] 99.1807583 -102.753858   25.98162
-#&gt; [2,] -0.3618722   -1.181459 -999.60960</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
-<span class='co'># another way of specifying this - note the output is equivalent</span>
-<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'>rmatrixnorm</span><span class='op'>(</span>
-  n <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-<span class='va'>A</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;            [,1]        [,2]       [,3]
-#&gt; [1,] 99.1807583 -102.753858   25.98162
-#&gt; [2,] -0.3618722   -1.181459 -999.60960</div><div class='input'><span class='co'># demonstrating the dmatrixnorm function</span>
-<span class='fu'>dmatrixnorm</span><span class='op'>(</span><span class='va'>A</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>,
-  mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -4.36614</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># a draw from a matrix variate normal with a certain mean</span></span>
+<span class='r-in'><span class='co'># and row-wise covariance</span></span>
+<span class='r-in'><span class='fu'>rmatrixnorm</span><span class='op'>(</span></span>
+<span class='r-in'>  n <span class='op'>=</span> <span class='fl'>1</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            [,1]        [,2]       [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 99.1807583 -102.753858   25.98162</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -0.3618722   -1.181459 -999.60960</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># another way of specifying this - note the output is equivalent</span></span>
+<span class='r-in'><span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'>rmatrixnorm</span><span class='op'>(</span></span>
+<span class='r-in'>  n <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>A</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            [,1]        [,2]       [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 99.1807583 -102.753858   25.98162</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -0.3618722   -1.181459 -999.60960</span>
+<span class='r-in'><span class='co'># demonstrating the dmatrixnorm function</span></span>
+<span class='r-in'><span class='fu'>dmatrixnorm</span><span class='op'>(</span><span class='va'>A</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>,</span>
+<span class='r-in'>  mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, log <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] -4.36614</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

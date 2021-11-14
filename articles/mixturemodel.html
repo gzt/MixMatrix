@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Matrix Variate Mixture Models with the t distribution</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2021-09-25</h4>
+            <h4 class="date">2021-11-14</h4>
       
       <small class="dont-index">Source: <a href="http://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
       <div class="hidden name"><code>mixturemodel.Rmd</code></div>
@@ -166,7 +166,8 @@
 <a href="#initialization-function" class="anchor"></a>Initialization function</h3>
 <p>The packages also provides a helper function <code><a href="../reference/init_matrixmixture.html">init_matrixmixture()</a></code> to provide the <code>init</code> object for you. At present, it can either use the <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> function on the vectorization of the input data to provide starting centers or select random points. The <code>...</code> arguments are passed to <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> (so <code>nstart</code> of other similar arguments can be set). If a partially formed <code>init</code> object is sent to the initializer, it will complete it. However, it will not validate that, for instance, the covariance matrices are valid. Partial supply of initial centers is also supported - that is, if fewer centers than groups are provided, the remainder will be chosen by whatever method selected.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span><span class="op">(</span><span class="va">C</span>, prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.5</span>,<span class="fl">.5</span><span class="op">)</span>, centermethod <span class="op">=</span> <span class="st">'kmeans'</span><span class="op">)</span>
+<code class="sourceCode R">
+<span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span><span class="op">(</span><span class="va">C</span>, prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.5</span>,<span class="fl">.5</span><span class="op">)</span>, centermethod <span class="op">=</span> <span class="st">'kmeans'</span><span class="op">)</span>
 <span class="co">#&gt; $centers</span>
 <span class="co">#&gt; , , 1</span>
 <span class="co">#&gt; </span>
@@ -201,6 +202,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $V</span>
 <span class="co">#&gt; NULL</span>
+
 <span class="fu"><a href="../reference/init_matrixmixture.html">init_matrixmixture</a></span><span class="op">(</span><span class="va">C</span>, K <span class="op">=</span> <span class="fl">2</span>, centermethod <span class="op">=</span> <span class="st">'random'</span><span class="op">)</span>
 <span class="co">#&gt; $centers</span>
 <span class="co">#&gt; , , 1</span>
@@ -243,7 +245,7 @@
 <a href="#session-information" class="anchor"></a>Session Information</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
+<span class="co">#&gt; R version 4.1.2 (2021-11-01)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
 <span class="co">#&gt; Running under: Ubuntu 20.04.3 LTS</span>
 <span class="co">#&gt; </span>
@@ -261,16 +263,16 @@
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] MixMatrix_0.2.5</span>
+<span class="co">#&gt; [1] MixMatrix_0.2.6</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] Rcpp_1.0.7        CholWishart_1.1.0 rprojroot_2.0.2   digest_0.6.28    </span>
-<span class="co">#&gt;  [5] crayon_1.4.1      R6_2.5.1          magrittr_2.0.1    evaluate_0.14    </span>
-<span class="co">#&gt;  [9] highr_0.9         stringi_1.7.4     rlang_0.4.11      cachem_1.0.6     </span>
-<span class="co">#&gt; [13] fs_1.5.0          ragg_1.1.3        rmarkdown_2.11    pkgdown_1.6.1    </span>
-<span class="co">#&gt; [17] textshaping_0.3.5 desc_1.3.0        tools_4.1.1       stringr_1.4.0    </span>
-<span class="co">#&gt; [21] yaml_2.2.1        xfun_0.26         fastmap_1.1.0     compiler_4.1.1   </span>
-<span class="co">#&gt; [25] systemfonts_1.0.2 memoise_2.0.0     htmltools_0.5.2   knitr_1.34</span></code></pre></div>
+<span class="co">#&gt;  [1] Rcpp_1.0.7        CholWishart_1.1.2 rprojroot_2.0.2   digest_0.6.28    </span>
+<span class="co">#&gt;  [5] crayon_1.4.2      R6_2.5.1          magrittr_2.0.1    evaluate_0.14    </span>
+<span class="co">#&gt;  [9] highr_0.9         stringi_1.7.5     rlang_0.4.12      cachem_1.0.6     </span>
+<span class="co">#&gt; [13] fs_1.5.0          ragg_1.2.0        rmarkdown_2.11    pkgdown_1.6.1    </span>
+<span class="co">#&gt; [17] textshaping_0.3.6 desc_1.4.0        tools_4.1.2       stringr_1.4.0    </span>
+<span class="co">#&gt; [21] yaml_2.2.1        xfun_0.28         fastmap_1.1.0     compiler_4.1.2   </span>
+<span class="co">#&gt; [25] systemfonts_1.0.3 memoise_2.0.0     htmltools_0.5.2   knitr_1.36</span></code></pre></div>
 </div>
 <div id="all-the-code-for-easy-copying" class="section level2">
 <h2 class="hasAnchor">

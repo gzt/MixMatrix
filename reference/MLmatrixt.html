@@ -79,7 +79,7 @@ fail with a warning." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -294,52 +294,53 @@ doi: <a href='https://doi.org/10.1093/biomet/80.2.267'>10.1093/biomet/80.2.267</
 <code><a href='MLmatrixnorm.html'>MLmatrixnorm()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
-<span class='co'># drawing from a distribution with specified mean and covariance</span>
-<span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span><span class='op'>(</span>
-  n <span class='op'>=</span> <span class='fl'>100</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span>, df <span class='op'>=</span> <span class='fl'>5</span>
-<span class='op'>)</span>
-<span class='co'># fitting maximum likelihood estimates</span>
-<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>MLmatrixt</span><span class='op'>(</span><span class='va'>A</span>, tol <span class='op'>=</span> <span class='fl'>1e-5</span>, df <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>results</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $mean
-#&gt;             [,1]          [,2]        [,3]
-#&gt; [1,] 99.86681274 -100.08579303    24.96235
-#&gt; [2,] -0.05923668   -0.05035992 -1000.01499
-#&gt; 
-#&gt; $U
-#&gt;           [,1]      [,2]
-#&gt; [1,] 1.0000000 0.5053587
-#&gt; [2,] 0.5053587 0.2585040
-#&gt; 
-#&gt; $V
-#&gt;             [,1]       [,2]        [,3]
-#&gt; [1,]  1.00000000  0.1299735 -0.06949657
-#&gt; [2,]  0.12997346  1.1392257 -0.07063750
-#&gt; [3,] -0.06949657 -0.0706375  0.87998084
-#&gt; 
-#&gt; $var
-#&gt; [1] 3.666694
-#&gt; 
-#&gt; $nu
-#&gt; [1] 5
-#&gt; 
-#&gt; $iter
-#&gt; [1] 30
-#&gt; 
-#&gt; $tol
-#&gt; [1] 8.100888e-06
-#&gt; 
-#&gt; $logLik
-#&gt; [1] 3.492195
-#&gt; 
-#&gt; $convergence
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $call
-#&gt; MLmatrixt(data = A, df = 5, tol = 1e-05)
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># drawing from a distribution with specified mean and covariance</span></span>
+<span class='r-in'><span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rmatrixt.html'>rmatrixt</a></span><span class='op'>(</span></span>
+<span class='r-in'>  n <span class='op'>=</span> <span class='fl'>100</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>TRUE</span>, df <span class='op'>=</span> <span class='fl'>5</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># fitting maximum likelihood estimates</span></span>
+<span class='r-in'><span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>MLmatrixt</span><span class='op'>(</span><span class='va'>A</span>, tol <span class='op'>=</span> <span class='fl'>1e-5</span>, df <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>results</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $mean</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             [,1]          [,2]        [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 99.86681274 -100.08579303    24.96235</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -0.05923668   -0.05035992 -1000.01499</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $U</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]      [,2]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 1.0000000 0.5053587</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] 0.5053587 0.2585040</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $V</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             [,1]       [,2]        [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,]  1.00000000  0.1299735 -0.06949657</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,]  0.12997346  1.1392257 -0.07063750</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [3,] -0.06949657 -0.0706375  0.87998084</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $var</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 3.666694</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $nu</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $iter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $tol</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 8.100888e-06</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $logLik</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 3.492195</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $convergence</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $call</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MLmatrixt(data = A, df = 5, tol = 1e-05)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

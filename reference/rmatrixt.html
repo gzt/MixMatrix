@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -147,8 +147,8 @@
   <span class='va'>mean</span>,
   L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>,
   R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>,
-  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
-  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='va'>R</span>,
   list <span class='op'>=</span> <span class='cn'>FALSE</span>,
   array <span class='op'>=</span> <span class='cn'>NULL</span>,
   force <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -160,8 +160,8 @@
   mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='va'>p</span>, <span class='va'>n</span><span class='op'>)</span>,
   L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>,
   R <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span>,
-  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'>%*%</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
-  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'>%*%</span> <span class='va'>R</span>,
+  U <span class='op'>=</span> <span class='va'>L</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>L</span><span class='op'>)</span>,
+  V <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='va'>R</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/matmult.html'>%*%</a></span> <span class='va'>R</span>,
   log <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -230,7 +230,7 @@ unless they are not, in fact, invertible.</p></td>
     <tr>
       <th>log</th>
       <td><p>logical; in <code>dmatrixt</code>, if <code>TRUE</code>, probabilities
-<code>p</code> are given as <code><a href='https://rdrr.io/r/base/Log.html'>log(p)</a></code>.</p></td>
+<code>p</code> are given as <code>log(p)</code>.</p></td>
     </tr>
     </table>
 
@@ -270,26 +270,31 @@ doi: <a href='https://doi.org/10.1214/aoms/1177698967'>10.1214/aoms/1177698967</
 <code><a href='https://rdrr.io/r/stats/Distributions.html'>stats::Distributions()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span>
-<span class='co'># random matrix with df = 10 and the given mean and L matrix</span>
-<span class='fu'>rmatrixt</span><span class='op'>(</span>
-  n <span class='op'>=</span> <span class='fl'>1</span>, df <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
-  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt;            [,1]         [,2]      [,3]
-#&gt; [1,] 99.7106463 -100.9726544   25.3467
-#&gt; [2,] -0.1341239   -0.4413188 -999.8511</div><div class='input'><span class='co'># comparing 1-D distribution of t to matrix</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/TDist.html'>rt</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, df <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -3.25709 -0.98684 -0.13442 -0.09184  0.77896  3.11982 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>rmatrixt</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, df <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-#&gt; -1.06175 -0.13456  0.03359  0.03465  0.21606  0.85072 </div><div class='input'><span class='co'># demonstrating equivalence of 1x1 matrix t to usual t</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180204</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>rmatrixt</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>1</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/TDist.html'>dt</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           [,1]
-#&gt; [1,] 0.1574079</div><div class='input'><span class='fu'>dmatrixt</span><span class='op'>(</span><span class='va'>x</span>, df <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1574079</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180202</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># random matrix with df = 10 and the given mean and L matrix</span></span>
+<span class='r-in'><span class='fu'>rmatrixt</span><span class='op'>(</span></span>
+<span class='r-in'>  n <span class='op'>=</span> <span class='fl'>1</span>, df <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>25</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  L <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>.1</span><span class='op'>)</span>, nrow <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, list <span class='op'>=</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>            [,1]         [,2]      [,3]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 99.7106463 -100.9726544   25.3467</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [2,] -0.1341239   -0.4413188 -999.8511</span>
+<span class='r-in'><span class='co'># comparing 1-D distribution of t to matrix</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/TDist.html'>rt</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, df <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -3.25709 -0.98684 -0.13442 -0.09184  0.77896  3.11982 </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>rmatrixt</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>100</span>, df <span class='op'>=</span> <span class='fl'>10</span>, <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -1.06175 -0.13456  0.03359  0.03465  0.21606  0.85072 </span>
+<span class='r-in'><span class='co'># demonstrating equivalence of 1x1 matrix t to usual t</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>20180204</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>rmatrixt</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>1</span>, mean <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/TDist.html'>dt</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           [,1]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1,] 0.1574079</span>
+<span class='r-in'><span class='fu'>dmatrixt</span><span class='op'>(</span><span class='va'>x</span>, df <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.1574079</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MixMatrix</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.6</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
       <h1 data-toc-skip>Matrix Variate Normal Distributions with MixMatrix</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2021-09-25</h4>
+            <h4 class="date">2021-11-14</h4>
       
       <small class="dont-index">Source: <a href="http://github.com/gzt/MixMatrix/blob/master/vignettes/matrixnormal.Rmd"><code>vignettes/matrixnormal.Rmd</code></a></small>
       <div class="hidden name"><code>matrixnormal.Rmd</code></div>
@@ -140,7 +140,7 @@
 <span class="co">#&gt; [1,]  1.146691 5.322459</span>
 <span class="co">#&gt; [2,] -1.568345 5.387067</span>
 <span class="co">#&gt; [3,]  3.734947 6.755212</span>
-<span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">U</span><span class="op">)</span><span class="op">)</span> <span class="op">%*%</span> <span class="va">y</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span>
+<span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">U</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span>
 <span class="co">#&gt;           [,1]     [,2]</span>
 <span class="co">#&gt; [1,]  1.146691 5.322459</span>
 <span class="co">#&gt; [2,] -1.568345 5.387067</span>
@@ -356,7 +356,7 @@ L<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matri
 <p>This vignette was compiled with <code>rmarkdown</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
+<span class="co">#&gt; R version 4.1.2 (2021-11-01)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
 <span class="co">#&gt; Running under: Ubuntu 20.04.3 LTS</span>
 <span class="co">#&gt; </span>
@@ -374,16 +374,16 @@ L<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matri
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] MixMatrix_0.2.5</span>
+<span class="co">#&gt; [1] MixMatrix_0.2.6</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] Rcpp_1.0.7        rprojroot_2.0.2   digest_0.6.28     crayon_1.4.1     </span>
-<span class="co">#&gt;  [5] R6_2.5.1          magrittr_2.0.1    evaluate_0.14     stringi_1.7.4    </span>
-<span class="co">#&gt;  [9] rlang_0.4.11      cachem_1.0.6      fs_1.5.0          ragg_1.1.3       </span>
-<span class="co">#&gt; [13] rmarkdown_2.11    pkgdown_1.6.1     textshaping_0.3.5 desc_1.3.0       </span>
-<span class="co">#&gt; [17] tools_4.1.1       stringr_1.4.0     yaml_2.2.1        xfun_0.26        </span>
-<span class="co">#&gt; [21] fastmap_1.1.0     compiler_4.1.1    systemfonts_1.0.2 memoise_2.0.0    </span>
-<span class="co">#&gt; [25] htmltools_0.5.2   knitr_1.34</span></code></pre></div>
+<span class="co">#&gt;  [1] Rcpp_1.0.7        rprojroot_2.0.2   digest_0.6.28     crayon_1.4.2     </span>
+<span class="co">#&gt;  [5] R6_2.5.1          magrittr_2.0.1    evaluate_0.14     stringi_1.7.5    </span>
+<span class="co">#&gt;  [9] rlang_0.4.12      cachem_1.0.6      fs_1.5.0          ragg_1.2.0       </span>
+<span class="co">#&gt; [13] rmarkdown_2.11    pkgdown_1.6.1     textshaping_0.3.6 desc_1.4.0       </span>
+<span class="co">#&gt; [17] tools_4.1.2       stringr_1.4.0     yaml_2.2.1        xfun_0.28        </span>
+<span class="co">#&gt; [21] fastmap_1.1.0     compiler_4.1.2    systemfonts_1.0.3 memoise_2.0.0    </span>
+<span class="co">#&gt; [25] htmltools_0.5.2   knitr_1.36</span></code></pre></div>
 </div>
 <div id="all-the-code-for-easy-copying" class="section level2">
 <h2 class="hasAnchor">
@@ -405,7 +405,7 @@ L<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matri
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180203</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean<span class="op">=</span><span class="va">mu</span>,U<span class="op">=</span><span class="va">U</span>,V<span class="op">=</span><span class="va">V</span><span class="op">)</span>
 <span class="va">z</span>
-<span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">U</span><span class="op">)</span><span class="op">)</span> <span class="op">%*%</span> <span class="va">y</span> <span class="op">%*%</span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span>
+<span class="va">mu</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">U</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">y</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chol.html">chol</a></span><span class="op">(</span><span class="va">V</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180203</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">6</span><span class="op">)</span>,nrow<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>
