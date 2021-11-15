@@ -45,7 +45,7 @@ $t$ random variable if it has probability density function as follows:
 With $\Omega$ and $\Sigma$ covariance matrices of appropriate dimension, 
 $\mathbf{M}$ a mean matrix, $\nu$ the degrees of freedom parameter, and 
 $\Gamma_p()$ the multivariate gamma function, which is implemented in the 
-[`CholWishart`](https://gzt.github.io/CholWishart) package available on CRAN.
+[`CholWishart`](https://gzt.github.io/CholWishart/) package available on CRAN.
 
 
 For $p = 1$ and $\Sigma = \nu$ (or $q = 1$ and $\Omega = \nu$),
