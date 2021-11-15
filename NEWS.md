@@ -1,3 +1,7 @@
+# MixMatrix 0.2.6
+* Update to fix M_PI issue with Rcpp update.
+* Fix some non-HTTPS URLs.
+
 # MixMatrix 0.2.5
 
 * Update with DOI for associated paper.
