@@ -32,7 +32,6 @@ Suggests:
     magrittr,
     spelling
 VignetteBuilder: knitr
-LazyData: true
 URL: https://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
 BugReports: https://github.com/gzt/MixMatrix/issues
 Language: en-us
