@@ -11,7 +11,7 @@ Status](https://travis-ci.org/gzt/MixMatrix.svg?branch=master)](https://travis-c
 Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://codecov.io/github/gzt/MixMatrix?branch=master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.4%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.6%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)](https://github.com/gzt/MixMatrix/)
 [![](https://cranlogs.r-pkg.org/badges/MixMatrix)](https://cran.r-project.org/package=MixMatrix)
 <!-- badges: end -->
