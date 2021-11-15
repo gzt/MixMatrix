@@ -17,3 +17,5 @@ inprogress
 *~
 *#
 /.clang-format
+/doc/
+/Meta/
