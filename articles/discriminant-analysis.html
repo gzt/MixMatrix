@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/gzt/MixMatrix/">
+  <a href="https://github.com/gzt/MixMatrix/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,9 +94,9 @@
       <h1 data-toc-skip>Discriminant Analysis for Matrix Variate Distributions</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2021-11-14</h4>
+            <h4 class="date">2021-11-15</h4>
       
-      <small class="dont-index">Source: <a href="http://github.com/gzt/MixMatrix/blob/master/vignettes/discriminant-analysis.Rmd"><code>vignettes/discriminant-analysis.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/gzt/MixMatrix/blob/master/vignettes/discriminant-analysis.Rmd"><code>vignettes/discriminant-analysis.Rmd</code></a></small>
       <div class="hidden name"><code>discriminant-analysis.Rmd</code></div>
 
     </div>
@@ -104,11 +104,11 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span></code></pre></div>
 <p>In the <code>MixMatrix</code> package, there are two functions for training a linear or quadratic classifier. The usage is fairly similar to the function <code><a href="https://rdrr.io/pkg/MASS/man/lda.html">MASS::lda()</a></code> or <code><a href="https://rdrr.io/pkg/MASS/man/qda.html">MASS::qda()</a></code>, however it requires the input as an array and the group variable provided as a vector (that is, it cannot handle data frames or the formula interface directly, which is reasonable, as there is no immediately clear way to make that work for a collection of matrices).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180222</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://github.com/gzt/MixMatrix/">'MixMatrix'</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/gzt/MixMatrix/">'MixMatrix'</a></span><span class="op">)</span>
 <span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="co"># creating the three groups</span>
 <span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
@@ -422,7 +422,7 @@ R_g(\mathbf{X}) &amp; = &amp; \mathrm{trace}\big[ -\frac{1}{2}(\mathbf{V}_g^{-1}
   comment <span class="op">=</span> <span class="st">"#&gt;"</span>
 <span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180222</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://github.com/gzt/MixMatrix/">'MixMatrix'</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/gzt/MixMatrix/">'MixMatrix'</a></span><span class="op">)</span>
 <span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="co"># creating the three groups</span>
 <span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixnorm.html">rmatrixnorm</a></span><span class="op">(</span><span class="fl">30</span>, mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>

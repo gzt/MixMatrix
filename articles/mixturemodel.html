@@ -73,7 +73,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="http://github.com/gzt/MixMatrix/">
+  <a href="https://github.com/gzt/MixMatrix/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,9 +94,9 @@
       <h1 data-toc-skip>Matrix Variate Mixture Models with the t distribution</h1>
                         <h4 class="author">Geoffrey Thompson</h4>
             
-            <h4 class="date">2021-11-14</h4>
+            <h4 class="date">2021-11-15</h4>
       
-      <small class="dont-index">Source: <a href="http://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/gzt/MixMatrix/blob/master/vignettes/mixturemodel.Rmd"><code>vignettes/mixturemodel.Rmd</code></a></small>
       <div class="hidden name"><code>mixturemodel.Rmd</code></div>
 
     </div>
@@ -104,7 +104,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span></code></pre></div>
 <div id="matrix-variate-mixture-modeling-with-the-t-distribution" class="section level2">
 <h2 class="hasAnchor">
 <a href="#matrix-variate-mixture-modeling-with-the-t-distribution" class="anchor"></a>Matrix Variate Mixture Modeling with the <span class="math inline">\(t\)</span> Distribution</h2>
@@ -123,7 +123,7 @@
 <a href="#matrixmixture-function" class="anchor"></a><code>matrixmixture</code> function</h3>
 <p>The function takes data array <code>x</code>, either an argument <code>K</code> for how many groups there are or an initialization of a vector of probabilities <code>prior</code>, an optional initialization of centers and covariance matrices <code>init</code> (if the covariances are left blank, they will be initialized to identity matrices), and optional arguments controlling the other parameters of function, such as number of iterations and normal vs <em>t</em>. If <code>model = "t"</code> is chosen, the degrees of freedom <code>nu</code> must be provided, but in the future it can be estimated.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span>
  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180221</span><span class="op">)</span>
  <span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span><span class="op">(</span><span class="fl">30</span>,mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">4</span><span class="op">)</span>, df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># 3x4 matrices with mean 0</span>
  <span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span><span class="op">(</span><span class="fl">30</span>,mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">4</span><span class="op">)</span>, df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># 3x4 matrices with mean 2</span>
@@ -282,7 +282,7 @@
   collapse <span class="op">=</span> <span class="cn">TRUE</span>,
   comment <span class="op">=</span> <span class="st">"#&gt;"</span>
 <span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gzt/MixMatrix/">MixMatrix</a></span><span class="op">)</span>
  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20180221</span><span class="op">)</span>
  <span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span><span class="op">(</span><span class="fl">30</span>,mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">4</span><span class="op">)</span>, df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># 3x4 matrices with mean 0</span>
  <span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rmatrixt.html">rmatrixt</a></span><span class="op">(</span><span class="fl">30</span>,mean<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">1</span>,nrow<span class="op">=</span><span class="fl">3</span>,ncol<span class="op">=</span><span class="fl">4</span><span class="op">)</span>, df <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="co"># 3x4 matrices with mean 2</span>
