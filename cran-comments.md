@@ -1,3 +1,15 @@
+## Resubmission
+
+This is a resubmission to fix the following:
+
+     URL: https://gzt.github.io/CholWishart (moved to
+https://gzt.github.io/CholWishart/)
+       From: inst/doc/matrix-t-estimation.html
+       Status: 301
+       Message: Moved Permanently
+	   
+This has now been fixed.
+
 ## Test environments 
 * local Fedora 34, R 4.0.5
 * winbuilder (release and devel)
