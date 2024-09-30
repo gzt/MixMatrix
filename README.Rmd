@@ -16,9 +16,8 @@ knitr::opts_chunk$set(
   <!-- badges: start -->
   
   [![R build status](https://github.com/gzt/MixMatrix/workflows/R-CMD-check/badge.svg)](https://github.com/gzt/MixMatrix/actions)
- [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/gzt/MixMatrix?branch=master&svg=true)](https://ci.appveyor.com/project/gzt/MixMatrix)
- [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://app.codecov.io/gh/gzt/MixMatrix?branch=master)
-[![packageversion](https://img.shields.io/badge/Package%20version-0.2.6%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
+  [![Coverage Status](https://img.shields.io/codecov/c/github/gzt/MixMatrix/master.svg)](https://app.codecov.io/gh/gzt/MixMatrix?branch=master)
+[![packageversion](https://img.shields.io/badge/Package%20version-0.2.7%20-orange.svg?style=flat-square)](https://github.com/gzt/MixMatrix/releases)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MixMatrix)](https://github.com/gzt/MixMatrix/)
    [![](https://cranlogs.r-pkg.org/badges/MixMatrix)](https://cran.r-project.org/package=MixMatrix)
  <!-- badges: end -->
