@@ -1,3 +1,9 @@
+# MixMatrix 0.2.7
+
+* Fix Doxygen update to _PACKAGE issue
+* Fix names in DESCRIPTION
+* Fix "if (class(x) == ...)" issue.
+
 # MixMatrix 0.2.6
 * Update to fix M_PI issue with Rcpp update.
 * Fix some non-HTTPS URLs.
