@@ -9,11 +9,12 @@
 #' in [Thompson et al. (2019)](https://arxiv.org/abs/1907.09565).
 #' Performs clustering with matrix variate normal and t mixture models.
 #'
-#' @docType package
-#' @name MixMatrix
-NULL
+#' @keywords internal 
+"_PACKAGE"
+
 ## usethis namespace: start
 #' @useDynLib MixMatrix, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom glue glue_collapse
 ## usethis namespace: end
 NULL

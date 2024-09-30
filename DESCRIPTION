@@ -1,14 +1,14 @@
 Package: MixMatrix
 Type: Package
 Title: Classification with Matrix Variate Normal and t Distributions
-Version: 0.2.6
-Authors@R: c(person(c("Geoffrey", "Thompson"),email="gzthompson@gmail.com",
+Version: 0.2.7
+Authors@R: c(person("Geoffrey", "Thompson", ,email="gzthompson@gmail.com",
           role = c("aut", "cre"), comment = c(ORCID = '0000-0003-2436-8822')),
-	  person(c("B. D.", "Ripley",
-	  comment = "author of original lda and qda functions"),
+	  person("B. D.", "Ripley",
+	  comment = "author of original lda and qda functions",
 	  email = "ripley@stats.ox.ac.uk", role = c("ctb","cph")),
-	  person(c("W. N.", "Venables",
-	  comment = "author of original lda and qda functions"),
+	  person("W. N.", "Venables",
+	  comment = "author of original lda and qda functions",
           role = c("ctb","cph")))
 Description: Provides sampling and density functions for matrix
     variate normal, t, and inverted t distributions;  ML estimation for matrix
@@ -21,7 +21,8 @@ Depends: R (>= 3.5.0)
 Imports:
     stats, 
     CholWishart,
-    Rcpp
+    Rcpp,
+    glue
 Suggests:
     knitr,
     rmarkdown,
@@ -36,7 +37,7 @@ URL: https://github.com/gzt/MixMatrix/, https://gzt.github.io/MixMatrix/
 BugReports: https://github.com/gzt/MixMatrix/issues
 Language: en-us
 License: GPL-3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 LinkingTo: Rcpp, RcppArmadillo
 Roxygen: list(markdown = TRUE)

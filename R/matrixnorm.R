@@ -313,7 +313,7 @@ MLmatrixnorm <- function(data, row.mean = FALSE, col.mean = FALSE,
                          row.variance = "none", col.variance = "none",
                          tol = 10 * .Machine$double.eps^0.5, max.iter = 100,
                          U, V, ...) {
-  if (class(data) == "list") {
+  if (inherits(data, "list")) {
     data <- array(unlist(data),
       dim = c(
         nrow(data[[1]]),
