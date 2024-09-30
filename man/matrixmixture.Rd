@@ -126,7 +126,7 @@ BIC(res) # BIC of final result
 predict(res, newdata = C[,,c(1,21)]) # predicted class membership
 }
 \references{
-\preformatted{Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Andrews, Jeffrey L., Paul D. McNicholas, and Sanjeena Subedi. 2011.
   "Model-Based Classification via Mixtures of Multivariate
   T-Distributions." Computational Statistics & Data Analysis 55 (1):
   520–29. \doi{10.1016/j.csda.2010.05.019}.
@@ -144,7 +144,7 @@ McLachlan, Geoffrey J, Sharon X Lee, and Suren I Rathnayake. 2019.
 Viroli, Cinzia. 2011. "Finite Mixtures of Matrix Normal Distributions
       for Classifying Three-Way Data." Statistics and Computing 21 (4):
       511–22. \doi{10.1007/s11222-010-9188-x}.
-}
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link[=init_matrixmixture]{init_matrixmixture()}}

@@ -95,9 +95,11 @@ print(results)
 \references{
 Pierre Dutilleul.  The MLE algorithm for the matrix normal
 distribution.
-Journal of Statistical Computation and Simulation, (64):105–123, 1999.\preformatted{Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
+Journal of Statistical Computation and Simulation, (64):105–123, 1999.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Gupta, Arjun K, and Daya K Nagar. 1999. Matrix Variate Distributions.
 Vol. 104. CRC Press. ISBN:978-1584880462
-}
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link[=rmatrixnorm]{rmatrixnorm()}} and \code{\link[=MLmatrixt]{MLmatrixt()}}

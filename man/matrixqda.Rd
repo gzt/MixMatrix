@@ -78,15 +78,17 @@ logLik(D)
 print(D)
 }
 \references{
-\preformatted{G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
+\if{html}{\out{<div class="sourceCode">}}\preformatted{G Z Thompson, R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
 e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
-}
+}\if{html}{\out{</div>}}
 
 Venables, W. N. & Ripley, B. D. (2002) Modern Applied Statistics with
-S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0\preformatted{Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
+S. Fourth Edition. Springer, New York. ISBN 0-387-95457-0
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Pierre Dutilleul.  The MLE algorithm for the matrix normal distribution.
 Journal of Statistical Computation and Simulation, (64):105–123, 1999.
-}
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link[=predict.matrixqda]{predict.matrixqda()}}, \code{\link[MASS:qda]{MASS::qda()}},

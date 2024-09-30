@@ -106,7 +106,7 @@ results <- MLmatrixt(A, tol = 1e-5, df = 5)
 print(results)
 }
 \references{
-\preformatted{Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Thompson, G Z.  R Maitra, W Q Meeker, A Bastawros (2019),
 "Classification with the matrix-variate-t distribution", arXiv
 e-prints arXiv:1907.09565 <https://arxiv.org/abs/1907.09565>
 
@@ -119,13 +119,15 @@ Liu, Chuanhai, and Donald B. Rubin. 1994. “The ECME Algorithm:
 A Simple Extension of EM and ECM with Faster Monotone Convergence.”
 Biometrika 81 (4): 633–48.
       \doi{10.2307/2337067}
-}
+}\if{html}{\out{</div>}}
 
 Meng, Xiao-Li, and Donald B. Rubin. 1993. “Maximum Likelihood Estimation
 via the ECM Algorithm: A General Framework.” Biometrika 80 (2): 267–78.
-\doi{10.1093/biomet/80.2.267}\preformatted{Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed.,
+\doi{10.1093/biomet/80.2.267}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Rubin, D.B. 1983. “Encyclopedia of Statistical Sciences.” In, 4th ed.,
   272–5. John Wiley.
-}
+}\if{html}{\out{</div>}}
 }
 \seealso{
 \code{\link[=rmatrixnorm]{rmatrixnorm()}}, \code{\link[=rmatrixt]{rmatrixt()}},
