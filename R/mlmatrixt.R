@@ -126,7 +126,7 @@ MLmatrixt <- function(data, row.mean = FALSE, col.mean = FALSE,
       col.variance, tol, max.iter, U, V, ...
     ))
   }
-  if (class(data) == "list") {
+  if (inherits(data, "list"))  {
     data <- array(unlist(data),
       dim = c(
         nrow(data[[1]]),

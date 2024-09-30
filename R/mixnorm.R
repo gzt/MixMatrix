@@ -132,7 +132,7 @@ matrixmixture <- function(x, init = NULL, prior = NULL, K = length(prior),
                           row.mean = FALSE, col.mean = FALSE,
                           tolerance = 1e-1, nu = NULL, ..., verbose = 0,
                           miniter = 5, convergence = TRUE) {
-  if (class(x) == "list") {
+  if (inherits(x, "list")) {
     x <- array(unlist(x),
       dim = c(
         nrow(x[[1]]),
